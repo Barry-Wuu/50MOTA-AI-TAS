@@ -1,0 +1,77 @@
+<!-- Copyright Oz furano@po2.across.or.jp  2001/ 1/18-->
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+   <meta name="Author" content="Shigemasa Ozawa">
+   <meta name="GENERATOR" content="Mozilla/4.7 [ja] (Win98; I) [Netscape]">
+   <title>HowtoSave</title>
+</head>
+<body>
+<font size=+2>アプレットは通常自分のマシンへの書き込みはできません。よってその設定を変えないとデータをセーブすることができないのです。今からこのプログラムだけ書き込みができるように設定します。ここで大切なことはJavaがどこにあるのか、そしてインストールしたMagic
+Towerがどこにあるのかをしっかり確認してください。では順を追って説明していきます。</font>
+<p><font size=+3>セーブを可能にする方法</font>
+<p><font size=+2>1.C:\jdk1.3\bin フォルダーの中にあるpolicytool.exeを実行します。(JavaのバージョンによってはフォルダーがC:\jdk1.2.2\binのようになります。)</font>
+<br><font size=+2>（エクスプローラーでJavaのフォルダーにいきダブルクリックで起動します。）</font>
+<br><font size=+2>Dos画面が表示された後、最初は下の表示がでると思います。</font>
+<br><font size=+2>これは今から設定しようとするファイルがないことを表しています。</font>
+<p><img SRC="himage/1.gif" height=75 width=302>
+<p><font size=+2>2.[OK]をクリックします。</font>
+<br><font size=+2>そうすると下のようになります。</font>
+<p><img SRC="himage/2.gif" height=523 width=503>
+<p><font size=+2>3.メニューのFileをクリックします。</font>
+<p><img SRC="himage/1_2.gif" height=180 width=135>
+<p><font size=+2>4.Openを選択します。</font>
+<br><font size=+2>ファイル選択ダイアログが開きますので、Windowsフォルダを選択します。ファイルの場所は最初Javaフォルダーからスタートします。選択の仕方がわからない人はファイルの場所の四角形のどこかをクリックすると、どこかにC:\と表示されます。そこをクリックした後それからWindowsフォルダーを選択しましょう。下の図はWindowsフォルダを選択したところですが、表示している様子は各マシンによって異なります。</font>
+<p><img SRC="himage/1_3.gif" height=252 width=505>
+<p><font size=+2>5.ファイル名を <font color="#000099">.java.policy</font>
+として[開く]をクリックします。</font>
+<br><font size=+2>(注意．ファイル名はピリオド、小文字のjava、ピリオド、小文字のpolicyです。)</font>
+<u><font color="#FF0000"><font size=+2>もう一度繰り返しますがファイル名はピリオドから始まります。</font></font></u>
+<br><font size=+2>ファイル名を入力しおわったら、[開く]をクリックします。</font>
+<br><font size=+2>以下のダイアログボックスが表示されます。</font><font size=+2></font>
+<p><img SRC="himage/1_4.gif" height=74 width=382><font size=+2></font>
+<p><font size=+2>これは現在作ろうとしているファイルがないというメッセージです。今はファイル名だけを指定しましたから当然です。</font>
+<br><font size=+2>無視して進みましょう。</font>
+<br><font size=+2>[OK]をクリックします。</font>
+<br><font size=+2>図のような状態になります。</font><font size=+2></font>
+<p><img SRC="himage/1_5.gif" height=189 width=498><font size=+2></font>
+<p><font size=+2>6.[Add Policy Entry] のボタンをクリックします。</font>
+<br><font size=+2>そうすると以下のような Policy Entry のダイアログボックスが表示されます。</font>
+<p><img SRC="himage/3.gif" height=500 width=600>
+<p><font size=+2>7.CodeBase欄に自分がインストールしたフォルダ名を入力します。</font>
+<font size=+2>（例．<font color="#000099">file:/C:/Java/MagicTower/</font>）</font>
+<br><font size=+2>大文字小文字に注意してください。<font color="#FF0000">必ず先頭にはfile:/をつけてください。最後は必ず/で終わります。</font>ここでのフォルダー区切り記号は\を使わずに/で区切ります。</font><font size=+2></font>
+<p><img SRC="himage/2_1.gif" height=182 width=597>
+<p><font size=+2>8.ファイル名を入力し終わったら[Add Permission]をクリックします。以下のようになります。</font>
+<p><img SRC="himage/4.gif" height=255 width=702>
+<p><font size=+2>9.次にPermission:欄の右についているプルダウンメニューの▼をクリックします。</font>
+<p><img SRC="himage/4_1.gif" height=250 width=698>
+<p><font size=+2>10.項目の中から４番目のFilePermissionを選択します。</font>
+<br><font size=+2>11.同様にTarget Name: のプルダウンメニューから&lt;&lt;ALL
+FILES>></font>
+<br><font size=+2>12.Actions:のプルダウンメニューからwriteを選択します。</font>
+<br><font size=+2>以下の図を参考にしてください。</font>
+<br>&nbsp;
+<p><img SRC="himage/5.gif" height=253 width=704>
+<p><font size=+2>13.この通りに指定できたら[OK]をクリックします。以下の図のようにエントリー欄に表示されましたか？</font>
+<p><img SRC="himage/6.gif" height=500 width=599>
+<p><font size=+2>14.[Done]をクリックします。ここでも以下の図のようにエントリー欄に表示されましたか？</font>
+<p><img SRC="himage/7.gif" height=519 width=501>
+<p><font size=+2>15.最後にメニューのFileからSaveを選択します。以下の図のようなメッセージが表示されれば設定終了です。</font>
+<p><img SRC="himage/8.gif" height=74 width=317>
+<p><font size=+2>16.[OK]をクリックして、policytoolを終了します。(メニューのファイルから[EXIT]を選択する。)</font>
+<br><font size=+2>17.Magic Towerを起動します。右クリックまたはアプリケーションキーのポップアップメニューの中にセーブがあります。ステータス行にSaved.と表示されたらOKです。なおこの書き込み設定は指定したフォルダーのファイルのみ書き込みできることを許可するものです。無制限に書き込むわけではありませんのでご安心ください。なおこのMagic
+Towerは自分のフォルダーの下層フォルダーにセーブデータやランキングデータを書き込みします。よって<u><font color="#FF0000">インストールしたフォルダー名を勝手に変えますとセーブできなくなります</font></u>。ではごゆっくりゲームを楽しんでください。(^^)/~</font>
+<br>&nbsp;
+<br><font size=+2>もし参考資料をほしい方は次のリンクを参考にして下さい。
+(<A 
+href="http://java.sun.com/products/jdk/1.2/ja/docs/ja/tooldocs/solaris/policytool.html">Solaris 
+用</A>) (<A 
+href="http://java.sun.com/products/jdk/1.2/ja/docs/ja/tooldocs/win32/policytool.html">Windows 
+用</A>)
+</font>
+<p><font size=+2>付記.もしこのとおりにならなかった場合、または変に設定してしまった場合には、一度policytoolを終了し、エクスプローラーでWindowsフォルダーにいって、作った.java.policyのファイルを削除してからもう一度最初からやり直してください。できる限り質問には答えますが、自分はここに書いた以上のことはわからないのでがんばってください。(Oz
+wrote Jan 18, 2001)</font>
+<br><font size=+2></font>&nbsp;
+</body>
+</html>

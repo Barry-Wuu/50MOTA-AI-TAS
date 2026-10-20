@@ -1,0 +1,18 @@
+[High Score information in Tower of the Sorcerer]   
+This is an attempt to publish the world's high scores from "Tower of the Sorcerer" .  
+
+[How to take part]
+Just send the Score data file to Oz by e-mail.
+
+  Option1.dat is the 10th floor.
+  Option2.dat is the 20th floor.
+  Option3.dat is the 25th floor.
+  Option4.dat is the 40th floor.
+  Option5.dat is the 49th floor   
+
+Oz's Email Address is furano@po2.across.or.jp
+Please use the subject: "Ranking of Tower of the Sorcerer".
+And please include your name in the E-mail.
+
+High scores are displayed at Oz's Homepage.
+(http://plaza.across.or.jp/~furano)

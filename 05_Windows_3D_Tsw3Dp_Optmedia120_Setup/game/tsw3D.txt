@@ -1,0 +1,258 @@
+The explanation of the rules of "Tower of the Sorcerer"
+
+The story:
+----------
+It may seem that the story is usual. 
+Brave man is trying to save princess caught in the tower. 
+But this is not so usual and normal story. Well, this story is even not from this game. 
+Why? 
+Check this while playing.
+
+"Tower of the Sorcerer" is something between the Role Playing Game and puzzle. 
+Play this with no hurry, thinking and deciding what would be the best.
+
+And there is not the random element in this game.   
+You will get the same result anytime, if it does that is same.
+
+Setting Up TSW:
+---------------
+  1. Right when you start, you should choose whether you want to use the mouse or keyboard.
+     (Mouse Mode is default)
+  2. Next, you should choose which size font you'd like to use.
+  3. Finally, choose a directory to save your games in.
+     (The default is instdir/savedat.)
+
+  + Display mode is 800x600.
+
+Setup Information:
+------------------
+The first time you run the program, the setup file (MTW17.INI) is made in the Windows Directory.
+When you delete this software, please delete it's setup file too. 
+
+Playing the game:
+-----------------
+*Using the mouse:
+
+You must click the arrow buttons on the bottom right of the window to move around.
+And you can save the data and with the menu on the upper side.
+(road savedata etc.,)
+
+When you want to use items, click on their icon.
+
+*Using the Keyboard:
+
+To move around, use the arrow keys.
+Pressing the ALT key chooses a menu.
+
+When you want to use items, press the Enter key.
+You can choose items by using the arrow keys.
+If you've changed your mind, press the Escape key.  
+
++Summary:
+The only keys that do anything are the arrow keys,
+Enter key, Alt key, and Escape key.
+
+* About play mode
+  This game has two mode. One is game play and other one is play mode.
+@Play mode is possible for stored save data. Please think that it is a video. 
+@This game make Blake Point in save data when you meet a fairy. 
+  You can go to next Blake Point when you click play menu with the check.
+
+The screen and the rule and parameter explanation:
+--------------------------------------------------
+*The floor number.
+The indicator on the upper-left corner of the screen is the floor number.
+It goes from 1 to the 50th floor.
+
+*Your life power.
+Under the floor number is a heart that expresses your life power.
+Your life decreases when you are attacked by an enemy, and the game is over when it reaches zero.
+You can recover life by taking medicine or offering to an altar.
+Your life no limits. (^_^)
+
+*Your offensive power.
+Under the heart symbol is the offensive power (Indicated by a sword).
+It determines the damage that the enemy takes.
+The player can raise it by taking red crystals or offering gold to an alter.
+
+*Your defensive power.
+Under the sword symbol is a shield that shows the defensive power.
+This determines how well protected the player is.
+The player can raise this by taking blue crystal or offering gold to an altar.
+
+*Your gold.
+The coin beneath shield shows how much money you have.
+The player gets gold when the player beats an enemy.
+The player may then offer this gold to an altar or use it to buy articles from merchants.
+
+*Your special items.
+The special items that the player has are shown on the lower right of the screen.
+The player can use items by clicking on them.
+
+*The player's weapons.
+On the upper right part of the screen where it says "WEAPON" shows the weapon that the player has.
+When the player has a sword, it is shown there.
+Having a weapon sufficiently adds to your offensive power.
+
+*The player's shield.
+Beneath the weapon, where "SHIELD" is written, is the player's shield.
+If the player loses his shield, no shield is shown.
+Owning a shield increases your defensive power.
+
+*The player's keys.
+On the right side of the screen are shown the blue, yellow, and red keys that you find.
+Each key you get is shown in this box.
+Every door you open takes away a key of that color.
+
+*The information window
+The enemy's information is on the bottom right corner of the screen.
+
+*Status Bar
+The blue bar at the bottom of the screen explains what happens.
+
+*The message window.
+When talking to characters, monsters and such, the message window will open and the message will be expressed.
+
+On Battle:
+----------
+The battles start when the player engages the enemy.
+The player hits the enemy first, then the enemy hits the player.
+They continue to take turns in the battle (Friendly, aren't they?)
+The first one whos life value reaches zero, loses.
+If the player beats the monster, he takes the monster's gold.
+So, here is how to calculate the results of battle:
+The monster's damage by one attack
+    = (Player's Attack Power) - (Monster's Strength). 
+
+The player's damage by one attack.
+    = (Monster's Power) - (Player's Strength). 
+
+Therefore, the player can easily calculate the enemy's damage, and the damage of the player too.
+(Even though the Hero Orb does this for you.)
+And the player can't attack any enemy who is stronger than the player's Attack Power.
+
+About fairies: 
+--------------
+When the player finishes off the major boss of an area, a fairy comes out, and scores the player's ability by adding the life, the offensive power, the defensive power, and the number of keys.
+
+How to conquer this game:
+-------------------------
+Although it looks like a cute window on your computer screen, this game has an element of mental challenge.
+You can't simply kill all the creatures and take all the items.
+Though there are items scattered throughout each level, you should first determine the best way to defeat or avoid the enemies to get items or ascend the tower.
+
+First Area Walk-through:
+------------------------
+TIPS:
+Don't fight anyone you don't need to fight.
+Don't fight the armed Skeleton before you get a shield.
+ 1. To start with, make your way to the fifth floor, and take the sword on that level first of all. 
+   (There is a secret tunnel there, just press the wall)
+ 2. Next, you should offer to the altar on the fouth floor, and raise your defensive power.
+ 3. Then, gather all the crystals from the 1st floor to the 5th.
+    Use the altar again and raise the defensive power. 
+ 4. Next, the player should take the shield from the 9th floor. 
+ 5. Gather all crystals from the 1st floor to the 10th.
+    Beat the enemies that won't hurt you and gather coins.
+    Raise the offensive and defensive power by offering to an altar.
+ 6. Although you shouldn't yet, you can beat the gate-keeper on the 8th floor and take the red key.
+    Go to the 10th floor and beat the skeleton Boss.
+    You may leave one blue key and five yellow keys if you need to. 
+
+At the start, you may play around with the game, just to get used to playing it.
+As you become used to it, you can figure out how to pass levels and the game too.
+
+
+The explanation of each area:
+-----------------------------
+Now, I will explain each area briefly.
+
+*The army corps of skeletons.
+>From the 1st floor to the 10th. 
+The enemies here are comparatively weak.
+But the Skeleton who has a sword and a shield is rather trouble some.
+Learn to master the basic operation and tactics in this area. 
+
+*The corps of immortal force.
+>From the 11st floor to the 20th. 
+The undead system, (Zombies, Vampires and the like) will appear.
+They are really powerful, and you will need the cross if you're thinking about fighting them.
+The Giant Octopus is ready for you on this route.
+And when you beat him, the precious item will appear.
+It is more difficult than the first block(1st-10th floor), so be careful. 
+
+*The Great Magic Master.
+>From the 21st floor to the 30th. 
+The Great Magic Master in this area is a fast boss!
+For the time being, you just have to put up with him.
+There is practically nothing in this area.
+
+*The Golden Knight corps.
+>From the 31st floor to the 40th. 
+This area is ruled by the Knight corps which is made up of Knights, Swordsmen, Soldiers and the like.
+Though they all have high fighting power, the boss never means what he says.
+That's why the other bosses don't like the Golden Knight.
+This boss is weak, but in this area, the Giant Dragon will block your way.
+
+*The Magic Sergeant Zeno.
+>From the 41st floor to the 50th.
+This area is presided over by the Magic Sergeant Zeno, who is a sub officer of this tower.
+Magical enemies will mainly appear.
+The Magic Sergeant Zeno is the head bad-guy in this tower, and he is the ringleader who
+captured the player in the intro.
+He is the last boss, and if you should fight him seriously, you will have done nothing but killed yourself.
+
+The explanation of the special items:
+-------------------------------------
+*The orb of the hero.
+
+It will analyze the player's strength and the monster's strength, and forecast who will win.
+But, when your strength is doubled by the cross and other items, keep in mind that this extra strength only works against certain creatures (like the Vampire and Zombie Knight).
+You also need this item to use the save function.
+So, please get this item from the old man on the 3rd floor.
+
+
+*The orb of wisdom.
+
+It will remember any information which you have heard.
+When you look at the information later, you may find out something new.
+You can get this item on the 6th floor.
+But you must beat Skeleton B before getting it.
+
+*The orb of flying.
+
+If you use this next to stairs, you will be able to fly up or down any stairs which you have already been to (Like an elevator!).
+It can never be exhausted, no matter how many times you use it
+(So please use it a lot, because it saves time!)
+This item is very convenient.
+You can get it on the 1st floor.
+But you must beat Skeleton B before getting it. 
+
+*The Magic Mattock.
+
+It can pull down the wall sides.
+This is a very effective item.
+When you beat big octopus that is on the 16th floor, this item will appear. 
+
+*The Magic Elixir.
+
+This is the magic medicine.
+It will recover your vital power according to your offensive and defensive powers at that time.
+Someone already has this item, but they might give it to you... 
+
+*The destructible ball.
+
+This is a bomb.
+It can destroy any enemy character who is too strong.
+But it has no effect against a part of the enemy character.
+
+*The Warp Staff.
+
+This is a very treasured item, the Space Staff.
+You can warp to other places on the same floor.
+You can't know where you will go.
+Strange things may happen when you use it in certain areas. 
+
+There are 15 special items. Collect them all! 
+------------------------------------
+Last Updated: Friday,Jan 28, 2008
