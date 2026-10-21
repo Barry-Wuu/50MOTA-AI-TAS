@@ -1,0 +1,155 @@
+id,kind,kind_name,name_jp,name_en,hp,atk,dfn,gold,bonus_hp,floors
+1,8,key-door,扉の鍵を手に入れた。,Got a key.,0,0,0,0,0,1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23;24;25;26;27;28;29;30;31;32;33;34;35;36;37;38;39;40;41;42;43;44;45;46;47;48;49;50
+2,5,pickup,,,0,0,0,0,0,16;18
+3,8,key-door,青色の扉の鍵を手に入れた。,Got a blue key.,0,0,0,0,0,1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;24;25;26;27;28;29;30;31;32;33;34;35;36;37;38;39;40;41;42;43;44;45;46;47;48;49;50
+4,5,pickup,,,0,0,0,0,0,1
+5,6,monster,Ｇスライム,Green Slime,35,18,1,1,0,2
+6,6,monster,Ｒスライム,Red Slime,45,20,2,2,0,2
+7,6,monster,バット,Bat,35,38,3,3,0,3
+8,6,monster,僧　侶,Priest,60,32,8,5,0,3
+9,6,monster,スケルトンＣ,Skeleton C,50,42,6,6,0,4
+10,6,monster,スケルトンＢ,Skeleton B,55,52,12,8,0,4
+11,3,walk-event(item/door),赤い回復薬を手に入れた。生命力が５０ポイントアップ！,Got a red elixir. Your vital power was 50 points up!,50,0,0,0,0,5
+12,3,walk-event(item/door),青い回復薬を手に入れた。生命力が２００ポイントアップ！,Got a blue elixir. Your vital power was 200 points up!,200,0,0,0,0,5
+13,3,walk-event(item/door),赤のクリスタルを手に入れた。攻撃力が１ポイントアップ！,Got a red crystal. Your offensive power was 1 point up!,0,1,0,0,0,6
+14,3,walk-event(item/door),青のクリスタルを手に入れた。防御力が１ポイントアップ！,Got a blue crystal. Your defensive power was 1 point up!,0,0,1,0,0,6
+15,6,monster,門番Ｂ,Gate-Keeper B,100,180,110,100,0,7
+16,6,monster,スケルトンＡ,Skeleton A,100,65,15,30,0,7
+17,14,shop/boss-event,「うちの店は鍵をいくらでも売るよ。１つ１０００ＧＯＬＤだが買うかい？」,"\""My store will sell as many keys as you need. They are 1000 Gold each",0,0,0,1000,0,8
+18,14,shop/boss-event,「紫の鍵を大特価の５０ＧＯＬＤで売るよ! 買わないかい?」,"\""I will sell a blue key at very special price (50 gold)! Will you buy",0,0,0,50,0,8
+19,0,trigger,,,0,0,0,0,0,9
+20,0,trigger,,,0,0,0,0,0,9
+21,0,trigger,,,0,0,0,0,0,10
+22,7,altar,「この祭壇に,"\""If you offer me",0,0,0,0,0,
+23,0,trigger,,,0,0,0,0,0,11
+24,4,treasure,勇者のオーブを手に入れた！,Got the orb of the hero.,0,0,0,0,0,11
+25,4,treasure,知恵のオーブを手に入れた！,Got the orb of wisdom.,0,0,0,0,0,12
+26,4,treasure,飛翔のオーブを手に入れた！,Got the orb of flying.,0,0,0,0,0,12
+27,5,pickup,,,0,0,0,0,0,13
+28,8,key-door,赤色の扉の鍵を手に入れた。,Got a red key.,0,0,0,0,0,13
+29,6,monster,門番Ｃ,Gate-Keeper C,50,48,22,12,0,14
+30,3,walk-event(item/door),鉄の剣を手に入れた。攻撃力が１０ポイントアップ！,Got an Iron Sword! Your offensive power was 10 points up!,0,10,0,0,0,1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23;24;25;26;27;28;29;30;31;32;33;34;35;36;37;38;39;40;41;42;43;44;45;46;47;48;49;50
+31,3,walk-event(item/door),銀の剣を手に入れた。攻撃力が２０ポイントアップ！,Got a Silver Sword! Your offensive power was 20 points up!,0,20,0,0,0,1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23;24;25;26;27;28;29;30;31;32;33;34;35;36;37;38;39;40;41;42;43;44;45;46;47;48;49;50
+32,3,walk-event(item/door),騎士の剣を手に入れた。攻撃力が４０ポイントアップ！,Got a Sword of Knight! Your offensive power was 40 points up!,0,40,0,0,0,1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23;24;25;26;27;28;29;30;31;32;33;34;35;36;37;38;39;40;41;42;43;44;45;46;47;48;49;50
+33,3,walk-event(item/door),聖　剣を手に入れた。攻撃力が５０ポイントアップ！,Got a Holy Sword! Your offensive power was 50 points up!,0,50,0,0,0,1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23;24;25;26;27;28;29;30;31;32;33;34;35;36;37;38;39;40;41;42;43;44;45;46;47;48;49;50
+34,3,walk-event(item/door),神　剣を手に入れた。攻撃力が１００ポイントアップ！,Got a Sacred Sword! Your offensive power was 100 points up!,0,100,0,0,0,1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23;24;25;26;27;28;29;30;31;32;33;34;35;36;37;38;39;40;41;42;43;44;45;46;47;48;49;50
+35,3,walk-event(item/door),鉄の盾を手に入れた。防御力が１０ポイントアップ！,Got an Iron Shield! Your defensive power was 10 points up!,0,0,10,0,0,1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23;24;25;26;27;28;29;30;31;32;33;34;35;36;37;38;39;40;41;42;43;44;45;46;47;48;49;50
+36,3,walk-event(item/door),銀の盾を手に入れた。防御力が２０ポイントアップ！,Got a Silver Shield! Your defensive power was 20 points up!,0,0,20,0,0,1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23;24;25;26;27;28;29;30;31;32;33;34;35;36;37;38;39;40;41;42;43;44;45;46;47;48;49;50
+37,3,walk-event(item/door),騎士の盾を手に入れた。防御力４０がポイントアップ！,Got a Shield of Knight! Your defensive power was 40 points up!,0,0,40,0,0,1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23;24;25;26;27;28;29;30;31;32;33;34;35;36;37;38;39;40;41;42;43;44;45;46;47;48;49;50
+38,3,walk-event(item/door),聖　盾を手に入れた。防御力が５０ポイントアップ！,Got a Holy Shield! Your defensive power was 50 points up!,0,0,50,0,0,14
+39,3,walk-event(item/door),神　盾を手に入れた。防御力が１００ポイントアップ！,Got a Sacred Shield! Your defensive power was 100 points up!,0,0,100,0,0,15
+40,1,solid/gate/NPC,「この塔は全部で５０階建てで、１０階ごとに１つのブロックを形成している。塔の内部には、各ブロックを統,"\""This tower has fifty floor. Every ten floor form one area. The boss ",0,0,0,0,0,15
+41,14,shop/boss-event,「鍵を５個セットで５０ＧＯＬＤで売るよ! 買わないかい?」,"\""I will sell five keys for 50 Gold! Will you buy them?\""",0,0,0,50,0,16
+42,1,solid/gate/NPC,「商人から物を買うと、あとで重要な情報を聞くことができるじゃろう。」,"\""If you buy goods from merchants, you will be able to hear important ",0,0,0,0,0,16
+43,1,solid/gate/NPC,「このブロックでは赤い鍵は２ヶ所で手に入るそうじゃ。」,"\""I heard that you can find a red key at two places in this area.\""",0,0,0,0,0,17
+44,1,solid/gate/NPC,勇者「これはっ……！人形だっ！」,"The brave man says \""Oh! What? This is a doll!\""",0,0,0,0,0,17
+45,6,monster,Ｂスライム,Big Slime,130,60,3,8,0,18
+46,6,monster,上級僧侶,Superion Priest,100,95,30,22,0,18
+47,6,monster,大バット,Big Bat,60,100,8,12,0,19
+48,6,monster,ゾンビ,Zombie,260,85,5,18,0,19
+49,6,monster,ゾンビナイト,Zombie Knight,320,120,15,30,0,20
+50,6,monster,大ダコの一部,some of Giant Octopus,1200,180,20,50,0,
+51,6,monster,大ダコの一部,some of Giant Octopus,1200,180,20,50,0,21
+52,6,monster,大ダコの一部,some of Giant Octopus,1200,180,20,50,0,21
+53,0,trigger,,,0,0,0,0,0,22
+54,0,trigger,,,0,0,0,0,0,22
+55,0,trigger,,,0,0,0,0,0,23
+56,6,monster,ロック,Rock,20,100,68,28,0,23
+57,6,monster,魔導師ゼノ,Magic Serg. Zeno,8000,5000,1000,500,0,24
+58,6,monster,魔導師,Magic Sergeant,230,450,100,100,0,24
+59,6,monster,バンパイア,Vampire,444,199,66,144,0,25
+60,6,monster,大ダコの一部,some of Giant Octopus,1200,180,20,50,0,25
+61,6,monster,大ダコの一部,some of Giant Octopus,1200,180,20,50,0,26
+62,6,monster,大ダコの一部,some of Giant Octopus,1200,180,20,50,0,26
+63,0,trigger,,,0,0,0,0,0,27
+64,0,trigger,,,0,0,0,0,0,27
+65,0,trigger,,,0,0,0,0,0,28
+66,3,walk-event(item/door),赤い回復薬を手に入れた。生命力が１００ポイントアップ！,Got a red elixir. Your vital power was 100 points up!,100,0,0,0,0,28
+67,3,walk-event(item/door),赤い回復薬を手に入れた。生命力が２００ポイントアップ！,Got a red elixir. Your vital power was 200 points up!,200,0,0,0,0,29
+68,3,walk-event(item/door),赤い回復薬を手に入れた。生命力が２５０ポイントアップ！,Got a red elixir. Your vital power was 250 points up!,250,0,0,0,0,29
+69,11,score,「この階までのあなたの生命力、防御力、攻撃力、鍵の個数からあなたの実力を評価すると・・・,"\""Judging by your vital power, offensive power, defensive power, and n",0,0,0,0,0,30
+70,6,monster,大ダコの一部,some of Giant Octopus,1200,180,20,50,0,
+71,6,monster,大ダコ,Giant Octopus,1200,180,20,100,0,31
+72,6,monster,大ダコの一部,some of Giant Octopus,1200,180,20,50,0,31
+73,0,trigger,,,0,0,0,0,0,32
+74,6,monster,ドラゴン,Dragon,1500,600,250,800,0,32
+75,0,trigger,,,0,0,0,0,0,33
+76,3,walk-event(item/door),青い回復薬を手に入れた。生命力が４００ポイントアップ！,Got a blue elixir. Your vital power was 400 points up!,400,0,0,0,0,33
+77,3,walk-event(item/door),青い回復薬を手に入れた。生命力が８００ポイントアップ！,Got a blue elixir. Your vital power was 800 points up!,800,0,0,0,0,34
+78,3,walk-event(item/door),青い回復薬を手に入れた。生命力が１０００ポイントアップ！,Got a blue elixir. Your vital power was 1000 points up!,1000,0,0,0,0,34
+79,0,trigger,溶岩が流れている。,The lava is really hot.,0,0,0,0,0,35
+80,3,walk-event(item/door),赤のクリスタルを手に入れた。攻撃力が２ポイントアップ！,Got a red crystal. Your offensive power was 2 points up!,0,2,0,0,0,35
+81,3,walk-event(item/door),赤のクリスタルを手に入れた。攻撃力が４ポイントアップ！,Got a red crystal. Your offensive power was 4 points up!,0,4,0,0,0,36
+82,3,walk-event(item/door),赤のクリスタルを手に入れた。攻撃力が５ポイントアップ！,Got a red crystal. Your offensive power was 5 points up!,0,5,0,0,0,36
+83,3,walk-event(item/door),青のクリスタルを手に入れた。防御力が２ポイントアップ！,Got a blue crystal. Your defensive power was 2 points up!,0,0,2,0,0,37
+84,3,walk-event(item/door),青のクリスタルを手に入れた。防御力が４ポイントアップ！,Got a blue crystal. Your defensive power was 4 points up!,0,0,4,0,0,37
+85,3,walk-event(item/door),青のクリスタルを手に入れた。防御力が５ポイントアップ！,Got a blue crystal. Your defensive power was 5 points up!,0,0,5,0,0,38
+86,0,trigger,,,0,0,0,0,0,38
+87,1,solid/gate/NPC,盗賊「おお無事か！おまえ、ここの魔導師に捕まってこの牢屋に入れられてたんだよ。で、今まで気を失ってい,"The thief says \""What a relief you\'re okay!\nYou were caught and thro",0,0,0,0,0,39
+88,1,solid/gate/NPC,盗賊「よおっ！無事だったか？ここの大ダコが道をふさいでいて困っていたんだが今ようやく抜け穴が完成した,"The thief says \""Ah! Are you all right? The Big Octopus which lives in",0,0,0,0,0,39
+89,5,pickup,壁がくずれた！,The wall collapsed!,0,0,0,0,0,40
+90,6,monster,金騎士,Golden Knight,120,150,50,100,0,
+91,6,monster,騎　士,Knight,160,230,105,65,0,41
+92,6,monster,剣　士,Swordsman,100,680,50,55,0,41
+93,6,monster,兵　士,Soldier,210,200,65,45,0,42
+94,6,monster,死霊兵士,Ghost Soldier,220,180,30,35,0,42
+95,6,monster,スライムマン,Slime Man,320,140,20,30,0,43
+96,6,monster,大魔導師,Great Magic Master,4500,560,310,1000,0,43
+97,6,monster,吸血コウモリ,Vampire Bat,200,390,90,50,0,
+98,6,monster,Ｋスライム,SlimeLord,360,310,20,40,0,44
+99,6,monster,魔術師Ａ,Magician A,200,380,130,90,0,45
+100,6,monster,魔術師Ｂ,Magician B,220,370,110,80,0,45
+101,6,monster,黒騎士,Dark Knight,180,430,210,120,0,46
+102,6,monster,門番Ａ,Gate-Keeper A,180,460,360,200,0,46
+103,4,treasure,十字架を手に入れた！バンパイア、ゾンビに対する攻撃力が２倍になった！,Got a cross! Your offensive power against Vampires and Zombies has dou,0,0,0,0,0,47
+104,4,treasure,エリクサーを手に入れた！,Recieved the Magic Elixir.,0,0,0,0,0,47
+105,4,treasure,破壊の玉を手に入れた！,Got the Destructible Ball!,0,0,0,0,0,48
+106,4,treasure,空間転移の秘宝を手に入れた！,Got the Warp Staff!,0,0,0,0,0,48
+107,4,treasure,昇華の翼を手に入れた！,Got wings to fly up!,0,0,0,0,0,49
+108,4,treasure,降臨の翼を手に入れた！,Got wings to fly down!,0,0,0,0,0,
+109,4,treasure,ドラゴンスレーヤーを手に入れた！ドラゴンに対する攻撃力が２倍になった！,Got the Dragon Slayer! Your attack power against the Dragon has double,0,0,0,0,0,
+110,4,treasure,雪の結晶を手に入れた！,Got the snow crystal!,0,0,0,0,0,
+111,4,treasure,魔法の鍵を手に入れた！,Got the magic key!,0,0,0,0,0,
+112,4,treasure,スーパーマトックを手に入れた！,Got the Super Magic Mattock!,0,0,0,0,0,
+113,4,treasure,幸運の金貨を手に入れた！敵が持っているＧＯＬＤ数が２倍になる。,Got the Lucky Gold! You can get twice gold which monster has from now.,0,0,0,0,0,
+114,4,treasure,マトックを手に入れた！,Got the Magic Mattock.,0,0,0,0,0,
+115,5,pickup,,,0,0,0,0,0,
+116,0,trigger,,,0,0,0,0,0,
+117,0,trigger,,,0,0,0,0,0,
+118,0,trigger,,,0,0,0,0,0,
+119,0,trigger,,,0,0,0,0,0,
+120,0,trigger,,,0,0,0,0,0,
+121,0,trigger,,,0,0,0,0,0,
+122,0,trigger,,,0,0,0,0,0,
+123,0,trigger,,,0,0,0,0,0,
+124,0,trigger,,,0,0,0,0,0,
+125,0,trigger,,,0,0,0,0,0,
+126,0,trigger,,,0,0,0,0,0,
+127,0,trigger,,,0,0,0,0,0,
+128,0,trigger,,,0,0,0,0,0,
+129,0,trigger,,,0,0,0,0,0,
+130,0,trigger,,,0,0,0,0,0,
+131,0,trigger,,,0,0,0,0,0,
+132,0,trigger,,,0,0,0,0,0,
+133,0,trigger,,,0,0,0,0,0,
+134,0,trigger,,,0,0,0,0,0,
+135,0,trigger,,,0,0,0,0,0,
+136,0,trigger,,,0,0,0,0,0,
+137,0,trigger,,,0,0,0,0,0,
+138,1,solid/gate/NPC,「わしが言うことは何もない。この階に、あるメッセージが隠されているじゃろう。」,"\""I have nothing to say. A certain message may be hidden in this room.",0,0,0,0,0,
+139,1,solid/gate/NPC,「このブロックでは、祭壇で攻撃力を何回か上げてもらわないとロックというモンスターが倒せなくなってしま,"\""In this area, if you don\'t raise your offensive power at an altar a",0,0,0,0,0,
+140,1,solid/gate/NPC,「このブロックに、この魔法の塔の主である大魔導師がいるが、今のおまえさんでは戦っても死にに行くような,"\""The Great Magic Master is in this area. He is a proprietor of this m",0,0,0,0,0,
+141,1,solid/gate/NPC,「この階まで来た段階で、生命力１５００、攻撃力８０、防御力９８、鍵５個、紫の鍵が１個あれば、ほぼ理想,"\""In the stage of this floor, if your strength is 1500, offensive powe",0,0,0,0,0,
+142,1,solid/gate/NPC,「二刀流の剣士は攻撃力がものすごく高い。まともに戦えば大きなダメージを受けるだろう。一撃で倒せるよう,"\""The offensive power of the swordsman who uses two swords is too high",0,0,0,0,0,
+143,1,solid/gate/NPC,「急がば回れじゃ。」,"\""More haste, less speed.\""",0,0,0,0,0,
+144,1,solid/gate/NPC,「この階の４つの抜け穴をうまく使えば、強い敵とは戦わずに上の階に行けるじゃろう。」,"\""You may be able to go upstairs without fighting strong enemies, if y",0,0,0,0,0,
+145,1,solid/gate/NPC,「この階の宝物庫にある宝を取るためにはマトックが必要じゃ。」,"\""You need the mattock in order to get the treasure which is in the it",0,0,0,0,0,
+146,1,solid/gate/NPC,「３時になれば空間移動の秘宝が現れるじゃろう。」,"\""At three o\'clock, the secret treasure that lets one travel in space",0,0,0,0,0,
+147,1,solid/gate/NPC,「魔術師は隣接すると魔法攻撃をしてくる。魔導師ははさまれると生命力を半分にする攻撃をしてくる。魔導師,"\""A Magician will attack using magic when he is next to you. The Magic",0,0,0,0,0,
+148,1,solid/gate/NPC,「この塔の４４階は幻の階じゃ。普通の階段を登り降りしたのでは行くことができないらしい。ワープでもしな,"\""The 44th floor in this tower is an illusion. It seems that we cannot",0,0,0,0,0,
+149,1,solid/gate/NPC,「４１階は完全に左右対称になっておる。だから……。」,"\""The 41st floor is perfectly symmetrical, and therefore,\""",0,0,0,0,0,
+150,1,solid/gate/NPC,「サイコロの５の目の形には、魔を封じ込める力があるという。このブロックのボスと戦う時には、このことを,"\""It is said that the symbol of 5 on a pair of dice has the force of s",0,0,0,0,0,
+151,1,solid/gate/NPC,「もう、話は終わりじゃ。」,"\""I have done what I can. Good luck!\""",0,0,0,0,0,
+152,1,solid/gate/NPC,「おお、助けてくれてありがとうよ。お礼に、そなたの攻撃力と防御力を３％だけあげてやろう」（攻撃力と防,"\""Oh, thank you for your help. I will raise your offensive and defensi",0,0,0,0,0,
+153,1,solid/gate/NPC,「おぬしにこの勇者のオーブをさずけよう。これを持っていれば今いる階のモンスターの能力を調べてダメージ,"\""I will grant you the orb of the hero. It will forecast the results o",0,0,0,0,0,
+154,1,solid/gate/NPC,「やれやれ、見つかってしもうたか。褒美におぬしに”エリクサー”をやろう。この薬を使えば、その時の攻撃,"\""Thank goodness, you found me. I will give you an elixir as a symbol ",0,0,0,0,0,
