@@ -92,9 +92,9 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 184,この階にいるモンスターの生命力、攻撃力、防御力、プレーヤーの受けるダメージを検索,Looking up the results of battling these monsters.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,存档 · 音效 · 版本等系统提示
 246,セーブデータがありません。,Nobody saved that game yet.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,存档 · 音效 · 版本等系统提示
 248,おめでとう！得点が第,Congratulations! You win the,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,存档 · 音效 · 版本等系统提示
-249,位の成績でした。, place with the points which you got.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,存档 · 音效 · 版本等系统提示
-250, データをロード(読み込み)しました。,Loaded the Game.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,存档 · 音效 · 版本等系统提示
-251, データをセーブ(保存)しました。,Saved the Game.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,存档 · 音效 · 版本等系统提示
+249,位の成績でした。,place with the points which you got.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,存档 · 音效 · 版本等系统提示
+250,データをロード(読み込み)しました。,Loaded the Game.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,存档 · 音效 · 版本等系统提示
+251,データをセーブ(保存)しました。,Saved the Game.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,存档 · 音效 · 版本等系统提示
 253,このデータはロードできません。,This Game can't load.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,存档 · 音效 · 版本等系统提示
 268,Magic Tower Ver0.8a,,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,存档 · 音效 · 版本等系统提示
 281,上書きします。よろしいですか？,Over write. Is it true ?,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,存档 · 音效 · 版本等系统提示
@@ -112,7 +112,7 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 294,Au サウンドオン！,Au sound on.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,存档 · 音效 · 版本等系统提示
 295,Auバックグラウンドミュージックオン！,Au Background music on.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,存档 · 音效 · 版本等系统提示
 314,アイテムを使用します。よろしいですか？,Do you use this item?,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,存档 · 音效 · 版本等系统提示
-4,盗賊「おお無事か！おまえ、ここの魔導師に捕まってこの牢屋に入れられてたんだよ。で、今まで気を失っていた訳だ。にしても、おまえ運がいいぜ。ちょうど抜け穴が完成したときに来るんだからな。そういう訳で俺は今から脱走するところだ。おまえもついてこい。」,"The thief says ""What a relief you're okay!\nYou were caught and thrown into this prison by the Magic Sergeant.\nYou were unconscious when you got here.\nNevertheless, you are so lucky that you just woke up.\nI've finished the escape tunnel. Let's break out.""",obj87（数据引用）,2 catalog,盗贼（脱出屋）对白
+4,盗賊「おお無事か！おまえ、ここの魔導師に捕まってこの牢屋に入れられてたんだよ。で、今まで気を失っていた訳だ。にしても、おまえ運がいいぜ。ちょうど抜け穴が完成したときに来るんだからな。そういう訳で俺は今から脱走するところだ。おまえもついてこい。」,"The thief says ""What a relief you're okay!⏎You were caught and thrown into this prison by the Magic Sergeant.⏎You were unconscious when you got here.⏎Nevertheless, you are so lucky that you just woke up.⏎I've finished the escape tunnel. Let's break out.""",obj87（数据引用）,2 catalog,盗贼（脱出屋）对白
 5,盗賊「よし、じゃあ俺は先に行かせてもらうぜ。ああ、それからおまえの剣と盾、あいつらに取り上げられちまったみたいだな。この塔の中を丸腰で歩き回るのはやめた方がいい。確か５階に剣、９階に盾があったはずだから、まずそれを手に入れることを考えるんだな。じゃあ、またなっ！」,"The thief says ""O.K. Well, excuse my going first. Your weapon and shield were stolen by the guards. It's not wise to wander about without them. I heard that there is a sword on the 5th floor and a shield on the 9th. You had better get them. See you!""",代码 `strNumber=5` ← attackMonster/directCheck/pointCheck,—,盗贼（脱出屋）对白
 6,盗賊「ようっ！また会ったな。ここの門番を倒してくれて助かったぜ、ドジってまた捕まっちまってな。今度は、こんな奥の牢に閉じ込められちまった。まあ、それはそれとして、３５階にいるドラゴンの手前まで抜け穴を掘っといたんだ。開通させとくから先に行っててくれ。」,"The thief says ""Ah, we meet again! Thank you. You beat the Gate-Keeper of this area. I was defeated and imprisoned again. Such a small prison this time. I'm making a secret tunnel in front of the Dragon. Go up to 35th floor and wait for me, while I complete the tunnel.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,盗贼（脱出屋）对白
 7,盗賊「後でちゃんと行くから３５階まで先に行っておいてくれ。」,"The thief says ""Don't worry, I'll be there.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,盗贼（脱出屋）对白
@@ -234,8 +234,8 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 180,魔法の鍵を手に入れた！,Got the magic key!,obj111（数据引用）,46 catalog,道具 / 装备 / 钥匙：拾取与使用
 181,スーパーマトックを手に入れた！,Got the Super Magic Mattock!,obj112（数据引用）,catalog,道具 / 装备 / 钥匙：拾取与使用
 182,幸運の金貨を手に入れた！敵が持っているＧＯＬＤ数が２倍になる。,Got the Lucky Gold! You can get twice gold which monster has from now.,obj113（数据引用）,00F catalog,道具 / 装备 / 钥匙：拾取与使用
-205,枚手に入れた！, Gold.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,道具 / 装备 / 钥匙：拾取与使用
-252, 鍵を持ってないよ！,You don't have a key!,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,道具 / 装备 / 钥匙：拾取与使用
+205,枚手に入れた！,Gold.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,道具 / 装备 / 钥匙：拾取与使用
+252,鍵を持ってないよ！,You don't have a key!,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,道具 / 装备 / 钥匙：拾取与使用
 254,赤い回復薬を手に入れた。生命力が１００ポイントアップ！,Got a red elixir. Your vital power was 100 points up!,obj66（数据引用）,"11-12,14,16-19 catalog",道具 / 装备 / 钥匙：拾取与使用
 255,赤い回復薬を手に入れた。生命力が２００ポイントアップ！,Got a red elixir. Your vital power was 200 points up!,obj67（数据引用）,"31,33-34,37-40 catalog",道具 / 装备 / 钥匙：拾取与使用
 256,赤い回復薬を手に入れた。生命力が２５０ポイントアップ！,Got a red elixir. Your vital power was 250 points up!,obj68（数据引用）,"41,43-44,46-48 catalog",道具 / 装备 / 钥匙：拾取与使用
@@ -260,10 +260,10 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 96,「超希少品のスーパーマトックを４０００ＧＯＬＤで買わないかい？」,"""Would you like to buy a super mattock (it's very rare) for 4000 Gold?""",obj170（数据引用）,47,商人 · 祭坛 · 积分石 · 智慧之戒问答
 204,ＧＯＬＤを,. Recieved,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,商人 · 祭坛 · 积分石 · 智慧之戒问答
 206,「この祭壇に,"""If you offer me",obj22（数据引用）,"4,12,32,46 catalog",商人 · 祭坛 · 积分石 · 智慧之戒问答
-210,ポイント回復, points.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,商人 · 祭坛 · 积分石 · 智慧之戒问答
+210,ポイント回復,points.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,商人 · 祭坛 · 积分石 · 智慧之戒问答
 224,「この階までのあなたの生命力、防御力、攻撃力、鍵の個数からあなたの実力を評価すると・・・,"""Judging by your vital power, offensive power, defensive power, and number of keys, you have",obj69（数据引用）,catalog,商人 · 祭坛 · 积分石 · 智慧之戒问答
-297,ポイント回復, points up!,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,商人 · 祭坛 · 积分石 · 智慧之戒问答
-298,ＧＯＬＤを, Got,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,商人 · 祭坛 · 积分石 · 智慧之戒问答
+297,ポイント回復,points up!,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,商人 · 祭坛 · 积分石 · 智慧之戒问答
+298,ＧＯＬＤを,Got,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,商人 · 祭坛 · 积分石 · 智慧之戒问答
 63,「このブロックに、この魔法の塔の主である大魔導師がいるが、今のおまえさんでは戦っても死にに行くようなものじゃろう。とりあえず、うまくやりすごして上のブロックに行くのが正解じゃ。」,"""The Great Magic Master is in this area. He is a proprietor of this magic tower. At your strenght, to attack him means death. It stands to reason that you should not face him, but rather, get items on higher levels first.""",obj140（数据引用）,21,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 70,「門番のいる所には必ず門があるよ。逆に門のある階には、それを守っている敵がいるよ。だから……。」,"""There is never a gate without a Gate-Keeper. Conversely there are always enemies who keep the gate on floors that have gates. So,""",obj165（数据引用）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 136,扉が開いた。,The door has opened.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
@@ -288,17 +288,17 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 187,防,Defensive power:,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
 188,予想ダメージ,Expected damage:,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
 189,攻撃不可能,Attack is impossible!,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
-207, ＧＯＬＤ寄進すれば望みをかなえてやろう。寄進するか？」," Gold, I will grant your request. Will you?""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
+207,ＧＯＬＤ寄進すれば望みをかなえてやろう。寄進するか？」,"Gold, I will grant your request. Will you?""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
 209,・生命力を,Your life recovers by,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
 211,・攻撃力を,The offensive power is raised,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
-212,ポイントアップ, points.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
+212,ポイントアップ,points.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
 213,・防御力を,The defensive power is raised,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
 216,塔,Tower,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
-217,階, F,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
+217,階,F,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
 218,生命力,Life,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
 219,攻撃力,Offense,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
 220,防御力,Defense,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
-225,点です。, points.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
+225,点です。,points.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
 233,『戦士』,FIGHTER,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
 234,『勇者』,BRAVE MAN,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
 235,『英雄』,HERO,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）

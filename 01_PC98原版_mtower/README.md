@@ -748,7 +748,11 @@ EN: Do you use this item?
 
 > 盗賊「おお無事か！おまえ、ここの魔導師に捕まってこの牢屋に入れられてたんだよ。で、今まで気を失っていた訳だ。にしても、おまえ運がいいぜ。ちょうど抜け穴が完成したときに来るんだからな。そういう訳で俺は今から脱走するところだ。おまえもついてこい。」
 >
-EN: The thief says "What a relief you're okay!\nYou were caught and thrown into this prison by the Magic Sergeant.\nYou were unconscious when you got here.\nNevertheless, you are so lucky that you just woke up.\nI've finished the escape tunnel. Let's break out."
+EN: The thief says "What a relief you're okay!
+　　 You were caught and thrown into this prison by the Magic Sergeant.
+　　 You were unconscious when you got here.
+　　 Nevertheless, you are so lucky that you just woke up.
+　　 I've finished the escape tunnel. Let's break out."
 
 **[5]** 　代码 `strNumber=5` ← attackMonster/directCheck/pointCheck 　·  出现层：—
 
