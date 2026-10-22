@@ -1,4 +1,4 @@
-"""生成 README「附录：塔内全部对话/提示文案」与 magic_tower1_texts.csv。
+"""生成 magic_tower1_texts.md（塔内全部文案，原为 README 附录）与 magic_tower1_texts.csv。
 
 前置：需已有 mtower.jvm（javap -c -p MTower.class）、crops/live.json、javamap.json（运行时导出）。
 用法：python3 tools/gen_texts.py
