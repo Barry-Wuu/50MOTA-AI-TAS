@@ -240,3 +240,56 @@ BOSS 金騎士 120/150/50；清扫　→ 上 41F
 
 - 与 00 层配对的**只有 1F**；23F 的 "GO 0F" 只是提示；48F(1,1) 与目录区 (4,3) 的单个 obj115 判为残留格，与 0F 事件无关（此处更正我先前版本的推测）。
 - obj115：`type=OBJECT_DOOR(5)`，但 `item/number/jump_x/jump_y` 全为 0 且 `crop=32`（地板图素），故不可见、不传送。
+
+---
+
+## 附：隐藏物体（事件后才出现的掉落/道具）
+
+这些格在初始地图上多半是空格、墙、甚至已被怪物占据，
+是引擎在事件分支里用 `mapObject[行][列]=ID` 写进去的（提取脚本见 `_dynamic_spawns.source`）。
+渲染时以 **45% 不透明度**的道具图素叠加在原格之上。
+
+覆盖 22 层、115 格；完整清单见 `magic_tower1_dynamic.csv` 与每层 JSON 的 `dynamic_objects`。
+
+### 五件独有道具（BOSS/事件掉落）
+
+| 层 | 格 | 道具 | 该格初始内容 |
+|---|---|---|---|
+| 15F | (6,5) | マトック | MONSTER |
+| 35F | (6,5) | 雪の結晶 | NORMAL |
+| 39F | (4,4) | 昇華の翼 | DOOR |
+| 41F | (6,5) | 降臨の翼 | 空 |
+| 49F | (7,2) | ドラゴンスレーヤー | 空 |
+
+### 成批出现的强化品/钥匙（按层）
+
+| 层 | 隐藏格数 | 主要内容 |
+|---|---|---|
+| 2F | 3 | MESSAGE×3 |
+| 3F | 4 | MONSTER×4 |
+| 10F | 18 | STATUS×9, NORMAL×4, KEY×3, MESSAGE×1, SCORE×1 |
+| 14F | 1 | KEY×1 |
+| 15F | 3 | NORMAL×2, ITEM×1, MESSAGE×1 |
+| 16F | 1 | MESSAGE×1 |
+| 20F | 15 | STATUS×9, KEY×3, SCORE×1, MONSTER×1, NORMAL×1 |
+| 25F | 7 | KEY×5, SCORE×1, NORMAL×1 |
+| 29F | 2 | MESSAGE×2 |
+| 30F | 2 | NORMAL×2 |
+| 32F | 2 | MONSTER×2 |
+| 33F | 2 | NORMAL×4 |
+| 34F | 5 | KEY×5 |
+| 35F | 5 | STATUS×3, MESSAGE×1, ITEM×1 |
+| 38F | 2 | NORMAL×1, DOOR×1 |
+| 39F | 1 | ITEM×1 |
+| 40F | 15 | MONSTER×13, STATUS×9, KEY×3, SCORE×1, NORMAL×1 |
+| 41F | 1 | ITEM×1 |
+| 42F | 5 | MONSTER×5 |
+| 48F | 1 | MONSTER×1 |
+| 49F | 19 | STATUS×9, MONSTER×8, SCORE×2, KEY×1, NORMAL×1, ITEM×1 |
+| 50F | 1 | MESSAGE×1 |
+
+注：40F/49F 等多格同时登记了"道具"与"怪物"两种候选（不同事件分支写入同一格），
+绘制时取道具优先，全部候选保留在 `variants` 中，未做取舍猜测。
+
+另有 28 处**动态地形**（`dynamic_terrain`）：10 格由墙改成地板（事件开启暗道）、6 格由地板封成墙、
+5 格两种分支都有，其余改成祭坛/特殊图素。这些未在半透明图层里绘制（属地形变化而非物品）。

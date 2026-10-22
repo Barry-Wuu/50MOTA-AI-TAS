@@ -1,0 +1,147 @@
+floor,x,y,draw_obj,variants(obj:type:method),cell_now,name_jp
+2,11,4,173,173:MESSAGE:eventMT,terrain=1(MESSAGE) obj=174,「有効に使ってね!」
+2,11,7,151,151:MESSAGE:eventMT,terrain=1(MESSAGE) obj=152,「もう、話は終わりじゃ。」
+2,11,11,88,88:MESSAGE:eventMT,terrain=1(空) obj=0,盗賊「よおっ！無事だったか？ここの大ダコが道をふさいでいて困っていたんだが今ようやく抜け穴が
+3,4,9,58,58:MONSTER:eventMT,terrain=1(空) obj=0,魔導師
+3,5,8,58,58:MONSTER:eventMT,terrain=1(空) obj=0,魔導師
+3,5,10,58,58:MONSTER:eventMT,terrain=1(空) obj=0,魔導師
+3,6,9,58,58:MONSTER:eventMT,terrain=1(空) obj=0,魔導師
+10,1,3,13,13:STATUS:eventMT,terrain=1(MONSTER) obj=9,赤のクリスタルを手に入れた。攻撃力が１ポイントアップ！
+10,1,4,12,12:STATUS:eventMT,terrain=1(空) obj=0,青い回復薬を手に入れた。生命力が２００ポイントアップ！
+10,1,11,87,87:MESSAGE:eventMT,terrain=21(空) obj=0,盗賊「おお無事か！おまえ、ここの魔導師に捕まってこの牢屋に入れられてたんだよ。で、今まで気を
+10,2,3,13,13:STATUS:eventMT,terrain=1(MONSTER) obj=9,赤のクリスタルを手に入れた。攻撃力が１ポイントアップ！
+10,2,4,12,12:STATUS:eventMT,terrain=1(MONSTER) obj=10,青い回復薬を手に入れた。生命力が２００ポイントアップ！
+10,3,3,13,13:STATUS:eventMT,terrain=1(MONSTER) obj=9,赤のクリスタルを手に入れた。攻撃力が１ポイントアップ！
+10,3,4,12,12:STATUS:eventMT,terrain=1(空) obj=0,青い回復薬を手に入れた。生命力が２００ポイントアップ！
+10,4,4,20,20:NORMAL:eventMT,terrain=1(NORMAL) obj=20,
+10,6,3,20,20:NORMAL:eventMT,terrain=1(MONSTER) obj=16,
+10,6,4,69,69:SCORE:eventMT,terrain=1(空) obj=0,「この階までのあなたの生命力、防御力、攻撃力、鍵の個数からあなたの実力を評価すると・・・
+10,6,7,20,20:NORMAL:eventMT,terrain=1(空) obj=0,
+10,8,4,20,20:NORMAL:eventMT,terrain=1(NORMAL) obj=20,
+10,9,3,14,14:STATUS:eventMT,terrain=1(MONSTER) obj=9,青のクリスタルを手に入れた。防御力が１ポイントアップ！
+10,9,4,1,1:KEY:eventMT,terrain=1(空) obj=0,扉の鍵を手に入れた。
+10,10,3,14,14:STATUS:eventMT,terrain=1(MONSTER) obj=9,青のクリスタルを手に入れた。防御力が１ポイントアップ！
+10,10,4,1,1:KEY:eventMT,terrain=1(MONSTER) obj=10,扉の鍵を手に入れた。
+10,11,3,14,14:STATUS:eventMT,terrain=1(MONSTER) obj=9,青のクリスタルを手に入れた。防御力が１ポイントアップ！
+10,11,4,1,1:KEY:eventMT,terrain=1(空) obj=0,扉の鍵を手に入れた。
+14,1,3,28,28:KEY:eventMT,terrain=3(空) obj=0,赤色の扉の鍵を手に入れた。
+15,6,5,114,114:ITEM:eventMT,terrain=1(MONSTER) obj=61,マトックを手に入れた！
+15,6,9,20,20:NORMAL:eventMT;20:NORMAL:eventMT,terrain=1(空) obj=0,
+15,9,1,88,88:MESSAGE:eventMT,terrain=1(空) obj=0,盗賊「よおっ！無事だったか？ここの大ダコが道をふさいでいて困っていたんだが今ようやく抜け穴が
+16,11,11,151,151:MESSAGE:eventMT,terrain=1(DOOR) obj=89,「もう、話は終わりじゃ。」
+20,4,5,80,80:STATUS:eventMT,terrain=1(空) obj=0,赤のクリスタルを手に入れた。攻撃力が２ポイントアップ！
+20,4,6,80,80:STATUS:eventMT,terrain=1(空) obj=0,赤のクリスタルを手に入れた。攻撃力が２ポイントアップ！
+20,4,7,80,80:STATUS:eventMT,terrain=1(空) obj=0,赤のクリスタルを手に入れた。攻撃力が２ポイントアップ！
+20,5,5,1,1:KEY:eventMT,terrain=1(MONSTER) obj=47,扉の鍵を手に入れた。
+20,5,8,76,76:STATUS:eventMT,terrain=1(空) obj=0,青い回復薬を手に入れた。生命力が４００ポイントアップ！
+20,6,4,69,69:SCORE:eventMT,terrain=1(空) obj=0,「この階までのあなたの生命力、防御力、攻撃力、鍵の個数からあなたの実力を評価すると・・・
+20,6,5,1,1:KEY:eventMT,terrain=1(MONSTER) obj=47,扉の鍵を手に入れた。
+20,6,6,59,59:MONSTER:banpaia,terrain=1(空) obj=0,バンパイア
+20,6,8,76,76:STATUS:eventMT,terrain=1(空) obj=0,青い回復薬を手に入れた。生命力が４００ポイントアップ！
+20,6,9,20,20:NORMAL:eventMT,terrain=1(DOOR) obj=27,
+20,7,5,1,1:KEY:eventMT,terrain=1(MONSTER) obj=47,扉の鍵を手に入れた。
+20,7,8,76,76:STATUS:eventMT,terrain=1(空) obj=0,青い回復薬を手に入れた。生命力が４００ポイントアップ！
+20,8,5,83,83:STATUS:eventMT,terrain=1(空) obj=0,青のクリスタルを手に入れた。防御力が２ポイントアップ！
+20,8,6,83,83:STATUS:eventMT,terrain=1(空) obj=0,青のクリスタルを手に入れた。防御力が２ポイントアップ！
+20,8,7,83,83:STATUS:eventMT,terrain=1(空) obj=0,青のクリスタルを手に入れた。防御力が２ポイントアップ！
+25,4,8,28,28:KEY:eventMT,terrain=1(空) obj=0,赤色の扉の鍵を手に入れた。
+25,5,8,28,28:KEY:eventMT,terrain=1(空) obj=0,赤色の扉の鍵を手に入れた。
+25,6,8,28,28:KEY:eventMT,terrain=1(空) obj=0,赤色の扉の鍵を手に入れた。
+25,6,9,69,69:SCORE:eventMT,terrain=1(空) obj=0,「この階までのあなたの生命力、防御力、攻撃力、鍵の個数からあなたの実力を評価すると・・・
+25,6,10,20,20:NORMAL:eventMT,terrain=1(DOOR) obj=27,
+25,7,8,28,28:KEY:eventMT,terrain=1(空) obj=0,赤色の扉の鍵を手に入れた。
+25,8,8,28,28:KEY:eventMT,terrain=1(空) obj=0,赤色の扉の鍵を手に入れた。
+29,6,4,88,88:MESSAGE:eventMT,terrain=1(空) obj=0,盗賊「よおっ！無事だったか？ここの大ダコが道をふさいでいて困っていたんだが今ようやく抜け穴が
+29,7,2,88,88:MESSAGE:eventMT,terrain=1(空) obj=0,盗賊「よおっ！無事だったか？ここの大ダコが道をふさいでいて困っていたんだが今ようやく抜け穴が
+30,6,4,20,20:NORMAL:eventMT,terrain=1(空) obj=0,
+30,6,7,20,20:NORMAL:eventMT,terrain=1(空) obj=0,
+32,6,9,90,90:MONSTER:eventMT,terrain=1(空) obj=0,金騎士
+32,11,1,90,90:MONSTER:eventMT,terrain=74(空) obj=0,金騎士
+33,10,4,20,20:NORMAL:eventMT;20:NORMAL:eventMT,terrain=1(空) obj=0,
+33,10,8,20,20:NORMAL:eventMT;20:NORMAL:eventMT,terrain=1(空) obj=0,
+34,1,5,1,1:KEY:eventMT,terrain=1(空) obj=0,扉の鍵を手に入れた。
+34,1,7,1,1:KEY:eventMT,terrain=1(空) obj=0,扉の鍵を手に入れた。
+34,2,6,28,28:KEY:eventMT,terrain=1(空) obj=0,赤色の扉の鍵を手に入れた。
+34,3,5,1,1:KEY:eventMT,terrain=1(空) obj=0,扉の鍵を手に入れた。
+34,3,7,1,1:KEY:eventMT,terrain=1(空) obj=0,扉の鍵を手に入れた。
+35,5,4,77,77:STATUS:eventMT,terrain=1(空) obj=0,青い回復薬を手に入れた。生命力が８００ポイントアップ！
+35,5,10,88,88:MESSAGE:directCheck,terrain=1(空) obj=0,盗賊「よおっ！無事だったか？ここの大ダコが道をふさいでいて困っていたんだが今ようやく抜け穴が
+35,6,4,77,77:STATUS:eventMT,terrain=1(空) obj=0,青い回復薬を手に入れた。生命力が８００ポイントアップ！
+35,6,5,110,110:ITEM:eventMT,terrain=1(NORMAL) obj=54,雪の結晶を手に入れた！
+35,7,4,77,77:STATUS:eventMT,terrain=1(空) obj=0,青い回復薬を手に入れた。生命力が８００ポイントアップ！
+38,2,5,20,20:NORMAL:eventMT,terrain=1(空) obj=0,
+38,2,9,,89:DOOR:eventMT,terrain=3(空) obj=0,壁がくずれた！
+39,4,4,107,107:ITEM:eventMT,terrain=1(DOOR) obj=2,昇華の翼を手に入れた！
+40,2,2,81,81:STATUS:eventMT;92:MONSTER:eventMT,terrain=1(MONSTER) obj=92,剣　士 | 赤のクリスタルを手に入れた。攻撃力が４ポイントアップ！
+40,3,2,81,81:STATUS:eventMT;92:MONSTER:eventMT,terrain=1(MONSTER) obj=92,剣　士 | 赤のクリスタルを手に入れた。攻撃力が４ポイントアップ！
+40,3,4,77,77:STATUS:eventMT;94:MONSTER:eventMT,terrain=1(MONSTER) obj=94,死霊兵士 | 青い回復薬を手に入れた。生命力が８００ポイントアップ！
+40,4,2,81,81:STATUS:eventMT;92:MONSTER:eventMT,terrain=1(MONSTER) obj=92,剣　士 | 赤のクリスタルを手に入れた。攻撃力が４ポイントアップ！
+40,4,4,77,77:STATUS:eventMT;94:MONSTER:eventMT,terrain=1(MONSTER) obj=94,死霊兵士 | 青い回復薬を手に入れた。生命力が８００ポイントアップ！
+40,5,4,77,77:STATUS:eventMT;94:MONSTER:eventMT,terrain=1(MONSTER) obj=94,死霊兵士 | 青い回復薬を手に入れた。生命力が８００ポイントアップ！
+40,6,2,69,69:SCORE:eventMT,terrain=1(MONSTER) obj=90,「この階までのあなたの生命力、防御力、攻撃力、鍵の個数からあなたの実力を評価すると・・・
+40,6,6,90,90:MONSTER:eventMT,terrain=1(空) obj=0,金騎士
+40,6,8,20,20:NORMAL:eventMT,terrain=1(DOOR) obj=27,
+40,7,4,1,1:KEY:eventMT;93:MONSTER:eventMT,terrain=1(MONSTER) obj=93,兵　士 | 扉の鍵を手に入れた。
+40,8,2,84,84:STATUS:eventMT;91:MONSTER:eventMT,terrain=1(MONSTER) obj=91,青のクリスタルを手に入れた。防御力が４ポイントアップ！ | 騎　士
+40,8,4,1,1:KEY:eventMT;93:MONSTER:eventMT,terrain=1(MONSTER) obj=93,兵　士 | 扉の鍵を手に入れた。
+40,9,2,84,84:STATUS:eventMT;91:MONSTER:eventMT,terrain=1(MONSTER) obj=91,青のクリスタルを手に入れた。防御力が４ポイントアップ！ | 騎　士
+40,9,4,1,1:KEY:eventMT;93:MONSTER:eventMT,terrain=1(MONSTER) obj=93,兵　士 | 扉の鍵を手に入れた。
+40,10,2,84,84:STATUS:eventMT;91:MONSTER:eventMT,terrain=1(MONSTER) obj=91,青のクリスタルを手に入れた。防御力が４ポイントアップ！ | 騎　士
+41,6,5,108,108:ITEM:eventMT,terrain=1(空) obj=0,降臨の翼を手に入れた！
+42,5,8,58,58:MONSTER:eventMT,terrain=1(空) obj=0,魔導師
+42,6,7,58,58:MONSTER:eventMT,terrain=1(空) obj=0,魔導師
+42,6,8,90,90:MONSTER:eventMT,terrain=1(空) obj=0,金騎士
+42,6,9,58,58:MONSTER:eventMT,terrain=1(空) obj=0,魔導師
+42,7,8,58,58:MONSTER:eventMT,terrain=1(空) obj=0,魔導師
+48,1,1,58,58:MONSTER:eventMT,terrain=1(DOOR) obj=115,魔導師
+49,2,4,82,82:STATUS:eventMT,terrain=1(空) obj=0,赤のクリスタルを手に入れた。攻撃力が５ポイントアップ！
+49,3,4,82,82:STATUS:eventMT,terrain=1(空) obj=0,赤のクリスタルを手に入れた。攻撃力が５ポイントアップ！
+49,4,4,82,82:STATUS:eventMT,terrain=1(空) obj=0,赤のクリスタルを手に入れた。攻撃力が５ポイントアップ！
+49,5,2,28,28:KEY:eventMT;58:MONSTER:eventMT,terrain=1(空) obj=0,赤色の扉の鍵を手に入れた。 | 魔導師
+49,5,3,58,58:MONSTER:eventMT,terrain=1(空) obj=0,魔導師
+49,5,4,58,58:MONSTER:eventMT,terrain=1(空) obj=0,魔導師
+49,5,5,78,78:STATUS:eventMT,terrain=1(空) obj=0,青い回復薬を手に入れた。生命力が１０００ポイントアップ！
+49,6,2,69,58:MONSTER:eventMT;69:SCORE:eventMT,terrain=1(空) obj=0,「この階までのあなたの生命力、防御力、攻撃力、鍵の個数からあなたの実力を評価すると・・・ | 魔導師
+49,6,3,69,69:SCORE:eventMT,terrain=1(空) obj=0,「この階までのあなたの生命力、防御力、攻撃力、鍵の個数からあなたの実力を評価すると・・・
+49,6,4,58,58:MONSTER:eventMT,terrain=1(空) obj=0,魔導師
+49,6,5,78,78:STATUS:eventMT,terrain=1(空) obj=0,青い回復薬を手に入れた。生命力が１０００ポイントアップ！
+49,6,7,20,20:NORMAL:eventMT,terrain=1(NORMAL) obj=20,
+49,7,2,109,58:MONSTER:eventMT;109:ITEM:eventMT,terrain=1(空) obj=0,ドラゴンスレーヤーを手に入れた！ドラゴンに対する攻撃力が２倍になった！ | 魔導師
+49,7,3,58,58:MONSTER:eventMT,terrain=1(空) obj=0,魔導師
+49,7,4,58,58:MONSTER:eventMT,terrain=1(空) obj=0,魔導師
+49,7,5,78,78:STATUS:eventMT,terrain=1(空) obj=0,青い回復薬を手に入れた。生命力が１０００ポイントアップ！
+49,8,4,85,85:STATUS:eventMT,terrain=1(空) obj=0,青のクリスタルを手に入れた。防御力が５ポイントアップ！
+49,9,4,85,85:STATUS:eventMT,terrain=1(空) obj=0,青のクリスタルを手に入れた。防御力が５ポイントアップ！
+49,10,4,85,85:STATUS:eventMT,terrain=1(空) obj=0,青のクリスタルを手に入れた。防御力が５ポイントアップ！
+50,6,5,88,88:MESSAGE:eventMT,terrain=1(空) obj=0,盗賊「よおっ！無事だったか？ここの大ダコが道をふさいでいて困っていたんだが今ようやく抜け穴が
+
+# 动态地形写入（事件改变地形本身）
+floor,x,y,to,now_terrain,methods
+2,2,7,1,3,eventMT
+3,5,9,1;116,1,eventMT
+10,5,6,1,3,eventMT
+10,6,11,22,1,eventMT
+10,7,6,1,3,eventMT
+14,1,3,1,3,eventMT
+15,8,1,1,3,directCheck
+20,6,1,50,1,eventMT
+24,5,1,1;3,1,ending;eventMT
+24,6,0,1;31,31,ending;eventMT
+24,6,2,1;3,3,ending;eventMT
+24,6,3,1;3,3,ending;eventMT
+24,6,4,1;3,3,ending;eventMT
+24,7,1,1;3,1,ending;eventMT
+29,6,3,1,3,eventMT
+30,6,1,70,1,eventMT
+33,8,10,3,1,eventMT
+35,4,9,1,3,directCheck
+38,2,9,1,3,eventMT
+40,6,1,90,1,eventMT
+41,5,6,3,1,eventMT
+41,5,7,1,3,eventMT
+41,6,6,3,1,eventMT
+41,7,6,3,1,eventMT
+41,7,7,1,3,eventMT
+43,7,1,3,1,eventMT
+43,10,1,3,1,eventMT
+51,1,1,117,118,eventMT
