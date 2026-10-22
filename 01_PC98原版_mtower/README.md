@@ -40,6 +40,8 @@
 ├── magic_tower1_rows.csv        # 大表逐行标记（S 暗墙 / T 隐形块 / E 实体 / B BOSS）
 ├── magic_tower1_walkroute.md    # 走法路线、危险格、00 层通达方式、隐藏物体说明
 ├── hidden_floor_band5.png / floor_00.png / MTower_sheet.gif
+├── tools/dynscan.py             # 提取“事件动态写入格子”的脚本
+├── tools/gen_texts.py           # 生成本文件文案附录与 magic_tower1_texts.csv
 └── README.md
 ```
 
