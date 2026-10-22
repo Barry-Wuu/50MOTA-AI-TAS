@@ -112,7 +112,7 @@
 
 | 文件 | 内容 |
 |---|---|
-| `README.md` | 版本真身、目录内容、**怪物战力表**（含战斗结算与提醒）、运行方式、备注、**附录：309 条塔内文案**（日/英+引用方式+出现层） |
+| `README.md` | 章节：版本真身 → 目录内容 → **50 层全图**（嵌 `map_50f.png`）→ **怪物战力表**（+战斗结算+提醒）→ **特殊道具**（25 件，除宝石/血瓶/三色钥匙）→ 运行方式 → 备注 → 文案文件指引 |
 | `magic_tower1_map_50f.json` | 每层 `terrain/objects/secret_walls/entities/bosses/dynamic_objects/dynamic_terrain/runtime_boss` + 顶层 `_obj115_invisible_marker_tiles`、`_dynamic_spawns`（含 `overlay_cells`、`corrections`、`limits`） |
 | `magic_tower1_rows.csv` | 大表逐行标记 S 暗墙 / T 隐形块 / E 实体 / B BOSS |
 | `magic_tower1_entities.csv` | 全部布点（floor,y,x,obj,kind,role,名称,HP,ATK,DEF,GOLD） |
@@ -121,5 +121,6 @@
 | `magic_tower1_texts.csv` | 309 条文案（strNumber、日、英、引用方式、出现层、分组） |
 | `magic_tower1_walkroute.md` | 走法路线、危险格、隐藏物体、00 层通达方式 |
 | `map_50f.png` / `floors/` / `floor_00.png` / `hidden_floor_band5.png` / `tiles/` | 渲染产出与 189 块 imgCrop 切片 |
+| `magic_tower1_texts.md` | 309 条塔内文案（日/英 + 引用方式 + 出现层 + 12 个分组），从 README 拆出 |
 | `tools/` | `dynscan.py` `register_boss.py` `gen_monster_table.py` `gen_texts.py` |
 | `01_PC98原版_mtower.fdi` / `game/` | 原始软盘映像与其内 23 个文件 |
