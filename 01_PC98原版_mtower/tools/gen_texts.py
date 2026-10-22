@@ -1,13 +1,3 @@
-"""生成 README「附录：塔内全部对话/提示文案」与 magic_tower1_texts.csv。
-
-前置（与 dynscan.py 相同）：
-  1) cd 08_Java_MTower08a/game && javap -c -p MTower.class > mtower.jvm
-  2) 运行时导出 crops/live.json（map/mapAttribute/objectAttribute）与 javamap.json（strMessage）
-用法：
-  python3 tools/gen_texts.py
-输出：
-  texts_section.md（README 附录正文） + magic_tower1_texts.csv（309 行机读版）
-"""
 """生成 01 版《魔法の塔》塔内全部文案（日/英）附录，按引用场景分组，输出 markdown 片段。
 
 用法: python3 gen_texts.py            # 打印统计并把片段写到 texts_section.md
