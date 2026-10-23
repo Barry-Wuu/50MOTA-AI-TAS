@@ -1,0 +1,30 @@
+{
+  "method": "BFS（uniform-cost）在 mota_core 无头内核上求解；event_mode='on_entry'（进层即写入 FLOOR_WRITES，与实机一致），trap_mode='apply'（踩 3F 中央(5,9) 必触发扒装剧本）。状态键含 (层,坐标,黄/蓝/红钥匙,trap_mode_done,已拾取掩码) → 首达即严格最少数。战斗失败视为不可走。",
+  "stair_landing_fix": "【本轮关键修正】落点改用权威 warp 表：每格楼梯在其 MA 条目 [16]=大表全局列、[17]=全局行 处直接存着目的地，解码即得 (目标层,x,y)。旧约定'踩上楼就落到相邻层的另一道楼梯'是错的——实测落点与另一道楼梯相差一格（1F→2F 落在 2F(1,2) 而非 (1,1)；2F→3F 落在 3F(2,11) 而非 (1,11)；3F→4F 落在 4F(11,10) 而非 (11,11)）。修正后落点与 mk_enter.py 旧注释（来自本 warp 表）完全一致，且阶数反而更优（落点更靠近下一梯）。",
+  "calibration": "enter2=28 与实机截图 verify_2f_28steps.png 一致；enter3 的层号(3F)也与 verify_3f_38steps.png 一致（楼层号正确，仅落点格由 (1,11) 校正为 (2,11)）。故 4F/5F/sword5 可直接采信。",
+  "caveat_old_route": "此前手工 route（keys_enter_2f_to_4f.txt，128 键；route_enter_4f_v2.json）名不副实：重放后终点停在 3F(10,11)，从未真正踏入 4F，且步数也非最优。已重命名为 *.BROKEN_* 留存，勿再用。旧 A* 的 4F=92 也被本轮 77 步严格更优解取代。",
+  "trap_notice": "3F 扒装剧本不可避免：踩 (5,9) 后 HP1000→400、ATK/DEF→10、神装被收、丢到 2F(3,8) 盗贼牢房、(2,7) 被挖通。所有路线均已显式计入该事件（见各 route csv 的 '★3F 剧本' 行）。",
+  "floors": {
+    "2F": {"steps": 28, "verified_model": true, "final": "2F(1,2) HP1000/ATK100/DEF100/金4", "events": ["1F 杀史莱姆×3(+金)", "上楼梯→2F(落点1,2)"], "keys_file": "keys_enter_2f.txt", "csv": "route_enter_2f.csv"},
+    "3F": {"steps": 37, "verified_model": true, "final": "3F(2,11) HP1000/ATK100/DEF100/金4", "events": ["上楼梯→2F", "上楼梯→3F(落点2,11)"], "keys_file": "keys_enter_3f.txt", "csv": "route_enter_3f.csv"},
+    "4F": {
+      "steps": 77, "verified_model": true,
+      "final": "4F(11,10) HP326/ATK10/DEF10/金7（蓝钥匙余1）",
+      "breakdown": [
+        "28 步踏入 2F（1F 取黄钥匙、开黄门、杀史莱姆×3）",
+        "9 步 2F→3F（上楼梯 1,1→2,11；落点 3F(2,11)）",
+        "5 步 3F 走到中央(5,9) 触发扒装剧本 → 丢到 2F(3,8)（HP→400/ATK·DEF→10）",
+        "1 步 与盗贼 obj87 对话（脱走）",
+        "4 步 回 3F(2,11)",
+        "12 步 3F 柱区取 蓝钥匙(5,3) 与 黄钥匙(5,2)",
+        "6 步 3F 右下绕杀史莱姆(掉血24)→红史莱姆(掉血50)，共 -74（400→326）",
+        "2 步 开黄门(8,11) 并踏入 3F 上梯(11,11)",
+        "3 步 上楼梯→4F(11,10)"
+      ],
+      "keys_file": "keys_enter_4f.txt", "csv": "route_enter_4f.csv"
+    },
+    "5F": {"steps": 106, "verified_model": true, "final": "5F(2,11) HP652/ATK10/DEF10/金10", "keys_file": "keys_enter_5f.txt", "csv": "route_enter_5f.csv"},
+    "5F铁剑": {"steps": 140, "verified_model": true, "final": "5F(11,11) HP418/ATK20/DEF10/金18（已吃铁剑+10ATK）", "keys_file": "keys_sword_5f.txt", "csv": "route_sword_5f.csv"}
+  },
+  "solver": "tools/mk_enter_any.py（BFS）；tools/mota_core.py（内核，落点读 MA[16]/MA[17] warp 表）；tools/run_verify.py（实机验证，自动按层切换点截图）"
+}

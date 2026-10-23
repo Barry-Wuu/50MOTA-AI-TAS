@@ -10,7 +10,7 @@
   本脚本只负责“哪些格会被运行时改写”，渲染叠加见 map_50f.png 的生成脚本。
 """
 import re, json, collections
-A='/workspace/f8fd4af0-b7d8-470f-bd1e-d5a9802c97d1/work/.artifacts'
+A='.'
 L=[l.rstrip() for l in open(A+'/mtower.jvm',encoding='utf8',errors='replace')]
 hd=[(i,l) for i,l in enumerate(L) if re.match(r'^  (?:public |private |protected |static |final |synchronized )*[A-Za-z_$][\w\.\$<>\[\]]* [A-Za-z_$][\w<>]*\(.*\);\s*$', l)]
 def owner(i):

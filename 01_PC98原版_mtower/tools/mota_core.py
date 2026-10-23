@@ -90,7 +90,7 @@ if STAIRS[49][1] is None:
 KEY_OF = {1: 'y', 3: 'b', 28: 'r'}                  # 📝 黄/蓝/红钥匙
 DOOR_OF = {2: 'y', 4: 'b', 27: 'r'}                 # ⚠️ 门色按 id 顺序推断，尚未从指令流确认
 SOLID_TYPES = {5, 7, 11, 14, 15}                   # DOOR/SAIDAN/SCORE/SELL/BUY：撞上而非穿过
-DECOR_PASS = {19, 21, 23}                          # 饰件/祭坛两翼：可踩（⚠️ 2F 牢房门 (5,8) 即 obj19）
+DECOR_PASS = {21, 23}                             # 饰件：可踩；obj19 实机验证不可踩（np2kai 实测 2026-10，撞击无位移）
 PICKUP_TYPES = {3, 4, 8}                            # STATUS/ITEM/KEY：踏入即拾取
 MONSTER_TYPE = 6
 
@@ -129,54 +129,46 @@ class Hero:
         return h
 
 # ---------------------------------------------------------------------------
-# 楼梯补丁：数据里没有楼梯格的连接，必须显式声明（附证据）
-#   上楼梯格缺失的层，其"出口格"由这些值给出；进入目标层时的落点同理。
+# 楼梯落点（权威）：每一格楼梯 tile 在其 MA 条目里直接存着目的地——
+#   MA[idx][16] = 大表全局列(col)，MA[idx][17] = 大表全局行(row)。
+#   解码 (col,row) → (目标层,x,y) 即得到"踩上去之后的落点"。
+#   关键修正：原始数据里落点与"相邻层的另一道楼梯"相差一格
+#   （如 1F 上梯落在 2F(1,2) 而非 2F(1,1)，2F 上梯落在 3F(2,11) 而非 3F(1,11)）。
+#   所以"踩上楼就落到另一道楼梯"的旧约定是错的，必须用本 warp 表。
+#   交叉验证：mk_enter.py 旧注释的 2F(1,2)/3F(2,11)/4F(11,10) 正是来自本表，与解码值完全一致。
 # ---------------------------------------------------------------------------
+def _decode_global(col, row):
+    band, slot = row // 13, col // 13
+    return band * 10 + slot + 1, col % 13, row % 13
+
+
+WARP = {}                       # (f, x, y) -> (目标层, x, y)，来自 MA[16]/MA[17]
+for _f in BAND_SLOT:
+    for _y in range(13):
+        for _x in range(13):
+            if terrain(_f, _x, _y) == 2:
+                _r, _c = rc(_f, _x, _y)
+                _idx = MAPT[_r][_c]
+                _col, _row = MA[_idx][16], MA[_idx][17]
+                if _col == 0 and _row == 0:
+                    continue
+                WARP[(_f, _x, _y)] = _decode_global(_col, _row)
+
+
+# 仅保留"无楼梯 tile、靠事件触发"的特殊过渡：49F 击败假魔王后入 50F。
 UP_PATCH = {
-    1:  ((1, 1), 2, (1, 1)),        # ✅ 1F 只有 crop34 (1,1)；2F 有 crop35 (1,1) → 正常
-    49: ((6, 3), 50, (6, 5)),       # ✅ 49F 无上楼梯格；(6,3) 是 eventMT 放 obj57 假魔王的格
+    49: ((6, 3), 50, (6, 5)),       # 49F 无上楼梯格；(6,3) 是 eventMT 放 obj57 假魔王的格
                                     #    `bipush 110; bipush 55; Zeno(...)`；50F 无楼梯格，
                                     #    真魔王落在 (6,5)：`bipush 123; bipush 57; Zeno2(...)`
-    0:  ((1, 1), 1, (1, 1)),        # ✅ 00 层只有 crop34 (1,1)，回 1F 同坐标 (1,1)
-}
-DOWN_PATCH = {
-    50: (6, 5),                     # 50F 无 crop35：入口即真魔王格 ⚠️（由 Zeno2 放置推断）
 }
 
 
-def stair_up_cell(f):
-    if f in UP_PATCH:
-        return UP_PATCH[f][0]
-    return STAIRS[f][0]
-
-
-def stair_down_cell(f):
-    if f in DOWN_PATCH:
-        return DOWN_PATCH[f]
-    return STAIRS[f][1]
-
-
-def take_up(f, x, y):
-    """站上下楼梯格 → (新层, 落点)。返回 None 表示该格不是上楼梯。"""
+def warp_to(f, x, y):
+    """站在楼梯格 (f,x,y) → (目标层, 落点x, 落点y)；非楼梯或无法通行返回 None。"""
+    if (f, x, y) in WARP:
+        return WARP[(f, x, y)]
     if f in UP_PATCH and (x, y) == UP_PATCH[f][0]:
         return UP_PATCH[f][1], UP_PATCH[f][2]
-    if STAIRS[f][0] == (x, y):
-        nf = f + 1
-        if nf > 50:
-            return None
-        return nf, (stair_down_cell(nf) or (x, y))
-    if f == 0 and STAIRS[0][0] == (x, y):
-        return 1, (1, 1)
-    return None
-
-
-def take_down(f, x, y):
-    if STAIRS[f][1] == (x, y) and STAIRS[f][1] is not None:
-        nf = f - 1
-        if nf < 0:
-            return None
-        tgt = nf if nf != 0 else 0
-        return (0 if f == 1 else nf), (stair_up_cell(0 if f == 1 else nf) or (x, y))
     return None
 
 
@@ -347,18 +339,11 @@ class World:
         # 落格
         h.x, h.y = nx, ny
         if self.terrain_at(f, nx, ny) == 2:
-            up = take_up(f, nx, ny)
-            if up:
-                h.f, (h.x, h.y) = up[0], up[1]
-                if h.f == 3 and not self.trap_done:
-                    pass
-                log.append(f'上楼梯 → {h.f}F')
+            w = warp_to(f, nx, ny)
+            if w:
+                h.f, h.x, h.y = w
+                log.append(f'楼梯 → {h.f}F')
                 self.apply_floor_events(h.f)
-            else:
-                dn = take_down(f, nx, ny)
-                if dn:
-                    h.f, (h.x, h.y) = dn[0], dn[1]
-                    log.append(f'下楼梯 → {h.f}F'); self.apply_floor_events(h.f)
         if h.f == 3 and (nx, ny) == TRAP_3F['trigger'] and not self.trap_done:
             h.x, h.y = nx, ny
             return self.do_trap3F(log)
@@ -445,11 +430,9 @@ def heuristic(goal_cell):
             if 0 <= nx < 13 and 0 <= ny < 13 and terrain(f, nx, ny) != 1:
                 nb.append((f, nx, ny))
         if terrain(f, x, y) == 2:
-            up = (STAIRS[f][0] == (x, y)) and (f + 1, *(stair_down_cell(f + 1) or (x, y)))
-            dn = (STAIRS[f][1] == (x, y)) and (f - 1, *(stair_up_cell(f - 1) or (x, y))) if f > 0 else None
-            for t in (up, dn):
-                if t and terrain(t[0], t[1], t[2]) != 1:
-                    nb.append(tuple(t))
+            w = WARP.get((f, x, y))
+            if w and terrain(w[0], w[1], w[2]) != 1:
+                nb.append(w)
         for c in nb:
             if c not in dist:
                 dist[c] = d + 1; gq.append(c)
