@@ -35,7 +35,7 @@
   `slot8 = 图鉴 catalog`，`slot9 = stage_flags`。序号 51/53..58 未用。
 - 引擎里 `mapX`=slot、`mapY`=band，楼层序号 = `mapY*10 + mapX + 1`；`eventMT` 里两处硬编码特例
   `index==1 ↔ index==52` 构成 **1F 与 00 层互连**（两块的楼梯都在 (1,1)）——所以 23F 的 "GO 0F" 只是提示，
-  49F/50F 与 00 层无关。角色格 = `charaX/5 × charaY/5`（1F 起点 (6,10)）。
+  49F/50F 与 00 层无关。角色格 = `charaX/5 × charaY/5`（1F 起点 (6,11)，08 实机确认）。
 - 主角与道具状态也塞在 stage_flags 块里：HP/ATK/DEF/GOLD = `mapObject[66..69][118]`，
   「持有十字架」`mapObject[74][119]==1`（对 id 48/49/59 翻倍）、「持有屠龙匕」`mapObject[70][120]==1`（对 id 74 翻倍）。
 
@@ -124,3 +124,17 @@
 | `magic_tower1_texts.md` | 309 条塔内文案（日/英 + 引用方式 + 出现层 + 12 个分组），从 README 拆出 |
 | `tools/` | `dynscan.py` `register_boss.py` `gen_monster_table.py` `gen_texts.py` |
 | `01_PC98原版_mtower.fdi` / `game/` | 原始软盘映像与其内 23 个文件 |
+
+## 9. 速通验证进度与实机测得的关键值（2026-10-23）
+
+- **实机（08 Java 版，Xvfb + 反射 `keyDown(java.awt.Event,int)`）已确认**：
+  初始 `mapObject[66..69][118] = 1000/100/100/0`；1F 起点格 **(6,11)**；按键映射 **上=56、右=54、下=52、左=50**；
+  必须补发 `keyUp`，否则下一次按键会被吞（我第一版就因此"111 键还在 1F"）。
+- **1F~5F 每只怪在 ATK100 下都是一击致命**（怪 DEF 最大 68，除 `obj15 門番B` DEF110 打不动），
+  故理论伤害为 0；但 `obj58 魔導師`（DEF100，ATK100 ⇒ 每击 0）**同样打不动**，而且它**不在静态层里**，
+  是 `eventMT` 写入 3F 的 (5,8)(4,9)(6,9)(5,10) — 用户提示的"3 楼惊喜"即此点，**尚未实机复现触发条件**。
+- 3F 一旦那 4 格成立，静态 BFS 显示入口侧只剩 26 格、到不了上行梯 ⇒ 若魔导师在进 3F 时即存在，则
+  "rush 到 5F 拿铁剑"的路线不成立，必须先解决 +10 攻的来源（而铁剑本身在 5F）。
+- 沙箱内实机装载不稳（贴图 45~60 s，偶尔卡在标题 `strNumber=280`）；重跑用
+  `xvfb-run -a -n 77 env LD_LIBRARY_PATH=$A/prefix/usr/lib/x86_64-linux-gnu $A/prefix/usr/lib/jvm/default-java/bin/java -cp . Walk <log> <按键串>`，
+  驱动源码在 `08_Java_MTower08a/game/{Boot,Play,Walk}.java`。
