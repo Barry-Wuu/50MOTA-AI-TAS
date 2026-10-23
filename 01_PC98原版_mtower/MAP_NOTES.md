@@ -195,3 +195,14 @@ game.clear(67); autoMove(68,99); game.clear(99)     // 盗贼挖暗道 → 自�
    我内核里写 10/10 是对的，但理由要按这条记：*剧本把攻防重设为基础值*，而不是"减去 90"。
 
 结论：h5 生态可作机制旁证与"跑另一版本"的载体，但**不能作为原版坐标/数值来源**。
+
+### 12.1 mota-js（样板本体）能印证什么、不能印证什么
+
+- `project/data.js` 的初始英雄数值：**`hp:1000, atk:100, def:100`** —— 与我从 01 的 `INITIAL.DAT` 头部
+  和 08 实机 `mapObject[66..68][118]` 读到的**完全相同**，可当作"原版初始三维"的第三方旁证。
+- 但 `project/floors/` 只有 `MT0 / sample0..2`（样板演示塔），**没有经典 50 层的关卡数据**；
+  战斗公式在压缩后的 core 里，本仓库未取到明文。
+- 想在"h5 平台"上跑**原版**数据，缺的只是一个导入器：把手上的
+  `crops/live.json`（`map/mapObject/mapAttribute/objectAttribute`）+ `dyn_raw.json`（事件写入）
+  + `javamap.json`（文案）转成样板的 `data.js / floors/*.js / items.js / enemys.js / events.js`。
+  这样就能用社区标准的战斗、钥匙、事件语义来复算并录放我那条 149 步路线，替代我手搓的内核。
