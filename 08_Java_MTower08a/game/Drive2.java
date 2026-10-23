@@ -7,7 +7,7 @@ public class Drive2 {
   static PrintWriter LOG;
   static void log(String m){ LOG.println(m); LOG.flush(); log(m); }
   public static void main(String[] x) throws Exception {
-    LOG=new PrintWriter(new OutputStreamWriter(new FileOutputStream("/workspace/f8fd4af0-b7d8-470f-bd1e-d5a9802c97d1/work/.artifacts/drive2_run.log"),"UTF-8"));
+    LOG=new PrintWriter(new OutputStreamWriter(new FileOutputStream(a.length>0?a[0]:"drive2_run.log"),"UTF-8"));
     app=(Applet)Class.forName("MTower").getDeclaredConstructor().newInstance();
     app.setStub(new RunApplet.Stub());
     Frame fr=new Frame("d"); fr.setSize(820,520); fr.add(app); fr.setVisible(true);
