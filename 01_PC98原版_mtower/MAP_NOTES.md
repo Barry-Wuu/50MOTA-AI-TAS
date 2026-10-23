@@ -161,3 +161,9 @@
 下一步（谁接手都做这个）：把 3F 剧本后半补进 `TRAP_3F` —— 需要在实机里让引擎真的踩一次 (5,9)
 后读回 `mapX/mapY/charaX/charaY/mapObject[73][126]/[74][126]`，或者继续读 `eventMT` 里
 `flag3F` 从 1 往后的分支（行号 23058 附近起）；补完后 `plan(goal=sword, trap_mode='apply')` 才可能成功。
+
+## 11. 1F→5F 铁剑（内核首条复验路线）
+
+`tools/mk_route.py` 输出 `route_sword_1f_to_5f.csv` + `route_sword_summary.json` + `keys_1f_to_5f.txt`；
+结论与四条 ⚠️ 待验证依赖见 README「速通验证」一节。要点：`avoid` 模式证明 3F 中央不可回避；
+搜索第一次给出"不可达"是**我的 A\* 写错**（优先级只放 h、且没有入队判重），不是游戏限制——已修。

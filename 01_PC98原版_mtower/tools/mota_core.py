@@ -89,12 +89,23 @@ if STAIRS[49][1] is None:
 # ---------------------------------------------------------------------------
 KEY_OF = {1: 'y', 3: 'b', 28: 'r'}                  # 📝 黄/蓝/红钥匙
 DOOR_OF = {2: 'y', 4: 'b', 27: 'r'}                 # ⚠️ 门色按 id 顺序推断，尚未从指令流确认
-SOLID_TYPES = {0, 5, 7, 11, 14, 15}                 # NORMAL/DOOR/SAIDAN/SCORE/SELL/BUY：撞上去而非穿过
+SOLID_TYPES = {5, 7, 11, 14, 15}                   # DOOR/SAIDAN/SCORE/SELL/BUY：撞上而非穿过
+DECOR_PASS = {19, 21, 23}                          # 饰件/祭坛两翼：可踩（⚠️ 2F 牢房门 (5,8) 即 obj19）
 PICKUP_TYPES = {3, 4, 8}                            # STATUS/ITEM/KEY：踏入即拾取
 MONSTER_TYPE = 6
 
 MAGIC_HALF_ATK = {58, 96}       # ⚠️ 魔导师/大魔导师战斗前削减主角 HP（我从未在指令流里逐条确认）
 ATK_DOUBLE_IF = {(103,): {48, 49, 59}, (109,): {74}}   # 📝 十字架对ゾンビ系、屠龙匕对ドラゴン：我方伤害×2（attackDouble）
+# 📝 MESSAGE（挡路 NPC）交互：谈完即从地图上消失，效果取自其文案括号内的明示数值
+MSG_EFFECT = {
+    152: ('pct3', None),      # 「攻撃力と防御力を３％だけあげてやろう」
+    153: ('item', 24),        # 授けるのは 勇者のオーブ（obj24：鑑定器）
+    174: ('gold', 1000),      # 「１０００ＧＯＬＤもらった!」
+    87:  ('none', None),      # 盗贼脱走：同事件把 2F(2,7) 的墙挖通（已在 TRAP 里做）
+    88:  ('none', None), 151: ('none', None), 173: ('none', None), 175: ('none', None),
+    44:  ('none', None),      # 勇者「人形だっ！」
+}
+
 LUCKY_GOLD = 113                                      # 📝 幸运金币：击杀 GOLD×2
 SEAL_TARGET = 57                                      # ✅ 封印后 objectAttribute[57][10/11/12] 改写 800/500/100
 
@@ -181,6 +192,8 @@ for e in DYNEV.get('ter', []):
     if e['floor'].isdigit():
         TERR_WRITES[int(e['floor'])].append((e['x'], e['y'], e['to']))
 
+_TRAP_GUARD_CELLS = set()          # 由剧本自己放置的格，不进"进层即写入"集合（在下面填）
+
 TRAP_3F = dict(                                        # ✅ 指令行 31937/32084/32094/32107/32325..32404
     trigger=(5, 9),                                    #    中央格＝勇者所站处
     set_hp=400, set_atk=10, set_dfn=10,
@@ -189,9 +202,8 @@ TRAP_3F = dict(                                        # ✅ 指令行 31937/320
     texts=[222, 223],
     # 落点：loadMapData2 静态把 mapAttribute[116][16/17]=1/66 → mapX=0,mapY=5 → 大表块(band5,slot0) 的 (1,1)
     # 该块是 13×13 全空房间；剧本后续阶段再把勇者接回 2F（这段我没跟完 ⚠️），故默认不做位移。
-    drop_floor=None,
-    drop_cell=None,
-    trap_stats=True,      # 关掉这句并把两项设 None 即可做「若绕开 (5,9)」的反事实分析
+    drop_floor=2, drop_cell=(3, 8),   # 盗贼 (3,7) 正下方的地板格（盗贼格不可站人）⚠️ 指令未直接给出，取邻格
+    # 空块 (band5,slot0)(1,1) 只是演出用的空白，不再当落点用
 )
 
 # ---------------------------------------------------------------------------
@@ -216,6 +228,7 @@ class World:
     hero: Hero = None
     cells: Dict = None           # 只读底图（一次构造）
     over: Dict = None            # 稀疏覆盖：被击杀/开门/拾取后的变化
+    ter_over: Dict = None        # 稀疏地形覆盖：(f,x,y)->新地形id（剧本造/拆墙）
     cleared: Set = None
     applied_events: Set = None
     trap_done: bool = False
@@ -226,7 +239,7 @@ class World:
 
     @classmethod
     def new(cls, event_mode='on_entry', hero=None, trap_mode='apply'):
-        w = cls(hero=hero or Hero.initial(), cells=base_cells(), over={}, cleared=set(),
+        w = cls(hero=hero or Hero.initial(), cells=base_cells(), over={}, ter_over={}, cleared=set(),
                 applied_events=set(), event_mode=event_mode, trap_mode=trap_mode, caveats=set())
         w.apply_floor_events(w.hero.f)
         return w
@@ -237,6 +250,8 @@ class World:
             return
         self.applied_events.add(f)
         for x, y, o in FLOOR_WRITES.get(f, []):
+            if (f, x, y) in _TRAP_GUARD_CELLS:
+                continue                                  # 属于 3F 剧本，触发时才放
             if o:
                 self.set_at(f, x, y, o)
 
@@ -253,6 +268,9 @@ class World:
         self.over[(f, x, y)] = o
 
     def terrain_at(self, f, x, y):
+        t = self.ter_over.get((f, x, y))
+        if t is not None:
+            return MA[t][3] if t < len(MA) else 1
         return terrain(f, x, y)
 
     def battle(self, o):
@@ -309,7 +327,22 @@ class World:
                 h.keys[KEY_OF[o]] += 1; self.cleared.add((f, nx, ny)); log.append(f'拾 {oname(o)[:10]}'); o = 0
             elif ty in ('STATUS', 'ITEM'):
                 self.pick(o, log); self.cleared.add((f, nx, ny)); o = 0
-            elif ty in ('SELL', 'BUY', 'SAIDAN', 'SCORE', 'MESSAGE', 'NORMAL'):
+            elif o in DECOR_PASS:
+                log.append(f'踩过装饰 obj{o}'); o = 0
+            elif ty == 'MESSAGE':
+                kind, val = MSG_EFFECT.get(o, ('none', None))
+                if kind == 'pct3':
+                    b_a, b_d = h.atk, h.dfn
+                    h.atk, h.dfn = int(h.atk * 1.03) or 1, int(h.dfn * 1.03) or 1
+                    log.append(f'NPC obj{o} 交谈后消失：攻{b_a}→{h.atk} 防{b_d}→{h.dfn}（+3%，取整）')
+                elif kind == 'gold':
+                    h.gold += val; log.append(f'NPC obj{o} 交谈后消失：+{val} GOLD')
+                elif kind == 'item':
+                    h.items.add(val); log.append(f'NPC obj{o} 交谈后消失：获得 obj{val}')
+                else:
+                    log.append(f'NPC obj{o} 交谈后消失')
+                self.cleared.add((f, nx, ny))                 # 📝 谈完让路 ✅ 老人/盗贼不常驻
+            elif ty in ('SELL', 'BUY', 'SAIDAN', 'SCORE', 'NORMAL'):
                 return [f'不可通行 obj{o}（{ty}）']
         # 落格
         h.x, h.y = nx, ny
@@ -329,6 +362,8 @@ class World:
         if h.f == 3 and (nx, ny) == TRAP_3F['trigger'] and not self.trap_done:
             h.x, h.y = nx, ny
             return self.do_trap3F(log)
+        # 剧本收尾后的通路：盗贼挖开的 2F(2,7) 由 ter_over 生效，这里只把「四角撤走」标清楚
+        
         if h.f == 3 and self.trap_mode == 'avoid' and (nx, ny) == TRAP_3F['trigger']:
             return ['避开3F中央(反事实)']
         return log
@@ -354,8 +389,14 @@ class World:
             self.set_at(3, gx, gy, t['guard_obj'])
         if t['drop_cell']:
             h.f, (h.x, h.y) = t['drop_floor'], t['drop_cell']
-        log.append('★3F 剧本：HP→400、ATK/DEF→10（神装被收）'
-                   + (f'，丢到 block{t["drop_floor"]}{h.x},{h.y}' if t['drop_cell'] else '（落点未解，暂不位移 ⇒ 四警卫围死）'))
+        # —— 剧本收尾（同一函数内一次做完，实测三段写入见下行说明）——
+        for gx, gy in t['guards']:
+            self.set_at(3, gx, gy, 0)                      # 四只魔导师撤走
+        self.ter_over[(3, 5, 9)] = 1                       # ✅ line23394 传送门复成普通地板
+        self.ter_over[(2, 2, 7)] = 1                       # ✅ line23316 盗贼挖开牢房墙
+        h.f, (h.x, h.y) = t['drop_floor'], t['drop_cell']
+        log.append(f'★3F 剧本：HP→400、ATK/DEF→10（神装被收）→ 丢到 {h.f}F 盗贼牢房 '
+                   f'→ 四角撤走、3F(5,9) 复原、2F(2,7) 被挖通')
         return log
 
     def after_49(self, log):
@@ -434,13 +475,14 @@ def plan(goal, event_mode='on_entry', max_states=400000, beam=None, trap_mode='a
                 cur = getattr(cur, '_par', None)
             return w, list(reversed(path))
         n += 1
-        k = (w.hero.f, w.hero.x, w.hero.y, w.hero.keys['y'], w.hero.keys['b'], w.hero.keys['r'],
-             hash(frozenset([c for c in w.cleared if c in PICKUP_CELLS])))
+        # atk/dfn/gold 都由「已拾取掩码」唯一决定，放进键里只会让状态数爆炸，故不放
+        k = (w.hero.f, w.hero.x, w.hero.y, w.hero.keys['y'], w.hero.keys['b'],
+             frozenset(c for c in w.cleared if c in PICKUP_CELLS))
         if k in seen and seen[k][0] <= loss and seen[k][1] <= steps:
             continue
         seen[k] = (loss, steps)
         if n > max_states:
-            return None
+            return ('cap', n)
         for dx, dy in ((0, -1), (1, 0), (0, 1), (-1, 0)):
             before = (w.hero.hp, w.hero.f, w.hero.x, w.hero.y)
             w2 = w.clone()
@@ -452,7 +494,7 @@ def plan(goal, event_mode='on_entry', max_states=400000, beam=None, trap_mode='a
             ns = steps + 1
             nh = (H or {}).get((w2.hero.f, w2.hero.x, w2.hero.y), 0)
             _hq.heappush(pq, (loss + max(add, 0) + nh * 1000000, ns, next(_TIE), w2))
-    return ('cap', n)
+    return None            # 队列自然耗尽 = 图不可达（与撞上限区分）
 
 
 def PICKUP_CELLS_FN():
@@ -475,6 +517,7 @@ def _clone(self):
     w.over = dict(self.over)
     w.cleared = set(self.cleared); w.applied_events = set(self.applied_events)
     w.trap_done = self.trap_done; w.flag3F = self.flag3F
+    w.ter_over = dict(self.ter_over)
     w.event_mode = self.event_mode; w.trap_mode = self.trap_mode; w.caveats = set(self.caveats)
     return w
 
@@ -527,3 +570,6 @@ if __name__ == '__main__':
             for p in path[:6]:
                 print('   ', p)
             print('    …')
+
+
+_TRAP_GUARD_CELLS |= {(3, x, y) for x, y in TRAP_3F['guards']}
