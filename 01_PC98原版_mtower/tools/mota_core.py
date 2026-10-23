@@ -1,0 +1,529 @@
+"""
+mota_core —— 《魔法の塔》(01 PC-98 / 08 Java 同源数据) 的无头游玩内核。
+
+只保留状态与函数，不做任何绘制：地图、怪物、战斗、门与钥匙、拾取、商店/祭坛、
+以及运行时改写地图的事件脚本，全部用数据 + 纯函数复现，供寻路/速通分析使用。
+
+每条规则都标注来源：
+  ✅ = 从 08_Java_MTower08a/game/MTower.class 指令流读到的算式（mtower.jvm 复核）
+  📝 = 物件自带文案（objectAttribute[][5] → strMessage）里明说的数值
+  ⚠️ = 推断，尚未逐条追溯到写回语句（用时会被打印成 caveat，不当结论）
+
+坐标约定（全部用“格”单位，不再有像素）：
+  层 f ∈ 1..50 → band=(f-1)//10, slot=(f-1)%10；格 (x,y) 对应大表 row=band*13+y, col=slot*13+x
+  00 层 = (band 5, slot 1)；图鉴块 (5,8)、变量块 (5,9) 不作为可行走楼层。
+"""
+
+from __future__ import annotations
+import json, math, os, collections, dataclasses, typing
+from typing import Set, List, Tuple, Dict
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ART = os.environ.get('MOTA_ART', HERE)          # .artifacts 根目录（含 crops/、javamap.json、dyn_raw.json）
+
+LIVE = json.load(open(os.path.join(ART, 'crops', 'live.json')))
+MAPT, MAPO, MA, OA = LIVE['map'], LIVE['mapObject'], LIVE['mapAttribute'], LIVE['objectAttribute']
+SMX = json.load(open(os.path.join(ART, 'javamap.json')))['strMessage']
+TEXT_JP = {int(k): v for k, v in SMX['1'].items() if isinstance(v, str)}
+TEXT_EN = {int(k): v for k, v in SMX['0'].items() if isinstance(v, str)}
+DYNEV = json.load(open(os.path.join(ART, 'dyn_raw.json'))) if os.path.exists(os.path.join(ART, 'dyn_raw.json')) else {'obj': [], 'ter': []}
+
+KIND = {0: 'floor', 1: 'wall', 2: 'stair'}
+TYPE = {0: 'NORMAL', 1: 'MESSAGE', 3: 'STATUS', 4: 'ITEM', 5: 'DOOR', 6: 'MONSTER',
+        7: 'SAIDAN', 8: 'KEY', 11: 'SCORE', 14: 'SELL', 15: 'BUY'}
+
+# ---- 地图访问 ---------------------------------------------------------------
+BAND_SLOT = {}                                  # 层号 -> (band, slot)
+for _f in range(1, 51):
+    BAND_SLOT[_f] = ((_f - 1) // 10, (_f - 1) % 10)
+BAND_SLOT[0] = (5, 1)                           # 00 层
+
+
+def rc(f, x, y):
+    b, s = BAND_SLOT[f]
+    return b * 13 + y, s * 13 + x
+
+
+def terrain(f, x, y):
+    r, c = rc(f, x, y)
+    return MA[MAPT[r][c]][3] if 0 <= r < 78 and 0 <= c < 130 and MAPT[r][c] < len(MA) else 1
+
+
+def stair_up(f, x, y):
+    """kind==2 的地形：crop 34=上行、35=下行 ✅（楼梯链 49/49 已验证）"""
+    r, c = rc(f, x, y)
+    return MA[MAPT[r][c]][1] == 34
+
+
+def obj_raw(f, x, y):
+    r, c = rc(f, x, y)
+    return MAPO[r][c] if 0 <= r < 78 and 0 <= c < 130 else 0
+
+
+def oatr(o, col):
+    r = OA[o] if o < len(OA) else None
+    return (r[col] if r and len(r) > col else 0) or 0
+
+
+def oname(o):
+    return TEXT_JP.get(oatr(o, 5), '')
+
+
+def stairs_of(f):
+    up = dn = None
+    for y in range(13):
+        for x in range(13):
+            if terrain(f, x, y) == 2:
+                (up := (x, y)) if stair_up(f, x, y) else (dn := (x, y))
+    return up, dn
+
+
+STAIRS = {f: stairs_of(f) for f in BAND_SLOT}
+# 49F 没有 crop35 的下行梯：其"入口格"就是 eventMT 放 obj57（假魔王/魔导师ゼノ）的 (6,3)
+# （写入点 `bipush 110; bipush 55; Zeno(g,col,row)` → slot8 x=6、band4 y=3 ✅）
+if STAIRS[49][1] is None:
+    STAIRS[49] = (STAIRS[49][0], (6, 3))
+
+# ---------------------------------------------------------------------------
+# 物件语义（默认按类型；个别 obj 有特例）
+# ---------------------------------------------------------------------------
+KEY_OF = {1: 'y', 3: 'b', 28: 'r'}                  # 📝 黄/蓝/红钥匙
+DOOR_OF = {2: 'y', 4: 'b', 27: 'r'}                 # ⚠️ 门色按 id 顺序推断，尚未从指令流确认
+SOLID_TYPES = {0, 5, 7, 11, 14, 15}                 # NORMAL/DOOR/SAIDAN/SCORE/SELL/BUY：撞上去而非穿过
+PICKUP_TYPES = {3, 4, 8}                            # STATUS/ITEM/KEY：踏入即拾取
+MONSTER_TYPE = 6
+
+MAGIC_HALF_ATK = {58, 96}       # ⚠️ 魔导师/大魔导师战斗前削减主角 HP（我从未在指令流里逐条确认）
+ATK_DOUBLE_IF = {(103,): {48, 49, 59}, (109,): {74}}   # 📝 十字架对ゾンビ系、屠龙匕对ドラゴン：我方伤害×2（attackDouble）
+LUCKY_GOLD = 113                                      # 📝 幸运金币：击杀 GOLD×2
+SEAL_TARGET = 57                                      # ✅ 封印后 objectAttribute[57][10/11/12] 改写 800/500/100
+
+
+@dataclasses.dataclass
+class Hero:
+    hp: int = 0
+    atk: int = 0
+    dfn: int = 0
+    gold: int = 0
+    keys: typing.Counter = dataclasses.field(default_factory=collections.Counter)
+    items: Set = dataclasses.field(default_factory=set)
+    f: int = 1
+    x: int = 6
+    y: int = 11
+
+    @staticmethod
+    def initial():
+        # ✅ 实机读取：mapObject[66..69][118] = 1000/100/100/0；1F 起点格 (6,11)
+        h = Hero(hp=1000, atk=100, dfn=100, gold=0, f=1, x=6, y=11)
+        return h
+
+# ---------------------------------------------------------------------------
+# 楼梯补丁：数据里没有楼梯格的连接，必须显式声明（附证据）
+#   上楼梯格缺失的层，其"出口格"由这些值给出；进入目标层时的落点同理。
+# ---------------------------------------------------------------------------
+UP_PATCH = {
+    1:  ((1, 1), 2, (1, 1)),        # ✅ 1F 只有 crop34 (1,1)；2F 有 crop35 (1,1) → 正常
+    49: ((6, 3), 50, (6, 5)),       # ✅ 49F 无上楼梯格；(6,3) 是 eventMT 放 obj57 假魔王的格
+                                    #    `bipush 110; bipush 55; Zeno(...)`；50F 无楼梯格，
+                                    #    真魔王落在 (6,5)：`bipush 123; bipush 57; Zeno2(...)`
+    0:  ((1, 1), 1, (1, 1)),        # ✅ 00 层只有 crop34 (1,1)，回 1F 同坐标 (1,1)
+}
+DOWN_PATCH = {
+    50: (6, 5),                     # 50F 无 crop35：入口即真魔王格 ⚠️（由 Zeno2 放置推断）
+}
+
+
+def stair_up_cell(f):
+    if f in UP_PATCH:
+        return UP_PATCH[f][0]
+    return STAIRS[f][0]
+
+
+def stair_down_cell(f):
+    if f in DOWN_PATCH:
+        return DOWN_PATCH[f]
+    return STAIRS[f][1]
+
+
+def take_up(f, x, y):
+    """站上下楼梯格 → (新层, 落点)。返回 None 表示该格不是上楼梯。"""
+    if f in UP_PATCH and (x, y) == UP_PATCH[f][0]:
+        return UP_PATCH[f][1], UP_PATCH[f][2]
+    if STAIRS[f][0] == (x, y):
+        nf = f + 1
+        if nf > 50:
+            return None
+        return nf, (stair_down_cell(nf) or (x, y))
+    if f == 0 and STAIRS[0][0] == (x, y):
+        return 1, (1, 1)
+    return None
+
+
+def take_down(f, x, y):
+    if STAIRS[f][1] == (x, y) and STAIRS[f][1] is not None:
+        nf = f - 1
+        if nf < 0:
+            return None
+        tgt = nf if nf != 0 else 0
+        return (0 if f == 1 else nf), (stair_up_cell(0 if f == 1 else nf) or (x, y))
+    return None
+
+
+# ---------------------------------------------------------------------------
+# 事件脚本：数据写入 + 3F 扒装丢牢（唯一有完整指令证据的剧本）
+# ---------------------------------------------------------------------------
+FLOOR_WRITES = collections.defaultdict(list)          # 层 -> [(x,y,obj)] 静态之外的常量写入
+for e in DYNEV.get('obj', []):
+    if e['floor'].isdigit():
+        FLOOR_WRITES[int(e['floor'])].append((e['x'], e['y'], e['obj']))
+TERR_WRITES = collections.defaultdict(list)
+for e in DYNEV.get('ter', []):
+    if e['floor'].isdigit():
+        TERR_WRITES[int(e['floor'])].append((e['x'], e['y'], e['to']))
+
+TRAP_3F = dict(                                        # ✅ 指令行 31937/32084/32094/32107/32325..32404
+    trigger=(5, 9),                                    #    中央格＝勇者所站处
+    set_hp=400, set_atk=10, set_dfn=10,
+    guards=[(5, 8), (4, 9), (6, 9), (5, 10)],           #    四只 obj58 魔导师
+    guard_obj=58,
+    texts=[222, 223],
+    # 落点：loadMapData2 静态把 mapAttribute[116][16/17]=1/66 → mapX=0,mapY=5 → 大表块(band5,slot0) 的 (1,1)
+    # 该块是 13×13 全空房间；剧本后续阶段再把勇者接回 2F（这段我没跟完 ⚠️），故默认不做位移。
+    drop_floor=None,
+    drop_cell=None,
+    trap_stats=True,      # 关掉这句并把两项设 None 即可做「若绕开 (5,9)」的反事实分析
+)
+
+# ---------------------------------------------------------------------------
+# World：可复制的游玩状态。move() 是唯一的"按键"，返回动作记录。
+# ---------------------------------------------------------------------------
+WALKABLE = set(range(0, 51))
+
+
+def base_cells():
+    d = {}
+    for f in WALKABLE:
+        for y in range(13):
+            for x in range(13):
+                o = obj_raw(f, x, y)
+                if o:
+                    d[(f, x, y)] = o
+    return d
+
+
+@dataclasses.dataclass
+class World:
+    hero: Hero = None
+    cells: Dict = None           # 只读底图（一次构造）
+    over: Dict = None            # 稀疏覆盖：被击杀/开门/拾取后的变化
+    cleared: Set = None
+    applied_events: Set = None
+    trap_done: bool = False
+    flag3F: int = 0
+    event_mode: str = 'on_entry'
+    trap_mode: str = 'apply'          # apply=踩中央即吃剧本 / avoid=把中央格当禁行（反事实）
+    caveats: Set = None
+
+    @classmethod
+    def new(cls, event_mode='on_entry', hero=None, trap_mode='apply'):
+        w = cls(hero=hero or Hero.initial(), cells=base_cells(), over={}, cleared=set(),
+                applied_events=set(), event_mode=event_mode, trap_mode=trap_mode, caveats=set())
+        w.apply_floor_events(w.hero.f)
+        return w
+
+    # -- 事件写入 ----------------------------------------------------------
+    def apply_floor_events(self, f):
+        if self.event_mode != 'on_entry' or f in self.applied_events:
+            return
+        self.applied_events.add(f)
+        for x, y, o in FLOOR_WRITES.get(f, []):
+            if o:
+                self.set_at(f, x, y, o)
+
+    # -- 查询 --------------------------------------------------------------
+    def at(self, f, x, y):
+        k = (f, x, y)
+        if k in self.cleared:
+            return 0
+        if k in self.over:
+            return self.over[k]
+        return self.cells.get(k, 0)
+
+    def set_at(self, f, x, y, o):
+        self.over[(f, x, y)] = o
+
+    def terrain_at(self, f, x, y):
+        return terrain(f, x, y)
+
+    def battle(self, o):
+        """返回 (我方掉血, 得到GOLD) 或 None（打不动）✅ 已验证算式"""
+        h = self.hero
+        hp, atk, dfn, gold = oatr(o, 10), oatr(o, 11), oatr(o, 12), oatr(o, 13)
+        mult = 2 if (o in {48, 49, 59} and 103 in h.items) or (o == 74 and 109 in h.items) else 1
+        per = h.atk * mult - dfn
+        if hp <= 0 or per <= 0:
+            return None
+        turns = math.ceil(hp / per)
+        loss = max(atk - h.dfn, 0) * (turns - 1)
+        return loss, gold * (2 if LUCKY_GOLD in h.items else 1)
+
+    # -- 动作：朝 (dx,dy) 走一步 -------------------------------------------
+    def move(self, dx, dy):
+        h = self.hero
+        f, x, y = h.f, h.x, h.y
+        nx, ny = x + dx, y + dy
+        if self.terrain_at(f, nx, ny) == 1:
+            return ['blocked:墙']
+        o = self.at(f, nx, ny)
+        log = []
+        ty = TYPE.get(oatr(o, 3), '?') if o else '空'
+        if o:
+            if o == 89:                                   # 📝 暗墙：撞了就塌
+                self.cleared.add((f, nx, ny)); log.append('撞塌暗墙 obj89'); o = 0; ty = '空'
+            elif o == 115:                                # ⚠️ 隐形块（GO 0F 字形等）按可走处理
+                log.append('隐形块 obj115 视为可走(caveat)'); self.caveats.add('obj115 可通行未指令流确认'); o = 0
+            elif ty == 'MONSTER':
+                r = self.battle(o)
+                if r is None:
+                    return [f'打不动 obj{o} {oname(o)[:10]}']
+                loss, gold = r
+                if o in MAGIC_HALF_ATK:
+                    h.hp = math.ceil(h.hp / 2); log.append(f'{oname(o)[:6]} 半血(⚠️未证)'); self.caveats.add('MAGIC_HALF_ATK 未指令流确认')
+                if h.hp - loss <= 0:
+                    return [f'打不过 obj{o}（需掉血 {loss}，剩 {h.hp}）']
+                h.hp -= loss; h.gold += gold; self.cleared.add((f, nx, ny))
+                log.append(f'击杀 obj{o} {oname(o)[:8]} 掉血{loss} +金{gold}')
+                if f == 49:
+                    self.after_49(log)
+                o = 0
+            elif ty == 'DOOR':
+                col = DOOR_OF.get(o)
+                if col is None:
+                    self.cleared.add((f, nx, ny)); log.append(f'未知门 obj{o} 视为已开(⚠️)'); self.caveats.add('DOOR 颜色未确认')
+                elif h.keys[col] <= 0:
+                    return [f'无{ {"y":"黄","b":"蓝","r":"红"}[col] }钥匙，门 obj{o} 开不了']
+                else:
+                    h.keys[col] -= 1; self.cleared.add((f, nx, ny))
+                    log.append(f'开{ {"y":"黄","b":"蓝","r":"红"}[col] }门 obj{o}'); return log
+            elif o in KEY_OF:
+                h.keys[KEY_OF[o]] += 1; self.cleared.add((f, nx, ny)); log.append(f'拾 {oname(o)[:10]}'); o = 0
+            elif ty in ('STATUS', 'ITEM'):
+                self.pick(o, log); self.cleared.add((f, nx, ny)); o = 0
+            elif ty in ('SELL', 'BUY', 'SAIDAN', 'SCORE', 'MESSAGE', 'NORMAL'):
+                return [f'不可通行 obj{o}（{ty}）']
+        # 落格
+        h.x, h.y = nx, ny
+        if self.terrain_at(f, nx, ny) == 2:
+            up = take_up(f, nx, ny)
+            if up:
+                h.f, (h.x, h.y) = up[0], up[1]
+                if h.f == 3 and not self.trap_done:
+                    pass
+                log.append(f'上楼梯 → {h.f}F')
+                self.apply_floor_events(h.f)
+            else:
+                dn = take_down(f, nx, ny)
+                if dn:
+                    h.f, (h.x, h.y) = dn[0], dn[1]
+                    log.append(f'下楼梯 → {h.f}F'); self.apply_floor_events(h.f)
+        if h.f == 3 and (nx, ny) == TRAP_3F['trigger'] and not self.trap_done:
+            h.x, h.y = nx, ny
+            return self.do_trap3F(log)
+        if h.f == 3 and self.trap_mode == 'avoid' and (nx, ny) == TRAP_3F['trigger']:
+            return ['避开3F中央(反事实)']
+        return log
+
+    def pick(self, o, log):
+        h = self.hero
+        hp, atk, dfn = oatr(o, 10), oatr(o, 11), oatr(o, 12)
+        if hp: h.hp += hp
+        if atk: h.atk += atk
+        if dfn: h.dfn += dfn
+        if TYPE.get(oatr(o, 3)) == 'ITEM':
+            h.items.add(o)
+        log.append(f'拾取 obj{o} {oname(o)[:14]} (HP+{hp} ATK+{atk} DEF+{dfn})')
+
+    def do_trap3F(self, log):
+        h, t = self.hero, TRAP_3F
+        if self.trap_mode == 'avoid':
+            h.x, h.y = h.x, h.y
+            return ['3F 中央被禁行(反事实)']
+        self.trap_done = True; self.flag3F = 1
+        h.hp, h.atk, h.dfn = t['set_hp'], t['set_atk'], t['set_dfn']
+        for gx, gy in t['guards']:
+            self.set_at(3, gx, gy, t['guard_obj'])
+        if t['drop_cell']:
+            h.f, (h.x, h.y) = t['drop_floor'], t['drop_cell']
+        log.append('★3F 剧本：HP→400、ATK/DEF→10（神装被收）'
+                   + (f'，丢到 block{t["drop_floor"]}{h.x},{h.y}' if t['drop_cell'] else '（落点未解，暂不位移 ⇒ 四警卫围死）'))
+        return log
+
+    def after_49(self, log):
+        guards = [(x, y) for x, y, o in FLOOR_WRITES.get(49, []) if o == 58]
+        left = [g for g in guards if self.at(49, g[0], g[1]) == 58]
+        if not left and not self.at(49, 6, 3):
+            self.set_at(49, 6, 3, SEAL_TARGET)
+            globals()['OA'][SEAL_TARGET][10:13] = [800, 500, 100]       # ✅ 封印改写
+            log.append('★49F 封印完成：四周围杀尽 → (6,3) 出现 obj57，其四维改写为 800/500/100')
+
+# ---------------------------------------------------------------------------
+# 规划：Dijkstra，代价 = (累计掉血, 步数)；状态含已拾取格子的掩码（防"重复捡"作弊），
+# 怪物/门不做掩码（重访会重复付费 ⇒ 只会偏保守，不会偏乐观）。
+# ---------------------------------------------------------------------------
+import heapq as _hq
+from collections import deque
+_TIE = iter(range(10 ** 9))
+
+
+def _key(w):
+    return (w.hero.f, w.hero.x, w.hero.y, w.hero.keys['y'], w.hero.keys['b'], w.hero.keys['r'],
+            w.hero.atk if False else w.hero.keys['y'], frozenset(sorted(w.cleared & ITEMISH)))
+
+
+BLOCK_WORDS = ('blocked', '打不动', '不可通行', '无黄', '无蓝', '无红')
+
+def blocked(log):
+    return bool(log) and any(t in log[0] for t in BLOCK_WORDS)
+
+_HST = {}
+
+
+def heuristic(goal_cell):
+    """下界：忽略怪物/门/剧情、只把墙当障碍的最短格数（跨层用楼梯连通）。可采纳。"""
+    key = goal_cell
+    if key in _HST:
+        return _HST[key]
+    import collections as C
+    dist = {}
+    gq = deque([goal_cell]); dist[goal_cell] = 0
+    while gq:
+        f, x, y = gq.popleft(); d = dist[(f, x, y)]
+        nb = []
+        for dx, dy in ((0, -1), (1, 0), (0, 1), (-1, 0)):
+            nx, ny = x + dx, y + dy
+            if 0 <= nx < 13 and 0 <= ny < 13 and terrain(f, nx, ny) != 1:
+                nb.append((f, nx, ny))
+        if terrain(f, x, y) == 2:
+            up = (STAIRS[f][0] == (x, y)) and (f + 1, *(stair_down_cell(f + 1) or (x, y)))
+            dn = (STAIRS[f][1] == (x, y)) and (f - 1, *(stair_up_cell(f - 1) or (x, y))) if f > 0 else None
+            for t in (up, dn):
+                if t and terrain(t[0], t[1], t[2]) != 1:
+                    nb.append(tuple(t))
+        for c in nb:
+            if c not in dist:
+                dist[c] = d + 1; gq.append(c)
+    _HST[key] = dist
+    return dist
+
+
+def plan(goal, event_mode='on_entry', max_states=400000, beam=None, trap_mode='apply', goal_cell=None):
+    """goal(f,x,y)->bool 命中即停。返回 (世界, 路径) 或 None 或 ('cap',...)。"""
+    start = World.new(event_mode=event_mode, trap_mode=trap_mode)
+    H = heuristic(goal_cell) if goal_cell else None
+    h0 = (H or {}).get((start.hero.f, start.hero.x, start.hero.y), 0)
+    pq = [(h0, 0, 0, start)]
+    seen = {}
+    n = 0
+    while pq:
+        loss, steps, _, w = _hq.heappop(pq)
+        if goal(w.hero.f, w.hero.x, w.hero.y):
+            path = []
+            cur = w
+            while cur is not None:
+                path.append((cur.hero.f, cur.hero.x, cur.hero.y, cur.hero.hp))
+                cur = getattr(cur, '_par', None)
+            return w, list(reversed(path))
+        n += 1
+        k = (w.hero.f, w.hero.x, w.hero.y, w.hero.keys['y'], w.hero.keys['b'], w.hero.keys['r'],
+             hash(frozenset([c for c in w.cleared if c in PICKUP_CELLS])))
+        if k in seen and seen[k][0] <= loss and seen[k][1] <= steps:
+            continue
+        seen[k] = (loss, steps)
+        if n > max_states:
+            return None
+        for dx, dy in ((0, -1), (1, 0), (0, 1), (-1, 0)):
+            before = (w.hero.hp, w.hero.f, w.hero.x, w.hero.y)
+            w2 = w.clone()
+            log = w2.move(dx, dy)
+            if blocked(log):
+                continue
+            add = before[0] - w2.hero.hp
+            w2._par = w
+            ns = steps + 1
+            nh = (H or {}).get((w2.hero.f, w2.hero.x, w2.hero.y), 0)
+            _hq.heappush(pq, (loss + max(add, 0) + nh * 1000000, ns, next(_TIE), w2))
+    return ('cap', n)
+
+
+def PICKUP_CELLS_FN():
+    cs = set()
+    for (f, x, y), o in base_cells().items():
+        if TYPE.get(oatr(o, 3)) in ('STATUS', 'ITEM') or o in KEY_OF:
+            cs.add((f, x, y))
+    return frozenset(cs)
+
+
+PICKUP_CELLS = PICKUP_CELLS_FN()
+
+
+def _clone(self):
+    import copy as _c
+    w = World.__new__(World)
+    w.hero = _c.copy(self.hero); w.hero.keys = collections.Counter(self.hero.keys)
+    w.hero.items = set(self.hero.items)
+    w.cells = self.cells                            # 底图共享（只读）
+    w.over = dict(self.over)
+    w.cleared = set(self.cleared); w.applied_events = set(self.applied_events)
+    w.trap_done = self.trap_done; w.flag3F = self.flag3F
+    w.event_mode = self.event_mode; w.trap_mode = self.trap_mode; w.caveats = set(self.caveats)
+    return w
+
+
+World.clone = _clone
+
+
+def make_goal(spec):
+    """spec: 'sword'(5F 铁剑) / 'f<N>' / 'N:x,y'"""
+    if spec == 'sword':
+        for y in range(13):
+            for x in range(13):
+                if obj_raw(5, x, y) == 30:
+                    tx, ty = x, y
+        return (5, tx, ty)
+    if spec.startswith('f'):
+        return (int(spec[1:]), None, None)
+    f, x, y = spec.split(':')
+    return (int(f), int(x), int(y))
+
+
+if __name__ == '__main__':
+    import argparse
+    ap = argparse.ArgumentParser(description='魔塔无头内核')
+    ap.add_argument('cmd', choices=['selftest', 'route', 'probe'])
+    ap.add_argument('--to', default='sword')
+    ap.add_argument('--events', default='on_entry', choices=['on_entry', 'static'])
+    ap.add_argument('--trap', default='apply', choices=['apply', 'avoid'])
+    a = ap.parse_args()
+    if a.cmd == 'selftest':
+        assert World.new(trap_mode='avoid').clone().trap_mode == 'avoid', 'clone 丢字段'
+        assert World.new().event_mode == 'on_entry'
+        w = World.new()
+        print('起点', w.hero.f, (w.hero.x, w.hero.y), 'HP/ATK/DEF', w.hero.hp, w.hero.atk, w.hero.dfn)
+        print('可拾取格数', len(PICKUP_CELLS), ' 事件写入涉及层', len(FLOOR_WRITES))
+        for d in ((0, -1), (-1, 0), (1, 0), (1, 0)):
+            print(' move', d, w.move(*d), '->', (w.hero.f, w.hero.x, w.hero.y), dict(w.hero.keys))
+    else:
+        g = make_goal(a.to)
+        print('目标', g, '事件模式', a.events)
+        r = plan(lambda f, x, y, g=g: (f == g[0] and (g[1] is None or (x, y) == (g[1], g[2]))),
+                 event_mode=a.events, trap_mode=a.trap, goal_cell=g)
+        if not r or (isinstance(r, tuple) and r and r[0] == 'cap'):
+            print('未搜到（状态上限）' if r else '图不可达（无解）'); raise SystemExit(1)
+        else:
+            w, path = r
+            print('路径长度', len(path) - 1, ' 余血', w.hero.hp, 'ATK/DEF', w.hero.atk, w.hero.dfn,
+                  '钥匙', dict(w.hero.keys), 'GOLD', w.hero.gold)
+            print('caveats', w.caveats)
+            for p in path[:6]:
+                print('   ', p)
+            print('    …')

@@ -138,3 +138,26 @@
 - 沙箱内实机装载不稳（贴图 45~60 s，偶尔卡在标题 `strNumber=280`）；重跑用
   `xvfb-run -a -n 77 env LD_LIBRARY_PATH=$A/prefix/usr/lib/x86_64-linux-gnu $A/prefix/usr/lib/jvm/default-java/bin/java -cp . Walk <log> <按键串>`，
   驱动源码在 `08_Java_MTower08a/game/{Boot,Play,Walk}.java`。
+
+## 10. 无头游玩内核 `tools/mota_core.py`（本轮新建）
+
+把游玩过程压成"数据 + 纯函数"：地图/物件读自 `crops/live.json`，文案读 `javamap.json`，
+事件写入读 `dyn_raw.json`；无绘制、无音效，`World.move()` 是唯一动作，`plan()` 是 A*（启发式＝忽略怪与门的最短格数，可采纳）。
+每条规则标了来源（✅指令流 / 📝物件文案 / ⚠️推断），caveat 会随世界带出来，不再把猜测当结论。
+
+已验证的初始状态（写死在 `Hero.initial()`）：HP 1000 / ATK 100 / DEF 100 / GOLD 0，1F 起点 (6,11)。
+楼梯链：1F(1,1)↗→2F(1,1)↘…；49F 无上楼梯格（其入口/出口由 eventMT 放 obj57 的 (6,3) 承担），50F 无楼梯格。
+
+内核目前给出的两条结论：
+
+1. **3F 中央 (5,9) 是唯一通路**：以 `trap_mode='avoid'`（把中央格设为禁行）跑 A*，从起点到 5F 铁剑 (11,11) 的图**不可达**；
+   所以"绕过那段剧本"是不可能的，扒装事件必然发生。
+2. **吃下剧本后目前走不通**，原因不是游戏而是内核缺一段：剧本只建模到
+   `HP→400 / ATK,DEF→10 / 四只 obj58 围住 (5,9) / 清四方向键 / flag3F=1`，
+   而落点取自 `mapAttribute[116][16]=1、[17]=66` ⇒ `mapX=0, mapY=5` = **大表块(band5,slot0) 的 (1,1)**，
+   那一块 13×13 全空（无墙、无物件、无楼梯），显然只是`牢房演出`用的空白块，
+   真实的"送回 2F 牢房 + 盗贼给钥匙/道具"的后续阶段（`flag3F` 2→3→4、`sai2` 等）我没跟完。
+
+下一步（谁接手都做这个）：把 3F 剧本后半补进 `TRAP_3F` —— 需要在实机里让引擎真的踩一次 (5,9)
+后读回 `mapX/mapY/charaX/charaY/mapObject[73][126]/[74][126]`，或者继续读 `eventMT` 里
+`flag3F` 从 1 往后的分支（行号 23058 附近起）；补完后 `plan(goal=sword, trap_mode='apply')` 才可能成功。
