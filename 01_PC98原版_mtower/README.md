@@ -287,7 +287,7 @@
 
 ## 速通验证（内核复算）：1F 起点 → 5F 铁剑
 
-无头内核 `tools/mota_core.py` + A\* `tools/mk_route.py`（f=g+h，并用同一串动作逐步复验）算出并复验通过：
+无头内核 `tools/mota_core.py` + A* `tools/mk_route.py`（f=g+h，并用同一串动作逐步复验）算出并复验通过：
 
 | 项 | 结果 |
 |---|---|
