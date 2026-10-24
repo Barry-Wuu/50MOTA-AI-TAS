@@ -86,8 +86,7 @@ public class Headless8 {
   static String stats() {
     return "f" + fl() + " (" + cx() + "," + cy() + ") HP=" + arrA("mapObject", 66, 118)
         + " ATK=" + arrA("mapObject", 67, 118) + " DEF=" + arrA("mapObject", 68, 118)
-        + " G=" + arrA("mapObject", 69, 118) + " keys(Y,B)=" + arrA("mapObject", 70, 118)
-        + "," + arrA("mapObject", 71, 118)
+        + " G=" + arrA("mapObject", 69, 118)
         + " str=" + gi("strNumber");
   }
 
@@ -346,6 +345,19 @@ public class Headless8 {
       lastF = fl();
     }
     log("终 " + stats());
+    // 状态区 dump（行 60-77 × 列 115-125）：用于核对钥匙等真实槽位
+    {
+      Field mo = f("mapObject");
+      int moRows = mo == null ? 0 : Array.getLength(mo.get(app));
+      Object row0 = moRows > 0 ? Array.get(mo.get(app), 0) : null;
+      int cols = row0 == null ? 0 : Array.getLength(row0);
+      log("  mapObject 维度 = " + moRows + "×" + cols);
+      for (int r = 60; r < Math.min(moRows, 78); r++) {
+        StringBuilder sb = new StringBuilder(String.format("  r%02d:", r));
+        for (int c = 115; c <= 125; c++) sb.append(String.format("%4d", arrA("mapObject", r, c)));
+        log(sb.toString());
+      }
+    }
     log("[headless] tick 成功 " + tickOk + " 异常 " + tickErr);
     LOG.close(); System.exit(0);
   }

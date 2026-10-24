@@ -74,7 +74,9 @@ DISPLAY=:77 java Headless8 <log> <keys.txt> <route.csv>
   1. 逻辑推进链 `paint() -> moveCharacter() -> pointCheck()`，角色在格中心才调 pointCheck；同步调 paint 即可驱动，不需要 timer 线程
   2. `OpenningZeno` 的 `createImage(640,400)` 需要 peer：反射 `Component.addNotify()` + 一个**不可见** Frame 父容器（否则 Applet 无 graphicsConfig，X11 peer 构造 NPE）；Frame 不可见故 AWT 不会并发发 paint，保确定性
   3. **3F 扒装剧本**：踩 3F(5,9) -> 过场 -> 空房间 -> **HP=400/ATK=10/DEF=10** -> 消息队列 -> 完成时英雄落 **2F(4,8)**（实测；旧推测 (3,8) 已纠正）、盗贼 obj87 在 2F(3,7)、2F(2,7) 挖通
-  4. `mapObject[72][118]/[73][118]` 是勇者初始全局坐标槽（loadMapData 偏移 43814 写死 6/11），不是红钥匙数
+  4. `mapObject[72][118]/[73][118]` 是勇者初始全局坐标槽（loadMapData 偏移 43814 写死 6/11），不是红钥匙数（终态 dump：当前已在 4F(11,10)，两槽仍为 6/11）
+  5. `mapObject[71][118]` = 最深到达楼层（pointCheck 偏移 314-366：warp 时 `if (current - V >= 0) V = current`；实测 1,2,3,4,5 与楼层一一吻合，终态值 4 对应进入 4F）
+  6. 钥匙计数不在 stage_flags（band5 slot9）状态块内：拾蓝钥前后全状态区 diff 仅 [69][117] 0→8、[70][124] 4→3 两格；因 4F 路线全程不开门无法反查，stats() 不再显示钥匙字段（诚实缺失）
 
 已验证路线（2026-10-24，exit 0 全过，模型与实机逐步位置/属性全一致）：
 
