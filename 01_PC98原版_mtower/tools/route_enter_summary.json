@@ -26,5 +26,8 @@
     "5F": {"steps": 106, "verified_model": true, "final": "5F(2,11) HP652/ATK10/DEF10/金10", "keys_file": "keys_enter_5f.txt", "csv": "route_enter_5f.csv"},
     "5F铁剑": {"steps": 140, "verified_model": true, "final": "5F(11,11) HP418/ATK20/DEF10/金18（已吃铁剑+10ATK）", "keys_file": "keys_sword_5f.txt", "csv": "route_sword_5f.csv"}
   },
+  "full_landing_verification": "已用原著三处数据源交叉核验全部 50 层+00层的落点，结论：落点全部正确，无错。① 数据源=08_Java_MTower08a 的 mapAttribute[idx][16]=大表全局列、[17]=全局行（每格楼梯自带目的地）；② 交叉=01_PC98原版_mtower/magic_tower1_rows.csv 大表；③ 反编译=mtower.jvm 中 mapAttribute 读取逻辑。解码 decode(col,row)=(row//13)*10+(col//13)+1, x=col%13, y=row%13。逐层断言：每个上梯落点=本层+1、每个下梯落点=本层-1（仅 43→45、44→45 跳过伪44F 属原著设定；0→1 由00层；49→50 为击败假魔王后事件过渡）。92 个楼梯 tile 无一空 warp、无落墙。",
+  "block_boundary_note": "10/20/30/40F 为各 10 层区块的楼顶，原著数据中无上梯（stair_deadend），故 10→11 等区块衔接走非楼梯机制（事件/传送），属原著设定而非落点错误，不在楼梯落点修正范围内。",
+  "deliverable": "tools/landing_table.json = 全部 50 层+00层 楼梯(上/下)及落点的权威表，逐格来自原著 MA[16]/MA[17]，可直接作为速通/逆向的落点基准。",
   "solver": "tools/mk_enter_any.py（BFS）；tools/mota_core.py（内核，落点读 MA[16]/MA[17] warp 表）；tools/run_verify.py（实机验证，自动按层切换点截图）"
 }
