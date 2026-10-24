@@ -91,6 +91,27 @@ KEY_OF = {1: 'y', 3: 'b', 28: 'r'}                  # 📝 黄/蓝/红钥匙
 DOOR_OF = {2: 'y', 4: 'b', 27: 'r'}                 # ⚠️ 门色按 id 顺序推断，尚未从指令流确认
 SOLID_TYPES = {5, 7, 11, 14, 15}                   # DOOR/SAIDAN/SCORE/SELL/BUY：撞上而非穿过
 DECOR_PASS = {21, 23}                             # 饰件：可踩；obj19 实机验证不可踩（np2kai 实测 2026-10，撞击无位移）
+
+# ---- 商店（BUY/SELL 物件按 id 直接建模，避免 type14/15 命名歧义） ----------
+# 依据：yesnoJudge 中 mdataBuff==id 分支（mtower.jvm 行 25143 起）+ OA[id][13]=价格。
+#   41 → 7F 商人「鍵を５個セットで５０ＧＯＬＤ」= 5 把黄钥（✅ 指令流 [74][118]+=5）
+#   18 → 6F 紫钥店（实际给蓝钥 [75][118]+=1，✅ 指令流）
+#   156/159/162/164/166/168/170 为其它楼层商店（本路线只用到 41）
+SHOP = {41, 18, 156, 159, 162, 164, 166, 168, 170}
+SHOP_PRICE = {}                                     # obj -> 价格（从 OA 读，下面填）
+SHOP_GRANT = {                                      # obj -> (资源, 数量) 列表
+    41: [('y', 5)],
+    18: [('b', 1)],
+    156: [('r', 1)],
+    159: [('b', 1)],
+    162: [('y', 4), ('b', 1)],
+    164: [('y', 3)],
+    166: [('b', 3)],
+    168: [('hp', 2000)],
+    170: [('item', 170)],
+}
+for _o in SHOP:
+    SHOP_PRICE[_o] = oatr(_o, 13)
 PICKUP_TYPES = {3, 4, 8}                            # STATUS/ITEM/KEY：踏入即拾取
 MONSTER_TYPE = 6
 
@@ -229,11 +250,14 @@ class World:
     event_mode: str = 'on_entry'
     trap_mode: str = 'apply'          # apply=踩中央即吃剧本 / avoid=把中央格当禁行（反事实）
     caveats: Set = None
+    bought: Set = None                # 已购物的商人格子（防重复购买）
+    boss10: bool = False             # 10F BOSS（obj16 スケルトンＡ）已击败 → (6,11) 生上行梯
 
     @classmethod
     def new(cls, event_mode='on_entry', hero=None, trap_mode='apply'):
         w = cls(hero=hero or Hero.initial(), cells=base_cells(), over={}, ter_over={}, cleared=set(),
-                applied_events=set(), event_mode=event_mode, trap_mode=trap_mode, caveats=set())
+                applied_events=set(), event_mode=event_mode, trap_mode=trap_mode, caveats=set(),
+                bought=set(), boss10=False)
         w.apply_floor_events(w.hero.f)
         return w
 
@@ -245,6 +269,9 @@ class World:
         for x, y, o in FLOOR_WRITES.get(f, []):
             if (f, x, y) in _TRAP_GUARD_CELLS:
                 continue                                  # 属于 3F 剧本，触发时才放
+            base = self.cells.get((f, x, y), 0)
+            if base and TYPE.get(oatr(base, 3)) == 'MONSTER':
+                continue                                  # ✅ 该格静态是怪/BOSS，事件写入不得覆盖（否则 BOSS 消失、怪免打）
             if o:
                 self.set_at(f, x, y, o)
 
@@ -306,6 +333,9 @@ class World:
                 log.append(f'击杀 obj{o} {oname(o)[:8]} 掉血{loss} +金{gold}')
                 if f == 49:
                     self.after_49(log)
+                if f == 10 and o == 16:
+                    self.boss10 = True
+                    log.append('★击败10F BOSS(スケルトンＡ) → 10F(6,11) 将生上行梯')
                 o = 0
             elif ty == 'DOOR':
                 col = DOOR_OF.get(o)
@@ -322,6 +352,24 @@ class World:
                 self.pick(o, log); self.cleared.add((f, nx, ny)); o = 0
             elif o in DECOR_PASS:
                 log.append(f'踩过装饰 obj{o}'); o = 0
+            elif o in SHOP:
+                price = SHOP_PRICE.get(o, 0)
+                if (f, nx, ny) in self.bought:
+                    self.cleared.add((f, nx, ny)); log.append(f'已过商店 obj{o}'); o = 0
+                elif h.gold < price:
+                    return [f'买不起 obj{o}（需{price}G，仅{h.gold}G）']
+                else:
+                    h.gold -= price
+                    for res, n in SHOP_GRANT.get(o, []):
+                        if res == 'y': h.keys['y'] += n
+                        elif res == 'b': h.keys['b'] += n
+                        elif res == 'r': h.keys['r'] += n
+                        elif res == 'hp': h.hp += n
+                        elif res == 'item': h.items.add(n)
+                    self.bought.add((f, nx, ny))
+                    self.cleared.add((f, nx, ny))   # 买后该格变可走（obj155 占位）
+                    log.append(f'购物 obj{o} 花{price}G -> {SHOP_GRANT.get(o)}')
+                    return log                       # 英雄不移动（对话确认后仍在原格）
             elif ty == 'MESSAGE':
                 kind, val = MSG_EFFECT.get(o, ('none', None))
                 if kind == 'pct3':
@@ -335,8 +383,13 @@ class World:
                 else:
                     log.append(f'NPC obj{o} 交谈后消失')
                 self.cleared.add((f, nx, ny))                 # 📝 谈完让路 ✅ 老人/盗贼不常驻
-            elif ty in ('SELL', 'BUY', 'SAIDAN', 'SCORE', 'NORMAL'):
+            elif ty == 'SCORE':
+                # 📝 仙女评分(obj69)：可交谈通过，不是墙。写死成不可通行会把 10F(6,4) 这一竖道封死、BOSS 到不了
+                log.append(f'评分 NPC obj{o}（交谈通过）'); self.cleared.add((f, nx, ny)); o = 0
+            elif ty in ('SELL', 'BUY', 'SAIDAN'):
                 return [f'不可通行 obj{o}（{ty}）']
+            elif ty == 'NORMAL':
+                log.append(f'踩过 type0 装饰 obj{o}'); o = 0   # ✅ type0=NORMAL 地板装饰，可踩（obj20 等）
         # 落格
         h.x, h.y = nx, ny
         if self.terrain_at(f, nx, ny) == 2:
@@ -345,6 +398,12 @@ class World:
                 h.f, h.x, h.y = w
                 log.append(f'楼梯 → {h.f}F')
                 self.apply_floor_events(h.f)
+        elif f == 10 and self.boss10 and (nx, ny) == (6, 11):
+            # ✅ 10F BOSS 死后 eventMT 把 map[11][123]=22（10F(6,11) 上行梯）→ MA[22] warp=(11,6,10)
+            # 该格静态地形是地板(0)，故必须放在 terrain==2 分支之外判断，否则永不触发
+            h.f, h.x, h.y = (11, 6, 10)
+            log.append('楼梯 → 11F（BOSS 死后上行梯）')
+            self.apply_floor_events(11)
         if h.f == 3 and (nx, ny) == TRAP_3F['trigger'] and not self.trap_done:
             h.x, h.y = nx, ny
             return self.do_trap3F(log)
@@ -407,7 +466,7 @@ def _key(w):
             w.hero.atk if False else w.hero.keys['y'], frozenset(sorted(w.cleared & ITEMISH)))
 
 
-BLOCK_WORDS = ('blocked', '打不动', '不可通行', '无黄', '无蓝', '无红')
+BLOCK_WORDS = ('blocked', '打不动', '打不过', '不可通行', '无黄', '无蓝', '无红')
 
 def blocked(log):
     return bool(log) and any(t in log[0] for t in BLOCK_WORDS)
@@ -441,9 +500,11 @@ def heuristic(goal_cell):
     return dist
 
 
-def plan(goal, event_mode='on_entry', max_states=400000, beam=None, trap_mode='apply', goal_cell=None):
-    """goal(f,x,y)->bool 命中即停。返回 (世界, 路径) 或 None 或 ('cap',...)。"""
-    start = World.new(event_mode=event_mode, trap_mode=trap_mode)
+def plan(goal, event_mode='on_entry', max_states=400000, beam=None, trap_mode='apply', goal_cell=None, start=None):
+    """goal(f,x,y)->bool 命中即停。返回 (世界, 路径) 或 None 或 ('cap',...)。
+    start：外传起点世界（如铁剑路线终态），None 则按 Hero.initial() 新建。"""
+    start = start if start is not None else World.new(event_mode=event_mode, trap_mode=trap_mode)
+    start._par = None                      # 切断外传起点的父链，路径只含本段
     H = heuristic(goal_cell) if goal_cell else None
     h0 = (H or {}).get((start.hero.f, start.hero.x, start.hero.y), 0)
     pq = [(h0, 0, 0, start)]
@@ -460,8 +521,8 @@ def plan(goal, event_mode='on_entry', max_states=400000, beam=None, trap_mode='a
             return w, list(reversed(path))
         n += 1
         # atk/dfn/gold 都由「已拾取掩码」唯一决定，放进键里只会让状态数爆炸，故不放
-        k = (w.hero.f, w.hero.x, w.hero.y, w.hero.keys['y'], w.hero.keys['b'],
-             frozenset(c for c in w.cleared if c in PICKUP_CELLS))
+        k = (w.hero.f, w.hero.x, w.hero.y, w.hero.keys['y'], w.hero.keys['b'], w.hero.keys['r'],
+             frozenset(c for c in w.cleared if c in PICKUP_CELLS), frozenset(w.bought))
         if k in seen and seen[k][0] <= loss and seen[k][1] <= steps:
             continue
         seen[k] = (loss, steps)
@@ -503,6 +564,7 @@ def _clone(self):
     w.trap_done = self.trap_done; w.flag3F = self.flag3F
     w.ter_over = dict(self.ter_over)
     w.event_mode = self.event_mode; w.trap_mode = self.trap_mode; w.caveats = set(self.caveats)
+    w.bought = set(self.bought); w.boss10 = self.boss10
     return w
 
 

@@ -28,10 +28,12 @@ def key_of(w):
             frozenset(c for c in w.cleared if c in M.PICKUP_CELLS))
 
 
-def bfs(goal_f=None, goal_cell=None, cap=3000000):
-    """goal_f: 进入该层即停；goal_cell=(f,x,y): 走到该格即停。返回 (动作串, 终点世界, 展开状态数)。"""
+def bfs(goal_f=None, goal_cell=None, cap=3000000, start=None):
+    """goal_f: 进入该层即停；goal_cell=(f,x,y): 走到该格即停。返回 (动作串, 终点世界, 展开状态数)。
+    start：外传起点世界（如铁剑路线终态），None 则从 1F 起点新建。"""
     assert goal_f or goal_cell
-    start = M.World.new(event_mode='on_entry', trap_mode='apply')
+    start = start if start is not None else M.World.new(event_mode='on_entry', trap_mode='apply')
+    start._par = None
 
     def reached(w):
         return w.hero.f == goal_f if goal_f else (w.hero.f, w.hero.x, w.hero.y) == goal_cell
@@ -62,9 +64,9 @@ def bfs(goal_f=None, goal_cell=None, cap=3000000):
     return None, None, n
 
 
-def replay(keys):
+def replay(keys, start=None):
     KS = {'8': (0, -1), '2': (0, 1), '4': (-1, 0), '6': (1, 0)}
-    w = M.World.new(event_mode='on_entry', trap_mode='apply')
+    w = start.clone() if start is not None else M.World.new(event_mode='on_entry', trap_mode='apply')
     rows = []
     for i, ch in enumerate(keys, 1):
         log = w.move(*KS[ch])
@@ -76,10 +78,10 @@ def replay(keys):
     return w, rows
 
 
-def run(target, goal_f=None, goal_cell=None, tag=None):
-    keys, w, n = bfs(goal_f=goal_f, goal_cell=goal_cell)
+def run(target, goal_f=None, goal_cell=None, tag=None, start=None):
+    keys, w, n = bfs(goal_f=goal_f, goal_cell=goal_cell, start=start)
     assert keys is not None, f'{target} 搜索失败（状态上限 {n}）'
-    wr, rows = replay(keys)
+    wr, rows = replay(keys, start=start)
     assert wr is not None, rows
     assert (goal_f and wr.hero.f == goal_f) or (goal_cell and (wr.hero.f, wr.hero.x, wr.hero.y) == goal_cell), \
         f'{target} 复验终点不符：{wr.hero.f},{wr.hero.x},{wr.hero.y}'
