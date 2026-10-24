@@ -87,7 +87,7 @@ summary = {
     'caveats': sorted(w.caveats),
     'assumptions': ['obj2 吃黄钥匙(obj1)=DOOR_OF 推断 ⚠️', 'obj19/21/23 饰件可踩 ⚠️',
                     '剧本收尾后四角魔导师撤走、3F(5,9) 复原、2F(2,7) 挖通 ✅指令流',
-                    '落点 2F(3,8) 取盗贼邻格 ⚠️（指令给的是空白演出块 (band5,slot0)）'],
+                    '落点 2F(4,8) ✅Java 版 Headless8 无头驱动实测（旧推测 (3,8) 已纠正）'],
 }
 json.dump(summary, open('route_sword_summary.json', 'w'), ensure_ascii=False, indent=1)
 print(json.dumps(summary, ensure_ascii=False, indent=1)[:1700])

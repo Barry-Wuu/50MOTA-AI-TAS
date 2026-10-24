@@ -48,7 +48,7 @@
  },
  "enter4": {
   "tag": "enter_4f",
-  "steps": 77,
+  "steps": 78,
   "nodes": 5404,
   "final": [
    4,
@@ -77,7 +77,7 @@
  },
  "enter5": {
   "tag": "enter_5f",
-  "steps": 106,
+  "steps": 107,
   "nodes": 281443,
   "final": [
    5,
@@ -109,7 +109,7 @@
  },
  "sword5": {
   "tag": "sword_5f",
-  "steps": 140,
+  "steps": 141,
   "nodes": 1865374,
   "final": [
    5,

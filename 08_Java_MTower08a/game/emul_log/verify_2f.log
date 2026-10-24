@@ -1,0 +1,4 @@
+贴图就绪 180s
+起点 f1 (0,0) HP=0 ATK=0 DEF=0 G=0 keys(Y,B,R)=0,0,0
+!! 起点异常，应为 1F(6,11)
+  截图失败 javax.imageio.IIOException: Can't create an ImageOutputStream!

@@ -194,7 +194,8 @@ TRAP_3F = dict(                                        # ✅ 指令行 31937/320
     texts=[222, 223],
     # 落点：loadMapData2 静态把 mapAttribute[116][16/17]=1/66 → mapX=0,mapY=5 → 大表块(band5,slot0) 的 (1,1)
     # 该块是 13×13 全空房间；剧本后续阶段再把勇者接回 2F（这段我没跟完 ⚠️），故默认不做位移。
-    drop_floor=2, drop_cell=(3, 8),   # 盗贼 (3,7) 正下方的地板格（盗贼格不可站人）⚠️ 指令未直接给出，取邻格
+    drop_floor=2, drop_cell=(4, 8),   # ✅ 实测（Java 版 Headless8 无头驱动）：过场结束后英雄落在 2F(4,8)
+    #   （先前推测 (3,8)「盗贼正下方邻格」有误；盗贼 obj87 在 (3,7)，(4,8) 才是接人点）
     # 空块 (band5,slot0)(1,1) 只是演出用的空白，不再当落点用
 )
 
@@ -556,3 +557,42 @@ if __name__ == '__main__':
 
 
 _TRAP_GUARD_CELLS |= {(3, x, y) for x, y in TRAP_3F['guards']}
+
+
+# ---- 数据源切换：08 Java 版本体权威数据（DumpAll8.java 从 MTower.class 运行时导出） ----
+def use_java8(path):
+    """把 MAPT/MAPO/MA/OA 切换为 08 Java 版导出数据，并重建 WARP。
+
+    依据：DumpAll8.java 反射读取 MTower.map/mapObject/mapAttribute/objectAttribute
+    （loadMapData 加载后的运行时真值）。obj 表已与 PC98 live.json 全量对比 0 差异。
+    """
+    global MAPT, MAPO, MA, OA, WARP
+    d = json.load(open(path))
+    MAPT2 = [row[:] for row in MAPT]
+    MAPO2 = [row[:] for row in MAPO]
+    for _f in range(1, 51):
+        _b, _s = (_f - 1) // 10, (_f - 1) % 10
+        _J = d['floors'][str(_f)]
+        for _y in range(13):
+            for _x in range(13):
+                MAPT2[_b * 13 + _y][_s * 13 + _x] = _J['map'][_y][_x]
+                MAPO2[_b * 13 + _y][_s * 13 + _x] = _J['obj'][_y][_x]
+    MAPT, MAPO, MA, OA = MAPT2, MAPO2, d['mapAttribute'], d['objectAttribute']
+    W2 = {}
+    for _f in BAND_SLOT:
+        for _y in range(13):
+            for _x in range(13):
+                if terrain(_f, _x, _y) == 2:
+                    _r, _c = rc(_f, _x, _y)
+                    _idx = MAPT[_r][_c]
+                    _col, _row = MA[_idx][16], MA[_idx][17]
+                    if _col == 0 and _row == 0:
+                        continue
+                    W2[(_f, _x, _y)] = _decode_global(_col, _row)
+    WARP.clear(); WARP.update(W2)
+    return len(WARP)
+
+
+_J8 = os.environ.get('MOTA_JAVA8')
+if _J8 and os.path.exists(_J8):
+    use_java8(_J8)
