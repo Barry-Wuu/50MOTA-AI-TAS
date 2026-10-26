@@ -318,6 +318,11 @@ class World:
         if o:
             if o == 89:                                   # 📝 暗墙：撞了就塌
                 self.cleared.add((f, nx, ny)); log.append('撞塌暗墙 obj89'); o = 0; ty = '空'
+            elif o == 79:                                # ⚠️ 熔岩：非战斗危险格，每步 -200 HP
+                if h.hp <= 200:                          #    （MAP_NOTES §4 实证：13F 80 格 / 26F 18 格）
+                    return ['熔岩烫死（HP%d ≤ 200，进不去了）' % h.hp]
+                h.hp -= 200
+                self.cleared.add((f, nx, ny)); log.append('踩熔岩 obj79 掉血200'); o = 0; ty = '空'
             elif o == 115:                                # ⚠️ 隐形块（GO 0F 字形等）按可走处理
                 log.append('隐形块 obj115 视为可走(caveat)'); self.caveats.add('obj115 可通行未指令流确认'); o = 0
             elif ty == 'MONSTER':
