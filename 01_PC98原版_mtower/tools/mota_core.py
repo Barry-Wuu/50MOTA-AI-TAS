@@ -116,6 +116,10 @@ PICKUP_TYPES = {3, 4, 8}                            # STATUS/ITEM/KEY：踏入�
 MONSTER_TYPE = 6
 
 MAGIC_HALF_ATK = {58, 96}       # ⚠️ 魔导师/大魔导师战斗前削减主角 HP（我从未在指令流里逐条确认）
+# 📝 盗贼凿墙事件（dynamic.csv 实证：触发格 obj88 MESSAGE「…大ダコが道をふさいでいて…抜け穴が…」，
+#    目标格 directCheck 墙→地板；35F(5,10)→35F 暗道同机制）。键=被挖开的墙格，值=盗贼触发格
+DIG_WALLS = {(15, 8, 1): (15, 9, 1)}
+DIG_TRIG = {v: k for k, v in DIG_WALLS.items()}   # 触发格 → 被挖开的墙格
 ATK_DOUBLE_IF = {(103,): {48, 49, 59}, (109,): {74}}   # 📝 十字架对ゾンビ系、屠龙匕对ドラゴン：我方伤害×2（attackDouble）
 # 📝 MESSAGE（挡路 NPC）交互：谈完即从地图上消失，效果取自其文案括号内的明示数值
 MSG_EFFECT = {
@@ -311,7 +315,9 @@ class World:
         f, x, y = h.f, h.x, h.y
         nx, ny = x + dx, y + dy
         if self.terrain_at(f, nx, ny) == 1:
-            return ['blocked:墙']
+            # 📝 盗贼凿墙：触发格(盗贼)交谈后进 cleared，对应墙格即变成可通行的暗道
+            if DIG_WALLS.get((f, nx, ny)) not in self.cleared:
+                return ['blocked:墙']               # 未触发=普通墙；触发后直接放行（log 由落格时带出）
         o = self.at(f, nx, ny)
         log = []
         ty = TYPE.get(oatr(o, 3), '?') if o else '空'
@@ -397,6 +403,9 @@ class World:
                 log.append(f'踩过 type0 装饰 obj{o}'); o = 0   # ✅ type0=NORMAL 地板装饰，可踩（obj20 等）
         # 落格
         h.x, h.y = nx, ny
+        if (f, nx, ny) in DIG_TRIG:                   # 📝 盗贼格是 eventMT 动态生成（静态表 obj=0），
+            self.cleared.add((f, nx, ny))             #    踩到即交谈，凿开对应墙格
+            log.append('盗賊「…大ダコの抜け穴がようやく…」→ 凿开暗道 %s' % (DIG_TRIG[(f, nx, ny)],))
         if self.terrain_at(f, nx, ny) == 2:
             w = warp_to(f, nx, ny)
             if w:
