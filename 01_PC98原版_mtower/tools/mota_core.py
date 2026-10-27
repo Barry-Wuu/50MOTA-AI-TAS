@@ -271,7 +271,7 @@ class World:
     caveats: Set = None
     bought: Set = None                # 已购物的商人格子（防重复购买）
     boss10: bool = False             # 10F BOSS（obj16 スケルトンＡ）已击败 → (6,11) 生上行梯
-    boss20: bool = False             # 20F BOSS（obj59 バンパイア/吸血鬼）已击败 → (6,9) 红门开
+    boss20: bool = False             # 20F BOSS（obj59 バンパイア/吸血鬼）已击败 → (20,6,1) 现出上行梯
     altar_k: int = 0                  # 📝 本存档累计祭坛已使用次数（决定下一次代价）
     altar_policy: str = 'atk'         # 📝 祭坛菜单选择：hp / atk / dfn（A* 无法处理菜单，按策略预设）
 
@@ -337,9 +337,14 @@ class World:
             if DIG_WALLS.get((f, nx, ny)) not in self.cleared:
                 return ['blocked:墙']               # 未触发=普通墙；触发后直接放行（log 由落格时带出）
         o = self.at(f, nx, ny)
-        # 📝 20F(6,9) 红门：杀吸血鬼前强制挡路（dyn_raw 把它覆盖成地板 obj20，须补「杀 BOSS 才开」语义）
-        if (f, nx, ny) == (20, 6, 9) and not self.boss20:
-            return ['blocked: 20F(6,9) 红门未开（需先击败吸血鬼）']
+        # ✅ 修正（此处原为死锁 bug）：20F 的「进入」与「离开」是两套独立机制，不能混为一谈。
+        #    · 进入：玩家踏上触发点 (6,8) 后，由剧情自动开门 —— 见 Java 源码
+        #      MTower.java:3080：displayDoor(123,22,4)（开门动画）→ mapObject[22][123]=20
+        #      （(6,9) 变为可通行装饰）→ banpaia()（吸血鬼登场）→ strNumber=19。
+        #      门既不消耗红钥匙，也不要求 boss20。
+        #    · 离开：击败 (6,6) 吸血鬼后置 boss20=True，(20,6,1) 才现出上行梯（下方 warp 逻辑，原本正确）。
+        #    旧代码把「进入」误绑到 boss20 上，造成「要杀 BOSS 才开门、而 BOSS 就在门后 (6,6)」
+        #    的死锁，20F BOSS 永远打不到。现按源码语义移除该判断。
         log = []
         ty = TYPE.get(oatr(o, 3), '?') if o else '空'
         if o:
@@ -372,7 +377,7 @@ class World:
                     log.append('★击败10F BOSS(スケルトンＡ) → 10F(6,11) 将生上行梯')
                 if f == 20 and o == 59:
                     self.boss20 = True
-                    log.append('★击败20F BOSS(バンパイア/吸血鬼) → 20F(6,9) 红门开')
+                    log.append('★击败20F BOSS(バンパイア/吸血鬼) → 20F(6,1) 现出上行梯')
                 o = 0
             elif ty == 'DOOR':
                 col = DOOR_OF.get(o)
