@@ -1,0 +1,72 @@
+[probe] 起点 f1 (6,11) HP=1000 ATK=100 DEF=100 G=0 str=0
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_sword_5f.csv 步1)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_sword_5f.csv 步5)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_sword_5f.csv 步24)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_sword_5f.csv 步25)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_sword_5f.csv 步26)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_sword_5f.csv 步44)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_sword_5f.csv 步73)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_sword_5f.csv 步79)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_sword_5f.csv 步82)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_sword_5f.csv 步89)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_sword_5f.csv 步98)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_sword_5f.csv 步99)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_sword_5f.csv 步101)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_sword_5f.csv 步108)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_sword_5f.csv 步110)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_sword_5f.csv 步112)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_sword_5f.csv 步122)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_sword_5f.csv 步125)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_sword_5f.csv 步130)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_sword_5f.csv 步136)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_sword_5f.csv 步139)
+[probe] 铁剑路线终点 f5 (11,11) HP=418 ATK=20 DEF=10 G=18 str=0 msg=0/0 dlg=0 atk=0 op=0 yusya=0 saidan=0 item=0/0 itemKey=0 yesno=0/0
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_enter_7f.csv 步18)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_enter_7f.csv 步33)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_enter_7f.csv 步36)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_enter_7f.csv 步38)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_enter_7f.csv 步43)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_enter_7f.csv 步64)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_enter_7f.csv 步65)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_enter_7f.csv 步69)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_enter_7f.csv 步71)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_enter_7f.csv 步79)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_enter_7f.csv 步81)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_enter_7f.csv 步90)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_enter_7f.csv 步91)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_enter_7f.csv 步97)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_enter_7f.csv 步99)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_enter_7f.csv 步102)
+    [省流] 反射清零消息字段 (/tmp/motarepo2/01_PC98原版_mtower/tools/route_enter_7f.csv 步104)
+[probe] 到达 f7 (11,10) HP=34 ATK=20 DEF=10 G=44 str=0 msg=0/0 dlg=0 atk=0 op=0 yusya=0 saidan=0 item=0/0 itemKey=0 yesno=0/0
+[probe] 反射清零 7F 门 10 扇
+[probe] == 基线（商人前） ==
+  状态区 r66-77 c118-125:
+   r66:   34    0    0    0    0    0    0    0
+   r67:   20    8    0    0    0    0    0    0
+   r68:   10    0    0    0    0    0    0    0
+   r69:   44   30    0    0    0    0   27   89
+   r70:    1    0    0    0    0    0    0   10
+   r71:    7    0    0    0    0    0    0    0
+   r72:    6    0    0    0    0    0    2    0
+   r73:   11    0    0    0    0    0    0    0
+   r74:    1    0    0    0    0    0    0    0
+   r75:    1    0    0    0    0    0    0    0
+   r76:    0    0    0    0    0    0    0    0
+   r77:    0    0    0    0    0    0    0    0
+
+[probe] == 最小实验：清门后按左一次 ==
+[probe] 按左前 chX=55 chY=50 L=0 cur=2
+[probe] 按左后(含settle300) chX=55 chY=50 L=0 cur=4
+[probe]   tick00 chX=55 chY=50 L=0 cur=4 cntRep=6 focus=0 inKey=1
+[probe]   tick01 chX=55 chY=50 L=0 cur=4 cntRep=7 focus=0 inKey=1
+[probe]   tick02 chX=55 chY=50 L=0 cur=4 cntRep=8 focus=0 inKey=1
+[probe]   tick03 chX=55 chY=50 L=0 cur=4 cntRep=9 focus=0 inKey=1
+[probe]   tick04 chX=55 chY=50 L=0 cur=4 cntRep=10 focus=0 inKey=1
+[probe]   tick05 chX=55 chY=50 L=0 cur=4 cntRep=11 focus=0 inKey=1
+[probe]   tick06 chX=55 chY=50 L=0 cur=4 cntRep=12 focus=0 inKey=1
+[probe]   tick07 chX=55 chY=50 L=0 cur=4 cntRep=13 focus=0 inKey=1
+[probe]   tick08 chX=55 chY=50 L=0 cur=4 cntRep=14 focus=0 inKey=1
+[probe]   tick09 chX=55 chY=50 L=0 cur=4 cntRep=15 focus=0 inKey=1
+[probe]   tick10 chX=55 chY=50 L=0 cur=4 cntRep=16 focus=0 inKey=1
+[probe]   tick11 chX=55 chY=50 L=0 cur=4 cntRep=17 focus=0 inKey=1

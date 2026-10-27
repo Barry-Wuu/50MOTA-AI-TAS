@@ -45,9 +45,12 @@ def blockers_of(f):
 
 
 def _key(w):
-    """状态键。只记「本层已清掉几个挡路物」而不是整张清障集合——
-    集合做键会让状态空间组合爆炸（2^15 量级），改用计数后同一格的可达状态急剧减少，
-    代价是偶尔会漏掉「多绕一圈打怪再回来」的路径，对本路线（最短路足够）可以接受。
+    """状态键。
+
+    必须纳入攻防与血量（粗桶）：魔塔是「属性门控」游戏——同一格在低攻防下打不过守门怪、
+    在高攻防下能过，二者是不同状态。旧键只记 (楼层,坐标,钥匙,本层清障计数,购物数)，
+    会把「先绕路堆攻防、回头再走关口格」的高攻防路径误判为已访问而剪枝，导致 BFS 说可达、
+    A* 却返回不可达。现把 atk/dfn 与 hp//50 粗桶纳入，单楼层点到点 A* 状态数仍可控。
     """
     h = w.hero
     blk = blockers_of(h.f)
@@ -56,7 +59,8 @@ def _key(w):
         if c[0] == h.f and (c[1], c[2]) in blk:
             n += 1
     bo = len([c for c in w.bought if c[0] == h.f])
-    return (h.f, h.x, h.y, h.keys['y'], h.keys['b'], h.keys['r'], n, bo)
+    return (h.f, h.x, h.y, h.keys['y'], h.keys['b'], h.keys['r'],
+            h.atk, h.dfn, h.hp // 50, n, bo)
 
 
 def walk(w, tgt, max_exp=300000):

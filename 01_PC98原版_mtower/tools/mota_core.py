@@ -271,6 +271,7 @@ class World:
     caveats: Set = None
     bought: Set = None                # 已购物的商人格子（防重复购买）
     boss10: bool = False             # 10F BOSS（obj16 スケルトンＡ）已击败 → (6,11) 生上行梯
+    boss20: bool = False             # 20F BOSS（obj59 バンパイア/吸血鬼）已击败 → (6,9) 红门开
     altar_k: int = 0                  # 📝 本存档累计祭坛已使用次数（决定下一次代价）
     altar_policy: str = 'atk'         # 📝 祭坛菜单选择：hp / atk / dfn（A* 无法处理菜单，按策略预设）
 
@@ -278,7 +279,7 @@ class World:
     def new(cls, event_mode='on_entry', hero=None, trap_mode='apply'):
         w = cls(hero=hero or Hero.initial(), cells=base_cells(), over={}, ter_over={}, cleared=set(),
                 applied_events=set(), event_mode=event_mode, trap_mode=trap_mode, caveats=set(),
-                bought=set(), boss10=False)
+                bought=set(), boss10=False, boss20=False)
         w.apply_floor_events(w.hero.f)
         return w
 
@@ -336,11 +337,16 @@ class World:
             if DIG_WALLS.get((f, nx, ny)) not in self.cleared:
                 return ['blocked:墙']               # 未触发=普通墙；触发后直接放行（log 由落格时带出）
         o = self.at(f, nx, ny)
+        # 📝 20F(6,9) 红门：杀吸血鬼前强制挡路（dyn_raw 把它覆盖成地板 obj20，须补「杀 BOSS 才开」语义）
+        if (f, nx, ny) == (20, 6, 9) and not self.boss20:
+            return ['blocked: 20F(6,9) 红门未开（需先击败吸血鬼）']
         log = []
         ty = TYPE.get(oatr(o, 3), '?') if o else '空'
         if o:
             if o == 89:                                   # 📝 暗墙：撞了就塌
                 self.cleared.add((f, nx, ny)); log.append('撞塌暗墙 obj89'); o = 0; ty = '空'
+                if (f, nx, ny) in ((19, 6, 3), (19, 6, 4)):   # 📝 19F 十字暗墙：撞开获得十字架 obj103
+                    h.items.add(103); log.append('获得十字架 obj103（对吸血鬼等伤害翻倍）')
             elif o == 79:                                # ⚠️ 熔岩：非战斗危险格，每步 -200 HP
                 if h.hp <= 200:                          #    （MAP_NOTES §4 实证：13F 80 格 / 26F 18 格）
                     return ['熔岩烫死（HP%d ≤ 200，进不去了）' % h.hp]
@@ -364,6 +370,9 @@ class World:
                 if f == 10 and o == 16:
                     self.boss10 = True
                     log.append('★击败10F BOSS(スケルトンＡ) → 10F(6,11) 将生上行梯')
+                if f == 20 and o == 59:
+                    self.boss20 = True
+                    log.append('★击败20F BOSS(バンパイア/吸血鬼) → 20F(6,9) 红门开')
                 o = 0
             elif ty == 'DOOR':
                 col = DOOR_OF.get(o)
@@ -452,6 +461,14 @@ class World:
             h.f, h.x, h.y = (11, 6, 10)
             log.append('楼梯 → 11F（BOSS 死后上行梯）')
             self.apply_floor_events(11)
+        elif f == 20 and self.boss20 and (nx, ny) == (6, 1):
+            # ✅ 20F 同构：杀吸血鬼后 (6,1) 封印解除现出上行梯 → 21F(6,2)。
+            # 证据：21F(6,1) 静态下梯 warp=(20,6,2)，按 10F↔11F 同坐标配对规则，
+            # 20F 的上行梯就在 (6,1)（即顶部花纹封印格，dynamic_terrain to:[50]）。
+            # 该格静态地形是地板(1)，与 10F 一样必须放在 terrain==2 分支之外。
+            h.f, h.x, h.y = (21, 6, 2)
+            log.append('楼梯 → 21F（吸血鬼死后上行梯）')
+            self.apply_floor_events(21)
         if h.f == 3 and (nx, ny) == TRAP_3F['trigger'] and not self.trap_done:
             h.x, h.y = nx, ny
             return self.do_trap3F(log)
@@ -612,7 +629,7 @@ def _clone(self):
     w.trap_done = self.trap_done; w.flag3F = self.flag3F
     w.ter_over = dict(self.ter_over)
     w.event_mode = self.event_mode; w.trap_mode = self.trap_mode; w.caveats = set(self.caveats)
-    w.bought = set(self.bought); w.boss10 = self.boss10
+    w.bought = set(self.bought); w.boss10 = self.boss10; w.boss20 = self.boss20
     w.altar_k = self.altar_k; w.altar_policy = self.altar_policy
     return w
 

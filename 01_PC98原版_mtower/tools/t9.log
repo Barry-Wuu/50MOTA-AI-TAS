@@ -1,0 +1,1 @@
+timeout 700 python3 -u plan.py > p9.log 2>&1  1.60s user 0.03s system 100% cpu 1.632 total
