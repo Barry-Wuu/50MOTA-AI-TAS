@@ -125,7 +125,7 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 29,盗賊「おお、来たか。ちゃんと、抜け穴を開通させておいたぜ、この抜け穴を通ればドラゴンの後ろに出られるから、そこから上の階に行くんだな。」,"The thief says ""There you are. I have just finished the tunnel. As you go through it, you will get to the Dragon. And then you should go up.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,29,盗贼（脱出屋）对白
 30,盗賊「このブロックのボスの金騎士は弱いくせに態度だけはでかいから、この塔の副将格の魔導師ゼノには嫌われているらしい。」,"The thief says ""The Golden Knight (who is the boss of this area) has a strong attitude in spite of being weak. It is for this reason that he is disliked by the Magic Serg. Zeno, who is the sub commander of this tower.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,35,盗贼（脱出屋）对白
 44,盗賊「ふふふ……ここにいるという事は、答えは１つしかあるまい。こういう事だっ！」,"The thief says ""Humph. There is only one reason why I'm here. And this is it!""",代码 `strNumber=44` ← eventMT,50,盗贼（脱出屋）对白
-59,「９階と１６階と１８階の抜け穴には気が付いたかい？」,"""Did you notice the secret passages on the 9th, 16th, and 18th floors?""",obj157（数据引用）,16,盗贼（脱出屋）对白
+59,「９階と１６階と１８階の抜け穴には気が付いたかい？」,"""Did you notice the secret passages on the 9th, 16th, and 18th floors?""",obj157（数据引用）,12,盗贼（脱出屋）对白
 99,盗賊「ようまたあったな！無事だったか？これは聞いた話なんだが、２５階のボスを倒すと『時空の門』がどこかにできるらしいぞ。」,"The thief says ""Ah!, we meet again! Thank goodness you're alive! I heard that if you beat the boss of 25th floor, 'the gate of time and space' will appear somewhere.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,35,盗贼（脱出屋）对白
 23,勇者「これはっ……！人形だっ！」,"The brave man says ""Oh! What? This is a doll!""",obj44（数据引用）,26 catalog,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 10,魔導師ゼノ「ようこそ、『魔法の塔』へ。おまえがちょうど１００人目の侵入者だ。本来なら手下共に相手をさせるところだが、特別にこの私が自ら相手になってやろう。己の不運を呪うのだな。」,"The Magic Serg. Zeno says ""Welcome to 'The Magic Tower'. You are the hundredth man who dared to enter my tower. You will now face my guards. Should you happen to survive, I will fight with you in person specially. You should accept your fate.""",obj177（数据引用）,1,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
@@ -185,10 +185,10 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 3,「・・・・・おいっ！起きろ！」,"""------ Hey! Wake up!""",代码 `strNumber=3` ← eventMT,—,无名提示与谜面（石板/老人语气，未具名）
 18,「お金が足りないよ！」,"""You don't have enough money.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,无名提示与谜面（石板/老人语气，未具名）
 22,「・・・ジ・・・トキハキタレリ・・・エラバレシモノヨ、シヲオソレヌナラバジクウノモンヲクグリテ、ワガモトヘクルガヨイ・・・」,"""Now is the time. You were chosen. If you aren't afraid of Death, you should go through the gate of Time and Space, and come to me.""",代码 `strNumber=22` ← eventMT,—,无名提示与谜面（石板/老人语气，未具名）
-66,「この塔は５０階建てだが、実際には４９階までしか行けないようだ。」,"""This tower is 50 stories high, but in reality it seems that you cannot go up to the 50th floor.""",obj163（数据引用）,—,无名提示与谜面（石板/老人语气，未具名）
+66,「この塔は５０階建てだが、実際には４９階までしか行けないようだ。」,"""This tower is 50 stories high, but in reality it seems that you cannot go up to the 50th floor.""",obj163（数据引用）,31,无名提示与谜面（石板/老人语气，未具名）
 72,「この塔のどこかに、幸運の金貨というものがあって、それを持っていると敵を倒したときに得られるお金が２倍になるそうだ。」,"""There is a Lucky Gold somewhere in this tower. If you have it, you can get twice as much money when you beat an enemy.""",obj167（数据引用）,—,无名提示与谜面（石板/老人语气，未具名）
-75,「神盾は、魔法使いたちの魔法攻撃を防ぐ力があるらしい。……しかし、この盾は幻の階に隠されているそうだ。」,"""The sacred shield can defend you against magic attacks. But I heard this shield is hidden on a floor that doesn't exist.""",obj169（数据引用）,—,无名提示与谜面（石板/老人语气，未具名）
-82,「やれやれ、見つかってしもうたか。褒美におぬしに”エリクサー”をやろう。この薬を使えば、その時の攻撃力と防御力に応じた値だけ生命力が回復するじゃろう。じゃから、当然、後の方で使う方が効果は大きいぞ。」,"""Thank goodness, you found me. I will give you an elixir as a symbol of my gratitude. Using this medicine will cause you to gain life according to your offensive and defensive power. So naturally, the later you use, the more it will have an effect on you.""",obj154（数据引用）,—,无名提示与谜面（石板/老人语气，未具名）
+75,「神盾は、魔法使いたちの魔法攻撃を防ぐ力があるらしい。……しかし、この盾は幻の階に隠されているそうだ。」,"""The sacred shield can defend you against magic attacks. But I heard this shield is hidden on a floor that doesn't exist.""",obj169（数据引用）,"39,45",无名提示与谜面（石板/老人语气，未具名）
+82,「やれやれ、見つかってしもうたか。褒美におぬしに”エリクサー”をやろう。この薬を使えば、その時の攻撃力と防御力に応じた値だけ生命力が回復するじゃろう。じゃから、当然、後の方で使う方が効果は大きいぞ。」,"""Thank goodness, you found me. I will give you an elixir as a symbol of my gratitude. Using this medicine will cause you to gain life according to your offensive and defensive power. So naturally, the later you use, the more it will have an effect on you.""",obj154（数据引用）,16,无名提示与谜面（石板/老人语气，未具名）
 83,「もう、話す事はないよ。」,"""Be careful. I have nothing more to say.""",obj172（数据引用）,—,无名提示与谜面（石板/老人语气，未具名）
 98,「まいどーっ！」,"""Thank you very much.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,无名提示与谜面（石板/老人语气，未具名）
 208,「どの望みをかなえて欲しいのだ？」,"""What option shall you choose?""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,无名提示与谜面（石板/老人语气，未具名）
@@ -232,7 +232,7 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 176,昇華の翼を手に入れた！,Got wings to fly up!,obj107（数据引用）,45 catalog,道具 / 装备 / 钥匙：拾取与使用
 180,魔法の鍵を手に入れた！,Got the magic key!,obj111（数据引用）,46 catalog,道具 / 装备 / 钥匙：拾取与使用
 159,聖　剣を手に入れた。攻撃力が５０ポイントアップ！,Got a Holy Sword! Your offensive power was 50 points up!,obj33（数据引用）,48 catalog,道具 / 装备 / 钥匙：拾取与使用
-60,「十字架を持っていれば、ゾンビやバンパイアに対する攻撃力が２倍になる。特にバンパイアは十字架を持っていないと倒せないだろう。これより上の階のどこかにあるらしいが……。」,"""If you carry a cross, the strength of Zombies and Vampires will be cut in half. It is near impossible to defeat them without a cross, especially Vampires. A cross is on a floor higher than this one.""",obj160（数据引用）,—,道具 / 装备 / 钥匙：拾取与使用
+60,「十字架を持っていれば、ゾンビやバンパイアに対する攻撃力が２倍になる。特にバンパイアは十字架を持っていないと倒せないだろう。これより上の階のどこかにあるらしいが……。」,"""If you carry a cross, the strength of Zombies and Vampires will be cut in half. It is near impossible to defeat them without a cross, especially Vampires. A cross is on a floor higher than this one.""",obj160（数据引用）,15,道具 / 装备 / 钥匙：拾取与使用
 142,勇者のオーブを手に入れた！,Got the orb of the hero.,obj24（数据引用）,catalog,道具 / 装备 / 钥匙：拾取与使用
 147,扉の鍵がない！,Don't have the key.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,道具 / 装备 / 钥匙：拾取与使用
 148,青色の鍵がない！,Don't have the blue key.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,道具 / 装备 / 钥匙：拾取与使用
@@ -269,7 +269,7 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 141,壁がくずれた！,The wall collapsed!,obj89（数据引用）,"5,9,12,14,16,19,35-36,41 catalog",地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 183,溶岩が流れている。,The lava is really hot.,obj79（数据引用）,"13,26 catalog",地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 63,「このブロックに、この魔法の塔の主である大魔導師がいるが、今のおまえさんでは戦っても死にに行くようなものじゃろう。とりあえず、うまくやりすごして上のブロックに行くのが正解じゃ。」,"""The Great Magic Master is in this area. He is a proprietor of this magic tower. At your strenght, to attack him means death. It stands to reason that you should not face him, but rather, get items on higher levels first.""",obj140（数据引用）,21,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
-70,「門番のいる所には必ず門があるよ。逆に門のある階には、それを守っている敵がいるよ。だから……。」,"""There is never a gate without a Gate-Keeper. Conversely there are always enemies who keep the gate on floors that have gates. So,""",obj165（数据引用）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
+70,「門番のいる所には必ず門があるよ。逆に門のある階には、それを守っている敵がいるよ。だから……。」,"""There is never a gate without a Gate-Keeper. Conversely there are always enemies who keep the gate on floors that have gates. So,""",obj165（数据引用）,38,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 136,扉が開いた。,The door has opened.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 137,青色の扉が開いた。,The blue door has opened.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 138,赤色の扉が開いた。,The red door has opened.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
@@ -282,7 +282,7 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 245,道が壁に変わった！,The road changed to the wall!,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 267,0,0,地形116、地形117（数据引用）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 58,「祭壇に寄進したときは、攻撃力よりも防御力を主に上げてもらった方がいいでしょう。ただし、攻撃力をまったく上げないと、あとで倒せない敵がでてくるかもしれないよ。」,"""When you offer gold at an alter, you may as well have your defensive power risen rather than your offensive power. The enemy whom you cannot beat may appear, provided you won't raise your offensive power.""",obj155（数据引用）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
-77,「ドラゴンを倒す気なら、聖剣と聖盾、それにドラゴンスレーヤーを持って、なおかつレベルが高くなければならないだろう。」,"""If you want to beat the Dragon, you must have a holy sword, a holy shield, and a Dragon slayer, and also you must be high level.""",obj171（数据引用）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
+77,「ドラゴンを倒す気なら、聖剣と聖盾、それにドラゴンスレーヤーを持って、なおかつレベルが高くなければならないだろう。」,"""If you want to beat the Dragon, you must have a holy sword, a holy shield, and a Dragon slayer, and also you must be high level.""",obj171（数据引用）,47,界面 · 系统文案（状态窗、情報、音、得分、称号）
 185,命,Vital power:,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
 186,攻,Offensive power:,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
 187,防,Defensive power:,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）

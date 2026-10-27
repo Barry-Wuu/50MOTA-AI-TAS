@@ -729,6 +729,12 @@ EN: The thief says "O.K. Well, excuse my going first. Your weapon and shield wer
 >
 EN: The thief says "Ah, we meet again! Thank you. You beat the Gate-Keeper of this area. I was defeated and imprisoned again. Such a small prison this time. I'm making a secret tunnel in front of the Dragon. Go up to 35th floor and wait for me, while I complete the tunnel."
 
+**[59]** 　obj157（数据引用） 　·  出现层：12
+
+> 「９階と１６階と１８階の抜け穴には気が付いたかい？」
+>
+EN: "Did you notice the secret passages on the 9th, 16th, and 18th floors?"
+
 **[7]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：15
 
 > 盗賊「後でちゃんと行くから３５階まで先に行っておいてくれ。」
@@ -752,12 +758,6 @@ EN: The thief says "The tunnel has not been completed yet. You should have waite
 > 盗賊「ああ、やっと抜け穴が完成した。あれ？またお前か。いいタイミングできたな。また抜け穴作っといたぜ。自由に使ってくれ。」
 >
 EN: The thief says "Oh, I have finished the tunnel. What? It's you again. You came at a good time. I have openned a tunnel, and you may use it freely."
-
-**[59]** 　obj157（数据引用） 　·  出现层：16
-
-> 「９階と１６階と１８階の抜け穴には気が付いたかい？」
->
-EN: "Did you notice the secret passages on the 9th, 16th, and 18th floors?"
 
 **[26]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：29
 
@@ -1063,6 +1063,12 @@ EN: "If you buy goods from merchants, you will be able to hear important informa
 >
 EN: "I heard that you can find a red key at two places in this area."
 
+**[82]** 　obj154（数据引用） 　·  出现层：16
+
+> 「やれやれ、見つかってしもうたか。褒美におぬしに”エリクサー”をやろう。この薬を使えば、その時の攻撃力と防御力に応じた値だけ生命力が回復するじゃろう。じゃから、当然、後の方で使う方が効果は大きいぞ。」
+>
+EN: "Thank goodness, you found me. I will give you an elixir as a symbol of my gratitude. Using this medicine will cause you to gain life according to your offensive and defensive power. So naturally, the later you use, the more it will have an effect on you."
+
 **[62]** 　obj139（数据引用） 　·  出现层：18
 
 > 「このブロックでは、祭壇で攻撃力を何回か上げてもらわないとロックというモンスターが倒せなくなってしまうかもしれん。注意するのじゃ。」
@@ -1093,6 +1099,12 @@ EN: "I will buy your keys at 100 Gold a piece. Will you sell me keys?"
 >
 EN: "The offensive power of the swordsman who uses two swords is too high. He can use two swords at the same time. You will lose much strength if you fight him normally. You should never fight him before your attacks are stronger than his."
 
+**[66]** 　obj163（数据引用） 　·  出现层：31
+
+> 「この塔は５０階建てだが、実際には４９階までしか行けないようだ。」
+>
+EN: "This tower is 50 stories high, but in reality it seems that you cannot go up to the 50th floor."
+
 **[67]** 　obj143（数据引用） 　·  出现层：33
 
 > 「急がば回れじゃ。」
@@ -1110,6 +1122,12 @@ EN: "You need the mattock in order to get the treasure which is in the item ware
 > 「３時になれば空間移動の秘宝が現れるじゃろう。」
 >
 EN: "At three o'clock, the secret treasure that lets one travel in space will appear."
+
+**[75]** 　obj169（数据引用） 　·  出现层：39,45
+
+> 「神盾は、魔法使いたちの魔法攻撃を防ぐ力があるらしい。……しかし、この盾は幻の階に隠されているそうだ。」
+>
+EN: "The sacred shield can defend you against magic attacks. But I heard this shield is hidden on a floor that doesn't exist."
 
 **[73]** 　obj147（数据引用） 　·  出现层：42
 
@@ -1153,29 +1171,11 @@ EN: "You don't have enough money."
 >
 EN: "Now is the time. You were chosen. If you aren't afraid of Death, you should go through the gate of Time and Space, and come to me."
 
-**[66]** 　obj163（数据引用） 　·  出现层：—
-
-> 「この塔は５０階建てだが、実際には４９階までしか行けないようだ。」
->
-EN: "This tower is 50 stories high, but in reality it seems that you cannot go up to the 50th floor."
-
 **[72]** 　obj167（数据引用） 　·  出现层：—
 
 > 「この塔のどこかに、幸運の金貨というものがあって、それを持っていると敵を倒したときに得られるお金が２倍になるそうだ。」
 >
 EN: "There is a Lucky Gold somewhere in this tower. If you have it, you can get twice as much money when you beat an enemy."
-
-**[75]** 　obj169（数据引用） 　·  出现层：—
-
-> 「神盾は、魔法使いたちの魔法攻撃を防ぐ力があるらしい。……しかし、この盾は幻の階に隠されているそうだ。」
->
-EN: "The sacred shield can defend you against magic attacks. But I heard this shield is hidden on a floor that doesn't exist."
-
-**[82]** 　obj154（数据引用） 　·  出现层：—
-
-> 「やれやれ、見つかってしもうたか。褒美におぬしに”エリクサー”をやろう。この薬を使えば、その時の攻撃力と防御力に応じた値だけ生命力が回復するじゃろう。じゃから、当然、後の方で使う方が効果は大きいぞ。」
->
-EN: "Thank goodness, you found me. I will give you an elixir as a symbol of my gratitude. Using this medicine will cause you to gain life according to your offensive and defensive power. So naturally, the later you use, the more it will have an effect on you."
 
 **[83]** 　obj172（数据引用） 　·  出现层：—
 
@@ -1335,6 +1335,12 @@ EN: Got a blue crystal. Your defensive power was 2 points up!
 >
 EN: Got a Sacred Sword! Your offensive power was 100 points up!
 
+**[60]** 　obj160（数据引用） 　·  出现层：15
+
+> 「十字架を持っていれば、ゾンビやバンパイアに対する攻撃力が２倍になる。特にバンパイアは十字架を持っていないと倒せないだろう。これより上の階のどこかにあるらしいが……。」
+>
+EN: "If you carry a cross, the strength of Zombies and Vampires will be cut in half. It is near impossible to defeat them without a cross, especially Vampires. A cross is on a floor higher than this one."
+
 **[157]** 　obj31（数据引用） 　·  出现层：17 catalog
 
 > 銀の剣を手に入れた。攻撃力が２０ポイントアップ！
@@ -1436,12 +1442,6 @@ EN: Got the magic key!
 > 聖　剣を手に入れた。攻撃力が５０ポイントアップ！
 >
 EN: Got a Holy Sword! Your offensive power was 50 points up!
-
-**[60]** 　obj160（数据引用） 　·  出现层：—
-
-> 「十字架を持っていれば、ゾンビやバンパイアに対する攻撃力が２倍になる。特にバンパイアは十字架を持っていないと倒せないだろう。これより上の階のどこかにあるらしいが……。」
->
-EN: "If you carry a cross, the strength of Zombies and Vampires will be cut in half. It is near impossible to defeat them without a cross, especially Vampires. A cross is on a floor higher than this one."
 
 **[142]** 　obj24（数据引用） 　·  出现层：catalog
 
@@ -1663,7 +1663,7 @@ EN: The lava is really hot.
 >
 EN: "The Great Magic Master is in this area. He is a proprietor of this magic tower. At your strenght, to attack him means death. It stands to reason that you should not face him, but rather, get items on higher levels first."
 
-**[70]** 　obj165（数据引用） 　·  出现层：—
+**[70]** 　obj165（数据引用） 　·  出现层：38
 
 > 「門番のいる所には必ず門があるよ。逆に門のある階には、それを守っている敵がいるよ。だから……。」
 >
@@ -1737,17 +1737,17 @@ EN: 0
 
 ### 界面 · 系统文案（状态窗、情報、音、得分、称号）（26 条）
 
+**[77]** 　obj171（数据引用） 　·  出现层：47
+
+> 「ドラゴンを倒す気なら、聖剣と聖盾、それにドラゴンスレーヤーを持って、なおかつレベルが高くなければならないだろう。」
+>
+EN: "If you want to beat the Dragon, you must have a holy sword, a holy shield, and a Dragon slayer, and also you must be high level."
+
 **[58]** 　obj155（数据引用） 　·  出现层：—
 
 > 「祭壇に寄進したときは、攻撃力よりも防御力を主に上げてもらった方がいいでしょう。ただし、攻撃力をまったく上げないと、あとで倒せない敵がでてくるかもしれないよ。」
 >
 EN: "When you offer gold at an alter, you may as well have your defensive power risen rather than your offensive power. The enemy whom you cannot beat may appear, provided you won't raise your offensive power."
-
-**[77]** 　obj171（数据引用） 　·  出现层：—
-
-> 「ドラゴンを倒す気なら、聖剣と聖盾、それにドラゴンスレーヤーを持って、なおかつレベルが高くなければならないだろう。」
->
-EN: "If you want to beat the Dragon, you must have a holy sword, a holy shield, and a Dragon slayer, and also you must be high level."
 
 **[185]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：—
 
