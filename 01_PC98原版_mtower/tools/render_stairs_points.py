@@ -27,7 +27,7 @@ def f(sz):
     return _fc[sz]
 
 CELL, N = 40, 13
-MARGIN, TOP, BOT = 30, 68, 120
+MARGIN, TOP, BOT = 30, 68, 140
 W = N * CELL + MARGIN * 2
 H = TOP + N * CELL + BOT
 
@@ -39,6 +39,7 @@ C_UP      = (208, 48, 48)
 C_DN      = (36, 96, 200)
 C_HID     = (232, 138, 22)
 C_IN      = (24, 150, 88)
+C_FLY     = (146, 84, 196)   # 紫：飞翔宝珠 / 幻之层传送
 
 up_spr   = Image.open(os.path.join(ART, 'stair_up.png')).convert('RGBA')
 down_spr = Image.open(os.path.join(ART, 'stair_down.png')).convert('RGBA')
@@ -50,6 +51,15 @@ HIDDEN_UP = {
     40: ((6, 1),  41, (5, 1)),
 }
 SECRET_DOOR = {24: ((6, 0), 50, (6, 5))}
+# 飞翔宝珠（obj26，1F(2,11) 拾取；规则：必须站在楼梯旁使用）
+# 落点按实例反推的规律：楼梯格优先 (x, y+1)，不通则 (x+1, y)
+#   2F/8F/18F 楼梯 (1,1) 且两侧皆地板 → 落 (1,2)；1F (1,2) 是墙 → 落 (2,1)
+FLY_IN = {
+    0:  (1, 2, '1F 楼梯旁用飞行之珠下来'),
+    44: (1, 2, '幻之阶·只能飞行道具进入'),
+}
+FLY_ITEM = {1: (2, 11, '飞行之珠 飛翔のオーブ 拾取点')}
+FLY_USE = {1: (2, 1, '楼梯旁·可在此起飞'), 44: (1, 2, '楼梯旁·可在此起飞')}
 
 
 def terrain_grid(fl):
@@ -81,6 +91,12 @@ def build_tables():
 STAIRS, ARRIVE = build_tables()
 # 50F 的进入方式不是楼梯，是 24F(6,0) 暗门 ending-warp，落点 (6,5)（真魔王 Zeno2 所在）
 ARRIVE.setdefault(50, []).append((24, 6, 5))
+# 0F / 44F 的进入落点由 FLY_IN 单独渲染（飞翔宝珠），不重复计入 arrive
+
+
+def diamond(dr, cx, cy, r, color, width=2):
+    dr.line([(cx, cy - r), (cx + r, cy), (cx, cy + r), (cx - r, cy), (cx, cy - r)],
+            fill=color, width=width)
 
 
 def render(fl, scale=1.0, detail=True):
@@ -118,7 +134,10 @@ def render(fl, scale=1.0, detail=True):
         dr.ellipse([px + 3, py + 3, px + 3 + rr * 2, py + 3 + rr * 2], fill=col, outline=(255, 255, 255))
 
     # 落点（从下层上来落在这里）：绿色空心圈 + 十字
+    _skip = {(FLY_IN[fl][0], FLY_IN[fl][1])} if fl in FLY_IN else set()
     for (ff, x, y) in ARRIVE.get(fl, []):
+        if (x, y) in _skip:
+            continue
         px, py = m + x * cs, top + y * cs
         pad = max(4, int(cs * 0.14))
         lw = max(2, int(3 * scale))
@@ -155,6 +174,22 @@ def render(fl, scale=1.0, detail=True):
             dr.rectangle([px + 2, py + cs - 14, px + cs - 3, py + cs - 2], fill=C_IN)
             dr.text((px + 4, py + cs - 14), '→50', font=f(cs * 0.33), fill=(255, 255, 255))
 
+    # 飞翔宝珠：落点 / 拾取点 / 起飞点
+    if fl in FLY_IN:
+        fx, fy, _ = FLY_IN[fl]
+        px, py = m + fx * cs, top + fy * cs
+        diamond(dr, px + cs // 2, py + cs // 2, int(cs * 0.34), C_FLY, max(2, int(3 * scale)))
+        if detail:
+            dr.rectangle([px + 1, py + cs - 13, px + cs - 2, py + cs - 1], fill=C_FLY)
+            dr.text((px + 4, py + cs - 13), 'FLY', font=f(cs * 0.30), fill=(255, 255, 255))
+    if fl in FLY_ITEM:
+        fx, fy, _ = FLY_ITEM[fl]
+        px, py = m + fx * cs, top + fy * cs
+        diamond(dr, px + cs // 2, py + cs // 2, int(cs * 0.32), C_FLY, max(2, int(2 * scale)))
+        if detail:
+            dr.rectangle([px + 1, py + cs - 13, px + cs - 2, py + cs - 1], fill=C_FLY)
+            dr.text((px + 4, py + cs - 13), 'ORB', font=f(cs * 0.28), fill=(255, 255, 255))
+
     # 坐标刻度
     if detail and scale >= 0.75:
         fn = f(11 * scale if scale < 1 else 11)
@@ -186,9 +221,14 @@ def render(fl, scale=1.0, detail=True):
     if fl in SECRET_DOOR:
         (dx, dy), tf, (tx, ty) = SECRET_DOOR[fl]
         rows.append((C_IN, '暗门 (%d,%d)' % (dx, dy), '→ %dF (%d,%d)' % (tf, tx, ty)))
+    if fl in FLY_IN:
+        fx, fy, why = FLY_IN[fl]
+        rows.append((C_FLY, '飞行落点 (%d,%d)' % (fx, fy), why))
+    if fl == 1:
+        rows.append((C_FLY, '飞行之珠 (%d,%d)' % FLY_ITEM[1][:2], '飛翔のオーブ；须站楼梯旁用，可去 0F'))
     if not rows:
         rows.append(((150, 145, 138), '本层无楼梯格', '只能从 24F 暗门 warp 进' if fl == 50 else ''))
-    for i, (col, s1, s2) in enumerate(rows[:4]):
+    for i, (col, s1, s2) in enumerate(rows[:5]):
         yy = ty0 + i * 22 * scale
         dr.rectangle([m, yy + 3 * scale, m + 9 * scale, yy + 15 * scale], fill=col)
         dr.text((m + 15 * scale, yy), s1, font=fn, fill=(58, 58, 68))
@@ -197,7 +237,7 @@ def render(fl, scale=1.0, detail=True):
     # 落点行
     ar = ARRIVE.get(fl, [])
     if ar:
-        yy = ty0 + max(len(rows[:4]), 1) * 22 * scale
+        yy = ty0 + max(len(rows[:5]), 1) * 22 * scale
         s = '落点：' + '、'.join('%dF→(%d,%d)' % (a[0], a[1], a[2]) for a in ar[:3])
         if len(ar) > 3:
             s += ' 等%d处' % len(ar)
@@ -210,7 +250,7 @@ def legend_strip(width):
     dr = ImageDraw.Draw(img)
     fn = f(14)
     items = [(C_UP, '上行梯踏步格'), (C_DN, '下行梯踏步格'), (C_IN, '落点（从下层上来落在本层的位置）'),
-             (C_HID, '隐藏上梯：杀 BOSS 后出现')]
+             (C_HID, '隐藏上梯：杀 BOSS 后出现'), (C_FLY, '飞行之珠 / 幻之阶落点')]
     x = 14
     for col, lab in items:
         dr.ellipse([x, 18, x + 12, 30], fill=col)
