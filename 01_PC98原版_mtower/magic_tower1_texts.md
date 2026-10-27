@@ -717,35 +717,83 @@ EN: The thief says "What a relief you're okay!
 　　 Nevertheless, you are so lucky that you just woke up.
 　　 I've finished the escape tunnel. Let's break out."
 
+**[5]** 　代码 `strNumber=5` ← attackMonster/directCheck/pointCheck 　·  出现层：2
+
+> 盗賊「よし、じゃあ俺は先に行かせてもらうぜ。ああ、それからおまえの剣と盾、あいつらに取り上げられちまったみたいだな。この塔の中を丸腰で歩き回るのはやめた方がいい。確か５階に剣、９階に盾があったはずだから、まずそれを手に入れることを考えるんだな。じゃあ、またなっ！」
+>
+EN: The thief says "O.K. Well, excuse my going first. Your weapon and shield were stolen by the guards. It's not wise to wander about without them. I heard that there is a sword on the 5th floor and a shield on the 9th. You had better get them. See you!"
+
+**[6]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：10
+
+> 盗賊「ようっ！また会ったな。ここの門番を倒してくれて助かったぜ、ドジってまた捕まっちまってな。今度は、こんな奥の牢に閉じ込められちまった。まあ、それはそれとして、３５階にいるドラゴンの手前まで抜け穴を掘っといたんだ。開通させとくから先に行っててくれ。」
+>
+EN: The thief says "Ah, we meet again! Thank you. You beat the Gate-Keeper of this area. I was defeated and imprisoned again. Such a small prison this time. I'm making a secret tunnel in front of the Dragon. Go up to 35th floor and wait for me, while I complete the tunnel."
+
+**[7]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：15
+
+> 盗賊「後でちゃんと行くから３５階まで先に行っておいてくれ。」
+>
+EN: The thief says "Don't worry, I'll be there."
+
+**[16]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：16
+
+> 盗賊「よっ！またあったな。すげえじゃねえか。ここのブロックのボスを倒すとはよ。俺もこれ以上、先の階へ行けなくて困ってたんだ。ああ、あと聞いた話だが、１１階に盾、１７階に剣があるそうだ。盾よりも剣の方を先に取りに行った方がいいそうだから、うまく敵をかわして剣を先に取りに行くんだな。じゃ、お先に！」
+>
+EN: The thief says "Hey! We meet again! How greatly you beat the boss of this area. It troubled me that I couldn't go upstairs any more. After I heard that there is a shield on the 11th floor and a sword on the 17th. You had better get a sword first and then a shield. Please excuse my going first!"
+
+**[24]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：16
+
+> 盗賊「あっ！まだ抜け穴、完成してなかったのに・・・もう少し待ってればアイテムを使わずにすんだはずだぞ。予定が狂っちまうな・・・いや、気にしないでくれ。」
+>
+EN: The thief says "The tunnel has not been completed yet. You should have waited a little longer, and you should not have used items. I had a bug in the program. There! Don't worry!"
+
+**[25]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：16
+
+> 盗賊「ああ、やっと抜け穴が完成した。あれ？またお前か。いいタイミングできたな。また抜け穴作っといたぜ。自由に使ってくれ。」
+>
+EN: The thief says "Oh, I have finished the tunnel. What? It's you again. You came at a good time. I have openned a tunnel, and you may use it freely."
+
+**[59]** 　obj157（数据引用） 　·  出现层：16
+
+> 「９階と１６階と１８階の抜け穴には気が付いたかい？」
+>
+EN: "Did you notice the secret passages on the 9th, 16th, and 18th floors?"
+
+**[26]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：29
+
+> 盗賊「このブロックに最後のボスと捕まったプリンセスがいるはずだが、今はまだ戦うのは早すぎるだろうな。」
+>
+EN: The thief says "The last boss and the captured princess must be in this area. Hmm, I wonder if we should wait before fighting him."
+
+**[29]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：29
+
+> 盗賊「おお、来たか。ちゃんと、抜け穴を開通させておいたぜ、この抜け穴を通ればドラゴンの後ろに出られるから、そこから上の階に行くんだな。」
+>
+EN: The thief says "There you are. I have just finished the tunnel. As you go through it, you will get to the Dragon. And then you should go up."
+
+**[30]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：35
+
+> 盗賊「このブロックのボスの金騎士は弱いくせに態度だけはでかいから、この塔の副将格の魔導師ゼノには嫌われているらしい。」
+>
+EN: The thief says "The Golden Knight (who is the boss of this area) has a strong attitude in spite of being weak. It is for this reason that he is disliked by the Magic Serg. Zeno, who is the sub commander of this tower."
+
+**[99]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：35
+
+> 盗賊「ようまたあったな！無事だったか？これは聞いた話なんだが、２５階のボスを倒すと『時空の門』がどこかにできるらしいぞ。」
+>
+EN: The thief says "Ah!, we meet again! Thank goodness you're alive! I heard that if you beat the boss of 25th floor, 'the gate of time and space' will appear somewhere."
+
 **[68]** 　obj144（数据引用） 　·  出现层：36
 
 > 「この階の４つの抜け穴をうまく使えば、強い敵とは戦わずに上の階に行けるじゃろう。」
 >
 EN: "You may be able to go upstairs without fighting strong enemies, if you could use four tunnels skillfully in this floor."
 
-**[5]** 　代码 `strNumber=5` ← attackMonster/directCheck/pointCheck 　·  出现层：—
+**[44]** 　代码 `strNumber=44` ← eventMT 　·  出现层：50
 
-> 盗賊「よし、じゃあ俺は先に行かせてもらうぜ。ああ、それからおまえの剣と盾、あいつらに取り上げられちまったみたいだな。この塔の中を丸腰で歩き回るのはやめた方がいい。確か５階に剣、９階に盾があったはずだから、まずそれを手に入れることを考えるんだな。じゃあ、またなっ！」
+> 盗賊「ふふふ……ここにいるという事は、答えは１つしかあるまい。こういう事だっ！」
 >
-EN: The thief says "O.K. Well, excuse my going first. Your weapon and shield were stolen by the guards. It's not wise to wander about without them. I heard that there is a sword on the 5th floor and a shield on the 9th. You had better get them. See you!"
-
-**[6]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：—
-
-> 盗賊「ようっ！また会ったな。ここの門番を倒してくれて助かったぜ、ドジってまた捕まっちまってな。今度は、こんな奥の牢に閉じ込められちまった。まあ、それはそれとして、３５階にいるドラゴンの手前まで抜け穴を掘っといたんだ。開通させとくから先に行っててくれ。」
->
-EN: The thief says "Ah, we meet again! Thank you. You beat the Gate-Keeper of this area. I was defeated and imprisoned again. Such a small prison this time. I'm making a secret tunnel in front of the Dragon. Go up to 35th floor and wait for me, while I complete the tunnel."
-
-**[7]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：—
-
-> 盗賊「後でちゃんと行くから３５階まで先に行っておいてくれ。」
->
-EN: The thief says "Don't worry, I'll be there."
-
-**[16]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：—
-
-> 盗賊「よっ！またあったな。すげえじゃねえか。ここのブロックのボスを倒すとはよ。俺もこれ以上、先の階へ行けなくて困ってたんだ。ああ、あと聞いた話だが、１１階に盾、１７階に剣があるそうだ。盾よりも剣の方を先に取りに行った方がいいそうだから、うまく敵をかわして剣を先に取りに行くんだな。じゃ、お先に！」
->
-EN: The thief says "Hey! We meet again! How greatly you beat the boss of this area. It troubled me that I couldn't go upstairs any more. After I heard that there is a shield on the 11th floor and a sword on the 17th. You had better get a sword first and then a shield. Please excuse my going first!"
+EN: The thief says "Humph. There is only one reason why I'm here. And this is it!"
 
 **[17]** 　obj88（数据引用） 　·  出现层：catalog
 
@@ -753,55 +801,55 @@ EN: The thief says "Hey! We meet again! How greatly you beat the boss of this ar
 >
 EN: The thief says "Ah! Are you all right? The Big Octopus which lives in here was blocking my progress. Now a loophole has completed at last. You had better put off beating him. See you later!"
 
-**[24]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：—
-
-> 盗賊「あっ！まだ抜け穴、完成してなかったのに・・・もう少し待ってればアイテムを使わずにすんだはずだぞ。予定が狂っちまうな・・・いや、気にしないでくれ。」
->
-EN: The thief says "The tunnel has not been completed yet. You should have waited a little longer, and you should not have used items. I had a bug in the program. There! Don't worry!"
-
-**[25]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：—
-
-> 盗賊「ああ、やっと抜け穴が完成した。あれ？またお前か。いいタイミングできたな。また抜け穴作っといたぜ。自由に使ってくれ。」
->
-EN: The thief says "Oh, I have finished the tunnel. What? It's you again. You came at a good time. I have openned a tunnel, and you may use it freely."
-
-**[26]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：—
-
-> 盗賊「このブロックに最後のボスと捕まったプリンセスがいるはずだが、今はまだ戦うのは早すぎるだろうな。」
->
-EN: The thief says "The last boss and the captured princess must be in this area. Hmm, I wonder if we should wait before fighting him."
-
-**[29]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：—
-
-> 盗賊「おお、来たか。ちゃんと、抜け穴を開通させておいたぜ、この抜け穴を通ればドラゴンの後ろに出られるから、そこから上の階に行くんだな。」
->
-EN: The thief says "There you are. I have just finished the tunnel. As you go through it, you will get to the Dragon. And then you should go up."
-
-**[30]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：—
-
-> 盗賊「このブロックのボスの金騎士は弱いくせに態度だけはでかいから、この塔の副将格の魔導師ゼノには嫌われているらしい。」
->
-EN: The thief says "The Golden Knight (who is the boss of this area) has a strong attitude in spite of being weak. It is for this reason that he is disliked by the Magic Serg. Zeno, who is the sub commander of this tower."
-
-**[44]** 　代码 `strNumber=44` ← eventMT 　·  出现层：—
-
-> 盗賊「ふふふ……ここにいるという事は、答えは１つしかあるまい。こういう事だっ！」
->
-EN: The thief says "Humph. There is only one reason why I'm here. And this is it!"
-
-**[59]** 　obj157（数据引用） 　·  出现层：—
-
-> 「９階と１６階と１８階の抜け穴には気が付いたかい？」
->
-EN: "Did you notice the secret passages on the 9th, 16th, and 18th floors?"
-
-**[99]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：—
-
-> 盗賊「ようまたあったな！無事だったか？これは聞いた話なんだが、２５階のボスを倒すと『時空の門』がどこかにできるらしいぞ。」
->
-EN: The thief says "Ah!, we meet again! Thank goodness you're alive! I heard that if you beat the boss of 25th floor, 'the gate of time and space' will appear somewhere."
-
 ### 具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）（35 条）
+
+**[10]** 　obj177（数据引用） 　·  出现层：1
+
+> 魔導師ゼノ「ようこそ、『魔法の塔』へ。おまえがちょうど１００人目の侵入者だ。本来なら手下共に相手をさせるところだが、特別にこの私が自ら相手になってやろう。己の不運を呪うのだな。」
+>
+EN: The Magic Serg. Zeno says "Welcome to 'The Magic Tower'. You are the hundredth man who dared to enter my tower. You will now face my guards. Should you happen to survive, I will fight with you in person specially. You should accept your fate."
+
+**[11]** 　obj178（数据引用） 　·  出现层：1
+
+> 勇者「なんだっ！？　うわ～っ！？」
+>
+EN: The brave man says "What? Oh!"
+
+**[13]** 　代码 `strNumber=13` ← eventMT 　·  出现层：10
+
+> スケルトンＡ「ふふふ、よくここまできたな。かくなる上はこの俺様がじきじき相手になってやる・・・といいたいところだが、まずは貴様の力を見せてもらうぞ！出会え！スケルトン兵士たちよ！」
+>
+EN: Skeleton A "Ha ha ha, You are lucky to have gotten so far. Since it has come to this, I shall fight with you personally, but first I must test your strength. Go and fight! Skeleton Soldiers!"
+
+**[14]** 　代码 `strNumber=14` ← eventMT 　·  出现层：10
+
+> スケルトンＡ「ほほう、なかなか・・・。だが、ここから先へは行かせん！ここで葬ってくれるわっ！さあ、こいっ！！！」
+>
+EN: Skeleton A "How considerably you do. But I will never let you pass. Here, you will die. Fight me!"
+
+**[15]** 　代码 `strNumber=15` ← eventMT 　·  出现层：10
+
+> スケルトンＡ「ううう・・・よくぞこの俺様を倒せたものだ・・・。しかし、これから先の階はこれまでとは比べものにならんほど強力な敵とワナが待っているぞ、せいぜい気を付けることだな・・・」
+>
+EN: Skeleton A "No, It's not possible! You may have defeated me, but beyond this point you must meet some enemies and snares that are powerful beyond anything you've seen. If careless, you will die!"
+
+**[19]** 　代码 `strNumber=19` ← eventMT 　·  出现层：20
+
+> バンパイア「ほほう、貴様か、スケルトンを倒して侵入してきた勇者というのは・・・だがこの私をスケルトン共のようなザコと一緒にするなよ。不死に等しいこの私の力を見せてやろう。さあ、こいっ！」
+>
+EN: Vampire "Well, You beat the skeletons and invaded. Never regard me as small like a skeleton. I will show you that I am as immortal as god. Hey, come on!"
+
+**[20]** 　代码 `strNumber=20` ← eventMT 　·  出现层：20
+
+> バンパイア「ううう・・・よもや、この私までもが敗れるとは・・・どうやら貴様の力は本物のようだな・・・だが、その程度では大魔導師様には絶対にかなわんぞ、せいぜい束の間勝利に酔いしれているがいい・・・」
+>
+EN: Vampire "Good god! I've never dreamed I'd be defeated. There is no doubt of your strength. But you will never win against the Great Magic Master as weak as you are. You shall only celebrate fleeting victory at most."
+
+**[21]** 　代码 `strNumber=21` ← eventMT 　·  出现层：25
+
+> 大魔導師「・・・ジ・・・ユウシャ・・・・・コロス・・・」
+>
+EN: Great Magic Master "-K-I-L-L- -A-N- -I-N-V-A-D-E-R- "
 
 **[23]** 　obj44（数据引用） 　·  出现层：26 catalog
 
@@ -809,205 +857,157 @@ EN: The thief says "Ah!, we meet again! Thank goodness you're alive! I heard tha
 >
 EN: The brave man says "Oh! What? This is a doll!"
 
-**[10]** 　obj177（数据引用） 　·  出现层：—
-
-> 魔導師ゼノ「ようこそ、『魔法の塔』へ。おまえがちょうど１００人目の侵入者だ。本来なら手下共に相手をさせるところだが、特別にこの私が自ら相手になってやろう。己の不運を呪うのだな。」
->
-EN: The Magic Serg. Zeno says "Welcome to 'The Magic Tower'. You are the hundredth man who dared to enter my tower. You will now face my guards. Should you happen to survive, I will fight with you in person specially. You should accept your fate."
-
-**[11]** 　obj178（数据引用） 　·  出现层：—
-
-> 勇者「なんだっ！？　うわ～っ！？」
->
-EN: The brave man says "What? Oh!"
-
-**[13]** 　代码 `strNumber=13` ← eventMT 　·  出现层：—
-
-> スケルトンＡ「ふふふ、よくここまできたな。かくなる上はこの俺様がじきじき相手になってやる・・・といいたいところだが、まずは貴様の力を見せてもらうぞ！出会え！スケルトン兵士たちよ！」
->
-EN: Skeleton A "Ha ha ha, You are lucky to have gotten so far. Since it has come to this, I shall fight with you personally, but first I must test your strength. Go and fight! Skeleton Soldiers!"
-
-**[14]** 　代码 `strNumber=14` ← eventMT 　·  出现层：—
-
-> スケルトンＡ「ほほう、なかなか・・・。だが、ここから先へは行かせん！ここで葬ってくれるわっ！さあ、こいっ！！！」
->
-EN: Skeleton A "How considerably you do. But I will never let you pass. Here, you will die. Fight me!"
-
-**[15]** 　代码 `strNumber=15` ← eventMT 　·  出现层：—
-
-> スケルトンＡ「ううう・・・よくぞこの俺様を倒せたものだ・・・。しかし、これから先の階はこれまでとは比べものにならんほど強力な敵とワナが待っているぞ、せいぜい気を付けることだな・・・」
->
-EN: Skeleton A "No, It's not possible! You may have defeated me, but beyond this point you must meet some enemies and snares that are powerful beyond anything you've seen. If careless, you will die!"
-
-**[19]** 　代码 `strNumber=19` ← eventMT 　·  出现层：—
-
-> バンパイア「ほほう、貴様か、スケルトンを倒して侵入してきた勇者というのは・・・だがこの私をスケルトン共のようなザコと一緒にするなよ。不死に等しいこの私の力を見せてやろう。さあ、こいっ！」
->
-EN: Vampire "Well, You beat the skeletons and invaded. Never regard me as small like a skeleton. I will show you that I am as immortal as god. Hey, come on!"
-
-**[20]** 　代码 `strNumber=20` ← eventMT 　·  出现层：—
-
-> バンパイア「ううう・・・よもや、この私までもが敗れるとは・・・どうやら貴様の力は本物のようだな・・・だが、その程度では大魔導師様には絶対にかなわんぞ、せいぜい束の間勝利に酔いしれているがいい・・・」
->
-EN: Vampire "Good god! I've never dreamed I'd be defeated. There is no doubt of your strength. But you will never win against the Great Magic Master as weak as you are. You shall only celebrate fleeting victory at most."
-
-**[21]** 　代码 `strNumber=21` ← eventMT 　·  出现层：—
-
-> 大魔導師「・・・ジ・・・ユウシャ・・・・・コロス・・・」
->
-EN: Great Magic Master "-K-I-L-L- -A-N- -I-N-V-A-D-E-R- "
-
-**[27]** 　代码 `strNumber=27` ← eventMT 　·  出现层：—
+**[27]** 　代码 `strNumber=27` ← eventMT 　·  出现层：32
 
 > 金騎士「貴様だな、第１、第２ブロックのボスを倒し登ってきた勇者というのは。だがそれも、ここで終わりだ！ここのブロックのボスである私が自ら貴様の首を上げてやるわっ！覚悟しろっ！」
 >
 EN: The Golden Knight says "You are a brave man beating the bosses of the first and second areas, and ascending the tower. But the game is over now. Here and Now, I will beat you for myself! Give up!"
 
-**[28]** 　代码 `strNumber=28` ← eventMT 　·  出现层：—
+**[28]** 　代码 `strNumber=28` ← eventMT 　·  出现层：32
 
 > 金騎士「ううう……今回はこのぐらいにしておいてやる……４０階まで登ってこれたら今度は本気で相手をしてやるからなっ！覚えておけっ！」"
 >
 EN: The Golden Knight says "You think you're pretty strong, huh? If you can make it to the 40th floor, I shall fight with you again. There, you will die!
 
-**[31]** 　代码 `strNumber=31` ← eventMT 　·  出现层：—
+**[31]** 　代码 `strNumber=31` ← eventMT 　·  出现层：40
 
 > 金騎士「よくきたな。今度はさっきの様な訳にはいかんぞ！この屈辱は１０倍にして返してくれるわっ！死霊兵士突撃！」
 >
 EN: The Golden Knight says "I wonder how you were able to come so far. I will make sure you go no further. I will humiliate you 10 times as much as you've disgraced this tower. Ghost Soldiers, charge!"
 
-**[32]** 　代码 `strNumber=32` ← eventMT 　·  出现层：—
+**[32]** 　代码 `strNumber=32` ← eventMT 　·  出现层：40
 
 > 金騎士「ふふん、こんなのは小手調べだっ！兵士突撃！」
 >
 EN: The Golden Knight says "Humph, that was nothing! Soldiers, charge!"
 
-**[33]** 　代码 `strNumber=33` ← eventMT 　·  出现层：—
+**[33]** 　代码 `strNumber=33` ← eventMT 　·  出现层：40
 
 > 金騎士「まだまだ、これからっ！剣士突撃！」
 >
 EN: The Golden Knight says "We are only beginning. Let's fight from now on. Swordsmen, charge!"
 
-**[34]** 　代码 `strNumber=34` ← eventMT 　·  出现层：—
+**[34]** 　代码 `strNumber=34` ← eventMT 　·  出现层：40
 
 > 金騎士「うぬぬ……だが、これはどうだっ！騎士突撃！」
 >
 EN: The Golden Knight says "Heck! How about this attack? Knights, charge!"
 
-**[35]** 　代码 `strNumber=35` ← eventMT 　·  出现层：—
+**[35]** 　代码 `strNumber=35` ← eventMT 　·  出现层：40
 
 > 金騎士「うう……私の部下達を……許さんっ！許さんぞ！今度は手加減はしてやらんっ！覚悟しろ！」
 >
 EN: The Golden Knight says "How dare you defeat my followers? Never shall I forgive you! Now I won't use discretion. Give up!"
 
-**[36]** 　代码 `strNumber=36` ← eventMT 　·  出现层：—
+**[36]** 　代码 `strNumber=36` ← eventMT 　·  出现层：40
 
 > 金騎士「ごほっ……今回はこのへんで……はあはあ……許しておいてやる……。だが次にやる時は今度こそ本当に本気で相手をしてやるからなっ！覚悟しておけっ！」
 >
 EN: The Golden Knight says "I will unwillingly forgive you this time. But we shall quarrel seriously when we meet again. You had better give up!"
 
-**[37]** 　代码 `strNumber=37` ← eventMT 　·  出现层：—
+**[37]** 　代码 `strNumber=37` ← eventMT 　·  出现层：40
 
 > 金騎士「あっ……！ゼノ様……。あと一歩という所で、勇者を取り逃がしてしまいました。どうか、お許しを……。」
 >
 EN: The Golden Knight says "Oh! Sir Magic Serg. Zeno. I was not able to catch the brave man. Please forgive me."
 
-**[38]** 　代码 `strNumber=38` ← eventMT 　·  出现层：—
+**[38]** 　代码 `strNumber=38` ← eventMT 　·  出现层：40
 
 > 魔導師ゼノ「取り逃がしただと……？逃げてきたのは貴様の方ではないかっ！この恥知らずめがっ！貴様のような臆病者はこの塔には不要だっ！ここで、死ねっ！」
 >
 EN: The Magic Serg. Zeno replies "You weren't? I dare you to say that again. You come running up here like a coward and tell me you couldn't do your job. What shame! This tower has no need for the likes of you! You've failed me for the last time. You shall now die."
 
-**[39]** 　代码 `strNumber=39` ← eventMT 　·  出现层：—
+**[39]** 　代码 `strNumber=39` ← eventMT 　·  出现层：40
 
 > 金騎士「ああ、どうか、お許し……ぎゃあ～～～っ！！！」
 >
 EN: The Golden Knight says "Oh God, please forgive me! Ah!"
 
-**[40]** 　代码 `strNumber=40` ← eventMT 　·  出现层：—
+**[40]** 　代码 `strNumber=40` ← eventMT 　·  出现层：40
 
 > 魔導師ゼノ「お見苦しいところをお見せしたな……。だが、安心してもらおう。私はこのようなゴミとはわけが違う。もし、お前が上まで登ってこれたなら今度は、私が直々にお相手しよう。待っているぞ……。」
 >
 EN: The Magic Serg. Zeno says "I behaved unbecomingly. But don't worry. I quite different from such a fellow. If you should come up to me, I would fight with you directly. I'm waiting for you."
 
-**[41]** 　代码 `strNumber=41` ← eventMT 　·  出现层：—
+**[41]** 　代码 `strNumber=41` ← eventMT 　·  出现层：50
 
 > 魔導師ゼノ「よくぞ、ここまで、たどりついたものだ。誉めてやろう。約束どおり、この私が直々に相手をしよう。さあ、来るがいい。」
 >
 EN: The Magic Serg. Zeno "It's amazing that you found your way here at last. I compliment you. Now, as promised, I'll fight with you, man to man!"
 
-**[42]** 　代码 `strNumber=42` ← eventMT 　·  出现层：—
+**[42]** 　代码 `strNumber=42` ← eventMT 　·  出现层：50
 
 > 魔導師ゼノ「うっ……この陣形は……まずいっ！」
 >
 EN: The Magic Serg. Zeno "Alas..."
 
-**[43]** 　代码 `strNumber=43` ← eventMT 　·  出现层：—
+**[43]** 　代码 `strNumber=43` ← eventMT 　·  出现层：50
 
 > 勇者「おまえはっ……！どうしてこんな所に！」
 >
 EN: The brave man says "Who? It's you! Why are you in such a place ?"
 
-**[45]** 　代码 `strNumber=45` ← eventMT 　·  出现层：—
+**[45]** 　代码 `strNumber=45` ← eventMT 　·  出现层：50
 
 > 勇者「あっ！おまえはゼノッ！生きていたのか！？」
 >
 EN: The brave man says "Huh? Hey! You're Zeno! Were you still alive ?"
 
-**[46]** 　代码 `strNumber=46` ← eventMT 　·  出现层：—
+**[46]** 　代码 `strNumber=46` ← eventMT 　·  出现层：50
 
 > 魔導師ゼノ「あんなことで倒されるものか。あれは、おまえの戦士としての知性を試したにすぎん。」
 >
 EN: The Magic Serg. Zeno says "I will never die. I merely tested your intelligence as a soldier."
 
-**[47]** 　代码 `strNumber=47` ← eventMT 　·  出现层：—
+**[47]** 　代码 `strNumber=47` ← eventMT 　·  出现层：50
 
 > 勇者「なにっ！？……どういうことだっ！どうして、こんな事を……！？」
 >
 EN: The brave man says "Huh? What do you mean? Why did you do such a thing ?"
 
-**[48]** 　代码 `strNumber=48` ← eventMT 　·  出现层：—
+**[48]** 　代码 `strNumber=48` ← eventMT 　·  出现层：50
 
 > 魔導師ゼノ「おまえの持つ神剣ウェポナー、そして私の持つ全能の杖インテリオン。この２つの力が合わさる時、偉大なる知恵を手に入れる事ができるという……。しかし、それには、その剣の力を十分に発揮できる能力を持った戦士が必要となるのだ。」
 >
 EN: The Magic Serg. Zeno says "The Sacred Sword 'Weaponer' which you have and The Omniscient Staff 'Intellion' which I have, Legend says that whoever unites the two will recieve great wisdom. But to this end, it must be assured that the soldier who does so can handle the the power of that sword."
 
-**[49]** 　代码 `strNumber=49` ← eventMT 　·  出现层：—
+**[49]** 　代码 `strNumber=49` ← eventMT 　·  出现层：50
 
 > 勇者「その戦士が俺だというのか……！？」
 >
 EN: The brave man says "What are you saying... Am I the soldier ?"
 
-**[50]** 　代码 `strNumber=50` ← eventMT 　·  出现层：—
+**[50]** 　代码 `strNumber=50` ← eventMT 　·  出现层：50
 
 > 魔導師ゼノ「そうだ……しかし、おまえの技量はその神剣ウェポナーを使いこなすには十分ではなかった。だから、私は偽りの情報を流し、様々なワナをこの塔にしかけ、おまえが来るのを待っていたのだ。そして、予定通り、おまえは神剣を扱うのに十分な力を身につけてここまで来た。」
 >
 EN: The Magic Serg. Zeno says "Yes. But when you came here, your ability wasn't sufficient to master the sacred sword 'Weaponer'."For that reason, I gave false information, set various traps in this tower, and waited for you to come. You came to here master the power enough to using the sacred sword as arranged beforehand.
 
-**[51]** 　代码 `strNumber=51` ← eventMT 　·  出现层：—
+**[51]** 　代码 `strNumber=51` ← eventMT 　·  出现层：50
 
 > 勇者「では、姫がさらわれたという情報も、俺をここまで、おびき寄せる為のワナだったというのかっ！？」
 >
 EN: The brave man replies "Well, this means that the rumour that a princess was trapped here... was actually a lie in order to get me here, wasn't it ?"
 
-**[52]** 　代码 `strNumber=52` ← eventMT 　·  出现层：—
+**[52]** 　代码 `strNumber=52` ← eventMT 　·  出现层：50
 
 > 魔導師ゼノ「その通りだ。そして、後は私がおまえの力を取りこめば、この茶番劇も終わりとなる……。時は来たれり……我全能なる力を用いて、神剣を砕き偉大なる知恵を手に入れん……。ゆくぞっ！神剣の戦士よ！」
 >
 EN: The Magic Serg. Zeno says "Yes, that's right. And now, if we can work together, this farce will end. Now is the time to act. Using omniscient power, We shall break the sacred sword and recieve great enlightenment. Soldier of the Sacred Sword! Let's finish this!"
 
-**[54]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：—
+**[54]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：50
 
 > 魔導師ゼノ「ゴホッ！おのれ、この私が倒されるとは……、しかしこれぐらいで死ぬような私ではない！おぬしともう一度、戦う日が来ることを楽しみに待っているぞ！」
 >
 EN: The Magic Serg. Zeno says "You villain. Little did I expect to be beaten. But I would never die in such a way. I'll be looking forward to fighting with you again."
 
-**[222]** 　代码 `strNumber=222` ← eventMT 　·  出现层：—
+**[222]** 　代码 `strNumber=222` ← eventMT 　·  出现层：50
 
 > 勇者「なんだと～！」
 >
 EN: The brave man says "What?"
 
-**[223]** 　代码 `strNumber=223` ← eventMT 　·  出现层：—
+**[223]** 　代码 `strNumber=223` ← eventMT 　·  出现层：50
 
 > 勇者「あ～っ」
 >
