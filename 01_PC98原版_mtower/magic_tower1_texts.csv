@@ -59,7 +59,7 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 312,スーパーマトック,The Super Magic Mattock,运行时按计算下标引用（未在静态数据/常量赋值中定位）,47,装备与道具名称（菜单用的短名）
 313,幸運の金貨,The Lucky Gold,运行时按计算下标引用（未在静态数据/常量赋值中定位）,0,装备与道具名称（菜单用的短名）
 74,「この塔の４４階は幻の階じゃ。普通の階段を登り降りしたのでは行くことができないらしい。ワープでもしないかぎり行くことは不可能じゃろう。」,"""The 44th floor in this tower is an illusion. It seems that we cannot go to there even if we use the stairs. I think that it is impossible to get there without teleporting.""",obj148（数据引用）,45,战斗与道具使用反馈提示
-57,「この塔は全部で５０階建てで、１０階ごとに１つのブロックを形成している。塔の内部には、各ブロックを統括するボスが配置されていて、そいつらを倒さないことには、それより上の階に行くことはできないだろう。」,"""This tower has fifty floor. Every ten floor form one area. The boss who controls each area, are posted in this tower. You cannot ascend from there if you don't beat them.""",obj40（数据引用）,catalog,战斗与道具使用反馈提示
+57,「この塔は全部で５０階建てで、１０階ごとに１つのブロックを形成している。塔の内部には、各ブロックを統括するボスが配置されていて、そいつらを倒さないことには、それより上の階に行くことはできないだろう。」,"""This tower has fifty floor. Every ten floor form one area. The boss who controls each area, are posted in this tower. You cannot ascend from there if you don't beat them.""",obj40（数据引用）,6,战斗与道具使用反馈提示
 154,飛翔のオーブを使った！,Used the orb of flying!,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,战斗与道具使用反馈提示
 155,祭壇がある。,You see an altar.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,战斗与道具使用反馈提示
 190,エリクサーを使った！生命力が,Used the Magic Elixir. Your vital power was,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,战斗与道具使用反馈提示
@@ -189,7 +189,7 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 72,「この塔のどこかに、幸運の金貨というものがあって、それを持っていると敵を倒したときに得られるお金が２倍になるそうだ。」,"""There is a Lucky Gold somewhere in this tower. If you have it, you can get twice as much money when you beat an enemy.""",obj167（数据引用）,—,无名提示与谜面（石板/老人语气，未具名）
 75,「神盾は、魔法使いたちの魔法攻撃を防ぐ力があるらしい。……しかし、この盾は幻の階に隠されているそうだ。」,"""The sacred shield can defend you against magic attacks. But I heard this shield is hidden on a floor that doesn't exist.""",obj169（数据引用）,"39,45",无名提示与谜面（石板/老人语气，未具名）
 82,「やれやれ、見つかってしもうたか。褒美におぬしに”エリクサー”をやろう。この薬を使えば、その時の攻撃力と防御力に応じた値だけ生命力が回復するじゃろう。じゃから、当然、後の方で使う方が効果は大きいぞ。」,"""Thank goodness, you found me. I will give you an elixir as a symbol of my gratitude. Using this medicine will cause you to gain life according to your offensive and defensive power. So naturally, the later you use, the more it will have an effect on you.""",obj154（数据引用）,16,无名提示与谜面（石板/老人语气，未具名）
-83,「もう、話す事はないよ。」,"""Be careful. I have nothing more to say.""",obj172（数据引用）,—,无名提示与谜面（石板/老人语气，未具名）
+83,「もう、話す事はないよ。」,"""Be careful. I have nothing more to say.""",obj172（数据引用）,"6,7,12,15,31,38,39,45,47",无名提示与谜面（石板/老人语气，未具名）
 98,「まいどーっ！」,"""Thank you very much.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,无名提示与谜面（石板/老人语气，未具名）
 208,「どの望みをかなえて欲しいのだ？」,"""What option shall you choose?""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,无名提示与谜面（石板/老人语气，未具名）
 215,「金がたらん！」,"""You don't have enough money!""",代码 `strNumber=215` ← saidan,—,无名提示与谜面（石板/老人语气，未具名）
@@ -258,7 +258,7 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 94,「紫の鍵が３個で２０００ＧＯＬＤだが、買うかい？」,"""2000 Golds for three blue keys. Deal?""",obj166（数据引用）,39,商人 · 祭坛 · 积分石 · 智慧之戒问答
 95,「１０００ＧＯＬＤで生命力を２０００ポイント回復してあげるよ。」,"""I will increase your life 2000 points at 1000 Gold.""",obj168（数据引用）,45,商人 · 祭坛 · 积分石 · 智慧之戒问答
 96,「超希少品のスーパーマトックを４０００ＧＯＬＤで買わないかい？」,"""Would you like to buy a super mattock (it's very rare) for 4000 Gold?""",obj170（数据引用）,47,商人 · 祭坛 · 积分石 · 智慧之戒问答
-89,「うちの店は鍵をいくらでも売るよ。１つ１０００ＧＯＬＤだが買うかい？」,"""My store will sell as many keys as you need. They are 1000 Gold each. Will you buy them?""",obj17（数据引用）,catalog,商人 · 祭坛 · 积分石 · 智慧之戒问答
+89,「うちの店は鍵をいくらでも売るよ。１つ１０００ＧＯＬＤだが買うかい？」,"""My store will sell as many keys as you need. They are 1000 Gold each. Will you buy them?""",obj17（数据引用）,12,商人 · 祭坛 · 积分石 · 智慧之戒问答
 204,ＧＯＬＤを,. Recieved,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,商人 · 祭坛 · 积分石 · 智慧之戒问答
 210,ポイント回復,points.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,商人 · 祭坛 · 积分石 · 智慧之戒问答
 224,「この階までのあなたの生命力、防御力、攻撃力、鍵の個数からあなたの実力を評価すると・・・,"""Judging by your vital power, offensive power, defensive power, and number of keys, you have",obj69（数据引用）,catalog,商人 · 祭坛 · 积分石 · 智慧之戒问答
@@ -281,7 +281,7 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 202,溶岩が固まって道ができた！,The lava cooled and turned to stone.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 245,道が壁に変わった！,The road changed to the wall!,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 267,0,0,地形116、地形117（数据引用）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
-58,「祭壇に寄進したときは、攻撃力よりも防御力を主に上げてもらった方がいいでしょう。ただし、攻撃力をまったく上げないと、あとで倒せない敵がでてくるかもしれないよ。」,"""When you offer gold at an alter, you may as well have your defensive power risen rather than your offensive power. The enemy whom you cannot beat may appear, provided you won't raise your offensive power.""",obj155（数据引用）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
+58,「祭壇に寄進したときは、攻撃力よりも防御力を主に上げてもらった方がいいでしょう。ただし、攻撃力をまったく上げないと、あとで倒せない敵がでてくるかもしれないよ。」,"""When you offer gold at an alter, you may as well have your defensive power risen rather than your offensive power. The enemy whom you cannot beat may appear, provided you won't raise your offensive power.""",obj155（数据引用）,7,界面 · 系统文案（状态窗、情報、音、得分、称号）
 77,「ドラゴンを倒す気なら、聖剣と聖盾、それにドラゴンスレーヤーを持って、なおかつレベルが高くなければならないだろう。」,"""If you want to beat the Dragon, you must have a holy sword, a holy shield, and a Dragon slayer, and also you must be high level.""",obj171（数据引用）,47,界面 · 系统文案（状态窗、情報、音、得分、称号）
 185,命,Vital power:,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
 186,攻,Offensive power:,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）

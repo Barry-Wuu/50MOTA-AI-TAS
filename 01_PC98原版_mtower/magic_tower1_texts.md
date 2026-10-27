@@ -6,7 +6,7 @@
 
 - 章题即楼层，条目本身不写「出现层」；
 - 同层条目按 `[n]` 编号升序；
-- 一条文案若在多层出现（怪物名、地形提示等多为此类），在每个对应楼层章各写一遍，内容完全相同；因此本文实际条目数（609）大于文案表行数（309）。
+- 一条文案若在多层出现（怪物名、地形提示等多为此类），在每个对应楼层章各写一遍，内容完全相同；因此本文实际条目数（621）大于文案表行数（309）。
 - 不挂地图数据、没有楼层概念的统一放在最后的「无楼层归属」章，同样按编号升序。
 
 每条内容为两段：日文原文（`>` 引用块）与 `EN:` 英文译文。编号左侧是**引用方式**：
@@ -537,6 +537,18 @@ EN: The orb of wisdom
 >
 EN: "If you buy goods from merchants, you will be able to hear important information later."
 
+**[57]** obj40（数据引用）
+
+> 「この塔は全部で５０階建てで、１０階ごとに１つのブロックを形成している。塔の内部には、各ブロックを統括するボスが配置されていて、そいつらを倒さないことには、それより上の階に行くことはできないだろう。」
+>
+EN: "This tower has fifty floor. Every ten floor form one area. The boss who controls each area, are posted in this tower. You cannot ascend from there if you don't beat them."
+
+**[83]** obj172（数据引用）
+
+> 「もう、話す事はないよ。」
+>
+EN: "Be careful. I have nothing more to say."
+
 **[86]** obj18（数据引用）
 
 > 「紫の鍵を大特価の５０ＧＯＬＤで売るよ! 買わないかい?」
@@ -610,6 +622,18 @@ EN: Got a red elixir. Your vital power was 50 points up!
 EN: Got a blue crystal. Your defensive power was 1 point up!
 
 ### 7F
+
+**[58]** obj155（数据引用）
+
+> 「祭壇に寄進したときは、攻撃力よりも防御力を主に上げてもらった方がいいでしょう。ただし、攻撃力をまったく上げないと、あとで倒せない敵がでてくるかもしれないよ。」
+>
+EN: "When you offer gold at an alter, you may as well have your defensive power risen rather than your offensive power. The enemy whom you cannot beat may appear, provided you won't raise your offensive power."
+
+**[83]** obj172（数据引用）
+
+> 「もう、話す事はないよ。」
+>
+EN: "Be careful. I have nothing more to say."
 
 **[87]** obj41（数据引用）
 
@@ -1041,11 +1065,23 @@ EN: Silver
 >
 EN: "Did you notice the secret passages on the 9th, 16th, and 18th floors?"
 
+**[83]** obj172（数据引用）
+
+> 「もう、話す事はないよ。」
+>
+EN: "Be careful. I have nothing more to say."
+
 **[88]** obj156（数据引用）
 
 > 「希少品の赤い鍵を８００ＧＯＬＤで売るよ！買わないかい？」
 >
 EN: "I will sell the rare red key for 800 Gold! Will you buy it?"
+
+**[89]** obj17（数据引用）
+
+> 「うちの店は鍵をいくらでも売るよ。１つ１０００ＧＯＬＤだが買うかい？」
+>
+EN: "My store will sell as many keys as you need. They are 1000 Gold each. Will you buy them?"
 
 **[102]** obj45（数据引用）
 
@@ -1268,6 +1304,12 @@ EN: The thief says "Ah! Are you all right? The Big Octopus which lives in here w
 > 「十字架を持っていれば、ゾンビやバンパイアに対する攻撃力が２倍になる。特にバンパイアは十字架を持っていないと倒せないだろう。これより上の階のどこかにあるらしいが……。」
 >
 EN: "If you carry a cross, the strength of Zombies and Vampires will be cut in half. It is near impossible to defeat them without a cross, especially Vampires. A cross is on a floor higher than this one."
+
+**[83]** obj172（数据引用）
+
+> 「もう、話す事はないよ。」
+>
+EN: "Be careful. I have nothing more to say."
 
 **[90]** obj159（数据引用）
 
@@ -2075,6 +2117,12 @@ EN: "The offensive power of the swordsman who uses two swords is too high. He ca
 >
 EN: "This tower is 50 stories high, but in reality it seems that you cannot go up to the 50th floor."
 
+**[83]** obj172（数据引用）
+
+> 「もう、話す事はないよ。」
+>
+EN: "Be careful. I have nothing more to say."
+
 **[92]** obj162（数据引用）
 
 > 「鍵を４個と紫の鍵をセットにして１０００ＧＯＬＤだ！買うかい？」
@@ -2665,6 +2713,12 @@ EN: The Destructible Ball
 >
 EN: "There is never a gate without a Gate-Keeper. Conversely there are always enemies who keep the gate on floors that have gates. So,"
 
+**[83]** obj172（数据引用）
+
+> 「もう、話す事はないよ。」
+>
+EN: "Be careful. I have nothing more to say."
+
 **[93]** obj164（数据引用）
 
 > 「鍵３個を大サービスの２００ＧＯＬＤで売るよ！早い者勝ちだよ！」
@@ -2774,6 +2828,12 @@ EN: "At three o'clock, the secret treasure that lets one travel in space will ap
 > 「神盾は、魔法使いたちの魔法攻撃を防ぐ力があるらしい。……しかし、この盾は幻の階に隠されているそうだ。」
 >
 EN: "The sacred shield can defend you against magic attacks. But I heard this shield is hidden on a floor that doesn't exist."
+
+**[83]** obj172（数据引用）
+
+> 「もう、話す事はないよ。」
+>
+EN: "Be careful. I have nothing more to say."
 
 **[94]** obj166（数据引用）
 
@@ -3303,6 +3363,12 @@ EN: "The 44th floor in this tower is an illusion. It seems that we cannot go to 
 >
 EN: "The sacred shield can defend you against magic attacks. But I heard this shield is hidden on a floor that doesn't exist."
 
+**[83]** obj172（数据引用）
+
+> 「もう、話す事はないよ。」
+>
+EN: "Be careful. I have nothing more to say."
+
 **[95]** obj168（数据引用）
 
 > 「１０００ＧＯＬＤで生命力を２０００ポイント回復してあげるよ。」
@@ -3516,6 +3582,12 @@ EN: The magic key
 > 「ドラゴンを倒す気なら、聖剣と聖盾、それにドラゴンスレーヤーを持って、なおかつレベルが高くなければならないだろう。」
 >
 EN: "If you want to beat the Dragon, you must have a holy sword, a holy shield, and a Dragon slayer, and also you must be high level."
+
+**[83]** obj172（数据引用）
+
+> 「もう、話す事はないよ。」
+>
+EN: "Be careful. I have nothing more to say."
 
 **[96]** obj170（数据引用）
 
@@ -3795,10 +3867,10 @@ EN: The Magic Serg. Zeno says "You villain. Little did I expect to be beaten. Bu
 
 ### 无楼层归属
 
-余下这些条目没有楼层归属，按编号升序，共 122 条。原因分两类：
+余下这些条目没有楼层归属，按编号升序，共 118 条。原因分两类：
 
-- 纯系统反馈——开关门、梯子/人物存在提示、钥匙不足、道具使用与伤害结算、存读档、音效开关、界面标签、评语与称号等，任何楼层都可能出现，没有「本层专属」的含义（含购买时余额不足的 [18]）；
-- 挂在 obj40 / obj155 / obj167 / obj172 / obj17 上的 5 条（[57] [58] [72] [83] [89]）：这五个对象在 0F–50F 全部地图里没有任何落点（静态布点、`FLOOR_WRITES` 事件写入、`DYNEV` 动态投放三路都查过），文本在游戏里不会出现，属未使用条目。
+- 纯系统反馈——开关门、梯子/人物存在提示、钥匙不足、道具使用与伤害结算、存读档、音效开关、界面标签、评语与称号等，任何楼层都可能出现，没有「本层专属」的含义；其中 [18]「お金が足りないよ！」是**任何**商店余额不足时共用的同一句（MTower.java 4062 分支）；
+- [72]「この塔のどこかに、幸運の金貨というものがあって…」挂在 obj167 上，但 obj167 在 51 层地图、`FLOOR_WRITES` 事件写入、`DYNEV` 动态投放三处都没有落点；它唯一的显示路径是「情報」系统（知恵の玉 18 → 文本下标 18+54=72），而 18 号玉的解锁标记同样由这个从不出现的 NPC 置位——在 v0.8a 里不可达。
 
 **[18]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
@@ -3806,35 +3878,11 @@ EN: The Magic Serg. Zeno says "You villain. Little did I expect to be beaten. Bu
 >
 EN: "You don't have enough money."
 
-**[57]** obj40（数据引用）
-
-> 「この塔は全部で５０階建てで、１０階ごとに１つのブロックを形成している。塔の内部には、各ブロックを統括するボスが配置されていて、そいつらを倒さないことには、それより上の階に行くことはできないだろう。」
->
-EN: "This tower has fifty floor. Every ten floor form one area. The boss who controls each area, are posted in this tower. You cannot ascend from there if you don't beat them."
-
-**[58]** obj155（数据引用）
-
-> 「祭壇に寄進したときは、攻撃力よりも防御力を主に上げてもらった方がいいでしょう。ただし、攻撃力をまったく上げないと、あとで倒せない敵がでてくるかもしれないよ。」
->
-EN: "When you offer gold at an alter, you may as well have your defensive power risen rather than your offensive power. The enemy whom you cannot beat may appear, provided you won't raise your offensive power."
-
 **[72]** obj167（数据引用）
 
 > 「この塔のどこかに、幸運の金貨というものがあって、それを持っていると敵を倒したときに得られるお金が２倍になるそうだ。」
 >
 EN: "There is a Lucky Gold somewhere in this tower. If you have it, you can get twice as much money when you beat an enemy."
-
-**[83]** obj172（数据引用）
-
-> 「もう、話す事はないよ。」
->
-EN: "Be careful. I have nothing more to say."
-
-**[89]** obj17（数据引用）
-
-> 「うちの店は鍵をいくらでも売るよ。１つ１０００ＧＯＬＤだが買うかい？」
->
-EN: "My store will sell as many keys as you need. They are 1000 Gold each. Will you buy them?"
 
 **[97]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
