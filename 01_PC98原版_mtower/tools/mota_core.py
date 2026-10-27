@@ -118,8 +118,23 @@ MONSTER_TYPE = 6
 MAGIC_HALF_ATK = {58, 96}       # ⚠️ 魔导师/大魔导师战斗前削减主角 HP（我从未在指令流里逐条确认）
 # 📝 盗贼凿墙事件（dynamic.csv 实证：触发格 obj88 MESSAGE「…大ダコが道をふさいでいて…抜け穴が…」，
 #    目标格 directCheck 墙→地板；35F(5,10)→35F 暗道同机制）。键=被挖开的墙格，值=盗贼触发格
-DIG_WALLS = {(15, 8, 1): (15, 9, 1)}
+DIG_WALLS = {(15, 8, 1): (15, 9, 1),
+             (35, 4, 9): (35, 5, 10)}                # 35F 同机制（dynamic.csv L137 / L68 盗贼）
 DIG_TRIG = {v: k for k, v in DIG_WALLS.items()}   # 触发格 → 被挖开的墙格
+# 📝 祭坛（README「祭壇」节：4 座 4F/12F/32F/46F，obj22 type=7）
+#    4 项菜单：生命力 / 攻击力 / 防御力 / 取消（yesnoNumber=9，文案 206/207-）
+ALTAR_CELLS = {(4, 6, 1), (12, 6, 9), (32, 10, 10), (46, 6, 1)}   # ✅ 引擎 obj_raw 实测坐标
+ALTAR_GAIN = {'hp': 200, 'atk': 10, 'dfn': 10}    # 档位常量（saidan 绘制数值）
+
+
+def altar_cost(k):
+    """代价按本存档累计已祭次数 k 递增：((k+1)^2-(k+1)+2)*10 → 20/40/80/140/220/320…
+    ⚠︎ k 自增的那一步未逐条追到语句（README 原注），按 k=已祭次数推断。"""
+    return ((k + 1) ** 2 - (k + 1) + 2) * 10
+
+
+# 📝 双倍伤害（MAP_NOTES §：持有十字架 obj103 → 对 id 48/49/59 翻倍；屠龙匕 obj109 → 对 id 74 翻倍）
+DOUBLE_DMG_ITEM = {103: {48, 49, 59}, 109: {74}}
 ATK_DOUBLE_IF = {(103,): {48, 49, 59}, (109,): {74}}   # 📝 十字架对ゾンビ系、屠龙匕对ドラゴン：我方伤害×2（attackDouble）
 # 📝 MESSAGE（挡路 NPC）交互：谈完即从地图上消失，效果取自其文案括号内的明示数值
 MSG_EFFECT = {
@@ -256,6 +271,8 @@ class World:
     caveats: Set = None
     bought: Set = None                # 已购物的商人格子（防重复购买）
     boss10: bool = False             # 10F BOSS（obj16 スケルトンＡ）已击败 → (6,11) 生上行梯
+    altar_k: int = 0                  # 📝 本存档累计祭坛已使用次数（决定下一次代价）
+    altar_policy: str = 'atk'         # 📝 祭坛菜单选择：hp / atk / dfn（A* 无法处理菜单，按策略预设）
 
     @classmethod
     def new(cls, event_mode='on_entry', hero=None, trap_mode='apply'):
@@ -397,8 +414,25 @@ class World:
             elif ty == 'SCORE':
                 # 📝 仙女评分(obj69)：可交谈通过，不是墙。写死成不可通行会把 10F(6,4) 这一竖道封死、BOSS 到不了
                 log.append(f'评分 NPC obj{o}（交谈通过）'); self.cleared.add((f, nx, ny)); o = 0
-            elif ty in ('SELL', 'BUY', 'SAIDAN'):
-                return [f'不可通行 obj{o}（{ty}）']
+            elif ty == 'SAIDAN':
+                # 📝 祭坛：4 项菜单在 A* 里无法表达，按 altar_policy 预设选择；代价随累计次数递增
+                if (f, nx, ny) in ALTAR_CELLS:      # 可反复献祭，只受金币与递增代价限制
+                    c = altar_cost(self.altar_k)
+                    if h.gold < c:
+                        return ['祭坛金币不足（需%d，有%d）' % (c, h.gold)]
+                    h.gold -= c
+                    pol = self.altar_policy if self.altar_policy in ALTAR_GAIN else 'atk'
+                    if pol == 'hp':
+                        h.hp += ALTAR_GAIN['hp']
+                    elif pol == 'atk':
+                        h.atk += ALTAR_GAIN['atk']
+                    else:
+                        h.dfn += ALTAR_GAIN['dfn']
+                    self.altar_k += 1
+                    log.append('祭坛献金%dG → %s+%d（第%d次，下次%dG）'
+                               % (c, pol, ALTAR_GAIN[pol], self.altar_k, altar_cost(self.altar_k)))
+                else:
+                    return [f'不可通行 obj{o}（{ty}）']
             elif ty == 'NORMAL':
                 log.append(f'踩过 type0 装饰 obj{o}'); o = 0   # ✅ type0=NORMAL 地板装饰，可踩（obj20 等）
         # 落格
@@ -579,6 +613,7 @@ def _clone(self):
     w.ter_over = dict(self.ter_over)
     w.event_mode = self.event_mode; w.trap_mode = self.trap_mode; w.caveats = set(self.caveats)
     w.bought = set(self.bought); w.boss10 = self.boss10
+    w.altar_k = self.altar_k; w.altar_policy = self.altar_policy
     return w
 
 
