@@ -232,6 +232,16 @@ _TRAP_GUARD_CELLS = set()          # 由剧本自己放置的格，不进"进层
 #    若照搬成进层覆盖，红门会凭空变成可通行装饰，红钥匙门槛被整个跳过。
 BOSS_DOOR_CELLS = {(20, 6, 9)}
 
+# ✅ 14F(1,3) 红钥匙（见 BOSS 的第二把钥匙，8F 那把已用于 10F 红门）
+#    Java MTower.java:3801-3808 实证：该格原版地形值是 **3（暗墙）**，并非实墙。
+#    进入 14F 且周围三格(mapObject[14][40/42]、[15][41])清空后执行：
+#        map[16][40] = 1   （暗墙塌掉 → 变可通行地板）
+#        mapObject[16][40] = 28  （落红钥匙）
+#    displayDoor/displayCharacter 表明这是一次「暗墙裂开、露出红钥匙」的演出。
+#    故本引擎按 **暗墙** 处理：撞塌后可踩入，露出 obj28 正常拾取（见 move 内 DARKWALL_CELLS 分支）。
+#    原引擎把 terrain=1 当死墙直接 blocked，导致红钥匙永远拿不到、20F 红门开不了。
+DARKWALL_CELLS = {(14, 1, 3)}
+
 TRAP_3F = dict(                                        # ✅ 指令行 31937/32084/32094/32107/32325..32404
     trigger=(5, 9),                                    #    中央格＝勇者所站处
     set_hp=400, set_atk=10, set_dfn=10,
@@ -340,9 +350,14 @@ class World:
         h = self.hero
         f, x, y = h.f, h.x, h.y
         nx, ny = x + dx, y + dy
+        log = []
         if self.terrain_at(f, nx, ny) == 1:
-            # 📝 盗贼凿墙：触发格(盗贼)交谈后进 cleared，对应墙格即变成可通行的暗道
-            if DIG_WALLS.get((f, nx, ny)) not in self.cleared:
+            if (f, nx, ny) in DARKWALL_CELLS and (f, nx, ny) not in self.cleared:
+                # 📝 暗墙(原版地形值 3)：撞塌后露出底下红钥匙 obj28，可踩入拾取
+                #    注意：此处只放行+记日志，**不**先加 cleared —— 否则 at() 命中 cleared 返回 0，
+                #    会跳过下方 KEY_OF 分支的红钥匙拾取。cleared 由拾取分支统一处理。
+                log.append('撞塌暗墙(14,1,3) → 露出红钥匙')
+            elif DIG_WALLS.get((f, nx, ny)) not in self.cleared:
                 return ['blocked:墙']               # 未触发=普通墙；触发后直接放行（log 由落格时带出）
         o = self.at(f, nx, ny)
         # ✅ 修正（此处原为死锁 bug）：20F 的「进入」与「离开」是两套独立机制，不能混为一谈。
@@ -353,7 +368,6 @@ class World:
         #    · 离开：击败 (6,6) 吸血鬼后置 boss20=True，(20,6,1) 才现上行梯（下方 warp 逻辑，正确）。
         #    旧代码把「进入」误绑到 boss20 上，既造出「要杀 BOSS 才开门、而 BOSS 在门后」的死锁，
         #    又让红钥匙这道门槛形同虚设。现已恢复红门、交由 DOOR 分支消耗红钥匙。
-        log = []
         ty = TYPE.get(oatr(o, 3), '?') if o else '空'
         if o:
             if o == 89:                                   # 📝 暗墙：撞了就塌
