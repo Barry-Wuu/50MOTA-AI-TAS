@@ -1,38 +1,38 @@
 strNumber,text_jp,text_en,referenced_by,floors,group
 100,Ｇスライム,Green Slime,obj5（数据引用）,"1,3-9,30,34 catalog",怪物与 BOSS 名称
 101,Ｒスライム,Red Slime,obj6（数据引用）,"1,3-9,30,34,46 catalog stage_flags",怪物与 BOSS 名称
-102,Ｂスライム,Big Slime,obj45（数据引用）,"11-12,14-19,30,34 catalog",怪物与 BOSS 名称
 103,バット,Bat,obj7（数据引用）,"1,3-9,11-12,15,19-20,34 catalog",怪物与 BOSS 名称
 104,僧　侶,Priest,obj8（数据引用）,"1,3-10 catalog stage_flags",怪物与 BOSS 名称
-105,上級僧侶,Superion Priest,obj46（数据引用）,"11-12,14-20 catalog",怪物与 BOSS 名称
-106,門番Ｃ,Gate-Keeper C,obj29（数据引用）,"8,17 catalog",怪物与 BOSS 名称
-107,門番Ｂ,Gate-Keeper B,obj15（数据引用）,"2,32,38 catalog",怪物与 BOSS 名称
 108,スケルトンＣ,Skeleton C,obj9（数据引用）,"1,3-4,6-10,46 catalog",怪物与 BOSS 名称
 109,スケルトンＢ,Skeleton B,obj10（数据引用）,"1,4-10 catalog",怪物与 BOSS 名称
+107,門番Ｂ,Gate-Keeper B,obj15（数据引用）,"2,32,38 catalog",怪物与 BOSS 名称
+106,門番Ｃ,Gate-Keeper C,obj29（数据引用）,"8,17 catalog",怪物与 BOSS 名称
 110,スケルトンＡ,Skeleton A,obj16（数据引用）,10 catalog stage_flags,怪物与 BOSS 名称
+102,Ｂスライム,Big Slime,obj45（数据引用）,"11-12,14-19,30,34 catalog",怪物与 BOSS 名称
+105,上級僧侶,Superion Priest,obj46（数据引用）,"11-12,14-20 catalog",怪物与 BOSS 名称
 111,大バット,Big Bat,obj47（数据引用）,"11-12,14-20,46 catalog",怪物与 BOSS 名称
 112,ゾンビ,Zombie,obj48（数据引用）,"11-12,14-19,38,46 catalog",怪物与 BOSS 名称
 113,ゾンビナイト,Zombie Knight,obj49（数据引用）,"14-19,31,33,36 catalog",怪物与 BOSS 名称
 114,ロック,Rock,obj56（数据引用）,"14,16,18-20 catalog",怪物与 BOSS 名称
-115,魔導師ゼノ,Magic Serg. Zeno,obj57（数据引用）,catalog,怪物与 BOSS 名称
-116,魔導師,Magic Sergeant,obj58（数据引用）,"41-43,45,48 catalog",怪物与 BOSS 名称
-117,バンパイア,Vampire,obj59（数据引用）,catalog,怪物与 BOSS 名称
 118,大ダコ,Giant Octopus,obj71（数据引用）,15 catalog,怪物与 BOSS 名称
-119,ドラゴン,Dragon,obj74（数据引用）,35 catalog,怪物与 BOSS 名称
-120,金騎士,Golden Knight,obj90（数据引用）,40 catalog,怪物与 BOSS 名称
+244,大ダコの一部,some of Giant Octopus,obj50、obj51、obj52 等5项（数据引用）,15 catalog,怪物与 BOSS 名称
+125,スライムマン,Slime Man,obj95（数据引用）,"16,31-34,36-40 catalog",怪物与 BOSS 名称
+126,大魔導師,Great Magic Master,obj96（数据引用）,25 catalog,怪物与 BOSS 名称
 121,騎　士,Knight,obj91（数据引用）,"31-32,34,36-40,46 catalog",怪物与 BOSS 名称
 122,剣　士,Swordsman,obj92（数据引用）,"31,33-34,36-40,46 catalog",怪物与 BOSS 名称
 123,兵　士,Soldier,obj93（数据引用）,"31-34,36-40,46 catalog",怪物与 BOSS 名称
 124,死霊兵士,Ghost Soldier,obj94（数据引用）,"31-34,36-40 catalog",怪物与 BOSS 名称
-125,スライムマン,Slime Man,obj95（数据引用）,"16,31-34,36-40 catalog",怪物与 BOSS 名称
-126,大魔導師,Great Magic Master,obj96（数据引用）,25 catalog,怪物与 BOSS 名称
+119,ドラゴン,Dragon,obj74（数据引用）,35 catalog,怪物与 BOSS 名称
+120,金騎士,Golden Knight,obj90（数据引用）,40 catalog,怪物与 BOSS 名称
+116,魔導師,Magic Sergeant,obj58（数据引用）,"41-43,45,48 catalog",怪物与 BOSS 名称
 127,吸血コウモリ,Vampire Bat,obj97（数据引用）,"41-43,45-48 catalog",怪物与 BOSS 名称
 128,Ｋスライム,SlimeLord,obj98（数据引用）,"41-43,45-48 catalog",怪物与 BOSS 名称
 129,魔術師Ａ,Magician A,obj99（数据引用）,"41-43,45-49 catalog",怪物与 BOSS 名称
 130,魔術師Ｂ,Magician B,obj100（数据引用）,"41-43,45-48 catalog stage_flags",怪物与 BOSS 名称
 131,黒騎士,Dark Knight,obj101（数据引用）,"42-43,45,48-49 catalog",怪物与 BOSS 名称
 132,門番Ａ,Gate-Keeper A,obj102（数据引用）,44 catalog,怪物与 BOSS 名称
-244,大ダコの一部,some of Giant Octopus,obj50、obj51、obj52 等5项（数据引用）,15 catalog,怪物与 BOSS 名称
+115,魔導師ゼノ,Magic Serg. Zeno,obj57（数据引用）,catalog,怪物与 BOSS 名称
+117,バンパイア,Vampire,obj59（数据引用）,catalog,怪物与 BOSS 名称
 270,鉄の剣,Iron,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,装备与道具名称（菜单用的短名）
 271,銀の剣,Silver,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,装备与道具名称（菜单用的短名）
 272,騎士の剣,Knight,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,装备与道具名称（菜单用的短名）
@@ -58,8 +58,8 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 311,魔法の鍵,The magic key,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,装备与道具名称（菜单用的短名）
 312,スーパーマトック,The Super Magic Mattock,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,装备与道具名称（菜单用的短名）
 313,幸運の金貨,The Lucky Gold,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,装备与道具名称（菜单用的短名）
-57,「この塔は全部で５０階建てで、１０階ごとに１つのブロックを形成している。塔の内部には、各ブロックを統括するボスが配置されていて、そいつらを倒さないことには、それより上の階に行くことはできないだろう。」,"""This tower has fifty floor. Every ten floor form one area. The boss who controls each area, are posted in this tower. You cannot ascend from there if you don't beat them.""",obj40（数据引用）,catalog,战斗与道具使用反馈提示
 74,「この塔の４４階は幻の階じゃ。普通の階段を登り降りしたのでは行くことができないらしい。ワープでもしないかぎり行くことは不可能じゃろう。」,"""The 44th floor in this tower is an illusion. It seems that we cannot go to there even if we use the stairs. I think that it is impossible to get there without teleporting.""",obj148（数据引用）,45,战斗与道具使用反馈提示
+57,「この塔は全部で５０階建てで、１０階ごとに１つのブロックを形成している。塔の内部には、各ブロックを統括するボスが配置されていて、そいつらを倒さないことには、それより上の階に行くことはできないだろう。」,"""This tower has fifty floor. Every ten floor form one area. The boss who controls each area, are posted in this tower. You cannot ascend from there if you don't beat them.""",obj40（数据引用）,catalog,战斗与道具使用反馈提示
 154,飛翔のオーブを使った！,Used the orb of flying!,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,战斗与道具使用反馈提示
 155,祭壇がある。,You see an altar.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,战斗与道具使用反馈提示
 190,エリクサーを使った！生命力が,Used the Magic Elixir. Your vital power was,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,战斗与道具使用反馈提示
@@ -113,6 +113,7 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 295,Auバックグラウンドミュージックオン！,Au Background music on.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,存档 · 音效 · 版本等系统提示
 314,アイテムを使用します。よろしいですか？,Do you use this item?,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,存档 · 音效 · 版本等系统提示
 4,盗賊「おお無事か！おまえ、ここの魔導師に捕まってこの牢屋に入れられてたんだよ。で、今まで気を失っていた訳だ。にしても、おまえ運がいいぜ。ちょうど抜け穴が完成したときに来るんだからな。そういう訳で俺は今から脱走するところだ。おまえもついてこい。」,"The thief says ""What a relief you're okay!⏎You were caught and thrown into this prison by the Magic Sergeant.⏎You were unconscious when you got here.⏎Nevertheless, you are so lucky that you just woke up.⏎I've finished the escape tunnel. Let's break out.""",obj87（数据引用）,2 catalog,盗贼（脱出屋）对白
+68,「この階の４つの抜け穴をうまく使えば、強い敵とは戦わずに上の階に行けるじゃろう。」,"""You may be able to go upstairs without fighting strong enemies, if you could use four tunnels skillfully in this floor.""",obj144（数据引用）,36,盗贼（脱出屋）对白
 5,盗賊「よし、じゃあ俺は先に行かせてもらうぜ。ああ、それからおまえの剣と盾、あいつらに取り上げられちまったみたいだな。この塔の中を丸腰で歩き回るのはやめた方がいい。確か５階に剣、９階に盾があったはずだから、まずそれを手に入れることを考えるんだな。じゃあ、またなっ！」,"The thief says ""O.K. Well, excuse my going first. Your weapon and shield were stolen by the guards. It's not wise to wander about without them. I heard that there is a sword on the 5th floor and a shield on the 9th. You had better get them. See you!""",代码 `strNumber=5` ← attackMonster/directCheck/pointCheck,—,盗贼（脱出屋）对白
 6,盗賊「ようっ！また会ったな。ここの門番を倒してくれて助かったぜ、ドジってまた捕まっちまってな。今度は、こんな奥の牢に閉じ込められちまった。まあ、それはそれとして、３５階にいるドラゴンの手前まで抜け穴を掘っといたんだ。開通させとくから先に行っててくれ。」,"The thief says ""Ah, we meet again! Thank you. You beat the Gate-Keeper of this area. I was defeated and imprisoned again. Such a small prison this time. I'm making a secret tunnel in front of the Dragon. Go up to 35th floor and wait for me, while I complete the tunnel.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,盗贼（脱出屋）对白
 7,盗賊「後でちゃんと行くから３５階まで先に行っておいてくれ。」,"The thief says ""Don't worry, I'll be there.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,盗贼（脱出屋）对白
@@ -125,8 +126,8 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 30,盗賊「このブロックのボスの金騎士は弱いくせに態度だけはでかいから、この塔の副将格の魔導師ゼノには嫌われているらしい。」,"The thief says ""The Golden Knight (who is the boss of this area) has a strong attitude in spite of being weak. It is for this reason that he is disliked by the Magic Serg. Zeno, who is the sub commander of this tower.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,盗贼（脱出屋）对白
 44,盗賊「ふふふ……ここにいるという事は、答えは１つしかあるまい。こういう事だっ！」,"The thief says ""Humph. There is only one reason why I'm here. And this is it!""",代码 `strNumber=44` ← eventMT,—,盗贼（脱出屋）对白
 59,「９階と１６階と１８階の抜け穴には気が付いたかい？」,"""Did you notice the secret passages on the 9th, 16th, and 18th floors?""",obj157（数据引用）,—,盗贼（脱出屋）对白
-68,「この階の４つの抜け穴をうまく使えば、強い敵とは戦わずに上の階に行けるじゃろう。」,"""You may be able to go upstairs without fighting strong enemies, if you could use four tunnels skillfully in this floor.""",obj144（数据引用）,36,盗贼（脱出屋）对白
 99,盗賊「ようまたあったな！無事だったか？これは聞いた話なんだが、２５階のボスを倒すと『時空の門』がどこかにできるらしいぞ。」,"The thief says ""Ah!, we meet again! Thank goodness you're alive! I heard that if you beat the boss of 25th floor, 'the gate of time and space' will appear somewhere.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,盗贼（脱出屋）对白
+23,勇者「これはっ……！人形だっ！」,"The brave man says ""Oh! What? This is a doll!""",obj44（数据引用）,26 catalog,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 10,魔導師ゼノ「ようこそ、『魔法の塔』へ。おまえがちょうど１００人目の侵入者だ。本来なら手下共に相手をさせるところだが、特別にこの私が自ら相手になってやろう。己の不運を呪うのだな。」,"The Magic Serg. Zeno says ""Welcome to 'The Magic Tower'. You are the hundredth man who dared to enter my tower. You will now face my guards. Should you happen to survive, I will fight with you in person specially. You should accept your fate.""",obj177（数据引用）,—,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 11,勇者「なんだっ！？　うわ～っ！？」,"The brave man says ""What? Oh!""",obj178（数据引用）,—,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 13,スケルトンＡ「ふふふ、よくここまできたな。かくなる上はこの俺様がじきじき相手になってやる・・・といいたいところだが、まずは貴様の力を見せてもらうぞ！出会え！スケルトン兵士たちよ！」,"Skeleton A ""Ha ha ha, You are lucky to have gotten so far. Since it has come to this, I shall fight with you personally, but first I must test your strength. Go and fight! Skeleton Soldiers!""",代码 `strNumber=13` ← eventMT,—,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
@@ -135,7 +136,6 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 19,バンパイア「ほほう、貴様か、スケルトンを倒して侵入してきた勇者というのは・・・だがこの私をスケルトン共のようなザコと一緒にするなよ。不死に等しいこの私の力を見せてやろう。さあ、こいっ！」,"Vampire ""Well, You beat the skeletons and invaded. Never regard me as small like a skeleton. I will show you that I am as immortal as god. Hey, come on!""",代码 `strNumber=19` ← eventMT,—,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 20,バンパイア「ううう・・・よもや、この私までもが敗れるとは・・・どうやら貴様の力は本物のようだな・・・だが、その程度では大魔導師様には絶対にかなわんぞ、せいぜい束の間勝利に酔いしれているがいい・・・」,"Vampire ""Good god! I've never dreamed I'd be defeated. There is no doubt of your strength. But you will never win against the Great Magic Master as weak as you are. You shall only celebrate fleeting victory at most.""",代码 `strNumber=20` ← eventMT,—,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 21,大魔導師「・・・ジ・・・ユウシャ・・・・・コロス・・・」,"Great Magic Master ""-K-I-L-L- -A-N- -I-N-V-A-D-E-R- """,代码 `strNumber=21` ← eventMT,—,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-23,勇者「これはっ……！人形だっ！」,"The brave man says ""Oh! What? This is a doll!""",obj44（数据引用）,26 catalog,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 27,金騎士「貴様だな、第１、第２ブロックのボスを倒し登ってきた勇者というのは。だがそれも、ここで終わりだ！ここのブロックのボスである私が自ら貴様の首を上げてやるわっ！覚悟しろっ！」,"The Golden Knight says ""You are a brave man beating the bosses of the first and second areas, and ascending the tower. But the game is over now. Here and Now, I will beat you for myself! Give up!""",代码 `strNumber=27` ← eventMT,—,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 28,"金騎士「ううう……今回はこのぐらいにしておいてやる……４０階まで登ってこれたら今度は本気で相手をしてやるからなっ！覚えておけっ！」""","The Golden Knight says ""You think you're pretty strong, huh? If you can make it to the 40th floor, I shall fight with you again. There, you will die!",代码 `strNumber=28` ← eventMT,—,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 31,金騎士「よくきたな。今度はさっきの様な訳にはいかんぞ！この屈辱は１０倍にして返してくれるわっ！死霊兵士突撃！」,"The Golden Knight says ""I wonder how you were able to come so far. I will make sure you go no further. I will humiliate you 10 times as much as you've disgraced this tower. Ghost Soldiers, charge!""",代码 `strNumber=31` ← eventMT,—,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
@@ -162,34 +162,34 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 54,魔導師ゼノ「ゴホッ！おのれ、この私が倒されるとは……、しかしこれぐらいで死ぬような私ではない！おぬしともう一度、戦う日が来ることを楽しみに待っているぞ！」,"The Magic Serg. Zeno says ""You villain. Little did I expect to be beaten. But I would never die in such a way. I'll be looking forward to fighting with you again.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 222,勇者「なんだと～！」,"The brave man says ""What?""",代码 `strNumber=222` ← eventMT,—,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 223,勇者「あ～っ」,"The brave man says ""Hey!""",代码 `strNumber=223` ← eventMT,—,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-2,「・・・・・おい・・・」,"""------ Hey!""",代码 `strNumber=2` ← eventMT,—,无名提示与谜面（石板/老人语气，未具名）
-3,「・・・・・おいっ！起きろ！」,"""------ Hey! Wake up!""",代码 `strNumber=3` ← eventMT,—,无名提示与谜面（石板/老人语气，未具名）
-18,「お金が足りないよ！」,"""You don't have enough money.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,无名提示与谜面（石板/老人语气，未具名）
-22,「・・・ジ・・・トキハキタレリ・・・エラバレシモノヨ、シヲオソレヌナラバジクウノモンヲクグリテ、ワガモトヘクルガヨイ・・・」,"""Now is the time. You were chosen. If you aren't afraid of Death, you should go through the gate of Time and Space, and come to me.""",代码 `strNumber=22` ← eventMT,—,无名提示与谜面（石板/老人语气，未具名）
-53,「わしが言うことは何もない。この階に、あるメッセージが隠されているじゃろう。」,"""I have nothing to say. A certain message may be hidden in this room.""",obj138（数据引用）,23,无名提示与谜面（石板/老人语气，未具名）
+79,「もう、話は終わりじゃ。」,"""I have done what I can. Good luck!""",obj151（数据引用）,"2,16",无名提示与谜面（石板/老人语气，未具名）
+80,「おお、助けてくれてありがとうよ。お礼に、そなたの攻撃力と防御力を３％だけあげてやろう」（攻撃力と防御力が上がった!）,"""Oh, thank you for your help. I will raise your offensive and defensive power 3 percent as a token of my gratitude. [You begin feeling stronger]""",obj152（数据引用）,2,无名提示与谜面（石板/老人语气，未具名）
+84,「有効に使ってね!」,"""Please, use it wisely.""",obj173（数据引用）,2,无名提示与谜面（石板/老人语气，未具名）
+85,「やあ、助けてくれてありがとう。少ないけれど、お礼にとっておいてくれ！」（１０００ＧＯＬＤもらった!）,"""Thank you for your help. Please accept money as a small token of my gratitude. (Got 1000 Gold.)""",obj174（数据引用）,2,无名提示与谜面（石板/老人语气，未具名）
+81,「おぬしにこの勇者のオーブをさずけよう。これを持っていれば今いる階のモンスターの能力を調べてダメージを予測してくれるじゃろう。有効に使うのじゃ」,"""I will grant you the orb of the hero. It will forecast the results of fighting monsters on the current floor. Use it often.""",obj153（数据引用）,3,无名提示与谜面（石板/老人语气，未具名）
 55,「この塔には鍵で開けられる扉のほかに ”門” というものがあって、これはその門を守っているモンスターを倒さなければあかないじゃろう。」,"""There are doors which cannot be openned by a key. You can open these doors by beating the monsters which guard them.""",obj175（数据引用）,4,无名提示与谜面（石板/老人语气，未具名）
 56,「商人から物を買うと、あとで重要な情報を聞くことができるじゃろう。」,"""If you buy goods from merchants, you will be able to hear important information later.""",obj42（数据引用）,6 catalog,无名提示与谜面（石板/老人语气，未具名）
 61,「このブロックでは赤い鍵は２ヶ所で手に入るそうじゃ。」,"""I heard that you can find a red key at two places in this area.""",obj43（数据引用）,16 catalog,无名提示与谜面（石板/老人语气，未具名）
 62,「このブロックでは、祭壇で攻撃力を何回か上げてもらわないとロックというモンスターが倒せなくなってしまうかもしれん。注意するのじゃ。」,"""In this area, if you don't raise your offensive power at an altar a few times, you may not be able to beat 'Rock' monsters. Be careful!""",obj139（数据引用）,18,无名提示与谜面（石板/老人语气，未具名）
+53,「わしが言うことは何もない。この階に、あるメッセージが隠されているじゃろう。」,"""I have nothing to say. A certain message may be hidden in this room.""",obj138（数据引用）,23,无名提示与谜面（石板/老人语气，未具名）
 64,「この階まで来た段階で、生命力１５００、攻撃力８０、防御力９８、鍵５個、紫の鍵が１個あれば、ほぼ理想的と言えるじゃろう。」,"""In the stage of this floor, if your strength is 1500, offensive power is 80, defensive power is 98, you have five keys, and one blue key, you are almost ideal.""",obj141（数据引用）,27,无名提示与谜面（石板/老人语气，未具名）
+91,「鍵１個を１００ＧＯＬＤで買うよ。鍵を売るかい？」,"""I will buy your keys at 100 Gold a piece. Will you sell me keys?""",obj161（数据引用）,28,无名提示与谜面（石板/老人语气，未具名）
 65,「二刀流の剣士は攻撃力がものすごく高い。まともに戦えば大きなダメージを受けるだろう。一撃で倒せるようになるまで、戦わない方がよかろう。」,"""The offensive power of the swordsman who uses two swords is too high. He can use two swords at the same time. You will lose much strength if you fight him normally. You should never fight him before your attacks are stronger than his.""",obj142（数据引用）,31,无名提示与谜面（石板/老人语气，未具名）
-66,「この塔は５０階建てだが、実際には４９階までしか行けないようだ。」,"""This tower is 50 stories high, but in reality it seems that you cannot go up to the 50th floor.""",obj163（数据引用）,—,无名提示与谜面（石板/老人语气，未具名）
 67,「急がば回れじゃ。」,"""More haste, less speed.""",obj143（数据引用）,33,无名提示与谜面（石板/老人语气，未具名）
 69,「この階の宝物庫にある宝を取るためにはマトックが必要じゃ。」,"""You need the mattock in order to get the treasure which is in the item warehouse on this floor.""",obj145（数据引用）,37,无名提示与谜面（石板/老人语气，未具名）
 71,「３時になれば空間移動の秘宝が現れるじゃろう。」,"""At three o'clock, the secret treasure that lets one travel in space will appear.""",obj146（数据引用）,39,无名提示与谜面（石板/老人语气，未具名）
-72,「この塔のどこかに、幸運の金貨というものがあって、それを持っていると敵を倒したときに得られるお金が２倍になるそうだ。」,"""There is a Lucky Gold somewhere in this tower. If you have it, you can get twice as much money when you beat an enemy.""",obj167（数据引用）,—,无名提示与谜面（石板/老人语气，未具名）
 73,「魔術師は隣接すると魔法攻撃をしてくる。魔導師ははさまれると生命力を半分にする攻撃をしてくる。魔導師のはさみ攻撃は自分の生命力が高いほど受けるダメージが大きいはずじゃから気をつけてな。」,"""A Magician will attack using magic when he is next to you. The Magic Sergeants will attack and divide the vital power in half when you are caught between two. As for an attack on both sides from the Magic Sergeant, the stronger you are, the more damage you take. So, please be careful.""",obj147（数据引用）,42,无名提示与谜面（石板/老人语气，未具名）
-75,「神盾は、魔法使いたちの魔法攻撃を防ぐ力があるらしい。……しかし、この盾は幻の階に隠されているそうだ。」,"""The sacred shield can defend you against magic attacks. But I heard this shield is hidden on a floor that doesn't exist.""",obj169（数据引用）,—,无名提示与谜面（石板/老人语气，未具名）
 76,「４１階は完全に左右対称になっておる。だから……。」,"""The 41st floor is perfectly symmetrical, and therefore,""",obj149（数据引用）,46,无名提示与谜面（石板/老人语气，未具名）
 78,「サイコロの５の目の形には、魔を封じ込める力があるという。このブロックのボスと戦う時には、このことを頭にいれておきなされ。」,"""It is said that the symbol of 5 on a pair of dice has the force of sealing magic. You had better memorize it till you fight the boss of this area.""",obj150（数据引用）,48,无名提示与谜面（石板/老人语气，未具名）
-79,「もう、話は終わりじゃ。」,"""I have done what I can. Good luck!""",obj151（数据引用）,—,无名提示与谜面（石板/老人语气，未具名）
-80,「おお、助けてくれてありがとうよ。お礼に、そなたの攻撃力と防御力を３％だけあげてやろう」（攻撃力と防御力が上がった!）,"""Oh, thank you for your help. I will raise your offensive and defensive power 3 percent as a token of my gratitude. [You begin feeling stronger]""",obj152（数据引用）,2,无名提示与谜面（石板/老人语气，未具名）
-81,「おぬしにこの勇者のオーブをさずけよう。これを持っていれば今いる階のモンスターの能力を調べてダメージを予測してくれるじゃろう。有効に使うのじゃ」,"""I will grant you the orb of the hero. It will forecast the results of fighting monsters on the current floor. Use it often.""",obj153（数据引用）,3,无名提示与谜面（石板/老人语气，未具名）
+2,「・・・・・おい・・・」,"""------ Hey!""",代码 `strNumber=2` ← eventMT,—,无名提示与谜面（石板/老人语气，未具名）
+3,「・・・・・おいっ！起きろ！」,"""------ Hey! Wake up!""",代码 `strNumber=3` ← eventMT,—,无名提示与谜面（石板/老人语气，未具名）
+18,「お金が足りないよ！」,"""You don't have enough money.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,无名提示与谜面（石板/老人语气，未具名）
+22,「・・・ジ・・・トキハキタレリ・・・エラバレシモノヨ、シヲオソレヌナラバジクウノモンヲクグリテ、ワガモトヘクルガヨイ・・・」,"""Now is the time. You were chosen. If you aren't afraid of Death, you should go through the gate of Time and Space, and come to me.""",代码 `strNumber=22` ← eventMT,—,无名提示与谜面（石板/老人语气，未具名）
+66,「この塔は５０階建てだが、実際には４９階までしか行けないようだ。」,"""This tower is 50 stories high, but in reality it seems that you cannot go up to the 50th floor.""",obj163（数据引用）,—,无名提示与谜面（石板/老人语气，未具名）
+72,「この塔のどこかに、幸運の金貨というものがあって、それを持っていると敵を倒したときに得られるお金が２倍になるそうだ。」,"""There is a Lucky Gold somewhere in this tower. If you have it, you can get twice as much money when you beat an enemy.""",obj167（数据引用）,—,无名提示与谜面（石板/老人语气，未具名）
+75,「神盾は、魔法使いたちの魔法攻撃を防ぐ力があるらしい。……しかし、この盾は幻の階に隠されているそうだ。」,"""The sacred shield can defend you against magic attacks. But I heard this shield is hidden on a floor that doesn't exist.""",obj169（数据引用）,—,无名提示与谜面（石板/老人语气，未具名）
 82,「やれやれ、見つかってしもうたか。褒美におぬしに”エリクサー”をやろう。この薬を使えば、その時の攻撃力と防御力に応じた値だけ生命力が回復するじゃろう。じゃから、当然、後の方で使う方が効果は大きいぞ。」,"""Thank goodness, you found me. I will give you an elixir as a symbol of my gratitude. Using this medicine will cause you to gain life according to your offensive and defensive power. So naturally, the later you use, the more it will have an effect on you.""",obj154（数据引用）,—,无名提示与谜面（石板/老人语气，未具名）
 83,「もう、話す事はないよ。」,"""Be careful. I have nothing more to say.""",obj172（数据引用）,—,无名提示与谜面（石板/老人语气，未具名）
-84,「有効に使ってね!」,"""Please, use it wisely.""",obj173（数据引用）,—,无名提示与谜面（石板/老人语气，未具名）
-85,「やあ、助けてくれてありがとう。少ないけれど、お礼にとっておいてくれ！」（１０００ＧＯＬＤもらった!）,"""Thank you for your help. Please accept money as a small token of my gratitude. (Got 1000 Gold.)""",obj174（数据引用）,2,无名提示与谜面（石板/老人语气，未具名）
-91,「鍵１個を１００ＧＯＬＤで買うよ。鍵を売るかい？」,"""I will buy your keys at 100 Gold a piece. Will you sell me keys?""",obj161（数据引用）,28,无名提示与谜面（石板/老人语气，未具名）
 98,「まいどーっ！」,"""Thank you very much.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,无名提示与谜面（石板/老人语气，未具名）
 208,「どの望みをかなえて欲しいのだ？」,"""What option shall you choose?""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,无名提示与谜面（石板/老人语气，未具名）
 215,「金がたらん！」,"""You don't have enough money!""",代码 `strNumber=215` ← saidan,—,无名提示与谜面（石板/老人语气，未具名）
@@ -197,87 +197,87 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 280,「生命力がなくなりました。再挑戦してください。」,"""You have perished in Magic Tower. Please try again!""",代码 `strNumber=280` ← eventMT,—,无名提示与谜面（石板/老人语气，未具名）
 283,「願いをかなえたぞ！」,"""Your wish came true.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,无名提示与谜面（石板/老人语气，未具名）
 296,「遊んでくれてありがとう！　まだ完成できていません。　楽しみに待っていてね！」,"""Thank you for playing this game. Please wait for completing.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,无名提示与谜面（石板/老人语气，未具名）
-60,「十字架を持っていれば、ゾンビやバンパイアに対する攻撃力が２倍になる。特にバンパイアは十字架を持っていないと倒せないだろう。これより上の階のどこかにあるらしいが……。」,"""If you carry a cross, the strength of Zombies and Vampires will be cut in half. It is near impossible to defeat them without a cross, especially Vampires. A cross is on a floor higher than this one.""",obj160（数据引用）,—,道具 / 装备 / 钥匙：拾取与使用
+182,幸運の金貨を手に入れた！敵が持っているＧＯＬＤ数が２倍になる。,Got the Lucky Gold! You can get twice gold which monster has from now.,obj113（数据引用）,00F catalog,道具 / 装备 / 钥匙：拾取与使用
 133,扉の鍵を手に入れた。,Got a key.,obj1（数据引用）,"1-9,11-12,14-20,31-34,36-43,45,47 catalog stage_flags",道具 / 装备 / 钥匙：拾取与使用
+152,飛翔のオーブを手に入れた！,Got the orb of flying.,obj26（数据引用）,1 catalog,道具 / 装备 / 钥匙：拾取与使用
+166,赤い回復薬を手に入れた。生命力が５０ポイントアップ！,Got a red elixir. Your vital power was 50 points up!,obj11（数据引用）,"1,3-9,20 catalog stage_flags",道具 / 装备 / 钥匙：拾取与使用
+167,青い回復薬を手に入れた。生命力が２００ポイントアップ！,Got a blue elixir. Your vital power was 200 points up!,obj12（数据引用）,"1-4,7-8,10 catalog",道具 / 装备 / 钥匙：拾取与使用
+168,赤のクリスタルを手に入れた。攻撃力が１ポイントアップ！,Got a red crystal. Your offensive power was 1 point up!,obj13（数据引用）,"1,3-4,7-10 catalog",道具 / 装备 / 钥匙：拾取与使用
+169,青のクリスタルを手に入れた。防御力が１ポイントアップ！,Got a blue crystal. Your defensive power was 1 point up!,obj14（数据引用）,"1,3,5-6,8-10 catalog",道具 / 装备 / 钥匙：拾取与使用
 134,青色の扉の鍵を手に入れた。,Got a blue key.,obj3（数据引用）,"3-4,8,12,14-16,18-19,31-32,37,41-43,47 catalog",道具 / 装备 / 钥匙：拾取与使用
+153,知恵のオーブを手に入れた！,Got the orb of wisdom.,obj25（数据引用）,5 catalog,道具 / 装备 / 钥匙：拾取与使用
+156,鉄の剣を手に入れた。攻撃力が１０ポイントアップ！,Got an Iron Sword! Your offensive power was 10 points up!,obj30（数据引用）,5 catalog,道具 / 装备 / 钥匙：拾取与使用
 135,赤色の扉の鍵を手に入れた。,Got a red key.,obj28（数据引用）,"8,37,42 catalog",道具 / 装备 / 钥匙：拾取与使用
+161,鉄の盾を手に入れた。防御力が１０ポイントアップ！,Got an Iron Shield! Your defensive power was 10 points up!,obj35（数据引用）,9 catalog,道具 / 装备 / 钥匙：拾取与使用
+162,銀の盾を手に入れた。防御力が２０ポイントアップ！,Got a Silver Shield! Your defensive power was 20 points up!,obj36（数据引用）,11 catalog,道具 / 装备 / 钥匙：拾取与使用
+254,赤い回復薬を手に入れた。生命力が１００ポイントアップ！,Got a red elixir. Your vital power was 100 points up!,obj66（数据引用）,"11-12,14,16-19 catalog",道具 / 装备 / 钥匙：拾取与使用
+257,青い回復薬を手に入れた。生命力が４００ポイントアップ！,Got a blue elixir. Your vital power was 400 points up!,obj76（数据引用）,"11-12,15,17,20 catalog",道具 / 装备 / 钥匙：拾取与使用
+260,赤のクリスタルを手に入れた。攻撃力が２ポイントアップ！,Got a red crystal. Your offensive power was 2 points up!,obj80（数据引用）,"11-12,16-20 catalog",道具 / 装备 / 钥匙：拾取与使用
+263,青のクリスタルを手に入れた。防御力が２ポイントアップ！,Got a blue crystal. Your defensive power was 2 points up!,obj83（数据引用）,"12,14-18,20 catalog",道具 / 装备 / 钥匙：拾取与使用
+160,神　剣を手に入れた。攻撃力が１００ポイントアップ！,Got a Sacred Sword! Your offensive power was 100 points up!,obj34（数据引用）,13 catalog stage_flags,道具 / 装备 / 钥匙：拾取与使用
+157,銀の剣を手に入れた。攻撃力が２０ポイントアップ！,Got a Silver Sword! Your offensive power was 20 points up!,obj31（数据引用）,17 catalog,道具 / 装备 / 钥匙：拾取与使用
+255,赤い回復薬を手に入れた。生命力が２００ポイントアップ！,Got a red elixir. Your vital power was 200 points up!,obj67（数据引用）,"31,33-34,37-40 catalog",道具 / 装备 / 钥匙：拾取与使用
+258,青い回復薬を手に入れた。生命力が８００ポイントアップ！,Got a blue elixir. Your vital power was 800 points up!,obj77（数据引用）,"31-34,36-38,40 catalog",道具 / 装备 / 钥匙：拾取与使用
+261,赤のクリスタルを手に入れた。攻撃力が４ポイントアップ！,Got a red crystal. Your offensive power was 4 points up!,obj81（数据引用）,"31-32,34,37,39-40 catalog",道具 / 装备 / 钥匙：拾取与使用
+264,青のクリスタルを手に入れた。防御力が４ポイントアップ！,Got a blue crystal. Your defensive power was 4 points up!,obj84（数据引用）,"31-32,34,37-40 catalog",道具 / 装备 / 钥匙：拾取与使用
+158,騎士の剣を手に入れた。攻撃力が４０ポイントアップ！,Got a Sword of Knight! Your offensive power was 40 points up!,obj32（数据引用）,33 catalog,道具 / 装备 / 钥匙：拾取与使用
+174,破壊の玉を手に入れた！,Got the Destructible Ball!,obj105（数据引用）,37 catalog,道具 / 装备 / 钥匙：拾取与使用
+163,騎士の盾を手に入れた。防御力４０がポイントアップ！,Got a Shield of Knight! Your defensive power was 40 points up!,obj37（数据引用）,38 catalog,道具 / 装备 / 钥匙：拾取与使用
+256,赤い回復薬を手に入れた。生命力が２５０ポイントアップ！,Got a red elixir. Your vital power was 250 points up!,obj68（数据引用）,"41,43-44,46-48 catalog",道具 / 装备 / 钥匙：拾取与使用
+259,青い回復薬を手に入れた。生命力が１０００ポイントアップ！,Got a blue elixir. Your vital power was 1000 points up!,obj78（数据引用）,"41-43,45,48 catalog",道具 / 装备 / 钥匙：拾取与使用
+262,赤のクリスタルを手に入れた。攻撃力が５ポイントアップ！,Got a red crystal. Your offensive power was 5 points up!,obj82（数据引用）,"41,45-48 catalog",道具 / 装备 / 钥匙：拾取与使用
+265,青のクリスタルを手に入れた。防御力が５ポイントアップ！,Got a blue crystal. Your defensive power was 5 points up!,obj85（数据引用）,"41-42,45,47-48 catalog",道具 / 装备 / 钥匙：拾取与使用
+164,聖　盾を手に入れた。防御力が５０ポイントアップ！,Got a Holy Shield! Your defensive power was 50 points up!,obj38（数据引用）,43 catalog,道具 / 装备 / 钥匙：拾取与使用
+165,神　盾を手に入れた。防御力が１００ポイントアップ！,Got a Sacred Shield! Your defensive power was 100 points up!,obj39（数据引用）,44 catalog stage_flags,道具 / 装备 / 钥匙：拾取与使用
+176,昇華の翼を手に入れた！,Got wings to fly up!,obj107（数据引用）,45 catalog,道具 / 装备 / 钥匙：拾取与使用
+180,魔法の鍵を手に入れた！,Got the magic key!,obj111（数据引用）,46 catalog,道具 / 装备 / 钥匙：拾取与使用
+159,聖　剣を手に入れた。攻撃力が５０ポイントアップ！,Got a Holy Sword! Your offensive power was 50 points up!,obj33（数据引用）,48 catalog,道具 / 装备 / 钥匙：拾取与使用
+60,「十字架を持っていれば、ゾンビやバンパイアに対する攻撃力が２倍になる。特にバンパイアは十字架を持っていないと倒せないだろう。これより上の階のどこかにあるらしいが……。」,"""If you carry a cross, the strength of Zombies and Vampires will be cut in half. It is near impossible to defeat them without a cross, especially Vampires. A cross is on a floor higher than this one.""",obj160（数据引用）,—,道具 / 装备 / 钥匙：拾取与使用
 142,勇者のオーブを手に入れた！,Got the orb of the hero.,obj24（数据引用）,catalog,道具 / 装备 / 钥匙：拾取与使用
 147,扉の鍵がない！,Don't have the key.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,道具 / 装备 / 钥匙：拾取与使用
 148,青色の鍵がない！,Don't have the blue key.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,道具 / 装备 / 钥匙：拾取与使用
 149,赤色の鍵がない！,Don't have the red key.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,道具 / 装备 / 钥匙：拾取与使用
 151,飛翔のオーブは階段のとなりでなくては使えない！,You must be near the stairs to use the orb of flying!,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,道具 / 装备 / 钥匙：拾取与使用
-152,飛翔のオーブを手に入れた！,Got the orb of flying.,obj26（数据引用）,1 catalog,道具 / 装备 / 钥匙：拾取与使用
-153,知恵のオーブを手に入れた！,Got the orb of wisdom.,obj25（数据引用）,5 catalog,道具 / 装备 / 钥匙：拾取与使用
-156,鉄の剣を手に入れた。攻撃力が１０ポイントアップ！,Got an Iron Sword! Your offensive power was 10 points up!,obj30（数据引用）,5 catalog,道具 / 装备 / 钥匙：拾取与使用
-157,銀の剣を手に入れた。攻撃力が２０ポイントアップ！,Got a Silver Sword! Your offensive power was 20 points up!,obj31（数据引用）,17 catalog,道具 / 装备 / 钥匙：拾取与使用
-158,騎士の剣を手に入れた。攻撃力が４０ポイントアップ！,Got a Sword of Knight! Your offensive power was 40 points up!,obj32（数据引用）,33 catalog,道具 / 装备 / 钥匙：拾取与使用
-159,聖　剣を手に入れた。攻撃力が５０ポイントアップ！,Got a Holy Sword! Your offensive power was 50 points up!,obj33（数据引用）,48 catalog,道具 / 装备 / 钥匙：拾取与使用
-160,神　剣を手に入れた。攻撃力が１００ポイントアップ！,Got a Sacred Sword! Your offensive power was 100 points up!,obj34（数据引用）,13 catalog stage_flags,道具 / 装备 / 钥匙：拾取与使用
-161,鉄の盾を手に入れた。防御力が１０ポイントアップ！,Got an Iron Shield! Your defensive power was 10 points up!,obj35（数据引用）,9 catalog,道具 / 装备 / 钥匙：拾取与使用
-162,銀の盾を手に入れた。防御力が２０ポイントアップ！,Got a Silver Shield! Your defensive power was 20 points up!,obj36（数据引用）,11 catalog,道具 / 装备 / 钥匙：拾取与使用
-163,騎士の盾を手に入れた。防御力４０がポイントアップ！,Got a Shield of Knight! Your defensive power was 40 points up!,obj37（数据引用）,38 catalog,道具 / 装备 / 钥匙：拾取与使用
-164,聖　盾を手に入れた。防御力が５０ポイントアップ！,Got a Holy Shield! Your defensive power was 50 points up!,obj38（数据引用）,43 catalog,道具 / 装备 / 钥匙：拾取与使用
-165,神　盾を手に入れた。防御力が１００ポイントアップ！,Got a Sacred Shield! Your defensive power was 100 points up!,obj39（数据引用）,44 catalog stage_flags,道具 / 装备 / 钥匙：拾取与使用
-166,赤い回復薬を手に入れた。生命力が５０ポイントアップ！,Got a red elixir. Your vital power was 50 points up!,obj11（数据引用）,"1,3-9,20 catalog stage_flags",道具 / 装备 / 钥匙：拾取与使用
-167,青い回復薬を手に入れた。生命力が２００ポイントアップ！,Got a blue elixir. Your vital power was 200 points up!,obj12（数据引用）,"1-4,7-8,10 catalog",道具 / 装备 / 钥匙：拾取与使用
-168,赤のクリスタルを手に入れた。攻撃力が１ポイントアップ！,Got a red crystal. Your offensive power was 1 point up!,obj13（数据引用）,"1,3-4,7-10 catalog",道具 / 装备 / 钥匙：拾取与使用
-169,青のクリスタルを手に入れた。防御力が１ポイントアップ！,Got a blue crystal. Your defensive power was 1 point up!,obj14（数据引用）,"1,3,5-6,8-10 catalog",道具 / 装备 / 钥匙：拾取与使用
 171,十字架を手に入れた！バンパイア、ゾンビに対する攻撃力が２倍になった！,Got a cross! Your offensive power against Vampires and Zombies has doubled.,obj103（数据引用）,catalog,道具 / 装备 / 钥匙：拾取与使用
 172,エリクサーを手に入れた！,Recieved the Magic Elixir.,obj104（数据引用）,catalog,道具 / 装备 / 钥匙：拾取与使用
 173,マトックを手に入れた！,Got the Magic Mattock.,obj114（数据引用）,catalog,道具 / 装备 / 钥匙：拾取与使用
-174,破壊の玉を手に入れた！,Got the Destructible Ball!,obj105（数据引用）,37 catalog,道具 / 装备 / 钥匙：拾取与使用
 175,空間転移の秘宝を手に入れた！,Got the Warp Staff!,obj106（数据引用）,catalog,道具 / 装备 / 钥匙：拾取与使用
-176,昇華の翼を手に入れた！,Got wings to fly up!,obj107（数据引用）,45 catalog,道具 / 装备 / 钥匙：拾取与使用
 177,降臨の翼を手に入れた！,Got wings to fly down!,obj108（数据引用）,catalog,道具 / 装备 / 钥匙：拾取与使用
 178,ドラゴンスレーヤーを手に入れた！ドラゴンに対する攻撃力が２倍になった！,Got the Dragon Slayer! Your attack power against the Dragon has doubled!,obj109（数据引用）,catalog,道具 / 装备 / 钥匙：拾取与使用
 179,雪の結晶を手に入れた！,Got the snow crystal!,obj110（数据引用）,catalog,道具 / 装备 / 钥匙：拾取与使用
-180,魔法の鍵を手に入れた！,Got the magic key!,obj111（数据引用）,46 catalog,道具 / 装备 / 钥匙：拾取与使用
 181,スーパーマトックを手に入れた！,Got the Super Magic Mattock!,obj112（数据引用）,catalog,道具 / 装备 / 钥匙：拾取与使用
-182,幸運の金貨を手に入れた！敵が持っているＧＯＬＤ数が２倍になる。,Got the Lucky Gold! You can get twice gold which monster has from now.,obj113（数据引用）,00F catalog,道具 / 装备 / 钥匙：拾取与使用
 205,枚手に入れた！,Gold.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,道具 / 装备 / 钥匙：拾取与使用
 252,鍵を持ってないよ！,You don't have a key!,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,道具 / 装备 / 钥匙：拾取与使用
-254,赤い回復薬を手に入れた。生命力が１００ポイントアップ！,Got a red elixir. Your vital power was 100 points up!,obj66（数据引用）,"11-12,14,16-19 catalog",道具 / 装备 / 钥匙：拾取与使用
-255,赤い回復薬を手に入れた。生命力が２００ポイントアップ！,Got a red elixir. Your vital power was 200 points up!,obj67（数据引用）,"31,33-34,37-40 catalog",道具 / 装备 / 钥匙：拾取与使用
-256,赤い回復薬を手に入れた。生命力が２５０ポイントアップ！,Got a red elixir. Your vital power was 250 points up!,obj68（数据引用）,"41,43-44,46-48 catalog",道具 / 装备 / 钥匙：拾取与使用
-257,青い回復薬を手に入れた。生命力が４００ポイントアップ！,Got a blue elixir. Your vital power was 400 points up!,obj76（数据引用）,"11-12,15,17,20 catalog",道具 / 装备 / 钥匙：拾取与使用
-258,青い回復薬を手に入れた。生命力が８００ポイントアップ！,Got a blue elixir. Your vital power was 800 points up!,obj77（数据引用）,"31-34,36-38,40 catalog",道具 / 装备 / 钥匙：拾取与使用
-259,青い回復薬を手に入れた。生命力が１０００ポイントアップ！,Got a blue elixir. Your vital power was 1000 points up!,obj78（数据引用）,"41-43,45,48 catalog",道具 / 装备 / 钥匙：拾取与使用
-260,赤のクリスタルを手に入れた。攻撃力が２ポイントアップ！,Got a red crystal. Your offensive power was 2 points up!,obj80（数据引用）,"11-12,16-20 catalog",道具 / 装备 / 钥匙：拾取与使用
-261,赤のクリスタルを手に入れた。攻撃力が４ポイントアップ！,Got a red crystal. Your offensive power was 4 points up!,obj81（数据引用）,"31-32,34,37,39-40 catalog",道具 / 装备 / 钥匙：拾取与使用
-262,赤のクリスタルを手に入れた。攻撃力が５ポイントアップ！,Got a red crystal. Your offensive power was 5 points up!,obj82（数据引用）,"41,45-48 catalog",道具 / 装备 / 钥匙：拾取与使用
-263,青のクリスタルを手に入れた。防御力が２ポイントアップ！,Got a blue crystal. Your defensive power was 2 points up!,obj83（数据引用）,"12,14-18,20 catalog",道具 / 装备 / 钥匙：拾取与使用
-264,青のクリスタルを手に入れた。防御力が４ポイントアップ！,Got a blue crystal. Your defensive power was 4 points up!,obj84（数据引用）,"31-32,34,37-40 catalog",道具 / 装备 / 钥匙：拾取与使用
-265,青のクリスタルを手に入れた。防御力が５ポイントアップ！,Got a blue crystal. Your defensive power was 5 points up!,obj85（数据引用）,"41-42,45,47-48 catalog",道具 / 装备 / 钥匙：拾取与使用
+206,「この祭壇に,"""If you offer me",obj22（数据引用）,"4,12,32,46 catalog",商人 · 祭坛 · 积分石 · 智慧之戒问答
 86,「紫の鍵を大特価の５０ＧＯＬＤで売るよ! 買わないかい?」,"""I will sell a blue key at very special price (50 gold)! Will you buy it?""",obj18（数据引用）,6 catalog,商人 · 祭坛 · 积分石 · 智慧之戒问答
 87,「鍵を５個セットで５０ＧＯＬＤで売るよ! 買わないかい?」,"""I will sell five keys for 50 Gold! Will you buy them?""",obj41（数据引用）,7 catalog,商人 · 祭坛 · 积分石 · 智慧之戒问答
 88,「希少品の赤い鍵を８００ＧＯＬＤで売るよ！買わないかい？」,"""I will sell the rare red key for 800 Gold! Will you buy it?""",obj156（数据引用）,12,商人 · 祭坛 · 积分石 · 智慧之戒问答
-89,「うちの店は鍵をいくらでも売るよ。１つ１０００ＧＯＬＤだが買うかい？」,"""My store will sell as many keys as you need. They are 1000 Gold each. Will you buy them?""",obj17（数据引用）,catalog,商人 · 祭坛 · 积分石 · 智慧之戒问答
 90,「紫の鍵を２００ＧＯＬＤで売るよ！買わないかい？」,"""I will sell a blue key for 200 Gold! Will you buy it?""",obj159（数据引用）,15,商人 · 祭坛 · 积分石 · 智慧之戒问答
 92,「鍵を４個と紫の鍵をセットにして１０００ＧＯＬＤだ！買うかい？」,"""I will sell four keys and a blue key for 1000 Gold! Will you buy them?""",obj162（数据引用）,31,商人 · 祭坛 · 积分石 · 智慧之戒问答
 93,「鍵３個を大サービスの２００ＧＯＬＤで売るよ！早い者勝ちだよ！」,"""I will sell three keys at special price (200 gold). First come, first served.""",obj164（数据引用）,38,商人 · 祭坛 · 积分石 · 智慧之戒问答
 94,「紫の鍵が３個で２０００ＧＯＬＤだが、買うかい？」,"""2000 Golds for three blue keys. Deal?""",obj166（数据引用）,39,商人 · 祭坛 · 积分石 · 智慧之戒问答
 95,「１０００ＧＯＬＤで生命力を２０００ポイント回復してあげるよ。」,"""I will increase your life 2000 points at 1000 Gold.""",obj168（数据引用）,45,商人 · 祭坛 · 积分石 · 智慧之戒问答
 96,「超希少品のスーパーマトックを４０００ＧＯＬＤで買わないかい？」,"""Would you like to buy a super mattock (it's very rare) for 4000 Gold?""",obj170（数据引用）,47,商人 · 祭坛 · 积分石 · 智慧之戒问答
+89,「うちの店は鍵をいくらでも売るよ。１つ１０００ＧＯＬＤだが買うかい？」,"""My store will sell as many keys as you need. They are 1000 Gold each. Will you buy them?""",obj17（数据引用）,catalog,商人 · 祭坛 · 积分石 · 智慧之戒问答
 204,ＧＯＬＤを,. Recieved,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,商人 · 祭坛 · 积分石 · 智慧之戒问答
-206,「この祭壇に,"""If you offer me",obj22（数据引用）,"4,12,32,46 catalog",商人 · 祭坛 · 积分石 · 智慧之戒问答
 210,ポイント回復,points.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,商人 · 祭坛 · 积分石 · 智慧之戒问答
 224,「この階までのあなたの生命力、防御力、攻撃力、鍵の個数からあなたの実力を評価すると・・・,"""Judging by your vital power, offensive power, defensive power, and number of keys, you have",obj69（数据引用）,catalog,商人 · 祭坛 · 积分石 · 智慧之戒问答
 297,ポイント回復,points up!,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,商人 · 祭坛 · 积分石 · 智慧之戒问答
 298,ＧＯＬＤを,Got,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,商人 · 祭坛 · 积分石 · 智慧之戒问答
+139,階段を上った。,Went up the stairs.,地形4、地形6、地形8 等47项（数据引用）,"1-9,11-19,21-29,31-39,41-48 00F",地形与调查提示（门、楼梯、暗墙、熔岩、人物）
+140,階段を下った。,Went down the stairs.,地形5、地形7、地形9 等46项（数据引用）,"2-43,45-49",地形与调查提示（门、楼梯、暗墙、熔岩、人物）
+141,壁がくずれた！,The wall collapsed!,obj89（数据引用）,"5,9,12,14,16,19,35-36,41 catalog",地形与调查提示（门、楼梯、暗墙、熔岩、人物）
+183,溶岩が流れている。,The lava is really hot.,obj79（数据引用）,"13,26 catalog",地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 63,「このブロックに、この魔法の塔の主である大魔導師がいるが、今のおまえさんでは戦っても死にに行くようなものじゃろう。とりあえず、うまくやりすごして上のブロックに行くのが正解じゃ。」,"""The Great Magic Master is in this area. He is a proprietor of this magic tower. At your strenght, to attack him means death. It stands to reason that you should not face him, but rather, get items on higher levels first.""",obj140（数据引用）,21,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 70,「門番のいる所には必ず門があるよ。逆に門のある階には、それを守っている敵がいるよ。だから……。」,"""There is never a gate without a Gate-Keeper. Conversely there are always enemies who keep the gate on floors that have gates. So,""",obj165（数据引用）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 136,扉が開いた。,The door has opened.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 137,青色の扉が開いた。,The blue door has opened.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 138,赤色の扉が開いた。,The red door has opened.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
-139,階段を上った。,Went up the stairs.,地形4、地形6、地形8 等47项（数据引用）,"1-9,11-19,21-29,31-39,41-48 00F",地形与调查提示（门、楼梯、暗墙、熔岩、人物）
-140,階段を下った。,Went down the stairs.,地形5、地形7、地形9 等46项（数据引用）,"2-43,45-49",地形与调查提示（门、楼梯、暗墙、熔岩、人物）
-141,壁がくずれた！,The wall collapsed!,obj89（数据引用）,"5,9,12,14,16,19,35-36,41 catalog",地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 143,老人がいる。,You see an old man.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 144,商人がいる。,You see a merchant.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 145,妖精がいる。,You see a fairy.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 146,盗賊がいる。,You see a thief.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 150,階段がある。,You see stairs.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
-183,溶岩が流れている。,The lava is really hot.,obj79（数据引用）,"13,26 catalog",地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 202,溶岩が固まって道ができた！,The lava cooled and turned to stone.,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 245,道が壁に変わった！,The road changed to the wall!,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 267,0,0,地形116、地形117（数据引用）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）

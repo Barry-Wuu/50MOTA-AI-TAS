@@ -13,6 +13,14 @@
 - `运行时按计算下标引用`——文案确实会在游戏里显示，但引用处的下标是算出来的（按楼层、分支、序号偏移，如盗贼台词与状态窗标签），我没能静态定位到具体引用点，所以直说"未定位"而不猜归属；
 - 出现层为 `—` 表示它不来自地图数据，因此没有楼层概念。
 
+**排序方式**：每一章内部按「出现层」升序排列（多层文案取其最小楼层；`0` 即地下层，排最前）；
+同一楼层内保持原编号顺序。「出现层」仍为 `—` 的条目（不挂地图数据、或运行时下标定位不到）统一排在**该章末尾**，章内相对顺序不变。
+所以条目的 `[n]` 编号在章内是乱序的——编号是文本表下标，与阅读顺序无关，检索请按编号查。
+
+**本轮补齐的楼层**：`[79] obj151` → 2,16；`[84] obj173` → 2。
+其余 `—` 条目经三路核对（静态 `mapObject`、`FLOOR_WRITES` 事件写入、`DYNEV` 动态投放）确认不落在地图格上，不用猜的楼层填。
+
+
 ### 怪物与 BOSS 名称（34 条）
 
 **[100]** 　obj5（数据引用） 　·  出现层：1,3-9,30,34 catalog
@@ -27,12 +35,6 @@ EN: Green Slime
 >
 EN: Red Slime
 
-**[102]** 　obj45（数据引用） 　·  出现层：11-12,14-19,30,34 catalog
-
-> Ｂスライム
->
-EN: Big Slime
-
 **[103]** 　obj7（数据引用） 　·  出现层：1,3-9,11-12,15,19-20,34 catalog
 
 > バット
@@ -44,24 +46,6 @@ EN: Bat
 > 僧　侶
 >
 EN: Priest
-
-**[105]** 　obj46（数据引用） 　·  出现层：11-12,14-20 catalog
-
-> 上級僧侶
->
-EN: Superion Priest
-
-**[106]** 　obj29（数据引用） 　·  出现层：8,17 catalog
-
-> 門番Ｃ
->
-EN: Gate-Keeper C
-
-**[107]** 　obj15（数据引用） 　·  出现层：2,32,38 catalog
-
-> 門番Ｂ
->
-EN: Gate-Keeper B
 
 **[108]** 　obj9（数据引用） 　·  出现层：1,3-4,6-10,46 catalog
 
@@ -75,11 +59,35 @@ EN: Skeleton C
 >
 EN: Skeleton B
 
+**[107]** 　obj15（数据引用） 　·  出现层：2,32,38 catalog
+
+> 門番Ｂ
+>
+EN: Gate-Keeper B
+
+**[106]** 　obj29（数据引用） 　·  出现层：8,17 catalog
+
+> 門番Ｃ
+>
+EN: Gate-Keeper C
+
 **[110]** 　obj16（数据引用） 　·  出现层：10 catalog stage_flags
 
 > スケルトンＡ
 >
 EN: Skeleton A
+
+**[102]** 　obj45（数据引用） 　·  出现层：11-12,14-19,30,34 catalog
+
+> Ｂスライム
+>
+EN: Big Slime
+
+**[105]** 　obj46（数据引用） 　·  出现层：11-12,14-20 catalog
+
+> 上級僧侶
+>
+EN: Superion Priest
 
 **[111]** 　obj47（数据引用） 　·  出现层：11-12,14-20,46 catalog
 
@@ -105,41 +113,29 @@ EN: Zombie Knight
 >
 EN: Rock
 
-**[115]** 　obj57（数据引用） 　·  出现层：catalog
-
-> 魔導師ゼノ
->
-EN: Magic Serg. Zeno
-
-**[116]** 　obj58（数据引用） 　·  出现层：41-43,45,48 catalog
-
-> 魔導師
->
-EN: Magic Sergeant
-
-**[117]** 　obj59（数据引用） 　·  出现层：catalog
-
-> バンパイア
->
-EN: Vampire
-
 **[118]** 　obj71（数据引用） 　·  出现层：15 catalog
 
 > 大ダコ
 >
 EN: Giant Octopus
 
-**[119]** 　obj74（数据引用） 　·  出现层：35 catalog
+**[244]** 　obj50、obj51、obj52 等5项（数据引用） 　·  出现层：15 catalog
 
-> ドラゴン
+> 大ダコの一部
 >
-EN: Dragon
+EN: some of Giant Octopus
 
-**[120]** 　obj90（数据引用） 　·  出现层：40 catalog
+**[125]** 　obj95（数据引用） 　·  出现层：16,31-34,36-40 catalog
 
-> 金騎士
+> スライムマン
 >
-EN: Golden Knight
+EN: Slime Man
+
+**[126]** 　obj96（数据引用） 　·  出现层：25 catalog
+
+> 大魔導師
+>
+EN: Great Magic Master
 
 **[121]** 　obj91（数据引用） 　·  出现层：31-32,34,36-40,46 catalog
 
@@ -165,17 +161,23 @@ EN: Soldier
 >
 EN: Ghost Soldier
 
-**[125]** 　obj95（数据引用） 　·  出现层：16,31-34,36-40 catalog
+**[119]** 　obj74（数据引用） 　·  出现层：35 catalog
 
-> スライムマン
+> ドラゴン
 >
-EN: Slime Man
+EN: Dragon
 
-**[126]** 　obj96（数据引用） 　·  出现层：25 catalog
+**[120]** 　obj90（数据引用） 　·  出现层：40 catalog
 
-> 大魔導師
+> 金騎士
 >
-EN: Great Magic Master
+EN: Golden Knight
+
+**[116]** 　obj58（数据引用） 　·  出现层：41-43,45,48 catalog
+
+> 魔導師
+>
+EN: Magic Sergeant
 
 **[127]** 　obj97（数据引用） 　·  出现层：41-43,45-48 catalog
 
@@ -213,11 +215,17 @@ EN: Dark Knight
 >
 EN: Gate-Keeper A
 
-**[244]** 　obj50、obj51、obj52 等5项（数据引用） 　·  出现层：15 catalog
+**[115]** 　obj57（数据引用） 　·  出现层：catalog
 
-> 大ダコの一部
+> 魔導師ゼノ
 >
-EN: some of Giant Octopus
+EN: Magic Serg. Zeno
+
+**[117]** 　obj59（数据引用） 　·  出现层：catalog
+
+> バンパイア
+>
+EN: Vampire
 
 ### 装备与道具名称（菜单用的短名）（25 条）
 
@@ -373,17 +381,17 @@ EN: The Lucky Gold
 
 ### 战斗与道具使用反馈提示（30 条）
 
-**[57]** 　obj40（数据引用） 　·  出现层：catalog
-
-> 「この塔は全部で５０階建てで、１０階ごとに１つのブロックを形成している。塔の内部には、各ブロックを統括するボスが配置されていて、そいつらを倒さないことには、それより上の階に行くことはできないだろう。」
->
-EN: "This tower has fifty floor. Every ten floor form one area. The boss who controls each area, are posted in this tower. You cannot ascend from there if you don't beat them."
-
 **[74]** 　obj148（数据引用） 　·  出现层：45
 
 > 「この塔の４４階は幻の階じゃ。普通の階段を登り降りしたのでは行くことができないらしい。ワープでもしないかぎり行くことは不可能じゃろう。」
 >
 EN: "The 44th floor in this tower is an illusion. It seems that we cannot go to there even if we use the stairs. I think that it is impossible to get there without teleporting."
+
+**[57]** 　obj40（数据引用） 　·  出现层：catalog
+
+> 「この塔は全部で５０階建てで、１０階ごとに１つのブロックを形成している。塔の内部には、各ブロックを統括するボスが配置されていて、そいつらを倒さないことには、それより上の階に行くことはできないだろう。」
+>
+EN: "This tower has fifty floor. Every ten floor form one area. The boss who controls each area, are posted in this tower. You cannot ascend from there if you don't beat them."
 
 **[154]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：—
 
@@ -709,6 +717,12 @@ EN: The thief says "What a relief you're okay!
 　　 Nevertheless, you are so lucky that you just woke up.
 　　 I've finished the escape tunnel. Let's break out."
 
+**[68]** 　obj144（数据引用） 　·  出现层：36
+
+> 「この階の４つの抜け穴をうまく使えば、強い敵とは戦わずに上の階に行けるじゃろう。」
+>
+EN: "You may be able to go upstairs without fighting strong enemies, if you could use four tunnels skillfully in this floor."
+
 **[5]** 　代码 `strNumber=5` ← attackMonster/directCheck/pointCheck 　·  出现层：—
 
 > 盗賊「よし、じゃあ俺は先に行かせてもらうぜ。ああ、それからおまえの剣と盾、あいつらに取り上げられちまったみたいだな。この塔の中を丸腰で歩き回るのはやめた方がいい。確か５階に剣、９階に盾があったはずだから、まずそれを手に入れることを考えるんだな。じゃあ、またなっ！」
@@ -781,12 +795,6 @@ EN: The thief says "Humph. There is only one reason why I'm here. And this is it
 >
 EN: "Did you notice the secret passages on the 9th, 16th, and 18th floors?"
 
-**[68]** 　obj144（数据引用） 　·  出现层：36
-
-> 「この階の４つの抜け穴をうまく使えば、強い敵とは戦わずに上の階に行けるじゃろう。」
->
-EN: "You may be able to go upstairs without fighting strong enemies, if you could use four tunnels skillfully in this floor."
-
 **[99]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：—
 
 > 盗賊「ようまたあったな！無事だったか？これは聞いた話なんだが、２５階のボスを倒すと『時空の門』がどこかにできるらしいぞ。」
@@ -794,6 +802,12 @@ EN: "You may be able to go upstairs without fighting strong enemies, if you coul
 EN: The thief says "Ah!, we meet again! Thank goodness you're alive! I heard that if you beat the boss of 25th floor, 'the gate of time and space' will appear somewhere."
 
 ### 具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）（35 条）
+
+**[23]** 　obj44（数据引用） 　·  出现层：26 catalog
+
+> 勇者「これはっ……！人形だっ！」
+>
+EN: The brave man says "Oh! What? This is a doll!"
 
 **[10]** 　obj177（数据引用） 　·  出现层：—
 
@@ -842,12 +856,6 @@ EN: Vampire "Good god! I've never dreamed I'd be defeated. There is no doubt of 
 > 大魔導師「・・・ジ・・・ユウシャ・・・・・コロス・・・」
 >
 EN: Great Magic Master "-K-I-L-L- -A-N- -I-N-V-A-D-E-R- "
-
-**[23]** 　obj44（数据引用） 　·  出现层：26 catalog
-
-> 勇者「これはっ……！人形だっ！」
->
-EN: The brave man says "Oh! What? This is a doll!"
 
 **[27]** 　代码 `strNumber=27` ← eventMT 　·  出现层：—
 
@@ -1007,35 +1015,35 @@ EN: The brave man says "Hey!"
 
 ### 无名提示与谜面（石板/老人语气，未具名）（35 条）
 
-**[2]** 　代码 `strNumber=2` ← eventMT 　·  出现层：—
+**[79]** 　obj151（数据引用） 　·  出现层：2,16
 
-> 「・・・・・おい・・・」
+> 「もう、話は終わりじゃ。」
 >
-EN: "------ Hey!"
+EN: "I have done what I can. Good luck!"
 
-**[3]** 　代码 `strNumber=3` ← eventMT 　·  出现层：—
+**[80]** 　obj152（数据引用） 　·  出现层：2
 
-> 「・・・・・おいっ！起きろ！」
+> 「おお、助けてくれてありがとうよ。お礼に、そなたの攻撃力と防御力を３％だけあげてやろう」（攻撃力と防御力が上がった!）
 >
-EN: "------ Hey! Wake up!"
+EN: "Oh, thank you for your help. I will raise your offensive and defensive power 3 percent as a token of my gratitude. [You begin feeling stronger]"
 
-**[18]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：—
+**[84]** 　obj173（数据引用） 　·  出现层：2
 
-> 「お金が足りないよ！」
+> 「有効に使ってね!」
 >
-EN: "You don't have enough money."
+EN: "Please, use it wisely."
 
-**[22]** 　代码 `strNumber=22` ← eventMT 　·  出现层：—
+**[85]** 　obj174（数据引用） 　·  出现层：2
 
-> 「・・・ジ・・・トキハキタレリ・・・エラバレシモノヨ、シヲオソレヌナラバジクウノモンヲクグリテ、ワガモトヘクルガヨイ・・・」
+> 「やあ、助けてくれてありがとう。少ないけれど、お礼にとっておいてくれ！」（１０００ＧＯＬＤもらった!）
 >
-EN: "Now is the time. You were chosen. If you aren't afraid of Death, you should go through the gate of Time and Space, and come to me."
+EN: "Thank you for your help. Please accept money as a small token of my gratitude. (Got 1000 Gold.)"
 
-**[53]** 　obj138（数据引用） 　·  出现层：23
+**[81]** 　obj153（数据引用） 　·  出现层：3
 
-> 「わしが言うことは何もない。この階に、あるメッセージが隠されているじゃろう。」
+> 「おぬしにこの勇者のオーブをさずけよう。これを持っていれば今いる階のモンスターの能力を調べてダメージを予測してくれるじゃろう。有効に使うのじゃ」
 >
-EN: "I have nothing to say. A certain message may be hidden in this room."
+EN: "I will grant you the orb of the hero. It will forecast the results of fighting monsters on the current floor. Use it often."
 
 **[55]** 　obj175（数据引用） 　·  出现层：4
 
@@ -1061,23 +1069,29 @@ EN: "I heard that you can find a red key at two places in this area."
 >
 EN: "In this area, if you don't raise your offensive power at an altar a few times, you may not be able to beat 'Rock' monsters. Be careful!"
 
+**[53]** 　obj138（数据引用） 　·  出现层：23
+
+> 「わしが言うことは何もない。この階に、あるメッセージが隠されているじゃろう。」
+>
+EN: "I have nothing to say. A certain message may be hidden in this room."
+
 **[64]** 　obj141（数据引用） 　·  出现层：27
 
 > 「この階まで来た段階で、生命力１５００、攻撃力８０、防御力９８、鍵５個、紫の鍵が１個あれば、ほぼ理想的と言えるじゃろう。」
 >
 EN: "In the stage of this floor, if your strength is 1500, offensive power is 80, defensive power is 98, you have five keys, and one blue key, you are almost ideal."
 
+**[91]** 　obj161（数据引用） 　·  出现层：28
+
+> 「鍵１個を１００ＧＯＬＤで買うよ。鍵を売るかい？」
+>
+EN: "I will buy your keys at 100 Gold a piece. Will you sell me keys?"
+
 **[65]** 　obj142（数据引用） 　·  出现层：31
 
 > 「二刀流の剣士は攻撃力がものすごく高い。まともに戦えば大きなダメージを受けるだろう。一撃で倒せるようになるまで、戦わない方がよかろう。」
 >
 EN: "The offensive power of the swordsman who uses two swords is too high. He can use two swords at the same time. You will lose much strength if you fight him normally. You should never fight him before your attacks are stronger than his."
-
-**[66]** 　obj163（数据引用） 　·  出现层：—
-
-> 「この塔は５０階建てだが、実際には４９階までしか行けないようだ。」
->
-EN: "This tower is 50 stories high, but in reality it seems that you cannot go up to the 50th floor."
 
 **[67]** 　obj143（数据引用） 　·  出现层：33
 
@@ -1097,23 +1111,11 @@ EN: "You need the mattock in order to get the treasure which is in the item ware
 >
 EN: "At three o'clock, the secret treasure that lets one travel in space will appear."
 
-**[72]** 　obj167（数据引用） 　·  出现层：—
-
-> 「この塔のどこかに、幸運の金貨というものがあって、それを持っていると敵を倒したときに得られるお金が２倍になるそうだ。」
->
-EN: "There is a Lucky Gold somewhere in this tower. If you have it, you can get twice as much money when you beat an enemy."
-
 **[73]** 　obj147（数据引用） 　·  出现层：42
 
 > 「魔術師は隣接すると魔法攻撃をしてくる。魔導師ははさまれると生命力を半分にする攻撃をしてくる。魔導師のはさみ攻撃は自分の生命力が高いほど受けるダメージが大きいはずじゃから気をつけてな。」
 >
 EN: "A Magician will attack using magic when he is next to you. The Magic Sergeants will attack and divide the vital power in half when you are caught between two. As for an attack on both sides from the Magic Sergeant, the stronger you are, the more damage you take. So, please be careful."
-
-**[75]** 　obj169（数据引用） 　·  出现层：—
-
-> 「神盾は、魔法使いたちの魔法攻撃を防ぐ力があるらしい。……しかし、この盾は幻の階に隠されているそうだ。」
->
-EN: "The sacred shield can defend you against magic attacks. But I heard this shield is hidden on a floor that doesn't exist."
 
 **[76]** 　obj149（数据引用） 　·  出现层：46
 
@@ -1127,23 +1129,47 @@ EN: "The 41st floor is perfectly symmetrical, and therefore,"
 >
 EN: "It is said that the symbol of 5 on a pair of dice has the force of sealing magic. You had better memorize it till you fight the boss of this area."
 
-**[79]** 　obj151（数据引用） 　·  出现层：—
+**[2]** 　代码 `strNumber=2` ← eventMT 　·  出现层：—
 
-> 「もう、話は終わりじゃ。」
+> 「・・・・・おい・・・」
 >
-EN: "I have done what I can. Good luck!"
+EN: "------ Hey!"
 
-**[80]** 　obj152（数据引用） 　·  出现层：2
+**[3]** 　代码 `strNumber=3` ← eventMT 　·  出现层：—
 
-> 「おお、助けてくれてありがとうよ。お礼に、そなたの攻撃力と防御力を３％だけあげてやろう」（攻撃力と防御力が上がった!）
+> 「・・・・・おいっ！起きろ！」
 >
-EN: "Oh, thank you for your help. I will raise your offensive and defensive power 3 percent as a token of my gratitude. [You begin feeling stronger]"
+EN: "------ Hey! Wake up!"
 
-**[81]** 　obj153（数据引用） 　·  出现层：3
+**[18]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：—
 
-> 「おぬしにこの勇者のオーブをさずけよう。これを持っていれば今いる階のモンスターの能力を調べてダメージを予測してくれるじゃろう。有効に使うのじゃ」
+> 「お金が足りないよ！」
 >
-EN: "I will grant you the orb of the hero. It will forecast the results of fighting monsters on the current floor. Use it often."
+EN: "You don't have enough money."
+
+**[22]** 　代码 `strNumber=22` ← eventMT 　·  出现层：—
+
+> 「・・・ジ・・・トキハキタレリ・・・エラバレシモノヨ、シヲオソレヌナラバジクウノモンヲクグリテ、ワガモトヘクルガヨイ・・・」
+>
+EN: "Now is the time. You were chosen. If you aren't afraid of Death, you should go through the gate of Time and Space, and come to me."
+
+**[66]** 　obj163（数据引用） 　·  出现层：—
+
+> 「この塔は５０階建てだが、実際には４９階までしか行けないようだ。」
+>
+EN: "This tower is 50 stories high, but in reality it seems that you cannot go up to the 50th floor."
+
+**[72]** 　obj167（数据引用） 　·  出现层：—
+
+> 「この塔のどこかに、幸運の金貨というものがあって、それを持っていると敵を倒したときに得られるお金が２倍になるそうだ。」
+>
+EN: "There is a Lucky Gold somewhere in this tower. If you have it, you can get twice as much money when you beat an enemy."
+
+**[75]** 　obj169（数据引用） 　·  出现层：—
+
+> 「神盾は、魔法使いたちの魔法攻撃を防ぐ力があるらしい。……しかし、この盾は幻の階に隠されているそうだ。」
+>
+EN: "The sacred shield can defend you against magic attacks. But I heard this shield is hidden on a floor that doesn't exist."
 
 **[82]** 　obj154（数据引用） 　·  出现层：—
 
@@ -1156,24 +1182,6 @@ EN: "Thank goodness, you found me. I will give you an elixir as a symbol of my g
 > 「もう、話す事はないよ。」
 >
 EN: "Be careful. I have nothing more to say."
-
-**[84]** 　obj173（数据引用） 　·  出现层：—
-
-> 「有効に使ってね!」
->
-EN: "Please, use it wisely."
-
-**[85]** 　obj174（数据引用） 　·  出现层：2
-
-> 「やあ、助けてくれてありがとう。少ないけれど、お礼にとっておいてくれ！」（１０００ＧＯＬＤもらった!）
->
-EN: "Thank you for your help. Please accept money as a small token of my gratitude. (Got 1000 Gold.)"
-
-**[91]** 　obj161（数据引用） 　·  出现层：28
-
-> 「鍵１個を１００ＧＯＬＤで買うよ。鍵を売るかい？」
->
-EN: "I will buy your keys at 100 Gold a piece. Will you sell me keys?"
 
 **[98]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：—
 
@@ -1219,11 +1227,11 @@ EN: "Thank you for playing this game. Please wait for completing."
 
 ### 道具 / 装备 / 钥匙：拾取与使用（51 条）
 
-**[60]** 　obj160（数据引用） 　·  出现层：—
+**[182]** 　obj113（数据引用） 　·  出现层：00F catalog
 
-> 「十字架を持っていれば、ゾンビやバンパイアに対する攻撃力が２倍になる。特にバンパイアは十字架を持っていないと倒せないだろう。これより上の階のどこかにあるらしいが……。」
+> 幸運の金貨を手に入れた！敵が持っているＧＯＬＤ数が２倍になる。
 >
-EN: "If you carry a cross, the strength of Zombies and Vampires will be cut in half. It is near impossible to defeat them without a cross, especially Vampires. A cross is on a floor higher than this one."
+EN: Got the Lucky Gold! You can get twice gold which monster has from now.
 
 **[133]** 　obj1（数据引用） 　·  出现层：1-9,11-12,14-20,31-34,36-43,45,47 catalog stage_flags
 
@@ -1231,17 +1239,209 @@ EN: "If you carry a cross, the strength of Zombies and Vampires will be cut in h
 >
 EN: Got a key.
 
+**[152]** 　obj26（数据引用） 　·  出现层：1 catalog
+
+> 飛翔のオーブを手に入れた！
+>
+EN: Got the orb of flying.
+
+**[166]** 　obj11（数据引用） 　·  出现层：1,3-9,20 catalog stage_flags
+
+> 赤い回復薬を手に入れた。生命力が５０ポイントアップ！
+>
+EN: Got a red elixir. Your vital power was 50 points up!
+
+**[167]** 　obj12（数据引用） 　·  出现层：1-4,7-8,10 catalog
+
+> 青い回復薬を手に入れた。生命力が２００ポイントアップ！
+>
+EN: Got a blue elixir. Your vital power was 200 points up!
+
+**[168]** 　obj13（数据引用） 　·  出现层：1,3-4,7-10 catalog
+
+> 赤のクリスタルを手に入れた。攻撃力が１ポイントアップ！
+>
+EN: Got a red crystal. Your offensive power was 1 point up!
+
+**[169]** 　obj14（数据引用） 　·  出现层：1,3,5-6,8-10 catalog
+
+> 青のクリスタルを手に入れた。防御力が１ポイントアップ！
+>
+EN: Got a blue crystal. Your defensive power was 1 point up!
+
 **[134]** 　obj3（数据引用） 　·  出现层：3-4,8,12,14-16,18-19,31-32,37,41-43,47 catalog
 
 > 青色の扉の鍵を手に入れた。
 >
 EN: Got a blue key.
 
+**[153]** 　obj25（数据引用） 　·  出现层：5 catalog
+
+> 知恵のオーブを手に入れた！
+>
+EN: Got the orb of wisdom.
+
+**[156]** 　obj30（数据引用） 　·  出现层：5 catalog
+
+> 鉄の剣を手に入れた。攻撃力が１０ポイントアップ！
+>
+EN: Got an Iron Sword! Your offensive power was 10 points up!
+
 **[135]** 　obj28（数据引用） 　·  出现层：8,37,42 catalog
 
 > 赤色の扉の鍵を手に入れた。
 >
 EN: Got a red key.
+
+**[161]** 　obj35（数据引用） 　·  出现层：9 catalog
+
+> 鉄の盾を手に入れた。防御力が１０ポイントアップ！
+>
+EN: Got an Iron Shield! Your defensive power was 10 points up!
+
+**[162]** 　obj36（数据引用） 　·  出现层：11 catalog
+
+> 銀の盾を手に入れた。防御力が２０ポイントアップ！
+>
+EN: Got a Silver Shield! Your defensive power was 20 points up!
+
+**[254]** 　obj66（数据引用） 　·  出现层：11-12,14,16-19 catalog
+
+> 赤い回復薬を手に入れた。生命力が１００ポイントアップ！
+>
+EN: Got a red elixir. Your vital power was 100 points up!
+
+**[257]** 　obj76（数据引用） 　·  出现层：11-12,15,17,20 catalog
+
+> 青い回復薬を手に入れた。生命力が４００ポイントアップ！
+>
+EN: Got a blue elixir. Your vital power was 400 points up!
+
+**[260]** 　obj80（数据引用） 　·  出现层：11-12,16-20 catalog
+
+> 赤のクリスタルを手に入れた。攻撃力が２ポイントアップ！
+>
+EN: Got a red crystal. Your offensive power was 2 points up!
+
+**[263]** 　obj83（数据引用） 　·  出现层：12,14-18,20 catalog
+
+> 青のクリスタルを手に入れた。防御力が２ポイントアップ！
+>
+EN: Got a blue crystal. Your defensive power was 2 points up!
+
+**[160]** 　obj34（数据引用） 　·  出现层：13 catalog stage_flags
+
+> 神　剣を手に入れた。攻撃力が１００ポイントアップ！
+>
+EN: Got a Sacred Sword! Your offensive power was 100 points up!
+
+**[157]** 　obj31（数据引用） 　·  出现层：17 catalog
+
+> 銀の剣を手に入れた。攻撃力が２０ポイントアップ！
+>
+EN: Got a Silver Sword! Your offensive power was 20 points up!
+
+**[255]** 　obj67（数据引用） 　·  出现层：31,33-34,37-40 catalog
+
+> 赤い回復薬を手に入れた。生命力が２００ポイントアップ！
+>
+EN: Got a red elixir. Your vital power was 200 points up!
+
+**[258]** 　obj77（数据引用） 　·  出现层：31-34,36-38,40 catalog
+
+> 青い回復薬を手に入れた。生命力が８００ポイントアップ！
+>
+EN: Got a blue elixir. Your vital power was 800 points up!
+
+**[261]** 　obj81（数据引用） 　·  出现层：31-32,34,37,39-40 catalog
+
+> 赤のクリスタルを手に入れた。攻撃力が４ポイントアップ！
+>
+EN: Got a red crystal. Your offensive power was 4 points up!
+
+**[264]** 　obj84（数据引用） 　·  出现层：31-32,34,37-40 catalog
+
+> 青のクリスタルを手に入れた。防御力が４ポイントアップ！
+>
+EN: Got a blue crystal. Your defensive power was 4 points up!
+
+**[158]** 　obj32（数据引用） 　·  出现层：33 catalog
+
+> 騎士の剣を手に入れた。攻撃力が４０ポイントアップ！
+>
+EN: Got a Sword of Knight! Your offensive power was 40 points up!
+
+**[174]** 　obj105（数据引用） 　·  出现层：37 catalog
+
+> 破壊の玉を手に入れた！
+>
+EN: Got the Destructible Ball!
+
+**[163]** 　obj37（数据引用） 　·  出现层：38 catalog
+
+> 騎士の盾を手に入れた。防御力４０がポイントアップ！
+>
+EN: Got a Shield of Knight! Your defensive power was 40 points up!
+
+**[256]** 　obj68（数据引用） 　·  出现层：41,43-44,46-48 catalog
+
+> 赤い回復薬を手に入れた。生命力が２５０ポイントアップ！
+>
+EN: Got a red elixir. Your vital power was 250 points up!
+
+**[259]** 　obj78（数据引用） 　·  出现层：41-43,45,48 catalog
+
+> 青い回復薬を手に入れた。生命力が１０００ポイントアップ！
+>
+EN: Got a blue elixir. Your vital power was 1000 points up!
+
+**[262]** 　obj82（数据引用） 　·  出现层：41,45-48 catalog
+
+> 赤のクリスタルを手に入れた。攻撃力が５ポイントアップ！
+>
+EN: Got a red crystal. Your offensive power was 5 points up!
+
+**[265]** 　obj85（数据引用） 　·  出现层：41-42,45,47-48 catalog
+
+> 青のクリスタルを手に入れた。防御力が５ポイントアップ！
+>
+EN: Got a blue crystal. Your defensive power was 5 points up!
+
+**[164]** 　obj38（数据引用） 　·  出现层：43 catalog
+
+> 聖　盾を手に入れた。防御力が５０ポイントアップ！
+>
+EN: Got a Holy Shield! Your defensive power was 50 points up!
+
+**[165]** 　obj39（数据引用） 　·  出现层：44 catalog stage_flags
+
+> 神　盾を手に入れた。防御力が１００ポイントアップ！
+>
+EN: Got a Sacred Shield! Your defensive power was 100 points up!
+
+**[176]** 　obj107（数据引用） 　·  出现层：45 catalog
+
+> 昇華の翼を手に入れた！
+>
+EN: Got wings to fly up!
+
+**[180]** 　obj111（数据引用） 　·  出现层：46 catalog
+
+> 魔法の鍵を手に入れた！
+>
+EN: Got the magic key!
+
+**[159]** 　obj33（数据引用） 　·  出现层：48 catalog
+
+> 聖　剣を手に入れた。攻撃力が５０ポイントアップ！
+>
+EN: Got a Holy Sword! Your offensive power was 50 points up!
+
+**[60]** 　obj160（数据引用） 　·  出现层：—
+
+> 「十字架を持っていれば、ゾンビやバンパイアに対する攻撃力が２倍になる。特にバンパイアは十字架を持っていないと倒せないだろう。これより上の階のどこかにあるらしいが……。」
+>
+EN: "If you carry a cross, the strength of Zombies and Vampires will be cut in half. It is near impossible to defeat them without a cross, especially Vampires. A cross is on a floor higher than this one."
 
 **[142]** 　obj24（数据引用） 　·  出现层：catalog
 
@@ -1273,102 +1473,6 @@ EN: Don't have the red key.
 >
 EN: You must be near the stairs to use the orb of flying!
 
-**[152]** 　obj26（数据引用） 　·  出现层：1 catalog
-
-> 飛翔のオーブを手に入れた！
->
-EN: Got the orb of flying.
-
-**[153]** 　obj25（数据引用） 　·  出现层：5 catalog
-
-> 知恵のオーブを手に入れた！
->
-EN: Got the orb of wisdom.
-
-**[156]** 　obj30（数据引用） 　·  出现层：5 catalog
-
-> 鉄の剣を手に入れた。攻撃力が１０ポイントアップ！
->
-EN: Got an Iron Sword! Your offensive power was 10 points up!
-
-**[157]** 　obj31（数据引用） 　·  出现层：17 catalog
-
-> 銀の剣を手に入れた。攻撃力が２０ポイントアップ！
->
-EN: Got a Silver Sword! Your offensive power was 20 points up!
-
-**[158]** 　obj32（数据引用） 　·  出现层：33 catalog
-
-> 騎士の剣を手に入れた。攻撃力が４０ポイントアップ！
->
-EN: Got a Sword of Knight! Your offensive power was 40 points up!
-
-**[159]** 　obj33（数据引用） 　·  出现层：48 catalog
-
-> 聖　剣を手に入れた。攻撃力が５０ポイントアップ！
->
-EN: Got a Holy Sword! Your offensive power was 50 points up!
-
-**[160]** 　obj34（数据引用） 　·  出现层：13 catalog stage_flags
-
-> 神　剣を手に入れた。攻撃力が１００ポイントアップ！
->
-EN: Got a Sacred Sword! Your offensive power was 100 points up!
-
-**[161]** 　obj35（数据引用） 　·  出现层：9 catalog
-
-> 鉄の盾を手に入れた。防御力が１０ポイントアップ！
->
-EN: Got an Iron Shield! Your defensive power was 10 points up!
-
-**[162]** 　obj36（数据引用） 　·  出现层：11 catalog
-
-> 銀の盾を手に入れた。防御力が２０ポイントアップ！
->
-EN: Got a Silver Shield! Your defensive power was 20 points up!
-
-**[163]** 　obj37（数据引用） 　·  出现层：38 catalog
-
-> 騎士の盾を手に入れた。防御力４０がポイントアップ！
->
-EN: Got a Shield of Knight! Your defensive power was 40 points up!
-
-**[164]** 　obj38（数据引用） 　·  出现层：43 catalog
-
-> 聖　盾を手に入れた。防御力が５０ポイントアップ！
->
-EN: Got a Holy Shield! Your defensive power was 50 points up!
-
-**[165]** 　obj39（数据引用） 　·  出现层：44 catalog stage_flags
-
-> 神　盾を手に入れた。防御力が１００ポイントアップ！
->
-EN: Got a Sacred Shield! Your defensive power was 100 points up!
-
-**[166]** 　obj11（数据引用） 　·  出现层：1,3-9,20 catalog stage_flags
-
-> 赤い回復薬を手に入れた。生命力が５０ポイントアップ！
->
-EN: Got a red elixir. Your vital power was 50 points up!
-
-**[167]** 　obj12（数据引用） 　·  出现层：1-4,7-8,10 catalog
-
-> 青い回復薬を手に入れた。生命力が２００ポイントアップ！
->
-EN: Got a blue elixir. Your vital power was 200 points up!
-
-**[168]** 　obj13（数据引用） 　·  出现层：1,3-4,7-10 catalog
-
-> 赤のクリスタルを手に入れた。攻撃力が１ポイントアップ！
->
-EN: Got a red crystal. Your offensive power was 1 point up!
-
-**[169]** 　obj14（数据引用） 　·  出现层：1,3,5-6,8-10 catalog
-
-> 青のクリスタルを手に入れた。防御力が１ポイントアップ！
->
-EN: Got a blue crystal. Your defensive power was 1 point up!
-
 **[171]** 　obj103（数据引用） 　·  出现层：catalog
 
 > 十字架を手に入れた！バンパイア、ゾンビに対する攻撃力が２倍になった！
@@ -1387,23 +1491,11 @@ EN: Recieved the Magic Elixir.
 >
 EN: Got the Magic Mattock.
 
-**[174]** 　obj105（数据引用） 　·  出现层：37 catalog
-
-> 破壊の玉を手に入れた！
->
-EN: Got the Destructible Ball!
-
 **[175]** 　obj106（数据引用） 　·  出现层：catalog
 
 > 空間転移の秘宝を手に入れた！
 >
 EN: Got the Warp Staff!
-
-**[176]** 　obj107（数据引用） 　·  出现层：45 catalog
-
-> 昇華の翼を手に入れた！
->
-EN: Got wings to fly up!
 
 **[177]** 　obj108（数据引用） 　·  出现层：catalog
 
@@ -1423,23 +1515,11 @@ EN: Got the Dragon Slayer! Your attack power against the Dragon has doubled!
 >
 EN: Got the snow crystal!
 
-**[180]** 　obj111（数据引用） 　·  出现层：46 catalog
-
-> 魔法の鍵を手に入れた！
->
-EN: Got the magic key!
-
 **[181]** 　obj112（数据引用） 　·  出现层：catalog
 
 > スーパーマトックを手に入れた！
 >
 EN: Got the Super Magic Mattock!
-
-**[182]** 　obj113（数据引用） 　·  出现层：00F catalog
-
-> 幸運の金貨を手に入れた！敵が持っているＧＯＬＤ数が２倍になる。
->
-EN: Got the Lucky Gold! You can get twice gold which monster has from now.
 
 **[205]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：—
 
@@ -1453,79 +1533,13 @@ EN: Gold.
 >
 EN: You don't have a key!
 
-**[254]** 　obj66（数据引用） 　·  出现层：11-12,14,16-19 catalog
-
-> 赤い回復薬を手に入れた。生命力が１００ポイントアップ！
->
-EN: Got a red elixir. Your vital power was 100 points up!
-
-**[255]** 　obj67（数据引用） 　·  出现层：31,33-34,37-40 catalog
-
-> 赤い回復薬を手に入れた。生命力が２００ポイントアップ！
->
-EN: Got a red elixir. Your vital power was 200 points up!
-
-**[256]** 　obj68（数据引用） 　·  出现层：41,43-44,46-48 catalog
-
-> 赤い回復薬を手に入れた。生命力が２５０ポイントアップ！
->
-EN: Got a red elixir. Your vital power was 250 points up!
-
-**[257]** 　obj76（数据引用） 　·  出现层：11-12,15,17,20 catalog
-
-> 青い回復薬を手に入れた。生命力が４００ポイントアップ！
->
-EN: Got a blue elixir. Your vital power was 400 points up!
-
-**[258]** 　obj77（数据引用） 　·  出现层：31-34,36-38,40 catalog
-
-> 青い回復薬を手に入れた。生命力が８００ポイントアップ！
->
-EN: Got a blue elixir. Your vital power was 800 points up!
-
-**[259]** 　obj78（数据引用） 　·  出现层：41-43,45,48 catalog
-
-> 青い回復薬を手に入れた。生命力が１０００ポイントアップ！
->
-EN: Got a blue elixir. Your vital power was 1000 points up!
-
-**[260]** 　obj80（数据引用） 　·  出现层：11-12,16-20 catalog
-
-> 赤のクリスタルを手に入れた。攻撃力が２ポイントアップ！
->
-EN: Got a red crystal. Your offensive power was 2 points up!
-
-**[261]** 　obj81（数据引用） 　·  出现层：31-32,34,37,39-40 catalog
-
-> 赤のクリスタルを手に入れた。攻撃力が４ポイントアップ！
->
-EN: Got a red crystal. Your offensive power was 4 points up!
-
-**[262]** 　obj82（数据引用） 　·  出现层：41,45-48 catalog
-
-> 赤のクリスタルを手に入れた。攻撃力が５ポイントアップ！
->
-EN: Got a red crystal. Your offensive power was 5 points up!
-
-**[263]** 　obj83（数据引用） 　·  出现层：12,14-18,20 catalog
-
-> 青のクリスタルを手に入れた。防御力が２ポイントアップ！
->
-EN: Got a blue crystal. Your defensive power was 2 points up!
-
-**[264]** 　obj84（数据引用） 　·  出现层：31-32,34,37-40 catalog
-
-> 青のクリスタルを手に入れた。防御力が４ポイントアップ！
->
-EN: Got a blue crystal. Your defensive power was 4 points up!
-
-**[265]** 　obj85（数据引用） 　·  出现层：41-42,45,47-48 catalog
-
-> 青のクリスタルを手に入れた。防御力が５ポイントアップ！
->
-EN: Got a blue crystal. Your defensive power was 5 points up!
-
 ### 商人 · 祭坛 · 积分石 · 智慧之戒问答（16 条）
+
+**[206]** 　obj22（数据引用） 　·  出现层：4,12,32,46 catalog
+
+> 「この祭壇に
+>
+EN: "If you offer me
 
 **[86]** 　obj18（数据引用） 　·  出现层：6 catalog
 
@@ -1544,12 +1558,6 @@ EN: "I will sell five keys for 50 Gold! Will you buy them?"
 > 「希少品の赤い鍵を８００ＧＯＬＤで売るよ！買わないかい？」
 >
 EN: "I will sell the rare red key for 800 Gold! Will you buy it?"
-
-**[89]** 　obj17（数据引用） 　·  出现层：catalog
-
-> 「うちの店は鍵をいくらでも売るよ。１つ１０００ＧＯＬＤだが買うかい？」
->
-EN: "My store will sell as many keys as you need. They are 1000 Gold each. Will you buy them?"
 
 **[90]** 　obj159（数据引用） 　·  出现层：15
 
@@ -1587,17 +1595,17 @@ EN: "I will increase your life 2000 points at 1000 Gold."
 >
 EN: "Would you like to buy a super mattock (it's very rare) for 4000 Gold?"
 
+**[89]** 　obj17（数据引用） 　·  出现层：catalog
+
+> 「うちの店は鍵をいくらでも売るよ。１つ１０００ＧＯＬＤだが買うかい？」
+>
+EN: "My store will sell as many keys as you need. They are 1000 Gold each. Will you buy them?"
+
 **[204]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：—
 
 > ＧＯＬＤを
 >
 EN: . Recieved
-
-**[206]** 　obj22（数据引用） 　·  出现层：4,12,32,46 catalog
-
-> 「この祭壇に
->
-EN: "If you offer me
 
 **[210]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：—
 
@@ -1624,6 +1632,30 @@ EN: points up!
 EN: Got
 
 ### 地形与调查提示（门、楼梯、暗墙、熔岩、人物）（17 条）
+
+**[139]** 　地形4、地形6、地形8 等47项（数据引用） 　·  出现层：1-9,11-19,21-29,31-39,41-48 00F
+
+> 階段を上った。
+>
+EN: Went up the stairs.
+
+**[140]** 　地形5、地形7、地形9 等46项（数据引用） 　·  出现层：2-43,45-49
+
+> 階段を下った。
+>
+EN: Went down the stairs.
+
+**[141]** 　obj89（数据引用） 　·  出现层：5,9,12,14,16,19,35-36,41 catalog
+
+> 壁がくずれた！
+>
+EN: The wall collapsed!
+
+**[183]** 　obj79（数据引用） 　·  出现层：13,26 catalog
+
+> 溶岩が流れている。
+>
+EN: The lava is really hot.
 
 **[63]** 　obj140（数据引用） 　·  出现层：21
 
@@ -1655,24 +1687,6 @@ EN: The blue door has opened.
 >
 EN: The red door has opened.
 
-**[139]** 　地形4、地形6、地形8 等47项（数据引用） 　·  出现层：1-9,11-19,21-29,31-39,41-48 00F
-
-> 階段を上った。
->
-EN: Went up the stairs.
-
-**[140]** 　地形5、地形7、地形9 等46项（数据引用） 　·  出现层：2-43,45-49
-
-> 階段を下った。
->
-EN: Went down the stairs.
-
-**[141]** 　obj89（数据引用） 　·  出现层：5,9,12,14,16,19,35-36,41 catalog
-
-> 壁がくずれた！
->
-EN: The wall collapsed!
-
 **[143]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：—
 
 > 老人がいる。
@@ -1702,12 +1716,6 @@ EN: You see a thief.
 > 階段がある。
 >
 EN: You see stairs.
-
-**[183]** 　obj79（数据引用） 　·  出现层：13,26 catalog
-
-> 溶岩が流れている。
->
-EN: The lava is really hot.
 
 **[202]** 　运行时按计算下标引用（未在静态数据/常量赋值中定位） 　·  出现层：—
 
