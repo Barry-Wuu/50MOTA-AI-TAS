@@ -1,37 +1,37 @@
 strNumber,text_jp,text_en,text_zh,referenced_by,floors,group
-100,Ｇスライム,Green Slime,绿史莱姆,obj5（数据引用）,"1,3-9,30,34 catalog",怪物与 BOSS 名称
-101,Ｒスライム,Red Slime,红史莱姆,obj6（数据引用）,"1,3-9,30,34,46 catalog stage_flags",怪物与 BOSS 名称
-103,バット,Bat,蝙蝠,obj7（数据引用）,"1,3-9,11-12,15,19-20,34 catalog",怪物与 BOSS 名称
-104,僧　侶,Priest,僧侣,obj8（数据引用）,"1,3-10 catalog stage_flags",怪物与 BOSS 名称
-108,スケルトンＣ,Skeleton C,骷髅兵 C,obj9（数据引用）,"1,3-4,6-10,46 catalog",怪物与 BOSS 名称
-109,スケルトンＢ,Skeleton B,骷髅兵 B,obj10（数据引用）,"1,4-10 catalog",怪物与 BOSS 名称
-107,門番Ｂ,Gate-Keeper B,门卫 B,obj15（数据引用）,"2,32,38 catalog",怪物与 BOSS 名称
-106,門番Ｃ,Gate-Keeper C,门卫 C,obj29（数据引用）,"8,17 catalog",怪物与 BOSS 名称
-110,スケルトンＡ,Skeleton A,骷髅兵 A,obj16（数据引用）,10 catalog stage_flags,怪物与 BOSS 名称
+100,Ｇスライム,Green Slime,绿色史莱姆,obj5（数据引用）,"1,3-9,30,34 catalog",怪物与 BOSS 名称
+101,Ｒスライム,Red Slime,红色史莱姆,obj6（数据引用）,"1,3-9,30,34,46 catalog stage_flags",怪物与 BOSS 名称
+103,バット,Bat,小蝙蝠,obj7（数据引用）,"1,3-9,11-12,15,19-20,34 catalog",怪物与 BOSS 名称
+104,僧　侶,Priest,初级法师,obj8（数据引用）,"1,3-10 catalog stage_flags",怪物与 BOSS 名称
+108,スケルトンＣ,Skeleton C,骷髅人,obj9（数据引用）,"1,3-4,6-10,46 catalog",怪物与 BOSS 名称
+109,スケルトンＢ,Skeleton B,骷髅士兵,obj10（数据引用）,"1,4-10 catalog",怪物与 BOSS 名称
+107,門番Ｂ,Gate-Keeper B,中级卫兵,obj15（数据引用）,"2,32,38 catalog",怪物与 BOSS 名称
+106,門番Ｃ,Gate-Keeper C,初级卫兵,obj29（数据引用）,"8,17 catalog",怪物与 BOSS 名称
+110,スケルトンＡ,Skeleton A,骷髅队长,obj16（数据引用）,10 catalog stage_flags,怪物与 BOSS 名称
 102,Ｂスライム,Big Slime,大史莱姆,obj45（数据引用）,"11-12,14-19,30,34 catalog",怪物与 BOSS 名称
-105,上級僧侶,Superion Priest,高级僧侣,obj46（数据引用）,"11-12,14-20 catalog",怪物与 BOSS 名称
+105,上級僧侶,Superion Priest,高级法师,obj46（数据引用）,"11-12,14-20 catalog",怪物与 BOSS 名称
 111,大バット,Big Bat,大蝙蝠,obj47（数据引用）,"11-12,14-20,46 catalog",怪物与 BOSS 名称
-112,ゾンビ,Zombie,丧尸,obj48（数据引用）,"11-12,14-19,38,46 catalog",怪物与 BOSS 名称
-113,ゾンビナイト,Zombie Knight,丧尸骑士,obj49（数据引用）,"14-19,31,33,36 catalog",怪物与 BOSS 名称
-114,ロック,Rock,岩石怪,obj56（数据引用）,"14,16,18-20 catalog",怪物与 BOSS 名称
-118,大ダコ,Giant Octopus,大章鱼,obj71（数据引用）,15 catalog,怪物与 BOSS 名称
-244,大ダコの一部,some of Giant Octopus,大章鱼的一部分,obj50、obj51、obj52 等5项（数据引用）,15 catalog,怪物与 BOSS 名称
-125,スライムマン,Slime Man,史莱姆人,obj95（数据引用）,"16,31-34,36-40 catalog",怪物与 BOSS 名称
-126,大魔導師,Great Magic Master,大魔导师,obj96（数据引用）,25 catalog,怪物与 BOSS 名称
+112,ゾンビ,Zombie,兽人,obj48（数据引用）,"11-12,14-19,38,46 catalog",怪物与 BOSS 名称
+113,ゾンビナイト,Zombie Knight,兽人武士,obj49（数据引用）,"14-19,31,33,36 catalog",怪物与 BOSS 名称
+114,ロック,Rock,石头人,obj56（数据引用）,"14,16,18-20 catalog",怪物与 BOSS 名称
+118,大ダコ,Giant Octopus,大乌贼,obj71（数据引用）,15 catalog,怪物与 BOSS 名称
+244,大ダコの一部,some of Giant Octopus,大乌贼的一部分,obj50、obj51、obj52 等5项（数据引用）,15 catalog,怪物与 BOSS 名称
+125,スライムマン,Slime Man,幽灵,obj95（数据引用）,"16,31-34,36-40 catalog",怪物与 BOSS 名称
+126,大魔導師,Great Magic Master,大法师,obj96（数据引用）,25 catalog,怪物与 BOSS 名称
 121,騎　士,Knight,骑士,obj91（数据引用）,"31-32,34,36-40,46 catalog",怪物与 BOSS 名称
-122,剣　士,Swordsman,剑士,obj92（数据引用）,"31,33-34,36-40,46 catalog",怪物与 BOSS 名称
-123,兵　士,Soldier,士兵,obj93（数据引用）,"31-34,36-40,46 catalog",怪物与 BOSS 名称
-124,死霊兵士,Ghost Soldier,亡灵士兵,obj94（数据引用）,"31-34,36-40 catalog",怪物与 BOSS 名称
-119,ドラゴン,Dragon,龙,obj74（数据引用）,35 catalog,怪物与 BOSS 名称
-120,金騎士,Golden Knight,金骑士,obj90（数据引用）,40 catalog,怪物与 BOSS 名称
-116,魔導師,Magic Sergeant,魔导师,obj58（数据引用）,"41-43,45,48 catalog",怪物与 BOSS 名称
+122,剣　士,Swordsman,双手剑士,obj92（数据引用）,"31,33-34,36-40,46 catalog",怪物与 BOSS 名称
+123,兵　士,Soldier,战士,obj93（数据引用）,"31-34,36-40,46 catalog",怪物与 BOSS 名称
+124,死霊兵士,Ghost Soldier,鬼战士,obj94（数据引用）,"31-34,36-40 catalog",怪物与 BOSS 名称
+119,ドラゴン,Dragon,魔龙,obj74（数据引用）,35 catalog,怪物与 BOSS 名称
+120,金騎士,Golden Knight,骑士队长,obj90（数据引用）,40 catalog,怪物与 BOSS 名称
+116,魔導師,Magic Sergeant,魔法警卫,obj58（数据引用）,"41-43,45,48 catalog",怪物与 BOSS 名称
 127,吸血コウモリ,Vampire Bat,吸血蝙蝠,obj97（数据引用）,"41-43,45-48 catalog",怪物与 BOSS 名称
 128,Ｋスライム,SlimeLord,史莱姆王,obj98（数据引用）,"41-43,45-48 catalog",怪物与 BOSS 名称
-129,魔術師Ａ,Magician A,魔术师 A,obj99（数据引用）,"41-43,45-49 catalog",怪物与 BOSS 名称
-130,魔術師Ｂ,Magician B,魔术师 B,obj100（数据引用）,"41-43,45-48 catalog stage_flags",怪物与 BOSS 名称
-131,黒騎士,Dark Knight,黑骑士,obj101（数据引用）,"42-43,45,48-49 catalog",怪物与 BOSS 名称
-132,門番Ａ,Gate-Keeper A,门卫 A,obj102（数据引用）,44 catalog,怪物与 BOSS 名称
-115,魔導師ゼノ,Magic Serg. Zeno,魔导师 Zeno,obj57（数据引用）,catalog,怪物与 BOSS 名称
+129,魔術師Ａ,Magician A,高级巫师,obj99（数据引用）,"41-43,45-49 catalog",怪物与 BOSS 名称
+130,魔術師Ｂ,Magician B,初级巫师,obj100（数据引用）,"41-43,45-48 catalog stage_flags",怪物与 BOSS 名称
+131,黒騎士,Dark Knight,黑暗骑士,obj101（数据引用）,"42-43,45,48-49 catalog",怪物与 BOSS 名称
+132,門番Ａ,Gate-Keeper A,高级卫兵,obj102（数据引用）,44 catalog,怪物与 BOSS 名称
+115,魔導師ゼノ,Magic Serg. Zeno,魔王（假魔王）,obj57（数据引用）,catalog,怪物与 BOSS 名称
 117,バンパイア,Vampire,吸血鬼,obj59（数据引用）,catalog,怪物与 BOSS 名称
 270,鉄の剣,Iron,铁剑,运行时按计算下标引用（未在静态数据/常量赋值中定位）,5,装备与道具名称（菜单用的短名）
 271,銀の剣,Silver,银剑,运行时按计算下标引用（未在静态数据/常量赋值中定位）,17,装备与道具名称（菜单用的短名）
@@ -53,7 +53,7 @@ strNumber,text_jp,text_en,text_zh,referenced_by,floors,group
 306,空間転移の秘宝,The Warp Staff,空间转移秘宝,运行时按计算下标引用（未在静态数据/常量赋值中定位）,39,装备与道具名称（菜单用的短名）
 307,昇華の翼,Wings to fly up,升华之翼,运行时按计算下标引用（未在静态数据/常量赋值中定位）,"39,45",装备与道具名称（菜单用的短名）
 308,降臨の翼,Wings to fly down,降临之翼,运行时按计算下标引用（未在静态数据/常量赋值中定位）,41,装备与道具名称（菜单用的短名）
-309,ドラゴンスレーヤー,The Dragon Slayer,屠龙匕,运行时按计算下标引用（未在静态数据/常量赋值中定位）,49,装备与道具名称（菜单用的短名）
+309,ドラゴンスレーヤー,The Dragon Slayer,屠龙匕首,运行时按计算下标引用（未在静态数据/常量赋值中定位）,49,装备与道具名称（菜单用的短名）
 310,雪の結晶,The snow crystal,雪花结晶,运行时按计算下标引用（未在静态数据/常量赋值中定位）,35,装备与道具名称（菜单用的短名）
 311,魔法の鍵,The magic key,魔法钥匙,运行时按计算下标引用（未在静态数据/常量赋值中定位）,46,装备与道具名称（菜单用的短名）
 312,スーパーマトック,The Super Magic Mattock,超级镐,运行时按计算下标引用（未在静态数据/常量赋值中定位）,47,装备与道具名称（菜单用的短名）
@@ -83,9 +83,9 @@ strNumber,text_jp,text_en,text_zh,referenced_by,floors,group
 229,なかなかのものです。もう少し頑張れば称号を差し上げましょう。」,"Doing fine! If you wish to continue, I will give you a special rank...""",相当不错。再努力一点就给你称号吧。」,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,战斗与道具使用反馈提示
 230,おめでとう！満点です。,Congratulations! Your score is GREAT!,恭喜！满分。,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,战斗与道具使用反馈提示
 231,よくがんばりましたね。,Do you wish to go on?,真是努力了。,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,战斗与道具使用反馈提示
-241,魔術師Ａの魔法攻撃だ！生命力が２００ポイント減少！,Your vital power decreased 200 points by magic attack of Magician A!,魔术师 A 的魔法攻击！生命减少200点！,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,战斗与道具使用反馈提示
-242,魔術師Ｂの魔法攻撃だ！生命力が１００ポイント減少！,Your vital power decreased 100 points by magic attack of Magician B!,魔术师 B 的魔法攻击！生命减少100点！,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,战斗与道具使用反馈提示
-243,魔導師の魔法攻撃だ！生命力が半減！,Your vital power decreased in half by the magic attack of Magic Master!,魔导师的魔法攻击！生命减半！,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,战斗与道具使用反馈提示
+241,魔術師Ａの魔法攻撃だ！生命力が２００ポイント減少！,Your vital power decreased 200 points by magic attack of Magician A!,高级巫师的魔法攻击！生命减少200点！,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,战斗与道具使用反馈提示
+242,魔術師Ｂの魔法攻撃だ！生命力が１００ポイント減少！,Your vital power decreased 100 points by magic attack of Magician B!,初级巫师的魔法攻击！生命减少100点！,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,战斗与道具使用反馈提示
+243,魔導師の魔法攻撃だ！生命力が半減！,Your vital power decreased in half by the magic attack of Magic Master!,魔法警卫的魔法攻击！生命减半！,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,战斗与道具使用反馈提示
 247,階段を移動中,You are using the stairs.,正在通过楼梯,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,战斗与道具使用反馈提示
 269,ドラゴンが火を吹いた！生命力が１０００ポイント減少！,Dragon blew on the fire! Your vital power decreased 1000 points.,龙喷出了火焰！生命减少1000点！,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,战斗与道具使用反馈提示
 97,表示する情報がありません。,You don't have an informations any more.,没有可显示的信息。,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,存档 · 音效 · 版本等系统提示
@@ -112,54 +112,54 @@ strNumber,text_jp,text_en,text_zh,referenced_by,floors,group
 294,Au サウンドオン！,Au sound on.,Au 音效开启！,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,存档 · 音效 · 版本等系统提示
 295,Auバックグラウンドミュージックオン！,Au Background music on.,Au 背景音乐开启！,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,存档 · 音效 · 版本等系统提示
 314,アイテムを使用します。よろしいですか？,Do you use this item?,要使用道具吗？,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,存档 · 音效 · 版本等系统提示
-4,盗賊「おお無事か！おまえ、ここの魔導師に捕まってこの牢屋に入れられてたんだよ。で、今まで気を失っていた訳だ。にしても、おまえ運がいいぜ。ちょうど抜け穴が完成したときに来るんだからな。そういう訳で俺は今から脱走するところだ。おまえもついてこい。」,"The thief says ""What a relief you're okay!⏎You were caught and thrown into this prison by the Magic Sergeant.⏎You were unconscious when you got here.⏎Nevertheless, you are so lucky that you just woke up.⏎I've finished the escape tunnel. Let's break out.""",盗贼「哦，你没事了！你被这里的魔导师抓住，关进了这间牢房，一直昏迷到现在。不过你运气真好，正好赶上我把地道挖通。所以我现在就要逃出去了，你也跟着来吧。」,obj87（数据引用）,2 catalog,盗贼（脱出屋）对白
-68,「この階の４つの抜け穴をうまく使えば、強い敵とは戦わずに上の階に行けるじゃろう。」,"""You may be able to go upstairs without fighting strong enemies, if you could use four tunnels skillfully in this floor.""",「只要用好这一层的四处地道，就能不跟强敌交手直接上去。」,obj144（数据引用）,36,盗贼（脱出屋）对白
+4,盗賊「おお無事か！おまえ、ここの魔導師に捕まってこの牢屋に入れられてたんだよ。で、今まで気を失っていた訳だ。にしても、おまえ運がいいぜ。ちょうど抜け穴が完成したときに来るんだからな。そういう訳で俺は今から脱走するところだ。おまえもついてこい。」,"The thief says ""What a relief you're okay!⏎You were caught and thrown into this prison by the Magic Sergeant.⏎You were unconscious when you got here.⏎Nevertheless, you are so lucky that you just woke up.⏎I've finished the escape tunnel. Let's break out.""",盗贼「哦，你没事了！你被这里的魔法警卫抓住，关进了这间牢房，一直昏迷到现在。不过你运气真好，正好赶上我把暗道挖通。所以我现在就要逃出去了，你也跟着来吧。」,obj87（数据引用）,2 catalog,盗贼（脱出屋）对白
+68,「この階の４つの抜け穴をうまく使えば、強い敵とは戦わずに上の階に行けるじゃろう。」,"""You may be able to go upstairs without fighting strong enemies, if you could use four tunnels skillfully in this floor.""",「只要用好这一层的四处暗道，就能不跟强敌交手直接上去。」,obj144（数据引用）,36,盗贼（脱出屋）对白
 5,盗賊「よし、じゃあ俺は先に行かせてもらうぜ。ああ、それからおまえの剣と盾、あいつらに取り上げられちまったみたいだな。この塔の中を丸腰で歩き回るのはやめた方がいい。確か５階に剣、９階に盾があったはずだから、まずそれを手に入れることを考えるんだな。じゃあ、またなっ！」,"The thief says ""O.K. Well, excuse my going first. Your weapon and shield were stolen by the guards. It's not wise to wander about without them. I heard that there is a sword on the 5th floor and a shield on the 9th. You had better get them. See you!""",盗贼「好，那我先走一步了。对了，你的剑和盾好像被他们收走了吧？在这塔里空着两手乱转可不行。我记得5楼有剑、9楼有盾，你先想办法把它们弄到手。那就回头见！」,代码 `strNumber=5` ← attackMonster/directCheck/pointCheck,2,盗贼（脱出屋）对白
-6,盗賊「ようっ！また会ったな。ここの門番を倒してくれて助かったぜ、ドジってまた捕まっちまってな。今度は、こんな奥の牢に閉じ込められちまった。まあ、それはそれとして、３５階にいるドラゴンの手前まで抜け穴を掘っといたんだ。開通させとくから先に行っててくれ。」,"The thief says ""Ah, we meet again! Thank you. You beat the Gate-Keeper of this area. I was defeated and imprisoned again. Such a small prison this time. I'm making a secret tunnel in front of the Dragon. Go up to 35th floor and wait for me, while I complete the tunnel.""",盗贼「哟！又见面了。谢谢你打倒这里的门卫，我又犯傻被抓了一回，这次被关在这么深的牢里。算了，说正事——我已经把地道挖到35楼那条龙的前面了，我这就把它打通，你先上去吧。」,运行时按计算下标引用（未在静态数据/常量赋值中定位）,10,盗贼（脱出屋）对白
+6,盗賊「ようっ！また会ったな。ここの門番を倒してくれて助かったぜ、ドジってまた捕まっちまってな。今度は、こんな奥の牢に閉じ込められちまった。まあ、それはそれとして、３５階にいるドラゴンの手前まで抜け穴を掘っといたんだ。開通させとくから先に行っててくれ。」,"The thief says ""Ah, we meet again! Thank you. You beat the Gate-Keeper of this area. I was defeated and imprisoned again. Such a small prison this time. I'm making a secret tunnel in front of the Dragon. Go up to 35th floor and wait for me, while I complete the tunnel.""",盗贼「哟！又见面了。谢谢你打倒这里的门卫，我又犯傻被抓了一回，这次被关在这么深的牢里。算了，说正事——我已经把暗道挖到35楼那条龙的前面了，我这就把它打通，你先上去吧。」,运行时按计算下标引用（未在静态数据/常量赋值中定位）,10,盗贼（脱出屋）对白
 7,盗賊「後でちゃんと行くから３５階まで先に行っておいてくれ。」,"The thief says ""Don't worry, I'll be there.""",盗贼「我随后就到，你先去35楼等着。」,运行时按计算下标引用（未在静态数据/常量赋值中定位）,15,盗贼（脱出屋）对白
 16,盗賊「よっ！またあったな。すげえじゃねえか。ここのブロックのボスを倒すとはよ。俺もこれ以上、先の階へ行けなくて困ってたんだ。ああ、あと聞いた話だが、１１階に盾、１７階に剣があるそうだ。盾よりも剣の方を先に取りに行った方がいいそうだから、うまく敵をかわして剣を先に取りに行くんだな。じゃ、お先に！」,"The thief says ""Hey! We meet again! How greatly you beat the boss of this area. It troubled me that I couldn't go upstairs any more. After I heard that there is a shield on the 11th floor and a sword on the 17th. You had better get a sword first and then a shield. Please excuse my going first!""",盗贼「哟！又碰上了。真行啊，居然打倒了这个区域的头目。我还正为没法再往上走发愁呢。对了，听人说11楼有盾、17楼有剑。据说剑该比盾先拿，你就想办法避开敌人先去取剑吧。那我先走了！」,运行时按计算下标引用（未在静态数据/常量赋值中定位）,16,盗贼（脱出屋）对白
-17,盗賊「よおっ！無事だったか？ここの大ダコが道をふさいでいて困っていたんだが今ようやく抜け穴が完成したんだ。おまえも、ここの大ダコを倒すのは後回しにした方がいいぜ。じゃあ、またなっ！」,"The thief says ""Ah! Are you all right? The Big Octopus which lives in here was blocking my progress. Now a loophole has completed at last. You had better put off beating him. See you later!""",盗贼「哟！你没事吧？这只大章鱼挡住了路，正发愁呢，现在地道总算挖通了。这只大章鱼你也还是先放着别打为好。那就回头见！」,obj88（数据引用）,15,盗贼（脱出屋）对白
-24,盗賊「あっ！まだ抜け穴、完成してなかったのに・・・もう少し待ってればアイテムを使わずにすんだはずだぞ。予定が狂っちまうな・・・いや、気にしないでくれ。」,"The thief says ""The tunnel has not been completed yet. You should have waited a little longer, and you should not have used items. I had a bug in the program. There! Don't worry!""",盗贼「啊！地道还没挖完呢……再等一会儿就不用浪费道具了。计划都乱了……算了，别在意。」,运行时按计算下标引用（未在静态数据/常量赋值中定位）,16,盗贼（脱出屋）对白
-25,盗賊「ああ、やっと抜け穴が完成した。あれ？またお前か。いいタイミングできたな。また抜け穴作っといたぜ。自由に使ってくれ。」,"The thief says ""Oh, I have finished the tunnel. What? It's you again. You came at a good time. I have openned a tunnel, and you may use it freely.""",盗贼「啊，地道终于挖好了。咦？又是你。来得正好，我又挖了一条地道，随便用吧。」,运行时按计算下标引用（未在静态数据/常量赋值中定位）,16,盗贼（脱出屋）对白
+17,盗賊「よおっ！無事だったか？ここの大ダコが道をふさいでいて困っていたんだが今ようやく抜け穴が完成したんだ。おまえも、ここの大ダコを倒すのは後回しにした方がいいぜ。じゃあ、またなっ！」,"The thief says ""Ah! Are you all right? The Big Octopus which lives in here was blocking my progress. Now a loophole has completed at last. You had better put off beating him. See you later!""",盗贼「哟！你没事吧？这只大乌贼挡住了路，正发愁呢，现在暗道总算挖通了。这只大乌贼你也还是先放着别打为好。那就回头见！」,obj88（数据引用）,15,盗贼（脱出屋）对白
+24,盗賊「あっ！まだ抜け穴、完成してなかったのに・・・もう少し待ってればアイテムを使わずにすんだはずだぞ。予定が狂っちまうな・・・いや、気にしないでくれ。」,"The thief says ""The tunnel has not been completed yet. You should have waited a little longer, and you should not have used items. I had a bug in the program. There! Don't worry!""",盗贼「啊！暗道还没挖完呢……再等一会儿就不用浪费道具了。计划都乱了……算了，别在意。」,运行时按计算下标引用（未在静态数据/常量赋值中定位）,16,盗贼（脱出屋）对白
+25,盗賊「ああ、やっと抜け穴が完成した。あれ？またお前か。いいタイミングできたな。また抜け穴作っといたぜ。自由に使ってくれ。」,"The thief says ""Oh, I have finished the tunnel. What? It's you again. You came at a good time. I have openned a tunnel, and you may use it freely.""",盗贼「啊，暗道终于挖好了。咦？又是你。来得正好，我又挖了一条暗道，随便用吧。」,运行时按计算下标引用（未在静态数据/常量赋值中定位）,16,盗贼（脱出屋）对白
 26,盗賊「このブロックに最後のボスと捕まったプリンセスがいるはずだが、今はまだ戦うのは早すぎるだろうな。」,"The thief says ""The last boss and the captured princess must be in this area. Hmm, I wonder if we should wait before fighting him.""",盗贼「这个区域应该有最后的首领和被囚禁的公主，不过现在打还太早了吧。」,运行时按计算下标引用（未在静态数据/常量赋值中定位）,29,盗贼（脱出屋）对白
-29,盗賊「おお、来たか。ちゃんと、抜け穴を開通させておいたぜ、この抜け穴を通ればドラゴンの後ろに出られるから、そこから上の階に行くんだな。」,"The thief says ""There you are. I have just finished the tunnel. As you go through it, you will get to the Dragon. And then you should go up.""",盗贼「哦，你来了。地道我已经好好打通了，穿过这条地道就能到龙的身后，从那里往上爬就行。」,运行时按计算下标引用（未在静态数据/常量赋值中定位）,29,盗贼（脱出屋）对白
-30,盗賊「このブロックのボスの金騎士は弱いくせに態度だけはでかいから、この塔の副将格の魔導師ゼノには嫌われているらしい。」,"The thief says ""The Golden Knight (who is the boss of this area) has a strong attitude in spite of being weak. It is for this reason that he is disliked by the Magic Serg. Zeno, who is the sub commander of this tower.""",盗贼「这个区域的首领金骑士又弱又只会摆架子，听说塔里的副将魔导师 Zeno 很讨厌他。」,运行时按计算下标引用（未在静态数据/常量赋值中定位）,35,盗贼（脱出屋）对白
+29,盗賊「おお、来たか。ちゃんと、抜け穴を開通させておいたぜ、この抜け穴を通ればドラゴンの後ろに出られるから、そこから上の階に行くんだな。」,"The thief says ""There you are. I have just finished the tunnel. As you go through it, you will get to the Dragon. And then you should go up.""",盗贼「哦，你来了。暗道我已经好好打通了，穿过这条暗道就能到龙的身后，从那里往上爬就行。」,运行时按计算下标引用（未在静态数据/常量赋值中定位）,29,盗贼（脱出屋）对白
+30,盗賊「このブロックのボスの金騎士は弱いくせに態度だけはでかいから、この塔の副将格の魔導師ゼノには嫌われているらしい。」,"The thief says ""The Golden Knight (who is the boss of this area) has a strong attitude in spite of being weak. It is for this reason that he is disliked by the Magic Serg. Zeno, who is the sub commander of this tower.""",盗贼「这个区域的首领骑士队长又弱又只会摆架子，听说塔里的副将魔王 Zeno 很讨厌他。」,运行时按计算下标引用（未在静态数据/常量赋值中定位）,35,盗贼（脱出屋）对白
 44,盗賊「ふふふ……ここにいるという事は、答えは１つしかあるまい。こういう事だっ！」,"The thief says ""Humph. There is only one reason why I'm here. And this is it!""",盗贼「呵呵呵……既然我在这里，答案就只有一个。就是这样！」,代码 `strNumber=44` ← eventMT,50,盗贼（脱出屋）对白
-59,「９階と１６階と１８階の抜け穴には気が付いたかい？」,"""Did you notice the secret passages on the 9th, 16th, and 18th floors?""",「9楼、16楼和18楼的地道，你注意到了吗？」,obj157（数据引用）,12,盗贼（脱出屋）对白
+59,「９階と１６階と１８階の抜け穴には気が付いたかい？」,"""Did you notice the secret passages on the 9th, 16th, and 18th floors?""",「9楼、16楼和18楼的暗道，你注意到了吗？」,obj157（数据引用）,12,盗贼（脱出屋）对白
 99,盗賊「ようまたあったな！無事だったか？これは聞いた話なんだが、２５階のボスを倒すと『時空の門』がどこかにできるらしいぞ。」,"The thief says ""Ah!, we meet again! Thank goodness you're alive! I heard that if you beat the boss of 25th floor, 'the gate of time and space' will appear somewhere.""",盗贼「哟，又见面了！你没事吧？这是我听来的消息——据说打倒25楼的首领，某处就会出现『时空之门』。」,运行时按计算下标引用（未在静态数据/常量赋值中定位）,35,盗贼（脱出屋）对白
 23,勇者「これはっ……！人形だっ！」,"The brave man says ""Oh! What? This is a doll!""",勇者「这是……！是人偶！」,obj44（数据引用）,26 catalog,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-10,魔導師ゼノ「ようこそ、『魔法の塔』へ。おまえがちょうど１００人目の侵入者だ。本来なら手下共に相手をさせるところだが、特別にこの私が自ら相手になってやろう。己の不運を呪うのだな。」,"The Magic Serg. Zeno says ""Welcome to 'The Magic Tower'. You are the hundredth man who dared to enter my tower. You will now face my guards. Should you happen to survive, I will fight with you in person specially. You should accept your fate.""",魔导师 Zeno「欢迎来到『魔法之塔』。你正好是第一百个入侵者。本来该让手下们来对付你，不过我特别亲自出马。怨你自己运气不好吧。」,obj177（数据引用）,3,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+10,魔導師ゼノ「ようこそ、『魔法の塔』へ。おまえがちょうど１００人目の侵入者だ。本来なら手下共に相手をさせるところだが、特別にこの私が自ら相手になってやろう。己の不運を呪うのだな。」,"The Magic Serg. Zeno says ""Welcome to 'The Magic Tower'. You are the hundredth man who dared to enter my tower. You will now face my guards. Should you happen to survive, I will fight with you in person specially. You should accept your fate.""",魔王 Zeno「欢迎来到『魔法之塔』。你正好是第一百个入侵者。本来该让手下们来对付你，不过我特别亲自出马。怨你自己运气不好吧。」,obj177（数据引用）,3,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 11,勇者「なんだっ！？　うわ～っ！？」,"The brave man says ""What? Oh!""",勇者「什么！？哇啊——！？」,obj178（数据引用）,3,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-13,スケルトンＡ「ふふふ、よくここまできたな。かくなる上はこの俺様がじきじき相手になってやる・・・といいたいところだが、まずは貴様の力を見せてもらうぞ！出会え！スケルトン兵士たちよ！」,"Skeleton A ""Ha ha ha, You are lucky to have gotten so far. Since it has come to this, I shall fight with you personally, but first I must test your strength. Go and fight! Skeleton Soldiers!""",骷髅兵 A「呵呵呵，居然能走到这里。既然如此，本该由我亲自出马……不过先让我看看你的本事！上吧，骷髅兵们！」,代码 `strNumber=13` ← eventMT,10,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-14,スケルトンＡ「ほほう、なかなか・・・。だが、ここから先へは行かせん！ここで葬ってくれるわっ！さあ、こいっ！！！」,"Skeleton A ""How considerably you do. But I will never let you pass. Here, you will die. Fight me!""",骷髅兵 A「哦？不赖嘛……但别想再往前一步！就在这里解决你！来吧！！」,代码 `strNumber=14` ← eventMT,10,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-15,スケルトンＡ「ううう・・・よくぞこの俺様を倒せたものだ・・・。しかし、これから先の階はこれまでとは比べものにならんほど強力な敵とワナが待っているぞ、せいぜい気を付けることだな・・・」,"Skeleton A ""No, It's not possible! You may have defeated me, but beyond this point you must meet some enemies and snares that are powerful beyond anything you've seen. If careless, you will die!""",骷髅兵 A「呜……居然真被你打倒了……不过往上的楼层等着你的是远超从前的强敌和陷阱，你可要当心……」,代码 `strNumber=15` ← eventMT,10,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-19,バンパイア「ほほう、貴様か、スケルトンを倒して侵入してきた勇者というのは・・・だがこの私をスケルトン共のようなザコと一緒にするなよ。不死に等しいこの私の力を見せてやろう。さあ、こいっ！」,"Vampire ""Well, You beat the skeletons and invaded. Never regard me as small like a skeleton. I will show you that I am as immortal as god. Hey, come on!""",吸血鬼「哦？你就是打倒骷髅兵闯进来的那个勇者……别把我和骷髅兵那种杂鱼相提并论。让你见识一下近乎不死的我的力量。来吧！」,代码 `strNumber=19` ← eventMT,20,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-20,バンパイア「ううう・・・よもや、この私までもが敗れるとは・・・どうやら貴様の力は本物のようだな・・・だが、その程度では大魔導師様には絶対にかなわんぞ、せいぜい束の間勝利に酔いしれているがいい・・・」,"Vampire ""Good god! I've never dreamed I'd be defeated. There is no doubt of your strength. But you will never win against the Great Magic Master as weak as you are. You shall only celebrate fleeting victory at most.""",吸血鬼「呜……没想到连我也败了……看来你的实力是真的……但就这点本事，绝对敌不过大魔导师大人，你就尽情沉醉在这短暂的胜利里吧……」,代码 `strNumber=20` ← eventMT,20,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-21,大魔導師「・・・ジ・・・ユウシャ・・・・・コロス・・・」,"Great Magic Master ""-K-I-L-L- -A-N- -I-N-V-A-D-E-R- """,大魔导师「……你……勇者……杀……」,代码 `strNumber=21` ← eventMT,25,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-27,金騎士「貴様だな、第１、第２ブロックのボスを倒し登ってきた勇者というのは。だがそれも、ここで終わりだ！ここのブロックのボスである私が自ら貴様の首を上げてやるわっ！覚悟しろっ！」,"The Golden Knight says ""You are a brave man beating the bosses of the first and second areas, and ascending the tower. But the game is over now. Here and Now, I will beat you for myself! Give up!""",金骑士「就是你吧，打倒了第一、第二区域首领爬上来的那个勇者。不过到此为止了！作为本区域的首领，我亲自来取你的首级！放马过来！」,代码 `strNumber=27` ← eventMT,32,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-28,"金騎士「ううう……今回はこのぐらいにしておいてやる……４０階まで登ってこれたら今度は本気で相手をしてやるからなっ！覚えておけっ！」""","The Golden Knight says ""You think you're pretty strong, huh? If you can make it to the 40th floor, I shall fight with you again. There, you will die!",金骑士「呜……这次就到此为止……你要是能爬到40楼，下次我可就认真对付你了！记住了！」,代码 `strNumber=28` ← eventMT,32,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-31,金騎士「よくきたな。今度はさっきの様な訳にはいかんぞ！この屈辱は１０倍にして返してくれるわっ！死霊兵士突撃！」,"The Golden Knight says ""I wonder how you were able to come so far. I will make sure you go no further. I will humiliate you 10 times as much as you've disgraced this tower. Ghost Soldiers, charge!""",金骑士「来得好。这次可不会像刚才那样了！这份屈辱我要十倍奉还！亡灵士兵，突击！」,代码 `strNumber=31` ← eventMT,40,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-32,金騎士「ふふん、こんなのは小手調べだっ！兵士突撃！」,"The Golden Knight says ""Humph, that was nothing! Soldiers, charge!""",金骑士「哼，这只是试探！士兵，突击！」,代码 `strNumber=32` ← eventMT,40,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-33,金騎士「まだまだ、これからっ！剣士突撃！」,"The Golden Knight says ""We are only beginning. Let's fight from now on. Swordsmen, charge!""",金骑士「还没完，这才开始！剑士，突击！」,代码 `strNumber=33` ← eventMT,40,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-34,金騎士「うぬぬ……だが、これはどうだっ！騎士突撃！」,"The Golden Knight says ""Heck! How about this attack? Knights, charge!""",金骑士「唔唔……那这招如何！骑士，突击！」,代码 `strNumber=34` ← eventMT,40,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-35,金騎士「うう……私の部下達を……許さんっ！許さんぞ！今度は手加減はしてやらんっ！覚悟しろ！」,"The Golden Knight says ""How dare you defeat my followers? Never shall I forgive you! Now I won't use discretion. Give up!""",金骑士「呜……我的部下们……不可饶恕！绝不饶你！这次我不会再留情！准备好！」,代码 `strNumber=35` ← eventMT,40,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-36,金騎士「ごほっ……今回はこのへんで……はあはあ……許しておいてやる……。だが次にやる時は今度こそ本当に本気で相手をしてやるからなっ！覚悟しておけっ！」,"The Golden Knight says ""I will unwillingly forgive you this time. But we shall quarrel seriously when we meet again. You had better give up!""",金骑士「咳……这次就到这里……呼、呼……先放过你……但下次动手时我可真会全力对付你！给我记着！」,代码 `strNumber=36` ← eventMT,40,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-37,金騎士「あっ……！ゼノ様……。あと一歩という所で、勇者を取り逃がしてしまいました。どうか、お許しを……。」,"The Golden Knight says ""Oh! Sir Magic Serg. Zeno. I was not able to catch the brave man. Please forgive me.""",金骑士「啊……！Zeno 大人……只差一步，却让勇者跑了。请您宽恕……」,代码 `strNumber=37` ← eventMT,40,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-38,魔導師ゼノ「取り逃がしただと……？逃げてきたのは貴様の方ではないかっ！この恥知らずめがっ！貴様のような臆病者はこの塔には不要だっ！ここで、死ねっ！」,"The Magic Serg. Zeno replies ""You weren't? I dare you to say that again. You come running up here like a coward and tell me you couldn't do your job. What shame! This tower has no need for the likes of you! You've failed me for the last time. You shall now die.""",魔导师 Zeno「让他跑了……？逃回来的不是你吗！你这不知羞耻的东西！像你这样的胆小鬼，这座塔不需要！就在这里，去死吧！」,代码 `strNumber=38` ← eventMT,40,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-39,金騎士「ああ、どうか、お許し……ぎゃあ～～～っ！！！」,"The Golden Knight says ""Oh God, please forgive me! Ah!""",金骑士「啊，请您宽恕……嘎啊——！！！」,代码 `strNumber=39` ← eventMT,40,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-40,魔導師ゼノ「お見苦しいところをお見せしたな……。だが、安心してもらおう。私はこのようなゴミとはわけが違う。もし、お前が上まで登ってこれたなら今度は、私が直々にお相手しよう。待っているぞ……。」,"The Magic Serg. Zeno says ""I behaved unbecomingly. But don't worry. I quite different from such a fellow. If you should come up to me, I would fight with you directly. I'm waiting for you.""",魔导师 Zeno「让你看到难堪的一幕了……不过你放心。我和这种垃圾可不一样。如果你真能爬上来，下次就由我亲自奉陪。我等着你……。」,代码 `strNumber=40` ← eventMT,40,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-41,魔導師ゼノ「よくぞ、ここまで、たどりついたものだ。誉めてやろう。約束どおり、この私が直々に相手をしよう。さあ、来るがいい。」,"The Magic Serg. Zeno ""It's amazing that you found your way here at last. I compliment you. Now, as promised, I'll fight with you, man to man!""",魔导师 Zeno「居然能走到这里，值得称赞。如约，由我亲自做你的对手。来吧。」,代码 `strNumber=41` ← eventMT,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-42,魔導師ゼノ「うっ……この陣形は……まずいっ！」,"The Magic Serg. Zeno ""Alas...""",魔导师 Zeno「唔……这个阵形……不妙！」,代码 `strNumber=42` ← eventMT,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+13,スケルトンＡ「ふふふ、よくここまできたな。かくなる上はこの俺様がじきじき相手になってやる・・・といいたいところだが、まずは貴様の力を見せてもらうぞ！出会え！スケルトン兵士たちよ！」,"Skeleton A ""Ha ha ha, You are lucky to have gotten so far. Since it has come to this, I shall fight with you personally, but first I must test your strength. Go and fight! Skeleton Soldiers!""",骷髅队长「呵呵呵，居然能走到这里。既然如此，本该由我亲自出马……不过先让我看看你的本事！上吧，骷髅们！」,代码 `strNumber=13` ← eventMT,10,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+14,スケルトンＡ「ほほう、なかなか・・・。だが、ここから先へは行かせん！ここで葬ってくれるわっ！さあ、こいっ！！！」,"Skeleton A ""How considerably you do. But I will never let you pass. Here, you will die. Fight me!""",骷髅队长「哦？不赖嘛……但别想再往前一步！就在这里解决你！来吧！！」,代码 `strNumber=14` ← eventMT,10,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+15,スケルトンＡ「ううう・・・よくぞこの俺様を倒せたものだ・・・。しかし、これから先の階はこれまでとは比べものにならんほど強力な敵とワナが待っているぞ、せいぜい気を付けることだな・・・」,"Skeleton A ""No, It's not possible! You may have defeated me, but beyond this point you must meet some enemies and snares that are powerful beyond anything you've seen. If careless, you will die!""",骷髅队长「呜……居然真被你打倒了……不过往上的楼层等着你的是远超从前的强敌和陷阱，你可要当心……」,代码 `strNumber=15` ← eventMT,10,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+19,バンパイア「ほほう、貴様か、スケルトンを倒して侵入してきた勇者というのは・・・だがこの私をスケルトン共のようなザコと一緒にするなよ。不死に等しいこの私の力を見せてやろう。さあ、こいっ！」,"Vampire ""Well, You beat the skeletons and invaded. Never regard me as small like a skeleton. I will show you that I am as immortal as god. Hey, come on!""",吸血鬼「哦？你就是打倒骷髅们闯进来的那个勇者……别把我和骷髅那种杂鱼相提并论。让你见识一下近乎不死的我的力量。来吧！」,代码 `strNumber=19` ← eventMT,20,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+20,バンパイア「ううう・・・よもや、この私までもが敗れるとは・・・どうやら貴様の力は本物のようだな・・・だが、その程度では大魔導師様には絶対にかなわんぞ、せいぜい束の間勝利に酔いしれているがいい・・・」,"Vampire ""Good god! I've never dreamed I'd be defeated. There is no doubt of your strength. But you will never win against the Great Magic Master as weak as you are. You shall only celebrate fleeting victory at most.""",吸血鬼「呜……没想到连我也败了……看来你的实力是真的……但就这点本事，绝对敌不过大法师大人，你就尽情沉醉在这短暂的胜利里吧……」,代码 `strNumber=20` ← eventMT,20,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+21,大魔導師「・・・ジ・・・ユウシャ・・・・・コロス・・・」,"Great Magic Master ""-K-I-L-L- -A-N- -I-N-V-A-D-E-R- """,大法师「……你……勇者……杀……」,代码 `strNumber=21` ← eventMT,25,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+27,金騎士「貴様だな、第１、第２ブロックのボスを倒し登ってきた勇者というのは。だがそれも、ここで終わりだ！ここのブロックのボスである私が自ら貴様の首を上げてやるわっ！覚悟しろっ！」,"The Golden Knight says ""You are a brave man beating the bosses of the first and second areas, and ascending the tower. But the game is over now. Here and Now, I will beat you for myself! Give up!""",骑士队长「就是你吧，打倒了第一、第二区域首领爬上来的那个勇者。不过到此为止了！作为本区域的首领，我亲自来取你的首级！放马过来！」,代码 `strNumber=27` ← eventMT,32,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+28,"金騎士「ううう……今回はこのぐらいにしておいてやる……４０階まで登ってこれたら今度は本気で相手をしてやるからなっ！覚えておけっ！」""","The Golden Knight says ""You think you're pretty strong, huh? If you can make it to the 40th floor, I shall fight with you again. There, you will die!",骑士队长「呜……这次就到此为止……你要是能爬到40楼，下次我可就认真对付你了！记住了！」,代码 `strNumber=28` ← eventMT,32,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+31,金騎士「よくきたな。今度はさっきの様な訳にはいかんぞ！この屈辱は１０倍にして返してくれるわっ！死霊兵士突撃！」,"The Golden Knight says ""I wonder how you were able to come so far. I will make sure you go no further. I will humiliate you 10 times as much as you've disgraced this tower. Ghost Soldiers, charge!""",骑士队长「来得好。这次可不会像刚才那样了！这份屈辱我要十倍奉还！亡灵士兵，突击！」,代码 `strNumber=31` ← eventMT,40,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+32,金騎士「ふふん、こんなのは小手調べだっ！兵士突撃！」,"The Golden Knight says ""Humph, that was nothing! Soldiers, charge!""",骑士队长「哼，这只是试探！士兵，突击！」,代码 `strNumber=32` ← eventMT,40,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+33,金騎士「まだまだ、これからっ！剣士突撃！」,"The Golden Knight says ""We are only beginning. Let's fight from now on. Swordsmen, charge!""",骑士队长「还没完，这才开始！剑士，突击！」,代码 `strNumber=33` ← eventMT,40,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+34,金騎士「うぬぬ……だが、これはどうだっ！騎士突撃！」,"The Golden Knight says ""Heck! How about this attack? Knights, charge!""",骑士队长「唔唔……那这招如何！骑士，突击！」,代码 `strNumber=34` ← eventMT,40,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+35,金騎士「うう……私の部下達を……許さんっ！許さんぞ！今度は手加減はしてやらんっ！覚悟しろ！」,"The Golden Knight says ""How dare you defeat my followers? Never shall I forgive you! Now I won't use discretion. Give up!""",骑士队长「呜……我的部下们……不可饶恕！绝不饶你！这次我不会再留情！准备好！」,代码 `strNumber=35` ← eventMT,40,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+36,金騎士「ごほっ……今回はこのへんで……はあはあ……許しておいてやる……。だが次にやる時は今度こそ本当に本気で相手をしてやるからなっ！覚悟しておけっ！」,"The Golden Knight says ""I will unwillingly forgive you this time. But we shall quarrel seriously when we meet again. You had better give up!""",骑士队长「咳……这次就到这里……呼、呼……先放过你……但下次动手时我可真会全力对付你！给我记着！」,代码 `strNumber=36` ← eventMT,40,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+37,金騎士「あっ……！ゼノ様……。あと一歩という所で、勇者を取り逃がしてしまいました。どうか、お許しを……。」,"The Golden Knight says ""Oh! Sir Magic Serg. Zeno. I was not able to catch the brave man. Please forgive me.""",骑士队长「啊……！Zeno 大人……只差一步，却让勇者跑了。请您宽恕……」,代码 `strNumber=37` ← eventMT,40,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+38,魔導師ゼノ「取り逃がしただと……？逃げてきたのは貴様の方ではないかっ！この恥知らずめがっ！貴様のような臆病者はこの塔には不要だっ！ここで、死ねっ！」,"The Magic Serg. Zeno replies ""You weren't? I dare you to say that again. You come running up here like a coward and tell me you couldn't do your job. What shame! This tower has no need for the likes of you! You've failed me for the last time. You shall now die.""",魔王 Zeno「让他跑了……？逃回来的不是你吗！你这不知羞耻的东西！像你这样的胆小鬼，这座塔不需要！就在这里，去死吧！」,代码 `strNumber=38` ← eventMT,40,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+39,金騎士「ああ、どうか、お許し……ぎゃあ～～～っ！！！」,"The Golden Knight says ""Oh God, please forgive me! Ah!""",骑士队长「啊，请您宽恕……嘎啊——！！！」,代码 `strNumber=39` ← eventMT,40,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+40,魔導師ゼノ「お見苦しいところをお見せしたな……。だが、安心してもらおう。私はこのようなゴミとはわけが違う。もし、お前が上まで登ってこれたなら今度は、私が直々にお相手しよう。待っているぞ……。」,"The Magic Serg. Zeno says ""I behaved unbecomingly. But don't worry. I quite different from such a fellow. If you should come up to me, I would fight with you directly. I'm waiting for you.""",魔王 Zeno「让你看到难堪的一幕了……不过你放心。我和这种垃圾可不一样。如果你真能爬上来，下次就由我亲自奉陪。我等着你……。」,代码 `strNumber=40` ← eventMT,40,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+41,魔導師ゼノ「よくぞ、ここまで、たどりついたものだ。誉めてやろう。約束どおり、この私が直々に相手をしよう。さあ、来るがいい。」,"The Magic Serg. Zeno ""It's amazing that you found your way here at last. I compliment you. Now, as promised, I'll fight with you, man to man!""",魔王 Zeno「居然能走到这里，值得称赞。如约，由我亲自做你的对手。来吧。」,代码 `strNumber=41` ← eventMT,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+42,魔導師ゼノ「うっ……この陣形は……まずいっ！」,"The Magic Serg. Zeno ""Alas...""",魔王 Zeno「唔……这个阵形……不妙！」,代码 `strNumber=42` ← eventMT,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 43,勇者「おまえはっ……！どうしてこんな所に！」,"The brave man says ""Who? It's you! Why are you in such a place ?""",勇者「你……！怎么会在这里！」,代码 `strNumber=43` ← eventMT,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 45,勇者「あっ！おまえはゼノッ！生きていたのか！？」,"The brave man says ""Huh? Hey! You're Zeno! Were you still alive ?""",勇者「啊！你是 Zeno！你还活着！？」,代码 `strNumber=45` ← eventMT,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-46,魔導師ゼノ「あんなことで倒されるものか。あれは、おまえの戦士としての知性を試したにすぎん。」,"The Magic Serg. Zeno says ""I will never die. I merely tested your intelligence as a soldier.""",魔导师 Zeno「我怎么可能因为那种事就倒下。那不过是试试你作为战士的才智罢了。」,代码 `strNumber=46` ← eventMT,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+46,魔導師ゼノ「あんなことで倒されるものか。あれは、おまえの戦士としての知性を試したにすぎん。」,"The Magic Serg. Zeno says ""I will never die. I merely tested your intelligence as a soldier.""",魔王 Zeno「我怎么可能因为那种事就倒下。那不过是试试你作为战士的才智罢了。」,代码 `strNumber=46` ← eventMT,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 47,勇者「なにっ！？……どういうことだっ！どうして、こんな事を……！？」,"The brave man says ""Huh? What do you mean? Why did you do such a thing ?""",勇者「什么！？……什么意思！为什么要做这种事……！？」,代码 `strNumber=47` ← eventMT,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-48,魔導師ゼノ「おまえの持つ神剣ウェポナー、そして私の持つ全能の杖インテリオン。この２つの力が合わさる時、偉大なる知恵を手に入れる事ができるという……。しかし、それには、その剣の力を十分に発揮できる能力を持った戦士が必要となるのだ。」,"The Magic Serg. Zeno says ""The Sacred Sword 'Weaponer' which you have and The Omniscient Staff 'Intellion' which I have, Legend says that whoever unites the two will recieve great wisdom. But to this end, it must be assured that the soldier who does so can handle the the power of that sword.""",魔导师 Zeno「你手上的神剑 Weaponer，以及我手上的全能之杖 Intherion。据说这两股力量合而为一之时，就能得到伟大的智慧……。但这需要一个能让那把剑发挥全部力量的战士。」,代码 `strNumber=48` ← eventMT,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+48,魔導師ゼノ「おまえの持つ神剣ウェポナー、そして私の持つ全能の杖インテリオン。この２つの力が合わさる時、偉大なる知恵を手に入れる事ができるという……。しかし、それには、その剣の力を十分に発揮できる能力を持った戦士が必要となるのだ。」,"The Magic Serg. Zeno says ""The Sacred Sword 'Weaponer' which you have and The Omniscient Staff 'Intellion' which I have, Legend says that whoever unites the two will recieve great wisdom. But to this end, it must be assured that the soldier who does so can handle the the power of that sword.""",魔王 Zeno「你手上的神剑 Weaponer，以及我手上的全能之杖 Intherion。据说这两股力量合而为一之时，就能得到伟大的智慧……。但这需要一个能让那把剑发挥全部力量的战士。」,代码 `strNumber=48` ← eventMT,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 49,勇者「その戦士が俺だというのか……！？」,"The brave man says ""What are you saying... Am I the soldier ?""",勇者「那个战士就是我……！？」,代码 `strNumber=49` ← eventMT,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-50,魔導師ゼノ「そうだ……しかし、おまえの技量はその神剣ウェポナーを使いこなすには十分ではなかった。だから、私は偽りの情報を流し、様々なワナをこの塔にしかけ、おまえが来るのを待っていたのだ。そして、予定通り、おまえは神剣を扱うのに十分な力を身につけてここまで来た。」,"The Magic Serg. Zeno says ""Yes. But when you came here, your ability wasn't sufficient to master the sacred sword 'Weaponer'.""For that reason, I gave false information, set various traps in this tower, and waited for you to come. You came to here master the power enough to using the sacred sword as arranged beforehand.",魔导师 Zeno「没错……但你的本事还不足以驾驭神剑 Weaponer。所以我放出假消息，在塔里布下各种陷阱，等着你来。而你也如我所料，练成了足以驾驭神剑的力量，走到了这里。」,代码 `strNumber=50` ← eventMT,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+50,魔導師ゼノ「そうだ……しかし、おまえの技量はその神剣ウェポナーを使いこなすには十分ではなかった。だから、私は偽りの情報を流し、様々なワナをこの塔にしかけ、おまえが来るのを待っていたのだ。そして、予定通り、おまえは神剣を扱うのに十分な力を身につけてここまで来た。」,"The Magic Serg. Zeno says ""Yes. But when you came here, your ability wasn't sufficient to master the sacred sword 'Weaponer'.""For that reason, I gave false information, set various traps in this tower, and waited for you to come. You came to here master the power enough to using the sacred sword as arranged beforehand.",魔王 Zeno「没错……但你的本事还不足以驾驭神剑 Weaponer。所以我放出假消息，在塔里布下各种陷阱，等着你来。而你也如我所料，练成了足以驾驭神剑的力量，走到了这里。」,代码 `strNumber=50` ← eventMT,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 51,勇者「では、姫がさらわれたという情報も、俺をここまで、おびき寄せる為のワナだったというのかっ！？」,"The brave man replies ""Well, this means that the rumour that a princess was trapped here... was actually a lie in order to get me here, wasn't it ?""",勇者「那么，公主被掳走的消息，也是为了把我引到这里来的圈套吗！？」,代码 `strNumber=51` ← eventMT,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-52,魔導師ゼノ「その通りだ。そして、後は私がおまえの力を取りこめば、この茶番劇も終わりとなる……。時は来たれり……我全能なる力を用いて、神剣を砕き偉大なる知恵を手に入れん……。ゆくぞっ！神剣の戦士よ！」,"The Magic Serg. Zeno says ""Yes, that's right. And now, if we can work together, this farce will end. Now is the time to act. Using omniscient power, We shall break the sacred sword and recieve great enlightenment. Soldier of the Sacred Sword! Let's finish this!""",魔导师 Zeno「正是。接下来只要夺取你的力量，这场闹剧就结束了……。时机已至……我就用这全能之力，击碎神剑，取得伟大的智慧……。上吧，神剑的战士！」,代码 `strNumber=52` ← eventMT,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-54,魔導師ゼノ「ゴホッ！おのれ、この私が倒されるとは……、しかしこれぐらいで死ぬような私ではない！おぬしともう一度、戦う日が来ることを楽しみに待っているぞ！」,"The Magic Serg. Zeno says ""You villain. Little did I expect to be beaten. But I would never die in such a way. I'll be looking forward to fighting with you again.""",魔导师 Zeno「咳！可恶，我居然会被打倒……不过我可不是这点伤就会死的人！我很期待与你再战的那一天！」,运行时按计算下标引用（未在静态数据/常量赋值中定位）,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+52,魔導師ゼノ「その通りだ。そして、後は私がおまえの力を取りこめば、この茶番劇も終わりとなる……。時は来たれり……我全能なる力を用いて、神剣を砕き偉大なる知恵を手に入れん……。ゆくぞっ！神剣の戦士よ！」,"The Magic Serg. Zeno says ""Yes, that's right. And now, if we can work together, this farce will end. Now is the time to act. Using omniscient power, We shall break the sacred sword and recieve great enlightenment. Soldier of the Sacred Sword! Let's finish this!""",魔王 Zeno「正是。接下来只要夺取你的力量，这场闹剧就结束了……。时机已至……我就用这全能之力，击碎神剑，取得伟大的智慧……。上吧，神剑的战士！」,代码 `strNumber=52` ← eventMT,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+54,魔導師ゼノ「ゴホッ！おのれ、この私が倒されるとは……、しかしこれぐらいで死ぬような私ではない！おぬしともう一度、戦う日が来ることを楽しみに待っているぞ！」,"The Magic Serg. Zeno says ""You villain. Little did I expect to be beaten. But I would never die in such a way. I'll be looking forward to fighting with you again.""",魔王 Zeno「咳！可恶，我居然会被打倒……不过我可不是这点伤就会死的人！我很期待与你再战的那一天！」,运行时按计算下标引用（未在静态数据/常量赋值中定位）,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 222,勇者「なんだと～！」,"The brave man says ""What?""",勇者「你说什么——！」,代码 `strNumber=222` ← eventMT,3,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 223,勇者「あ～っ」,"The brave man says ""Hey!""",勇者「啊——」,代码 `strNumber=223` ← eventMT,3,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 79,「もう、話は終わりじゃ。」,"""I have done what I can. Good luck!""",「话已经说完了。」,obj151（数据引用）,"2,16",无名提示与谜面（石板/老人语气，未具名）
@@ -178,7 +178,7 @@ strNumber,text_jp,text_en,text_zh,referenced_by,floors,group
 67,「急がば回れじゃ。」,"""More haste, less speed.""",「欲速则不达。」,obj143（数据引用）,33,无名提示与谜面（石板/老人语气，未具名）
 69,「この階の宝物庫にある宝を取るためにはマトックが必要じゃ。」,"""You need the mattock in order to get the treasure which is in the item warehouse on this floor.""",「要取这一层宝物库里的宝物，需要镐。」,obj145（数据引用）,37,无名提示与谜面（石板/老人语气，未具名）
 71,「３時になれば空間移動の秘宝が現れるじゃろう。」,"""At three o'clock, the secret treasure that lets one travel in space will appear.""",「到了3点，空间转移秘宝就会出现。」,obj146（数据引用）,39,无名提示与谜面（石板/老人语气，未具名）
-73,「魔術師は隣接すると魔法攻撃をしてくる。魔導師ははさまれると生命力を半分にする攻撃をしてくる。魔導師のはさみ攻撃は自分の生命力が高いほど受けるダメージが大きいはずじゃから気をつけてな。」,"""A Magician will attack using magic when he is next to you. The Magic Sergeants will attack and divide the vital power in half when you are caught between two. As for an attack on both sides from the Magic Sergeant, the stronger you are, the more damage you take. So, please be careful.""",「魔术师一贴身就会用魔法攻击。魔导师被夹在中间时会用把你的生命减半的攻击。魔导师的夹击，你自己的生命越高受到的伤害越大，得当心。」,obj147（数据引用）,42,无名提示与谜面（石板/老人语气，未具名）
+73,「魔術師は隣接すると魔法攻撃をしてくる。魔導師ははさまれると生命力を半分にする攻撃をしてくる。魔導師のはさみ攻撃は自分の生命力が高いほど受けるダメージが大きいはずじゃから気をつけてな。」,"""A Magician will attack using magic when he is next to you. The Magic Sergeants will attack and divide the vital power in half when you are caught between two. As for an attack on both sides from the Magic Sergeant, the stronger you are, the more damage you take. So, please be careful.""",「巫师一贴身就会用魔法攻击。魔法警卫被夹在中间时会用把你的生命减半的攻击。魔法警卫的夹击，你自己的生命越高受到的伤害越大，得当心。」,obj147（数据引用）,42,无名提示与谜面（石板/老人语气，未具名）
 76,「４１階は完全に左右対称になっておる。だから……。」,"""The 41st floor is perfectly symmetrical, and therefore,""",「41层是完全左右对称的。所以……。」,obj149（数据引用）,46,无名提示与谜面（石板/老人语气，未具名）
 78,「サイコロの５の目の形には、魔を封じ込める力があるという。このブロックのボスと戦う時には、このことを頭にいれておきなされ。」,"""It is said that the symbol of 5 on a pair of dice has the force of sealing magic. You had better memorize it till you fight the boss of this area.""",「骰子上5点的形状有封印魔力的力量。跟这个区域的首领交手时，把这件事记在心里。」,obj150（数据引用）,48,无名提示与谜面（石板/老人语气，未具名）
 2,「・・・・・おい・・・」,"""------ Hey!""",「……喂……」,代码 `strNumber=2` ← eventMT,2,无名提示与谜面（石板/老人语气，未具名）
@@ -198,7 +198,7 @@ strNumber,text_jp,text_en,text_zh,referenced_by,floors,group
 283,「願いをかなえたぞ！」,"""Your wish came true.""",「愿望已经实现了！」,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,无名提示与谜面（石板/老人语气，未具名）
 296,「遊んでくれてありがとう！　まだ完成できていません。　楽しみに待っていてね！」,"""Thank you for playing this game. Please wait for completing.""",「谢谢你玩到这里！还没做完。敬请期待！」,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,无名提示与谜面（石板/老人语气，未具名）
 182,幸運の金貨を手に入れた！敵が持っているＧＯＬＤ数が２倍になる。,Got the Lucky Gold! You can get twice gold which monster has from now.,拿到了幸运金币！敌人持有的金币数翻倍。,obj113（数据引用）,00F catalog,道具 / 装备 / 钥匙：拾取与使用
-133,扉の鍵を手に入れた。,Got a key.,拿到了门钥匙。,obj1（数据引用）,"1-9,11-12,14-20,31-34,36-43,45,47 catalog stage_flags",道具 / 装备 / 钥匙：拾取与使用
+133,扉の鍵を手に入れた。,Got a key.,拿到了黄钥匙。,obj1（数据引用）,"1-9,11-12,14-20,31-34,36-43,45,47 catalog stage_flags",道具 / 装备 / 钥匙：拾取与使用
 152,飛翔のオーブを手に入れた！,Got the orb of flying.,得到了飞翔宝珠！,obj26（数据引用）,1 catalog,道具 / 装备 / 钥匙：拾取与使用
 166,赤い回復薬を手に入れた。生命力が５０ポイントアップ！,Got a red elixir. Your vital power was 50 points up!,拿到了红色回复药。生命上升50点！,obj11（数据引用）,"1,3-9,20 catalog stage_flags",道具 / 装备 / 钥匙：拾取与使用
 167,青い回復薬を手に入れた。生命力が２００ポイントアップ！,Got a blue elixir. Your vital power was 200 points up!,拿到了蓝色回复药。生命上升200点！,obj12（数据引用）,"1-4,7-8,10 catalog",道具 / 装备 / 钥匙：拾取与使用
@@ -232,18 +232,18 @@ strNumber,text_jp,text_en,text_zh,referenced_by,floors,group
 176,昇華の翼を手に入れた！,Got wings to fly up!,拿到了升华之翼！,obj107（数据引用）,45 catalog,道具 / 装备 / 钥匙：拾取与使用
 180,魔法の鍵を手に入れた！,Got the magic key!,拿到了魔法钥匙！,obj111（数据引用）,46 catalog,道具 / 装备 / 钥匙：拾取与使用
 159,聖　剣を手に入れた。攻撃力が５０ポイントアップ！,Got a Holy Sword! Your offensive power was 50 points up!,拿到了圣剑。攻击力上升50点！,obj33（数据引用）,48 catalog,道具 / 装备 / 钥匙：拾取与使用
-60,「十字架を持っていれば、ゾンビやバンパイアに対する攻撃力が２倍になる。特にバンパイアは十字架を持っていないと倒せないだろう。これより上の階のどこかにあるらしいが……。」,"""If you carry a cross, the strength of Zombies and Vampires will be cut in half. It is near impossible to defeat them without a cross, especially Vampires. A cross is on a floor higher than this one.""",「只要带着十字架，对丧尸和吸血鬼的攻击力就会翻倍。尤其是吸血鬼，没有十字架大概打不倒。听说就在这上面的某层……。」,obj160（数据引用）,15,道具 / 装备 / 钥匙：拾取与使用
+60,「十字架を持っていれば、ゾンビやバンパイアに対する攻撃力が２倍になる。特にバンパイアは十字架を持っていないと倒せないだろう。これより上の階のどこかにあるらしいが……。」,"""If you carry a cross, the strength of Zombies and Vampires will be cut in half. It is near impossible to defeat them without a cross, especially Vampires. A cross is on a floor higher than this one.""",「只要带着十字架，对兽人和吸血鬼的攻击力就会翻倍。尤其是吸血鬼，没有十字架大概打不倒。听说就在这上面的某层……。」,obj160（数据引用）,15,道具 / 装备 / 钥匙：拾取与使用
 142,勇者のオーブを手に入れた！,Got the orb of the hero.,得到了勇者宝珠！,obj24（数据引用）,catalog,道具 / 装备 / 钥匙：拾取与使用
-147,扉の鍵がない！,Don't have the key.,没有门钥匙！,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,道具 / 装备 / 钥匙：拾取与使用
+147,扉の鍵がない！,Don't have the key.,没有黄钥匙！,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,道具 / 装备 / 钥匙：拾取与使用
 148,青色の鍵がない！,Don't have the blue key.,没有蓝钥匙！,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,道具 / 装备 / 钥匙：拾取与使用
 149,赤色の鍵がない！,Don't have the red key.,没有红钥匙！,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,道具 / 装备 / 钥匙：拾取与使用
 151,飛翔のオーブは階段のとなりでなくては使えない！,You must be near the stairs to use the orb of flying!,飞翔宝珠只能在楼梯旁边使用！,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,道具 / 装备 / 钥匙：拾取与使用
-171,十字架を手に入れた！バンパイア、ゾンビに対する攻撃力が２倍になった！,Got a cross! Your offensive power against Vampires and Zombies has doubled.,拿到了十字架！对吸血鬼、丧尸的攻击力翻倍了！,obj103（数据引用）,catalog,道具 / 装备 / 钥匙：拾取与使用
+171,十字架を手に入れた！バンパイア、ゾンビに対する攻撃力が２倍になった！,Got a cross! Your offensive power against Vampires and Zombies has doubled.,拿到了十字架！对吸血鬼、兽人的攻击力翻倍了！,obj103（数据引用）,catalog,道具 / 装备 / 钥匙：拾取与使用
 172,エリクサーを手に入れた！,Recieved the Magic Elixir.,拿到了圣水！,obj104（数据引用）,catalog,道具 / 装备 / 钥匙：拾取与使用
 173,マトックを手に入れた！,Got the Magic Mattock.,拿到了镐！,obj114（数据引用）,catalog,道具 / 装备 / 钥匙：拾取与使用
 175,空間転移の秘宝を手に入れた！,Got the Warp Staff!,拿到了空间转移秘宝！,obj106（数据引用）,catalog,道具 / 装备 / 钥匙：拾取与使用
 177,降臨の翼を手に入れた！,Got wings to fly down!,拿到了降临之翼！,obj108（数据引用）,catalog,道具 / 装备 / 钥匙：拾取与使用
-178,ドラゴンスレーヤーを手に入れた！ドラゴンに対する攻撃力が２倍になった！,Got the Dragon Slayer! Your attack power against the Dragon has doubled!,拿到了屠龙匕！对龙的攻击力翻倍了！,obj109（数据引用）,catalog,道具 / 装备 / 钥匙：拾取与使用
+178,ドラゴンスレーヤーを手に入れた！ドラゴンに対する攻撃力が２倍になった！,Got the Dragon Slayer! Your attack power against the Dragon has doubled!,拿到了屠龙匕首！对龙的攻击力翻倍了！,obj109（数据引用）,catalog,道具 / 装备 / 钥匙：拾取与使用
 179,雪の結晶を手に入れた！,Got the snow crystal!,拿到了雪花结晶！,obj110（数据引用）,catalog,道具 / 装备 / 钥匙：拾取与使用
 181,スーパーマトックを手に入れた！,Got the Super Magic Mattock!,拿到了超级镐！,obj112（数据引用）,catalog,道具 / 装备 / 钥匙：拾取与使用
 205,枚手に入れた！,Gold.,枚到手！,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,道具 / 装备 / 钥匙：拾取与使用
@@ -268,7 +268,7 @@ strNumber,text_jp,text_en,text_zh,referenced_by,floors,group
 140,階段を下った。,Went down the stairs.,下了楼梯。,地形5、地形7、地形9 等46项（数据引用）,"2-43,45-49",地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 141,壁がくずれた！,The wall collapsed!,墙壁塌了！,obj89（数据引用）,"5,9,12,14,16,19,35-36,41 catalog",地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 183,溶岩が流れている。,The lava is really hot.,熔岩在流动。,obj79（数据引用）,"13,26 catalog",地形与调查提示（门、楼梯、暗墙、熔岩、人物）
-63,「このブロックに、この魔法の塔の主である大魔導師がいるが、今のおまえさんでは戦っても死にに行くようなものじゃろう。とりあえず、うまくやりすごして上のブロックに行くのが正解じゃ。」,"""The Great Magic Master is in this area. He is a proprietor of this magic tower. At your strenght, to attack him means death. It stands to reason that you should not face him, but rather, get items on higher levels first.""",「这个区域里有这座魔法之塔的主人——大魔导师，以你现在的本事去挑战，等于去送死。总之先想办法避开他，往上面的区域去才是正解。」,obj140（数据引用）,21,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
+63,「このブロックに、この魔法の塔の主である大魔導師がいるが、今のおまえさんでは戦っても死にに行くようなものじゃろう。とりあえず、うまくやりすごして上のブロックに行くのが正解じゃ。」,"""The Great Magic Master is in this area. He is a proprietor of this magic tower. At your strenght, to attack him means death. It stands to reason that you should not face him, but rather, get items on higher levels first.""",「这个区域里有这座魔法之塔的主人——大法师，以你现在的本事去挑战，等于去送死。总之先想办法避开他，往上面的区域去才是正解。」,obj140（数据引用）,21,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 70,「門番のいる所には必ず門があるよ。逆に門のある階には、それを守っている敵がいるよ。だから……。」,"""There is never a gate without a Gate-Keeper. Conversely there are always enemies who keep the gate on floors that have gates. So,""",「有门卫的地方一定有门；反过来说，有门的楼层就有守卫它的敌人。所以……。」,obj165（数据引用）,38,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 136,扉が開いた。,The door has opened.,门开了。,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 137,青色の扉が開いた。,The blue door has opened.,蓝门开了。,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
@@ -282,7 +282,7 @@ strNumber,text_jp,text_en,text_zh,referenced_by,floors,group
 245,道が壁に変わった！,The road changed to the wall!,道路变成了墙壁！,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 267,0,0,0,地形116、地形117（数据引用）,—,地形与调查提示（门、楼梯、暗墙、熔岩、人物）
 58,「祭壇に寄進したときは、攻撃力よりも防御力を主に上げてもらった方がいいでしょう。ただし、攻撃力をまったく上げないと、あとで倒せない敵がでてくるかもしれないよ。」,"""When you offer gold at an alter, you may as well have your defensive power risen rather than your offensive power. The enemy whom you cannot beat may appear, provided you won't raise your offensive power.""",「在祭坛奉献时，主要提升防御力比提升攻击力更好。不过要是一点攻击力都不提，后面可能会出现打不动的敌人哦。」,obj155（数据引用）,7,界面 · 系统文案（状态窗、情報、音、得分、称号）
-77,「ドラゴンを倒す気なら、聖剣と聖盾、それにドラゴンスレーヤーを持って、なおかつレベルが高くなければならないだろう。」,"""If you want to beat the Dragon, you must have a holy sword, a holy shield, and a Dragon slayer, and also you must be high level.""",「想打倒龙，得带上圣剑、圣盾，再加屠龙匕，而且等级还得够高才行。」,obj171（数据引用）,47,界面 · 系统文案（状态窗、情報、音、得分、称号）
+77,「ドラゴンを倒す気なら、聖剣と聖盾、それにドラゴンスレーヤーを持って、なおかつレベルが高くなければならないだろう。」,"""If you want to beat the Dragon, you must have a holy sword, a holy shield, and a Dragon slayer, and also you must be high level.""",「想打倒龙，得带上圣剑、圣盾，再加屠龙匕首，而且等级还得够高才行。」,obj171（数据引用）,47,界面 · 系统文案（状态窗、情報、音、得分、称号）
 185,命,Vital power:,生命,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
 186,攻,Offensive power:,攻击,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
 187,防,Defensive power:,防御,运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,界面 · 系统文案（状态窗、情報、音、得分、称号）
