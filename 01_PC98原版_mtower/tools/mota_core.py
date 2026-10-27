@@ -226,6 +226,12 @@ for e in DYNEV.get('ter', []):
 
 _TRAP_GUARD_CELLS = set()          # 由剧本自己放置的格，不进"进层即写入"集合（在下面填）
 
+# ✅ 20F BOSS 间红门：静态底图 (20,6,9) 就是红门 obj27（DOOR_OF[27]='r'），
+#    必须持红钥匙 obj28 才能开启 —— 这是「见 BOSS 的基本门槛」。
+#    dyn_raw 里那条 (6,9,20) 记的是「门已开之后」的状态，不是进层即写入；
+#    若照搬成进层覆盖，红门会凭空变成可通行装饰，红钥匙门槛被整个跳过。
+BOSS_DOOR_CELLS = {(20, 6, 9)}
+
 TRAP_3F = dict(                                        # ✅ 指令行 31937/32084/32094/32107/32325..32404
     trigger=(5, 9),                                    #    中央格＝勇者所站处
     set_hp=400, set_atk=10, set_dfn=10,
@@ -291,6 +297,8 @@ class World:
         for x, y, o in FLOOR_WRITES.get(f, []):
             if (f, x, y) in _TRAP_GUARD_CELLS:
                 continue                                  # 属于 3F 剧本，触发时才放
+            if (f, x, y) in BOSS_DOOR_CELLS:
+                continue                                  # ✅ 红门保持 obj27，须红钥匙开启（见 BOSS 的门槛）
             base = self.cells.get((f, x, y), 0)
             if base and TYPE.get(oatr(base, 3)) == 'MONSTER':
                 continue                                  # ✅ 该格静态是怪/BOSS，事件写入不得覆盖（否则 BOSS 消失、怪免打）
@@ -338,13 +346,13 @@ class World:
                 return ['blocked:墙']               # 未触发=普通墙；触发后直接放行（log 由落格时带出）
         o = self.at(f, nx, ny)
         # ✅ 修正（此处原为死锁 bug）：20F 的「进入」与「离开」是两套独立机制，不能混为一谈。
-        #    · 进入：玩家踏上触发点 (6,8) 后，由剧情自动开门 —— 见 Java 源码
-        #      MTower.java:3080：displayDoor(123,22,4)（开门动画）→ mapObject[22][123]=20
-        #      （(6,9) 变为可通行装饰）→ banpaia()（吸血鬼登场）→ strNumber=19。
-        #      门既不消耗红钥匙，也不要求 boss20。
-        #    · 离开：击败 (6,6) 吸血鬼后置 boss20=True，(20,6,1) 才现出上行梯（下方 warp 逻辑，原本正确）。
-        #    旧代码把「进入」误绑到 boss20 上，造成「要杀 BOSS 才开门、而 BOSS 就在门后 (6,6)」
-        #    的死锁，20F BOSS 永远打不到。现按源码语义移除该判断。
+        #    · 进入：(20,6,9) 是红门 obj27，必须持红钥匙 obj28 开启 —— 见 BOSS 的基本门槛。
+        #      开门由下方 ty == 'DOOR' 分支统一处理（无红钥匙挡路、有则消耗 1 把），
+        #      故此处不再额外判断。开门后踏上 (6,8) 触发点，banpaia() 才放出吸血鬼
+        #      （Java MTower.java:3080：displayDoor → mapObject[22][123]=20 → banpaia）。
+        #    · 离开：击败 (6,6) 吸血鬼后置 boss20=True，(20,6,1) 才现上行梯（下方 warp 逻辑，正确）。
+        #    旧代码把「进入」误绑到 boss20 上，既造出「要杀 BOSS 才开门、而 BOSS 在门后」的死锁，
+        #    又让红钥匙这道门槛形同虚设。现已恢复红门、交由 DOOR 分支消耗红钥匙。
         log = []
         ty = TYPE.get(oatr(o, 3), '?') if o else '空'
         if o:

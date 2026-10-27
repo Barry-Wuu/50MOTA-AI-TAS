@@ -276,17 +276,17 @@ def main():
     #      ATK87 → 每击 108 → 需 5 击 → 掉血 (199-59)×4 = 560，此时血量仅两百多，必死；
     #      想把击数压到 2 需要 ATK147（献 6 次、共 2440G），而手上只有 955G，做不到。
     #    故献生命力：3 次 +600 HP，成本 140+220+320=680G，最划算。
-    print('--- 回 12F 祭坛献祭（+HP）', flush=True)
+    print('--- 回 12F：祭坛献攻 + 买红钥匙', flush=True)
     w = descend(w, 12)
     if w is None:
         print('✗ 回不到 12F')
         return
-    # ⚠️ 这里刻意**不**改 altar_policy，固定用引擎默认的 'atk'。
-    #    原因：CSV 只记录移动方向，无法记录「祭坛菜单选了哪一项」；
-    #    若在此设成 'hp'，replay 时会回落到默认的 'atk'，导致路线无法忠实复现。
-    #    用默认 'atk' 则脚本执行与 CSV 回放完全一致（已实测：献攻 3 次后仍可击杀 BOSS）。
-    for i in range(3):
-        # 献祭后英雄就站在祭坛格上，必须先离开再撞回来才能触发下一次
+    # ⚠️ 刻意不改 altar_policy：CSV 只记移动方向、无法记录祭坛菜单选项，
+    #    设成 'hp' 会让回放回落到默认 'atk'，路线无法忠实复现。故固定用默认 'atk'。
+    # 预算：GOLD 955 → 献祭 1 次(140) → 买红钥匙(800) → 余 15。
+    #    只献 1 次是因为红钥匙要 800G：献 3 次(680G)就买不起钥匙，进不了 BOSS 间。
+    for i in range(1):
+        # 献祭后英雄站在祭坛格上，必须先离开再撞回来才能触发下一次
         if (w.hero.f, w.hero.x, w.hero.y) == (12, 6, 9):
             w2 = seg('  离开祭坛', w, (12, 6, 10))
             if w2:
@@ -295,11 +295,26 @@ def main():
         if w.hero.gold < c:
             print('  金不足（需 %d，有 %d），停止献祭' % (c, w.hero.gold), flush=True)
             break
-        w2 = seg('12F 祭坛第%d次(+200HP)' % (i + 1), w, (12, 6, 9))
+        w2 = seg('12F 祭坛第%d次(ATK+10)' % (i + 1), w, (12, 6, 9))
         if w2 is None:
             break
         w = w2
     print('  献祭后:', st(w.hero), flush=True)
+
+    # ── 买红钥匙：12F(1,1) 商店 800G ──
+    #    20F(6,9) 是红门 obj27，必须持红钥匙才能开 —— 这是「见 BOSS 的基本门槛」。
+    #    静态红钥匙只有 8F(10,2)（已在 1F→17F 用于开 10F 红门）、37F、42F，都拿不到，
+    #    所以只能在这里买。GOLD 不够就进不了 BOSS 间。
+    print('--- 12F 商店买红钥匙（800G）', flush=True)
+    w2 = seg('12F 买红钥匙 (1,1)', w, (12, 1, 1))
+    if w2 is None:
+        print('✗ 买不到红钥匙（金不足或走不到）')
+        return
+    w = w2
+    print('  买后:', st(w.hero), flush=True)
+    if w.hero.keys['r'] <= 0:
+        print('✗ 红钥匙未到手，无法开 20F 红门')
+        return
 
     # ── 回 20F ──
     w = ascend(w, 20)
