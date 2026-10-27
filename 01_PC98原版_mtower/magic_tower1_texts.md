@@ -4,10 +4,10 @@
 
 **编排规则**
 
-- 章题即楼层，条目本身不再写「出现层」；
+- 章题即楼层，条目本身不写「出现层」；
 - 同层条目按 `[n]` 编号升序；
-- 一条文案若在多层出现（怪物名、地形提示等多为此类），在每个对应楼层章各写一遍，内容完全相同；因此本文实际条目数（604）大于文案表行数（309）。
-- 不挂地图数据、没有楼层概念的（开场/战后台词、菜单与系统提示、钥匙不足等）统一放在最后的「无楼层归属」章，同样按编号升序。
+- 一条文案若在多层出现（怪物名、地形提示等多为此类），在每个对应楼层章各写一遍，内容完全相同；因此本文实际条目数（608）大于文案表行数（309）。
+- 不挂地图数据、没有楼层概念的统一放在最后的「无楼层归属」章，同样按编号升序。
 
 每条内容为两段：日文原文（`>` 引用块）与 `EN:` 英文译文。编号左侧是**引用方式**：
 
@@ -54,6 +54,18 @@ EN: Got the Lucky Gold! You can get twice gold which monster has from now.
 EN: The Lucky Gold
 
 ### 1F
+
+**[2]** 代码 `strNumber=2` ← eventMT
+
+> 「・・・・・おい・・・」
+>
+EN: "------ Hey!"
+
+**[3]** 代码 `strNumber=3` ← eventMT
+
+> 「・・・・・おいっ！起きろ！」
+>
+EN: "------ Hey! Wake up!"
 
 **[10]** obj177（数据引用）
 
@@ -1227,6 +1239,12 @@ EN: Got a blue crystal. Your defensive power was 2 points up!
 >
 EN: The thief says "Don't worry, I'll be there."
 
+**[17]** obj88（数据引用）
+
+> 盗賊「よおっ！無事だったか？ここの大ダコが道をふさいでいて困っていたんだが今ようやく抜け穴が完成したんだ。おまえも、ここの大ダコを倒すのは後回しにした方がいいぜ。じゃあ、またなっ！」
+>
+EN: The thief says "Ah! Are you all right? The Big Octopus which lives in here was blocking my progress. Now a loophole has completed at last. You had better put off beating him. See you later!"
+
 **[60]** obj160（数据引用）
 
 > 「十字架を持っていれば、ゾンビやバンパイアに対する攻撃力が２倍になる。特にバンパイアは十字架を持っていないと倒せないだろう。これより上の階のどこかにあるらしいが……。」
@@ -1902,6 +1920,12 @@ EN: Went up the stairs.
 EN: Went down the stairs.
 
 ### 26F
+
+**[22]** 代码 `strNumber=22` ← eventMT
+
+> 「・・・ジ・・・トキハキタレリ・・・エラバレシモノヨ、シヲオソレヌナラバジクウノモンヲクグリテ、ワガモトヘクルガヨイ・・・」
+>
+EN: "Now is the time. You were chosen. If you aren't afraid of Death, you should go through the gate of Time and Space, and come to me."
 
 **[23]** obj44（数据引用）
 
@@ -3763,39 +3787,18 @@ EN: The brave man says "What?"
 >
 EN: The brave man says "Hey!"
 
-### 无楼层归属（—）
+### 无楼层归属
 
-这些文案不落在地图格上，或引用下标在运行时算出、无法静态定位到具体楼层；按编号升序，共 127 条。
+余下这些条目没有楼层归属，按编号升序，共 123 条。原因分两类：
 
-**[2]** 代码 `strNumber=2` ← eventMT
-
-> 「・・・・・おい・・・」
->
-EN: "------ Hey!"
-
-**[3]** 代码 `strNumber=3` ← eventMT
-
-> 「・・・・・おいっ！起きろ！」
->
-EN: "------ Hey! Wake up!"
-
-**[17]** obj88（数据引用）
-
-> 盗賊「よおっ！無事だったか？ここの大ダコが道をふさいでいて困っていたんだが今ようやく抜け穴が完成したんだ。おまえも、ここの大ダコを倒すのは後回しにした方がいいぜ。じゃあ、またなっ！」
->
-EN: The thief says "Ah! Are you all right? The Big Octopus which lives in here was blocking my progress. Now a loophole has completed at last. You had better put off beating him. See you later!"
+- 纯系统反馈——开关门、梯子/人物存在提示、钥匙不足、道具使用与伤害结算、存读档、音效开关、界面标签、评语与称号等，任何楼层都可能出现，没有「本层专属」的含义（含购买时余额不足的 [18]）；
+- 挂在 obj40 / obj155 / obj167 / obj172 / obj17 上的 5 条（[57] [58] [72] [83] [89]）：这五个对象在 0F–50F 全部地图里没有任何落点（静态布点、`FLOOR_WRITES` 事件写入、`DYNEV` 动态投放三路都查过），文本在游戏里不会出现，属未使用条目。
 
 **[18]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 「お金が足りないよ！」
 >
 EN: "You don't have enough money."
-
-**[22]** 代码 `strNumber=22` ← eventMT
-
-> 「・・・ジ・・・トキハキタレリ・・・エラバレシモノヨ、シヲオソレヌナラバジクウノモンヲクグリテ、ワガモトヘクルガヨイ・・・」
->
-EN: "Now is the time. You were chosen. If you aren't afraid of Death, you should go through the gate of Time and Space, and come to me."
 
 **[57]** obj40（数据引用）
 
