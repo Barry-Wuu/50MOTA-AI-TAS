@@ -6,7 +6,7 @@
 
 - 章题即楼层，条目本身不写「出现层」；
 - 同层条目按 `[n]` 编号升序；
-- 一条文案若在多层出现（怪物名、地形提示等多为此类），在每个对应楼层章各写一遍，内容完全相同；因此本文实际条目数（608）大于文案表行数（309）。
+- 一条文案若在多层出现（怪物名、地形提示等多为此类），在每个对应楼层章各写一遍，内容完全相同；因此本文实际条目数（609）大于文案表行数（309）。
 - 不挂地图数据、没有楼层概念的统一放在最后的「无楼层归属」章，同样按编号升序。
 
 每条内容为两段：日文原文（`>` 引用块）与 `EN:` 英文译文。编号左侧是**引用方式**：
@@ -54,18 +54,6 @@ EN: Got the Lucky Gold! You can get twice gold which monster has from now.
 EN: The Lucky Gold
 
 ### 1F
-
-**[10]** obj177（数据引用）
-
-> 魔導師ゼノ「ようこそ、『魔法の塔』へ。おまえがちょうど１００人目の侵入者だ。本来なら手下共に相手をさせるところだが、特別にこの私が自ら相手になってやろう。己の不運を呪うのだな。」
->
-EN: The Magic Serg. Zeno says "Welcome to 'The Magic Tower'. You are the hundredth man who dared to enter my tower. You will now face my guards. Should you happen to survive, I will fight with you in person specially. You should accept your fate."
-
-**[11]** obj178（数据引用）
-
-> 勇者「なんだっ！？　うわ～っ！？」
->
-EN: The brave man says "What? Oh!"
 
 **[100]** obj5（数据引用）
 
@@ -235,7 +223,25 @@ EN: Went down the stairs.
 >
 EN: Got a blue elixir. Your vital power was 200 points up!
 
+**[266]** 代码 `strNumber=266` ← eventMT
+
+> 「・・・」
+>
+EN: "------"
+
 ### 3F
+
+**[10]** obj177（数据引用）
+
+> 魔導師ゼノ「ようこそ、『魔法の塔』へ。おまえがちょうど１００人目の侵入者だ。本来なら手下共に相手をさせるところだが、特別にこの私が自ら相手になってやろう。己の不運を呪うのだな。」
+>
+EN: The Magic Serg. Zeno says "Welcome to 'The Magic Tower'. You are the hundredth man who dared to enter my tower. You will now face my guards. Should you happen to survive, I will fight with you in person specially. You should accept your fate."
+
+**[11]** obj178（数据引用）
+
+> 勇者「なんだっ！？　うわ～っ！？」
+>
+EN: The brave man says "What? Oh!"
 
 **[81]** obj153（数据引用）
 
@@ -320,6 +326,18 @@ EN: Got a red crystal. Your offensive power was 1 point up!
 > 青のクリスタルを手に入れた。防御力が１ポイントアップ！
 >
 EN: Got a blue crystal. Your defensive power was 1 point up!
+
+**[222]** 代码 `strNumber=222` ← eventMT
+
+> 勇者「なんだと～！」
+>
+EN: The brave man says "What?"
+
+**[223]** 代码 `strNumber=223` ← eventMT
+
+> 勇者「あ～っ」
+>
+EN: The brave man says "Hey!"
 
 **[299]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
@@ -3775,21 +3793,9 @@ EN: The Magic Serg. Zeno says "Yes, that's right. And now, if we can work togeth
 >
 EN: The Magic Serg. Zeno says "You villain. Little did I expect to be beaten. But I would never die in such a way. I'll be looking forward to fighting with you again."
 
-**[222]** 代码 `strNumber=222` ← eventMT
-
-> 勇者「なんだと～！」
->
-EN: The brave man says "What?"
-
-**[223]** 代码 `strNumber=223` ← eventMT
-
-> 勇者「あ～っ」
->
-EN: The brave man says "Hey!"
-
 ### 无楼层归属
 
-余下这些条目没有楼层归属，按编号升序，共 123 条。原因分两类：
+余下这些条目没有楼层归属，按编号升序，共 122 条。原因分两类：
 
 - 纯系统反馈——开关门、梯子/人物存在提示、钥匙不足、道具使用与伤害结算、存读档、音效开关、界面标签、评语与称号等，任何楼层都可能出现，没有「本层专属」的含义（含购买时余额不足的 [18]）；
 - 挂在 obj40 / obj155 / obj167 / obj172 / obj17 上的 5 条（[57] [58] [72] [83] [89]）：这五个对象在 0F–50F 全部地图里没有任何落点（静态布点、`FLOOR_WRITES` 事件写入、`DYNEV` 动态投放三路都查过），文本在游戏里不会出现，属未使用条目。
@@ -4387,12 +4393,6 @@ EN: You don't have a key!
 > このデータはロードできません。
 >
 EN: This Game can't load.
-
-**[266]** 代码 `strNumber=266` ← eventMT
-
-> 「・・・」
->
-EN: "------"
 
 **[267]** 地形116、地形117（数据引用）
 

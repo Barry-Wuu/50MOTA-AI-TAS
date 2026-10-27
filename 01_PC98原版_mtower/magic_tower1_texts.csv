@@ -128,8 +128,8 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 59,「９階と１６階と１８階の抜け穴には気が付いたかい？」,"""Did you notice the secret passages on the 9th, 16th, and 18th floors?""",obj157（数据引用）,12,盗贼（脱出屋）对白
 99,盗賊「ようまたあったな！無事だったか？これは聞いた話なんだが、２５階のボスを倒すと『時空の門』がどこかにできるらしいぞ。」,"The thief says ""Ah!, we meet again! Thank goodness you're alive! I heard that if you beat the boss of 25th floor, 'the gate of time and space' will appear somewhere.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,35,盗贼（脱出屋）对白
 23,勇者「これはっ……！人形だっ！」,"The brave man says ""Oh! What? This is a doll!""",obj44（数据引用）,26 catalog,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-10,魔導師ゼノ「ようこそ、『魔法の塔』へ。おまえがちょうど１００人目の侵入者だ。本来なら手下共に相手をさせるところだが、特別にこの私が自ら相手になってやろう。己の不運を呪うのだな。」,"The Magic Serg. Zeno says ""Welcome to 'The Magic Tower'. You are the hundredth man who dared to enter my tower. You will now face my guards. Should you happen to survive, I will fight with you in person specially. You should accept your fate.""",obj177（数据引用）,1,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-11,勇者「なんだっ！？　うわ～っ！？」,"The brave man says ""What? Oh!""",obj178（数据引用）,1,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+10,魔導師ゼノ「ようこそ、『魔法の塔』へ。おまえがちょうど１００人目の侵入者だ。本来なら手下共に相手をさせるところだが、特別にこの私が自ら相手になってやろう。己の不運を呪うのだな。」,"The Magic Serg. Zeno says ""Welcome to 'The Magic Tower'. You are the hundredth man who dared to enter my tower. You will now face my guards. Should you happen to survive, I will fight with you in person specially. You should accept your fate.""",obj177（数据引用）,3,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+11,勇者「なんだっ！？　うわ～っ！？」,"The brave man says ""What? Oh!""",obj178（数据引用）,3,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 13,スケルトンＡ「ふふふ、よくここまできたな。かくなる上はこの俺様がじきじき相手になってやる・・・といいたいところだが、まずは貴様の力を見せてもらうぞ！出会え！スケルトン兵士たちよ！」,"Skeleton A ""Ha ha ha, You are lucky to have gotten so far. Since it has come to this, I shall fight with you personally, but first I must test your strength. Go and fight! Skeleton Soldiers!""",代码 `strNumber=13` ← eventMT,10,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 14,スケルトンＡ「ほほう、なかなか・・・。だが、ここから先へは行かせん！ここで葬ってくれるわっ！さあ、こいっ！！！」,"Skeleton A ""How considerably you do. But I will never let you pass. Here, you will die. Fight me!""",代码 `strNumber=14` ← eventMT,10,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 15,スケルトンＡ「ううう・・・よくぞこの俺様を倒せたものだ・・・。しかし、これから先の階はこれまでとは比べものにならんほど強力な敵とワナが待っているぞ、せいぜい気を付けることだな・・・」,"Skeleton A ""No, It's not possible! You may have defeated me, but beyond this point you must meet some enemies and snares that are powerful beyond anything you've seen. If careless, you will die!""",代码 `strNumber=15` ← eventMT,10,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
@@ -160,8 +160,8 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 51,勇者「では、姫がさらわれたという情報も、俺をここまで、おびき寄せる為のワナだったというのかっ！？」,"The brave man replies ""Well, this means that the rumour that a princess was trapped here... was actually a lie in order to get me here, wasn't it ?""",代码 `strNumber=51` ← eventMT,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 52,魔導師ゼノ「その通りだ。そして、後は私がおまえの力を取りこめば、この茶番劇も終わりとなる……。時は来たれり……我全能なる力を用いて、神剣を砕き偉大なる知恵を手に入れん……。ゆくぞっ！神剣の戦士よ！」,"The Magic Serg. Zeno says ""Yes, that's right. And now, if we can work together, this farce will end. Now is the time to act. Using omniscient power, We shall break the sacred sword and recieve great enlightenment. Soldier of the Sacred Sword! Let's finish this!""",代码 `strNumber=52` ← eventMT,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 54,魔導師ゼノ「ゴホッ！おのれ、この私が倒されるとは……、しかしこれぐらいで死ぬような私ではない！おぬしともう一度、戦う日が来ることを楽しみに待っているぞ！」,"The Magic Serg. Zeno says ""You villain. Little did I expect to be beaten. But I would never die in such a way. I'll be looking forward to fighting with you again.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-222,勇者「なんだと～！」,"The brave man says ""What?""",代码 `strNumber=222` ← eventMT,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
-223,勇者「あ～っ」,"The brave man says ""Hey!""",代码 `strNumber=223` ← eventMT,50,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+222,勇者「なんだと～！」,"The brave man says ""What?""",代码 `strNumber=222` ← eventMT,3,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
+223,勇者「あ～っ」,"The brave man says ""Hey!""",代码 `strNumber=223` ← eventMT,3,具名人物台词（ゼノ・スケルトンＡ・バンパイア・大魔導師・老人・妖精・勇者…）
 79,「もう、話は終わりじゃ。」,"""I have done what I can. Good luck!""",obj151（数据引用）,"2,16",无名提示与谜面（石板/老人语气，未具名）
 80,「おお、助けてくれてありがとうよ。お礼に、そなたの攻撃力と防御力を３％だけあげてやろう」（攻撃力と防御力が上がった!）,"""Oh, thank you for your help. I will raise your offensive and defensive power 3 percent as a token of my gratitude. [You begin feeling stronger]""",obj152（数据引用）,2,无名提示与谜面（石板/老人语气，未具名）
 84,「有効に使ってね!」,"""Please, use it wisely.""",obj173（数据引用）,2,无名提示与谜面（石板/老人语气，未具名）
@@ -193,7 +193,7 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 98,「まいどーっ！」,"""Thank you very much.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,无名提示与谜面（石板/老人语气，未具名）
 208,「どの望みをかなえて欲しいのだ？」,"""What option shall you choose?""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,无名提示与谜面（石板/老人语气，未具名）
 215,「金がたらん！」,"""You don't have enough money!""",代码 `strNumber=215` ← saidan,—,无名提示与谜面（石板/老人语气，未具名）
-266,「・・・」,"""------""",代码 `strNumber=266` ← eventMT,—,无名提示与谜面（石板/老人语气，未具名）
+266,「・・・」,"""------""",代码 `strNumber=266` ← eventMT,2,无名提示与谜面（石板/老人语气，未具名）
 280,「生命力がなくなりました。再挑戦してください。」,"""You have perished in Magic Tower. Please try again!""",代码 `strNumber=280` ← eventMT,—,无名提示与谜面（石板/老人语气，未具名）
 283,「願いをかなえたぞ！」,"""Your wish came true.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,无名提示与谜面（石板/老人语气，未具名）
 296,「遊んでくれてありがとう！　まだ完成できていません。　楽しみに待っていてね！」,"""Thank you for playing this game. Please wait for completing.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,无名提示与谜面（石板/老人语气，未具名）
