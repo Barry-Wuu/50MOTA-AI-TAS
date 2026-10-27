@@ -55,18 +55,6 @@ EN: The Lucky Gold
 
 ### 1F
 
-**[2]** 代码 `strNumber=2` ← eventMT
-
-> 「・・・・・おい・・・」
->
-EN: "------ Hey!"
-
-**[3]** 代码 `strNumber=3` ← eventMT
-
-> 「・・・・・おいっ！起きろ！」
->
-EN: "------ Hey! Wake up!"
-
 **[10]** obj177（数据引用）
 
 > 魔導師ゼノ「ようこそ、『魔法の塔』へ。おまえがちょうど１００人目の侵入者だ。本来なら手下共に相手をさせるところだが、特別にこの私が自ら相手になってやろう。己の不運を呪うのだな。」
@@ -164,6 +152,18 @@ EN: Got a blue crystal. Your defensive power was 1 point up!
 EN: The orb of flying
 
 ### 2F
+
+**[2]** 代码 `strNumber=2` ← eventMT
+
+> 「・・・・・おい・・・」
+>
+EN: "------ Hey!"
+
+**[3]** 代码 `strNumber=3` ← eventMT
+
+> 「・・・・・おいっ！起きろ！」
+>
+EN: "------ Hey! Wake up!"
 
 **[4]** obj87（数据引用）
 

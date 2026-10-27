@@ -181,8 +181,8 @@ strNumber,text_jp,text_en,referenced_by,floors,group
 73,「魔術師は隣接すると魔法攻撃をしてくる。魔導師ははさまれると生命力を半分にする攻撃をしてくる。魔導師のはさみ攻撃は自分の生命力が高いほど受けるダメージが大きいはずじゃから気をつけてな。」,"""A Magician will attack using magic when he is next to you. The Magic Sergeants will attack and divide the vital power in half when you are caught between two. As for an attack on both sides from the Magic Sergeant, the stronger you are, the more damage you take. So, please be careful.""",obj147（数据引用）,42,无名提示与谜面（石板/老人语气，未具名）
 76,「４１階は完全に左右対称になっておる。だから……。」,"""The 41st floor is perfectly symmetrical, and therefore,""",obj149（数据引用）,46,无名提示与谜面（石板/老人语气，未具名）
 78,「サイコロの５の目の形には、魔を封じ込める力があるという。このブロックのボスと戦う時には、このことを頭にいれておきなされ。」,"""It is said that the symbol of 5 on a pair of dice has the force of sealing magic. You had better memorize it till you fight the boss of this area.""",obj150（数据引用）,48,无名提示与谜面（石板/老人语气，未具名）
-2,「・・・・・おい・・・」,"""------ Hey!""",代码 `strNumber=2` ← eventMT,1,无名提示与谜面（石板/老人语气，未具名）
-3,「・・・・・おいっ！起きろ！」,"""------ Hey! Wake up!""",代码 `strNumber=3` ← eventMT,1,无名提示与谜面（石板/老人语气，未具名）
+2,「・・・・・おい・・・」,"""------ Hey!""",代码 `strNumber=2` ← eventMT,2,无名提示与谜面（石板/老人语气，未具名）
+3,「・・・・・おいっ！起きろ！」,"""------ Hey! Wake up!""",代码 `strNumber=3` ← eventMT,2,无名提示与谜面（石板/老人语气，未具名）
 18,「お金が足りないよ！」,"""You don't have enough money.""",运行时按计算下标引用（未在静态数据/常量赋值中定位）,—,无名提示与谜面（石板/老人语气，未具名）
 22,「・・・ジ・・・トキハキタレリ・・・エラバレシモノヨ、シヲオソレヌナラバジクウノモンヲクグリテ、ワガモトヘクルガヨイ・・・」,"""Now is the time. You were chosen. If you aren't afraid of Death, you should go through the gate of Time and Space, and come to me.""",代码 `strNumber=22` ← eventMT,26,无名提示与谜面（石板/老人语气，未具名）
 66,「この塔は５０階建てだが、実際には４９階までしか行けないようだ。」,"""This tower is 50 stories high, but in reality it seems that you cannot go up to the 50th floor.""",obj163（数据引用）,31,无名提示与谜面（石板/老人语气，未具名）
