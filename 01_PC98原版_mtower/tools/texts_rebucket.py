@@ -115,10 +115,12 @@ def main():
     rows = list(csv.DictReader(open(CSVP, encoding='utf-8')))
     floors = {}
     group = {}
+    zh = {}
     for r in rows:
         i = int(r['strNumber'])
         floors[i] = FLOOR_FIX.get(i, r['floors'])
         group[i] = r['group']
+        zh[i] = (r.get('text_zh') or '').strip()
     missing = set(entries) - set(floors)
     if missing:
         raise SystemExit('CSV 缺编号 %s' % sorted(missing))
@@ -134,7 +136,16 @@ def main():
             nofloor.append(i)
 
     def block(i):
+        """条目块：标题行 + 日文引用块 + 「译文：」中文。EN 行（及其续行）在此被整体替换。"""
         mid, body = entries[i]
+        k = next((n for n, l in enumerate(body)
+                  if l.startswith('EN: ') or l.startswith('译文：')), -1)
+        if k >= 0:
+            body = body[:k]
+        while body and body[-1].strip() == '':
+            body.pop()
+        if zh.get(i):
+            body = body + ['译文：' + zh[i]]
         return ['**[%d]**%s' % (i, mid)] + body
 
     cat = defaultdict(list)
@@ -157,7 +168,7 @@ def main():
         '因此本文实际条目数（%d）大于文案表行数（309）。' % total,
         '- 不挂地图数据、没有楼层概念的统一放在最后的「无楼层归属」章，同样按编号升序。',
         '',
-        '每条内容为两段：日文原文（`>` 引用块）与 `EN:` 英文译文。编号左侧是**引用方式**：',
+        '每条内容为两段：日文原文（`>` 引用块）与 `译文：` 中文译文。编号左侧是**引用方式**：',
         '',
         '- `objN（数据引用）` / `地形N（数据引用）`——由对象表 / 地形表的 `ATR_STRING` 列挂上；',
         '- `代码 strNumber=N ← 函数名`——由指令流里 `sipush N; putfield strNumber` 直接指定'
@@ -168,6 +179,11 @@ def main():
         '少数条目（怪物名、钥匙与道具取得提示等）的楼层除地图布点外，还依据「怪物图鉴登记」与'
         '「关卡旗标表」两路数据交叉核对，原始 `floors` 字段（含 `catalog` / `stage_flags` / `00F` 标记）'
         '见 `magic_tower1_texts.csv`。',
+        '',
+        '**译文底本**：2004 年《魔塔50层》Flash 汉化版（`flash/mota50.swf`）的全部中文文案——'
+        '剧情、商店、祭坛、道具与怪物名均以该版为准（如 铁剑/银剑/骑士剑/圣剑/神圣剑、'
+        '史莱姆、大章鱼、骷髅兵、魔法警卫、幸运金币、圣水、屠龙匕、地震卷轴、镐、瞬移、'
+        '向上/向下传送）；该版没有的台词（PC-98 独有的 50F 终战长段、称号评语等）按同一套译名自行译出。',
         '',
         '原文的 12 个分组在正文里不再分章，编号索引如下（编号是文本表下标，与阅读顺序无关）：',
         '',
@@ -202,7 +218,8 @@ def main():
             if i in FLOOR_FIX:
                 r['floors'] = FLOOR_FIX[i]
         with open(CSVP, 'w', newline='', encoding='utf-8') as fh:
-            w = csv.DictWriter(fh, fieldnames=['strNumber', 'text_jp', 'text_en', 'referenced_by', 'floors', 'group'])
+            w = csv.DictWriter(fh, fieldnames=['strNumber', 'text_jp', 'text_en',
+                                               'text_zh', 'referenced_by', 'floors', 'group'])
             w.writeheader(); w.writerows(rows)
         print('已写回 md + csv')
     else:

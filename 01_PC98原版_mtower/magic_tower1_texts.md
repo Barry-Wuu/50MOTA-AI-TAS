@@ -9,13 +9,15 @@
 - 一条文案若在多层出现（怪物名、地形提示等多为此类），在每个对应楼层章各写一遍，内容完全相同；因此本文实际条目数（621）大于文案表行数（309）。
 - 不挂地图数据、没有楼层概念的统一放在最后的「无楼层归属」章，同样按编号升序。
 
-每条内容为两段：日文原文（`>` 引用块）与 `EN:` 英文译文。编号左侧是**引用方式**：
+每条内容为两段：日文原文（`>` 引用块）与 `译文：` 中文译文。编号左侧是**引用方式**：
 
 - `objN（数据引用）` / `地形N（数据引用）`——由对象表 / 地形表的 `ATR_STRING` 列挂上；
 - `代码 strNumber=N ← 函数名`——由指令流里 `sipush N; putfield strNumber` 直接指定（开场与战后台词、钥匙不足、菜单确认等），这类文案不挂在地图数据上；
 - `运行时按计算下标引用`——文案确实会在游戏里显示，但引用处的下标是算出来的（按楼层、分支、序号偏移），未能静态定位到引用点，故不猜楼层；
 
 少数条目（怪物名、钥匙与道具取得提示等）的楼层除地图布点外，还依据「怪物图鉴登记」与「关卡旗标表」两路数据交叉核对，原始 `floors` 字段（含 `catalog` / `stage_flags` / `00F` 标记）见 `magic_tower1_texts.csv`。
+
+**译文底本**：2004 年《魔塔50层》Flash 汉化版（`flash/mota50.swf`）的全部中文文案——剧情、商店、祭坛、道具与怪物名均以该版为准（如 铁剑/银剑/骑士剑/圣剑/神圣剑、史莱姆、大章鱼、骷髅兵、魔法警卫、幸运金币、圣水、屠龙匕、地震卷轴、镐、瞬移、向上/向下传送）；该版没有的台词（PC-98 独有的 50F 终战长段、称号评语等）按同一套译名自行译出。
 
 原文的 12 个分组在正文里不再分章，编号索引如下（编号是文本表下标，与阅读顺序无关）：
 
@@ -39,19 +41,19 @@
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[182]** obj113（数据引用）
 
 > 幸運の金貨を手に入れた！敵が持っているＧＯＬＤ数が２倍になる。
 >
-EN: Got the Lucky Gold! You can get twice gold which monster has from now.
+译文：拿到了幸运金币！敌人持有的金币数翻倍。
 
 **[313]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 幸運の金貨
 >
-EN: The Lucky Gold
+译文：幸运金币
 
 ### 1F
 
@@ -59,85 +61,85 @@ EN: The Lucky Gold
 
 > Ｇスライム
 >
-EN: Green Slime
+译文：绿史莱姆
 
 **[101]** obj6（数据引用）
 
 > Ｒスライム
 >
-EN: Red Slime
+译文：红史莱姆
 
 **[103]** obj7（数据引用）
 
 > バット
 >
-EN: Bat
+译文：蝙蝠
 
 **[104]** obj8（数据引用）
 
 > 僧　侶
 >
-EN: Priest
+译文：僧侣
 
 **[108]** obj9（数据引用）
 
 > スケルトンＣ
 >
-EN: Skeleton C
+译文：骷髅兵 C
 
 **[109]** obj10（数据引用）
 
 > スケルトンＢ
 >
-EN: Skeleton B
+译文：骷髅兵 B
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[152]** obj26（数据引用）
 
 > 飛翔のオーブを手に入れた！
 >
-EN: Got the orb of flying.
+译文：得到了飞翔宝珠！
 
 **[166]** obj11（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が５０ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 50 points up!
+译文：拿到了红色回复药。生命上升50点！
 
 **[167]** obj12（数据引用）
 
 > 青い回復薬を手に入れた。生命力が２００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 200 points up!
+译文：拿到了蓝色回复药。生命上升200点！
 
 **[168]** obj13（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が１ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 1 point up!
+译文：拿到了红水晶。攻击力上升1点！
 
 **[169]** obj14（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が１ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 1 point up!
+译文：拿到了蓝水晶。防御力上升1点！
 
 **[301]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 飛翔のオーブ
 >
-EN: The orb of flying
+译文：飞翔宝珠
 
 ### 2F
 
@@ -145,89 +147,85 @@ EN: The orb of flying
 
 > 「・・・・・おい・・・」
 >
-EN: "------ Hey!"
+译文：「……喂……」
 
 **[3]** 代码 `strNumber=3` ← eventMT
 
 > 「・・・・・おいっ！起きろ！」
 >
-EN: "------ Hey! Wake up!"
+译文：「……喂！醒醒！」
 
 **[4]** obj87（数据引用）
 
 > 盗賊「おお無事か！おまえ、ここの魔導師に捕まってこの牢屋に入れられてたんだよ。で、今まで気を失っていた訳だ。にしても、おまえ運がいいぜ。ちょうど抜け穴が完成したときに来るんだからな。そういう訳で俺は今から脱走するところだ。おまえもついてこい。」
 >
-EN: The thief says "What a relief you're okay!
-　　 You were caught and thrown into this prison by the Magic Sergeant.
-　　 You were unconscious when you got here.
-　　 Nevertheless, you are so lucky that you just woke up.
-　　 I've finished the escape tunnel. Let's break out."
+译文：盗贼「哦，你没事了！你被这里的魔导师抓住，关进了这间牢房，一直昏迷到现在。不过你运气真好，正好赶上我把地道挖通。所以我现在就要逃出去了，你也跟着来吧。」
 
 **[5]** 代码 `strNumber=5` ← attackMonster/directCheck/pointCheck
 
 > 盗賊「よし、じゃあ俺は先に行かせてもらうぜ。ああ、それからおまえの剣と盾、あいつらに取り上げられちまったみたいだな。この塔の中を丸腰で歩き回るのはやめた方がいい。確か５階に剣、９階に盾があったはずだから、まずそれを手に入れることを考えるんだな。じゃあ、またなっ！」
 >
-EN: The thief says "O.K. Well, excuse my going first. Your weapon and shield were stolen by the guards. It's not wise to wander about without them. I heard that there is a sword on the 5th floor and a shield on the 9th. You had better get them. See you!"
+译文：盗贼「好，那我先走一步了。对了，你的剑和盾好像被他们收走了吧？在这塔里空着两手乱转可不行。我记得5楼有剑、9楼有盾，你先想办法把它们弄到手。那就回头见！」
 
 **[79]** obj151（数据引用）
 
 > 「もう、話は終わりじゃ。」
 >
-EN: "I have done what I can. Good luck!"
+译文：「话已经说完了。」
 
 **[80]** obj152（数据引用）
 
 > 「おお、助けてくれてありがとうよ。お礼に、そなたの攻撃力と防御力を３％だけあげてやろう」（攻撃力と防御力が上がった!）
 >
-EN: "Oh, thank you for your help. I will raise your offensive and defensive power 3 percent as a token of my gratitude. [You begin feeling stronger]"
+译文：「哦，谢谢你救了我。作为谢礼，我就把你的攻击力和防御力各提升3%吧」（攻击力和防御力提升了！）
 
 **[84]** obj173（数据引用）
 
 > 「有効に使ってね!」
 >
-EN: "Please, use it wisely."
+译文：「要好好用它哦！」
 
 **[85]** obj174（数据引用）
 
 > 「やあ、助けてくれてありがとう。少ないけれど、お礼にとっておいてくれ！」（１０００ＧＯＬＤもらった!）
 >
-EN: "Thank you for your help. Please accept money as a small token of my gratitude. (Got 1000 Gold.)"
+译文：「呀，谢谢你救了我。虽然不多，就当谢礼收下吧！」（得到了1000金币！）
 
 **[107]** obj15（数据引用）
 
 > 門番Ｂ
 >
-EN: Gate-Keeper B
+译文：门卫 B
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[167]** obj12（数据引用）
 
 > 青い回復薬を手に入れた。生命力が２００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 200 points up!
+译文：拿到了蓝色回复药。生命上升200点！
 
 **[266]** 代码 `strNumber=266` ← eventMT
 
 > 「・・・」
 >
-EN: "------"
+译文：「……」
 
 ### 3F
 
@@ -235,115 +233,115 @@ EN: "------"
 
 > 魔導師ゼノ「ようこそ、『魔法の塔』へ。おまえがちょうど１００人目の侵入者だ。本来なら手下共に相手をさせるところだが、特別にこの私が自ら相手になってやろう。己の不運を呪うのだな。」
 >
-EN: The Magic Serg. Zeno says "Welcome to 'The Magic Tower'. You are the hundredth man who dared to enter my tower. You will now face my guards. Should you happen to survive, I will fight with you in person specially. You should accept your fate."
+译文：魔导师 Zeno「欢迎来到『魔法之塔』。你正好是第一百个入侵者。本来该让手下们来对付你，不过我特别亲自出马。怨你自己运气不好吧。」
 
 **[11]** obj178（数据引用）
 
 > 勇者「なんだっ！？　うわ～っ！？」
 >
-EN: The brave man says "What? Oh!"
+译文：勇者「什么！？哇啊——！？」
 
 **[81]** obj153（数据引用）
 
 > 「おぬしにこの勇者のオーブをさずけよう。これを持っていれば今いる階のモンスターの能力を調べてダメージを予測してくれるじゃろう。有効に使うのじゃ」
 >
-EN: "I will grant you the orb of the hero. It will forecast the results of fighting monsters on the current floor. Use it often."
+译文：「就把这颗勇者宝珠赐给你吧。带着它，就能查出所在楼层怪物的能力、预测伤害。要好好用啊。」
 
 **[100]** obj5（数据引用）
 
 > Ｇスライム
 >
-EN: Green Slime
+译文：绿史莱姆
 
 **[101]** obj6（数据引用）
 
 > Ｒスライム
 >
-EN: Red Slime
+译文：红史莱姆
 
 **[103]** obj7（数据引用）
 
 > バット
 >
-EN: Bat
+译文：蝙蝠
 
 **[104]** obj8（数据引用）
 
 > 僧　侶
 >
-EN: Priest
+译文：僧侣
 
 **[108]** obj9（数据引用）
 
 > スケルトンＣ
 >
-EN: Skeleton C
+译文：骷髅兵 C
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[134]** obj3（数据引用）
 
 > 青色の扉の鍵を手に入れた。
 >
-EN: Got a blue key.
+译文：拿到了蓝钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[166]** obj11（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が５０ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 50 points up!
+译文：拿到了红色回复药。生命上升50点！
 
 **[167]** obj12（数据引用）
 
 > 青い回復薬を手に入れた。生命力が２００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 200 points up!
+译文：拿到了蓝色回复药。生命上升200点！
 
 **[168]** obj13（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が１ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 1 point up!
+译文：拿到了红水晶。攻击力上升1点！
 
 **[169]** obj14（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が１ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 1 point up!
+译文：拿到了蓝水晶。防御力上升1点！
 
 **[222]** 代码 `strNumber=222` ← eventMT
 
 > 勇者「なんだと～！」
 >
-EN: The brave man says "What?"
+译文：勇者「你说什么——！」
 
 **[223]** 代码 `strNumber=223` ← eventMT
 
 > 勇者「あ～っ」
 >
-EN: The brave man says "Hey!"
+译文：勇者「啊——」
 
 **[299]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 勇者のオーブ
 >
-EN: The orb of the hero
+译文：勇者宝珠
 
 ### 4F
 
@@ -351,91 +349,91 @@ EN: The orb of the hero
 
 > 「この塔には鍵で開けられる扉のほかに ”門” というものがあって、これはその門を守っているモンスターを倒さなければあかないじゃろう。」
 >
-EN: "There are doors which cannot be openned by a key. You can open these doors by beating the monsters which guard them."
+译文：「这座塔里除了用钥匙开的门以外，还有叫作『门』的东西，那种门不把守着它的怪物打倒就打不开。」
 
 **[100]** obj5（数据引用）
 
 > Ｇスライム
 >
-EN: Green Slime
+译文：绿史莱姆
 
 **[101]** obj6（数据引用）
 
 > Ｒスライム
 >
-EN: Red Slime
+译文：红史莱姆
 
 **[103]** obj7（数据引用）
 
 > バット
 >
-EN: Bat
+译文：蝙蝠
 
 **[104]** obj8（数据引用）
 
 > 僧　侶
 >
-EN: Priest
+译文：僧侣
 
 **[108]** obj9（数据引用）
 
 > スケルトンＣ
 >
-EN: Skeleton C
+译文：骷髅兵 C
 
 **[109]** obj10（数据引用）
 
 > スケルトンＢ
 >
-EN: Skeleton B
+译文：骷髅兵 B
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[134]** obj3（数据引用）
 
 > 青色の扉の鍵を手に入れた。
 >
-EN: Got a blue key.
+译文：拿到了蓝钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[166]** obj11（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が５０ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 50 points up!
+译文：拿到了红色回复药。生命上升50点！
 
 **[167]** obj12（数据引用）
 
 > 青い回復薬を手に入れた。生命力が２００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 200 points up!
+译文：拿到了蓝色回复药。生命上升200点！
 
 **[168]** obj13（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が１ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 1 point up!
+译文：拿到了红水晶。攻击力上升1点！
 
 **[206]** obj22（数据引用）
 
 > 「この祭壇に
 >
-EN: "If you offer me
+译文：「向这座祭坛奉献
 
 ### 5F
 
@@ -443,91 +441,91 @@ EN: "If you offer me
 
 > Ｇスライム
 >
-EN: Green Slime
+译文：绿史莱姆
 
 **[101]** obj6（数据引用）
 
 > Ｒスライム
 >
-EN: Red Slime
+译文：红史莱姆
 
 **[103]** obj7（数据引用）
 
 > バット
 >
-EN: Bat
+译文：蝙蝠
 
 **[104]** obj8（数据引用）
 
 > 僧　侶
 >
-EN: Priest
+译文：僧侣
 
 **[109]** obj10（数据引用）
 
 > スケルトンＢ
 >
-EN: Skeleton B
+译文：骷髅兵 B
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[141]** obj89（数据引用）
 
 > 壁がくずれた！
 >
-EN: The wall collapsed!
+译文：墙壁塌了！
 
 **[153]** obj25（数据引用）
 
 > 知恵のオーブを手に入れた！
 >
-EN: Got the orb of wisdom.
+译文：得到了智慧宝珠！
 
 **[156]** obj30（数据引用）
 
 > 鉄の剣を手に入れた。攻撃力が１０ポイントアップ！
 >
-EN: Got an Iron Sword! Your offensive power was 10 points up!
+译文：拿到了铁剑。攻击力上升10点！
 
 **[166]** obj11（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が５０ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 50 points up!
+译文：拿到了红色回复药。生命上升50点！
 
 **[169]** obj14（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が１ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 1 point up!
+译文：拿到了蓝水晶。防御力上升1点！
 
 **[270]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 鉄の剣
 >
-EN: Iron
+译文：铁剑
 
 **[300]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 知恵のオーブ
 >
-EN: The orb of wisdom
+译文：智慧宝珠
 
 ### 6F
 
@@ -535,91 +533,91 @@ EN: The orb of wisdom
 
 > 「商人から物を買うと、あとで重要な情報を聞くことができるじゃろう。」
 >
-EN: "If you buy goods from merchants, you will be able to hear important information later."
+译文：「从商人那里买了东西之后，就能听到重要的情报。」
 
 **[57]** obj40（数据引用）
 
 > 「この塔は全部で５０階建てで、１０階ごとに１つのブロックを形成している。塔の内部には、各ブロックを統括するボスが配置されていて、そいつらを倒さないことには、それより上の階に行くことはできないだろう。」
 >
-EN: "This tower has fifty floor. Every ten floor form one area. The boss who controls each area, are posted in this tower. You cannot ascend from there if you don't beat them."
+译文：「这座塔一共50层，每10层构成一个区域。塔里配置着统辖各区域的首领，不把他们打倒，就上不了更高的楼层。」
 
 **[83]** obj172（数据引用）
 
 > 「もう、話す事はないよ。」
 >
-EN: "Be careful. I have nothing more to say."
+译文：「我已经没什么可说的了。」
 
 **[86]** obj18（数据引用）
 
 > 「紫の鍵を大特価の５０ＧＯＬＤで売るよ! 買わないかい?」
 >
-EN: "I will sell a blue key at very special price (50 gold)! Will you buy it?"
+译文：「紫钥匙大特价，50金币就卖！买不买？」
 
 **[100]** obj5（数据引用）
 
 > Ｇスライム
 >
-EN: Green Slime
+译文：绿史莱姆
 
 **[101]** obj6（数据引用）
 
 > Ｒスライム
 >
-EN: Red Slime
+译文：红史莱姆
 
 **[103]** obj7（数据引用）
 
 > バット
 >
-EN: Bat
+译文：蝙蝠
 
 **[104]** obj8（数据引用）
 
 > 僧　侶
 >
-EN: Priest
+译文：僧侣
 
 **[108]** obj9（数据引用）
 
 > スケルトンＣ
 >
-EN: Skeleton C
+译文：骷髅兵 C
 
 **[109]** obj10（数据引用）
 
 > スケルトンＢ
 >
-EN: Skeleton B
+译文：骷髅兵 B
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[166]** obj11（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が５０ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 50 points up!
+译文：拿到了红色回复药。生命上升50点！
 
 **[169]** obj14（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が１ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 1 point up!
+译文：拿到了蓝水晶。防御力上升1点！
 
 ### 7F
 
@@ -627,91 +625,91 @@ EN: Got a blue crystal. Your defensive power was 1 point up!
 
 > 「祭壇に寄進したときは、攻撃力よりも防御力を主に上げてもらった方がいいでしょう。ただし、攻撃力をまったく上げないと、あとで倒せない敵がでてくるかもしれないよ。」
 >
-EN: "When you offer gold at an alter, you may as well have your defensive power risen rather than your offensive power. The enemy whom you cannot beat may appear, provided you won't raise your offensive power."
+译文：「在祭坛奉献时，主要提升防御力比提升攻击力更好。不过要是一点攻击力都不提，后面可能会出现打不动的敌人哦。」
 
 **[83]** obj172（数据引用）
 
 > 「もう、話す事はないよ。」
 >
-EN: "Be careful. I have nothing more to say."
+译文：「我已经没什么可说的了。」
 
 **[87]** obj41（数据引用）
 
 > 「鍵を５個セットで５０ＧＯＬＤで売るよ! 買わないかい?」
 >
-EN: "I will sell five keys for 50 Gold! Will you buy them?"
+译文：「钥匙5把一套，50金币就卖！买不买？」
 
 **[100]** obj5（数据引用）
 
 > Ｇスライム
 >
-EN: Green Slime
+译文：绿史莱姆
 
 **[101]** obj6（数据引用）
 
 > Ｒスライム
 >
-EN: Red Slime
+译文：红史莱姆
 
 **[103]** obj7（数据引用）
 
 > バット
 >
-EN: Bat
+译文：蝙蝠
 
 **[104]** obj8（数据引用）
 
 > 僧　侶
 >
-EN: Priest
+译文：僧侣
 
 **[108]** obj9（数据引用）
 
 > スケルトンＣ
 >
-EN: Skeleton C
+译文：骷髅兵 C
 
 **[109]** obj10（数据引用）
 
 > スケルトンＢ
 >
-EN: Skeleton B
+译文：骷髅兵 B
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[166]** obj11（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が５０ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 50 points up!
+译文：拿到了红色回复药。生命上升50点！
 
 **[167]** obj12（数据引用）
 
 > 青い回復薬を手に入れた。生命力が２００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 200 points up!
+译文：拿到了蓝色回复药。生命上升200点！
 
 **[168]** obj13（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が１ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 1 point up!
+译文：拿到了红水晶。攻击力上升1点！
 
 ### 8F
 
@@ -719,97 +717,97 @@ EN: Got a red crystal. Your offensive power was 1 point up!
 
 > Ｇスライム
 >
-EN: Green Slime
+译文：绿史莱姆
 
 **[101]** obj6（数据引用）
 
 > Ｒスライム
 >
-EN: Red Slime
+译文：红史莱姆
 
 **[103]** obj7（数据引用）
 
 > バット
 >
-EN: Bat
+译文：蝙蝠
 
 **[104]** obj8（数据引用）
 
 > 僧　侶
 >
-EN: Priest
+译文：僧侣
 
 **[106]** obj29（数据引用）
 
 > 門番Ｃ
 >
-EN: Gate-Keeper C
+译文：门卫 C
 
 **[108]** obj9（数据引用）
 
 > スケルトンＣ
 >
-EN: Skeleton C
+译文：骷髅兵 C
 
 **[109]** obj10（数据引用）
 
 > スケルトンＢ
 >
-EN: Skeleton B
+译文：骷髅兵 B
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[134]** obj3（数据引用）
 
 > 青色の扉の鍵を手に入れた。
 >
-EN: Got a blue key.
+译文：拿到了蓝钥匙。
 
 **[135]** obj28（数据引用）
 
 > 赤色の扉の鍵を手に入れた。
 >
-EN: Got a red key.
+译文：拿到了红钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[166]** obj11（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が５０ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 50 points up!
+译文：拿到了红色回复药。生命上升50点！
 
 **[167]** obj12（数据引用）
 
 > 青い回復薬を手に入れた。生命力が２００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 200 points up!
+译文：拿到了蓝色回复药。生命上升200点！
 
 **[168]** obj13（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が１ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 1 point up!
+译文：拿到了红水晶。攻击力上升1点！
 
 **[169]** obj14（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が１ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 1 point up!
+译文：拿到了蓝水晶。防御力上升1点！
 
 ### 9F
 
@@ -817,91 +815,91 @@ EN: Got a blue crystal. Your defensive power was 1 point up!
 
 > Ｇスライム
 >
-EN: Green Slime
+译文：绿史莱姆
 
 **[101]** obj6（数据引用）
 
 > Ｒスライム
 >
-EN: Red Slime
+译文：红史莱姆
 
 **[103]** obj7（数据引用）
 
 > バット
 >
-EN: Bat
+译文：蝙蝠
 
 **[104]** obj8（数据引用）
 
 > 僧　侶
 >
-EN: Priest
+译文：僧侣
 
 **[108]** obj9（数据引用）
 
 > スケルトンＣ
 >
-EN: Skeleton C
+译文：骷髅兵 C
 
 **[109]** obj10（数据引用）
 
 > スケルトンＢ
 >
-EN: Skeleton B
+译文：骷髅兵 B
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[141]** obj89（数据引用）
 
 > 壁がくずれた！
 >
-EN: The wall collapsed!
+译文：墙壁塌了！
 
 **[161]** obj35（数据引用）
 
 > 鉄の盾を手に入れた。防御力が１０ポイントアップ！
 >
-EN: Got an Iron Shield! Your defensive power was 10 points up!
+译文：拿到了铁盾。防御力上升10点！
 
 **[166]** obj11（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が５０ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 50 points up!
+译文：拿到了红色回复药。生命上升50点！
 
 **[168]** obj13（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が１ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 1 point up!
+译文：拿到了红水晶。攻击力上升1点！
 
 **[169]** obj14（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が１ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 1 point up!
+译文：拿到了蓝水晶。防御力上升1点！
 
 **[275]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 鉄の盾
 >
-EN: Iron
+译文：铁盾
 
 ### 10F
 
@@ -909,73 +907,73 @@ EN: Iron
 
 > 盗賊「ようっ！また会ったな。ここの門番を倒してくれて助かったぜ、ドジってまた捕まっちまってな。今度は、こんな奥の牢に閉じ込められちまった。まあ、それはそれとして、３５階にいるドラゴンの手前まで抜け穴を掘っといたんだ。開通させとくから先に行っててくれ。」
 >
-EN: The thief says "Ah, we meet again! Thank you. You beat the Gate-Keeper of this area. I was defeated and imprisoned again. Such a small prison this time. I'm making a secret tunnel in front of the Dragon. Go up to 35th floor and wait for me, while I complete the tunnel."
+译文：盗贼「哟！又见面了。谢谢你打倒这里的门卫，我又犯傻被抓了一回，这次被关在这么深的牢里。算了，说正事——我已经把地道挖到35楼那条龙的前面了，我这就把它打通，你先上去吧。」
 
 **[13]** 代码 `strNumber=13` ← eventMT
 
 > スケルトンＡ「ふふふ、よくここまできたな。かくなる上はこの俺様がじきじき相手になってやる・・・といいたいところだが、まずは貴様の力を見せてもらうぞ！出会え！スケルトン兵士たちよ！」
 >
-EN: Skeleton A "Ha ha ha, You are lucky to have gotten so far. Since it has come to this, I shall fight with you personally, but first I must test your strength. Go and fight! Skeleton Soldiers!"
+译文：骷髅兵 A「呵呵呵，居然能走到这里。既然如此，本该由我亲自出马……不过先让我看看你的本事！上吧，骷髅兵们！」
 
 **[14]** 代码 `strNumber=14` ← eventMT
 
 > スケルトンＡ「ほほう、なかなか・・・。だが、ここから先へは行かせん！ここで葬ってくれるわっ！さあ、こいっ！！！」
 >
-EN: Skeleton A "How considerably you do. But I will never let you pass. Here, you will die. Fight me!"
+译文：骷髅兵 A「哦？不赖嘛……但别想再往前一步！就在这里解决你！来吧！！」
 
 **[15]** 代码 `strNumber=15` ← eventMT
 
 > スケルトンＡ「ううう・・・よくぞこの俺様を倒せたものだ・・・。しかし、これから先の階はこれまでとは比べものにならんほど強力な敵とワナが待っているぞ、せいぜい気を付けることだな・・・」
 >
-EN: Skeleton A "No, It's not possible! You may have defeated me, but beyond this point you must meet some enemies and snares that are powerful beyond anything you've seen. If careless, you will die!"
+译文：骷髅兵 A「呜……居然真被你打倒了……不过往上的楼层等着你的是远超从前的强敌和陷阱，你可要当心……」
 
 **[104]** obj8（数据引用）
 
 > 僧　侶
 >
-EN: Priest
+译文：僧侣
 
 **[108]** obj9（数据引用）
 
 > スケルトンＣ
 >
-EN: Skeleton C
+译文：骷髅兵 C
 
 **[109]** obj10（数据引用）
 
 > スケルトンＢ
 >
-EN: Skeleton B
+译文：骷髅兵 B
 
 **[110]** obj16（数据引用）
 
 > スケルトンＡ
 >
-EN: Skeleton A
+译文：骷髅兵 A
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[167]** obj12（数据引用）
 
 > 青い回復薬を手に入れた。生命力が２００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 200 points up!
+译文：拿到了蓝色回复药。生命上升200点！
 
 **[168]** obj13（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が１ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 1 point up!
+译文：拿到了红水晶。攻击力上升1点！
 
 **[169]** obj14（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が１ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 1 point up!
+译文：拿到了蓝水晶。防御力上升1点！
 
 ### 11F
 
@@ -983,79 +981,79 @@ EN: Got a blue crystal. Your defensive power was 1 point up!
 
 > Ｂスライム
 >
-EN: Big Slime
+译文：大史莱姆
 
 **[103]** obj7（数据引用）
 
 > バット
 >
-EN: Bat
+译文：蝙蝠
 
 **[105]** obj46（数据引用）
 
 > 上級僧侶
 >
-EN: Superion Priest
+译文：高级僧侣
 
 **[111]** obj47（数据引用）
 
 > 大バット
 >
-EN: Big Bat
+译文：大蝙蝠
 
 **[112]** obj48（数据引用）
 
 > ゾンビ
 >
-EN: Zombie
+译文：丧尸
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[162]** obj36（数据引用）
 
 > 銀の盾を手に入れた。防御力が２０ポイントアップ！
 >
-EN: Got a Silver Shield! Your defensive power was 20 points up!
+译文：拿到了银盾。防御力上升20点！
 
 **[254]** obj66（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が１００ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 100 points up!
+译文：拿到了红色回复药。生命上升100点！
 
 **[257]** obj76（数据引用）
 
 > 青い回復薬を手に入れた。生命力が４００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 400 points up!
+译文：拿到了蓝色回复药。生命上升400点！
 
 **[260]** obj80（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が２ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 2 points up!
+译文：拿到了红水晶。攻击力上升2点！
 
 **[276]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 銀の盾
 >
-EN: Silver
+译文：银盾
 
 ### 12F
 
@@ -1063,115 +1061,115 @@ EN: Silver
 
 > 「９階と１６階と１８階の抜け穴には気が付いたかい？」
 >
-EN: "Did you notice the secret passages on the 9th, 16th, and 18th floors?"
+译文：「9楼、16楼和18楼的地道，你注意到了吗？」
 
 **[83]** obj172（数据引用）
 
 > 「もう、話す事はないよ。」
 >
-EN: "Be careful. I have nothing more to say."
+译文：「我已经没什么可说的了。」
 
 **[88]** obj156（数据引用）
 
 > 「希少品の赤い鍵を８００ＧＯＬＤで売るよ！買わないかい？」
 >
-EN: "I will sell the rare red key for 800 Gold! Will you buy it?"
+译文：「稀有的红钥匙，800金币就卖！买不买？」
 
 **[89]** obj17（数据引用）
 
 > 「うちの店は鍵をいくらでも売るよ。１つ１０００ＧＯＬＤだが買うかい？」
 >
-EN: "My store will sell as many keys as you need. They are 1000 Gold each. Will you buy them?"
+译文：「本店的钥匙要多少有多少。一把1000金币，买吗？」
 
 **[102]** obj45（数据引用）
 
 > Ｂスライム
 >
-EN: Big Slime
+译文：大史莱姆
 
 **[103]** obj7（数据引用）
 
 > バット
 >
-EN: Bat
+译文：蝙蝠
 
 **[105]** obj46（数据引用）
 
 > 上級僧侶
 >
-EN: Superion Priest
+译文：高级僧侣
 
 **[111]** obj47（数据引用）
 
 > 大バット
 >
-EN: Big Bat
+译文：大蝙蝠
 
 **[112]** obj48（数据引用）
 
 > ゾンビ
 >
-EN: Zombie
+译文：丧尸
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[134]** obj3（数据引用）
 
 > 青色の扉の鍵を手に入れた。
 >
-EN: Got a blue key.
+译文：拿到了蓝钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[141]** obj89（数据引用）
 
 > 壁がくずれた！
 >
-EN: The wall collapsed!
+译文：墙壁塌了！
 
 **[206]** obj22（数据引用）
 
 > 「この祭壇に
 >
-EN: "If you offer me
+译文：「向这座祭坛奉献
 
 **[254]** obj66（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が１００ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 100 points up!
+译文：拿到了红色回复药。生命上升100点！
 
 **[257]** obj76（数据引用）
 
 > 青い回復薬を手に入れた。生命力が４００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 400 points up!
+译文：拿到了蓝色回复药。生命上升400点！
 
 **[260]** obj80（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が２ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 2 points up!
+译文：拿到了红水晶。攻击力上升2点！
 
 **[263]** obj83（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が２ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 2 points up!
+译文：拿到了蓝水晶。防御力上升2点！
 
 ### 13F
 
@@ -1179,31 +1177,31 @@ EN: Got a blue crystal. Your defensive power was 2 points up!
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[160]** obj34（数据引用）
 
 > 神　剣を手に入れた。攻撃力が１００ポイントアップ！
 >
-EN: Got a Sacred Sword! Your offensive power was 100 points up!
+译文：拿到了神圣剑。攻击力上升100点！
 
 **[183]** obj79（数据引用）
 
 > 溶岩が流れている。
 >
-EN: The lava is really hot.
+译文：熔岩在流动。
 
 **[274]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 神　剣
 >
-EN: Sacred
+译文：神圣剑
 
 ### 14F
 
@@ -1211,79 +1209,79 @@ EN: Sacred
 
 > Ｂスライム
 >
-EN: Big Slime
+译文：大史莱姆
 
 **[105]** obj46（数据引用）
 
 > 上級僧侶
 >
-EN: Superion Priest
+译文：高级僧侣
 
 **[111]** obj47（数据引用）
 
 > 大バット
 >
-EN: Big Bat
+译文：大蝙蝠
 
 **[112]** obj48（数据引用）
 
 > ゾンビ
 >
-EN: Zombie
+译文：丧尸
 
 **[113]** obj49（数据引用）
 
 > ゾンビナイト
 >
-EN: Zombie Knight
+译文：丧尸骑士
 
 **[114]** obj56（数据引用）
 
 > ロック
 >
-EN: Rock
+译文：岩石怪
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[134]** obj3（数据引用）
 
 > 青色の扉の鍵を手に入れた。
 >
-EN: Got a blue key.
+译文：拿到了蓝钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[141]** obj89（数据引用）
 
 > 壁がくずれた！
 >
-EN: The wall collapsed!
+译文：墙壁塌了！
 
 **[254]** obj66（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が１００ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 100 points up!
+译文：拿到了红色回复药。生命上升100点！
 
 **[263]** obj83（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が２ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 2 points up!
+译文：拿到了蓝水晶。防御力上升2点！
 
 ### 15F
 
@@ -1291,121 +1289,121 @@ EN: Got a blue crystal. Your defensive power was 2 points up!
 
 > 盗賊「後でちゃんと行くから３５階まで先に行っておいてくれ。」
 >
-EN: The thief says "Don't worry, I'll be there."
+译文：盗贼「我随后就到，你先去35楼等着。」
 
 **[17]** obj88（数据引用）
 
 > 盗賊「よおっ！無事だったか？ここの大ダコが道をふさいでいて困っていたんだが今ようやく抜け穴が完成したんだ。おまえも、ここの大ダコを倒すのは後回しにした方がいいぜ。じゃあ、またなっ！」
 >
-EN: The thief says "Ah! Are you all right? The Big Octopus which lives in here was blocking my progress. Now a loophole has completed at last. You had better put off beating him. See you later!"
+译文：盗贼「哟！你没事吧？这只大章鱼挡住了路，正发愁呢，现在地道总算挖通了。这只大章鱼你也还是先放着别打为好。那就回头见！」
 
 **[60]** obj160（数据引用）
 
 > 「十字架を持っていれば、ゾンビやバンパイアに対する攻撃力が２倍になる。特にバンパイアは十字架を持っていないと倒せないだろう。これより上の階のどこかにあるらしいが……。」
 >
-EN: "If you carry a cross, the strength of Zombies and Vampires will be cut in half. It is near impossible to defeat them without a cross, especially Vampires. A cross is on a floor higher than this one."
+译文：「只要带着十字架，对丧尸和吸血鬼的攻击力就会翻倍。尤其是吸血鬼，没有十字架大概打不倒。听说就在这上面的某层……。」
 
 **[83]** obj172（数据引用）
 
 > 「もう、話す事はないよ。」
 >
-EN: "Be careful. I have nothing more to say."
+译文：「我已经没什么可说的了。」
 
 **[90]** obj159（数据引用）
 
 > 「紫の鍵を２００ＧＯＬＤで売るよ！買わないかい？」
 >
-EN: "I will sell a blue key for 200 Gold! Will you buy it?"
+译文：「紫钥匙200金币就卖！买不买？」
 
 **[102]** obj45（数据引用）
 
 > Ｂスライム
 >
-EN: Big Slime
+译文：大史莱姆
 
 **[103]** obj7（数据引用）
 
 > バット
 >
-EN: Bat
+译文：蝙蝠
 
 **[105]** obj46（数据引用）
 
 > 上級僧侶
 >
-EN: Superion Priest
+译文：高级僧侣
 
 **[111]** obj47（数据引用）
 
 > 大バット
 >
-EN: Big Bat
+译文：大蝙蝠
 
 **[112]** obj48（数据引用）
 
 > ゾンビ
 >
-EN: Zombie
+译文：丧尸
 
 **[113]** obj49（数据引用）
 
 > ゾンビナイト
 >
-EN: Zombie Knight
+译文：丧尸骑士
 
 **[118]** obj71（数据引用）
 
 > 大ダコ
 >
-EN: Giant Octopus
+译文：大章鱼
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[134]** obj3（数据引用）
 
 > 青色の扉の鍵を手に入れた。
 >
-EN: Got a blue key.
+译文：拿到了蓝钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[244]** obj50、obj51、obj52 等5项（数据引用）
 
 > 大ダコの一部
 >
-EN: some of Giant Octopus
+译文：大章鱼的一部分
 
 **[257]** obj76（数据引用）
 
 > 青い回復薬を手に入れた。生命力が４００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 400 points up!
+译文：拿到了蓝色回复药。生命上升400点！
 
 **[263]** obj83（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が２ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 2 points up!
+译文：拿到了蓝水晶。防御力上升2点！
 
 **[304]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > マトック
 >
-EN: The Magic Mattock
+译文：镐
 
 ### 16F
 
@@ -1413,133 +1411,133 @@ EN: The Magic Mattock
 
 > 盗賊「よっ！またあったな。すげえじゃねえか。ここのブロックのボスを倒すとはよ。俺もこれ以上、先の階へ行けなくて困ってたんだ。ああ、あと聞いた話だが、１１階に盾、１７階に剣があるそうだ。盾よりも剣の方を先に取りに行った方がいいそうだから、うまく敵をかわして剣を先に取りに行くんだな。じゃ、お先に！」
 >
-EN: The thief says "Hey! We meet again! How greatly you beat the boss of this area. It troubled me that I couldn't go upstairs any more. After I heard that there is a shield on the 11th floor and a sword on the 17th. You had better get a sword first and then a shield. Please excuse my going first!"
+译文：盗贼「哟！又碰上了。真行啊，居然打倒了这个区域的头目。我还正为没法再往上走发愁呢。对了，听人说11楼有盾、17楼有剑。据说剑该比盾先拿，你就想办法避开敌人先去取剑吧。那我先走了！」
 
 **[24]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 盗賊「あっ！まだ抜け穴、完成してなかったのに・・・もう少し待ってればアイテムを使わずにすんだはずだぞ。予定が狂っちまうな・・・いや、気にしないでくれ。」
 >
-EN: The thief says "The tunnel has not been completed yet. You should have waited a little longer, and you should not have used items. I had a bug in the program. There! Don't worry!"
+译文：盗贼「啊！地道还没挖完呢……再等一会儿就不用浪费道具了。计划都乱了……算了，别在意。」
 
 **[25]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 盗賊「ああ、やっと抜け穴が完成した。あれ？またお前か。いいタイミングできたな。また抜け穴作っといたぜ。自由に使ってくれ。」
 >
-EN: The thief says "Oh, I have finished the tunnel. What? It's you again. You came at a good time. I have openned a tunnel, and you may use it freely."
+译文：盗贼「啊，地道终于挖好了。咦？又是你。来得正好，我又挖了一条地道，随便用吧。」
 
 **[61]** obj43（数据引用）
 
 > 「このブロックでは赤い鍵は２ヶ所で手に入るそうじゃ。」
 >
-EN: "I heard that you can find a red key at two places in this area."
+译文：「听说这个区域的红钥匙能在两个地方拿到。」
 
 **[79]** obj151（数据引用）
 
 > 「もう、話は終わりじゃ。」
 >
-EN: "I have done what I can. Good luck!"
+译文：「话已经说完了。」
 
 **[82]** obj154（数据引用）
 
 > 「やれやれ、見つかってしもうたか。褒美におぬしに”エリクサー”をやろう。この薬を使えば、その時の攻撃力と防御力に応じた値だけ生命力が回復するじゃろう。じゃから、当然、後の方で使う方が効果は大きいぞ。」
 >
-EN: "Thank goodness, you found me. I will give you an elixir as a symbol of my gratitude. Using this medicine will cause you to gain life according to your offensive and defensive power. So naturally, the later you use, the more it will have an effect on you."
+译文：「唉，还是被找到了。作为奖赏，就给你『圣水』吧。喝下这药，会按当时的攻击力和防御力回复相应的生命。所以当然，越晚用效果越大。」
 
 **[102]** obj45（数据引用）
 
 > Ｂスライム
 >
-EN: Big Slime
+译文：大史莱姆
 
 **[105]** obj46（数据引用）
 
 > 上級僧侶
 >
-EN: Superion Priest
+译文：高级僧侣
 
 **[111]** obj47（数据引用）
 
 > 大バット
 >
-EN: Big Bat
+译文：大蝙蝠
 
 **[112]** obj48（数据引用）
 
 > ゾンビ
 >
-EN: Zombie
+译文：丧尸
 
 **[113]** obj49（数据引用）
 
 > ゾンビナイト
 >
-EN: Zombie Knight
+译文：丧尸骑士
 
 **[114]** obj56（数据引用）
 
 > ロック
 >
-EN: Rock
+译文：岩石怪
 
 **[125]** obj95（数据引用）
 
 > スライムマン
 >
-EN: Slime Man
+译文：史莱姆人
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[134]** obj3（数据引用）
 
 > 青色の扉の鍵を手に入れた。
 >
-EN: Got a blue key.
+译文：拿到了蓝钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[141]** obj89（数据引用）
 
 > 壁がくずれた！
 >
-EN: The wall collapsed!
+译文：墙壁塌了！
 
 **[254]** obj66（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が１００ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 100 points up!
+译文：拿到了红色回复药。生命上升100点！
 
 **[260]** obj80（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が２ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 2 points up!
+译文：拿到了红水晶。攻击力上升2点！
 
 **[263]** obj83（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が２ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 2 points up!
+译文：拿到了蓝水晶。防御力上升2点！
 
 **[303]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > エリクサー
 >
-EN: The Magic Elixir
+译文：圣水
 
 ### 17F
 
@@ -1547,91 +1545,91 @@ EN: The Magic Elixir
 
 > Ｂスライム
 >
-EN: Big Slime
+译文：大史莱姆
 
 **[105]** obj46（数据引用）
 
 > 上級僧侶
 >
-EN: Superion Priest
+译文：高级僧侣
 
 **[106]** obj29（数据引用）
 
 > 門番Ｃ
 >
-EN: Gate-Keeper C
+译文：门卫 C
 
 **[111]** obj47（数据引用）
 
 > 大バット
 >
-EN: Big Bat
+译文：大蝙蝠
 
 **[112]** obj48（数据引用）
 
 > ゾンビ
 >
-EN: Zombie
+译文：丧尸
 
 **[113]** obj49（数据引用）
 
 > ゾンビナイト
 >
-EN: Zombie Knight
+译文：丧尸骑士
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[157]** obj31（数据引用）
 
 > 銀の剣を手に入れた。攻撃力が２０ポイントアップ！
 >
-EN: Got a Silver Sword! Your offensive power was 20 points up!
+译文：拿到了银剑。攻击力上升20点！
 
 **[254]** obj66（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が１００ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 100 points up!
+译文：拿到了红色回复药。生命上升100点！
 
 **[257]** obj76（数据引用）
 
 > 青い回復薬を手に入れた。生命力が４００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 400 points up!
+译文：拿到了蓝色回复药。生命上升400点！
 
 **[260]** obj80（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が２ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 2 points up!
+译文：拿到了红水晶。攻击力上升2点！
 
 **[263]** obj83（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が２ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 2 points up!
+译文：拿到了蓝水晶。防御力上升2点！
 
 **[271]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 銀の剣
 >
-EN: Silver
+译文：银剑
 
 ### 18F
 
@@ -1639,85 +1637,85 @@ EN: Silver
 
 > 「このブロックでは、祭壇で攻撃力を何回か上げてもらわないとロックというモンスターが倒せなくなってしまうかもしれん。注意するのじゃ。」
 >
-EN: "In this area, if you don't raise your offensive power at an altar a few times, you may not be able to beat 'Rock' monsters. Be careful!"
+译文：「在这个区域，不在祭坛把攻击力提上几次，可能就打不倒叫洛克的那种怪物了。小心为妙。」
 
 **[102]** obj45（数据引用）
 
 > Ｂスライム
 >
-EN: Big Slime
+译文：大史莱姆
 
 **[105]** obj46（数据引用）
 
 > 上級僧侶
 >
-EN: Superion Priest
+译文：高级僧侣
 
 **[111]** obj47（数据引用）
 
 > 大バット
 >
-EN: Big Bat
+译文：大蝙蝠
 
 **[112]** obj48（数据引用）
 
 > ゾンビ
 >
-EN: Zombie
+译文：丧尸
 
 **[113]** obj49（数据引用）
 
 > ゾンビナイト
 >
-EN: Zombie Knight
+译文：丧尸骑士
 
 **[114]** obj56（数据引用）
 
 > ロック
 >
-EN: Rock
+译文：岩石怪
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[134]** obj3（数据引用）
 
 > 青色の扉の鍵を手に入れた。
 >
-EN: Got a blue key.
+译文：拿到了蓝钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[254]** obj66（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が１００ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 100 points up!
+译文：拿到了红色回复药。生命上升100点！
 
 **[260]** obj80（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が２ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 2 points up!
+译文：拿到了红水晶。攻击力上升2点！
 
 **[263]** obj83（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が２ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 2 points up!
+译文：拿到了蓝水晶。防御力上升2点！
 
 ### 19F
 
@@ -1725,91 +1723,91 @@ EN: Got a blue crystal. Your defensive power was 2 points up!
 
 > Ｂスライム
 >
-EN: Big Slime
+译文：大史莱姆
 
 **[103]** obj7（数据引用）
 
 > バット
 >
-EN: Bat
+译文：蝙蝠
 
 **[105]** obj46（数据引用）
 
 > 上級僧侶
 >
-EN: Superion Priest
+译文：高级僧侣
 
 **[111]** obj47（数据引用）
 
 > 大バット
 >
-EN: Big Bat
+译文：大蝙蝠
 
 **[112]** obj48（数据引用）
 
 > ゾンビ
 >
-EN: Zombie
+译文：丧尸
 
 **[113]** obj49（数据引用）
 
 > ゾンビナイト
 >
-EN: Zombie Knight
+译文：丧尸骑士
 
 **[114]** obj56（数据引用）
 
 > ロック
 >
-EN: Rock
+译文：岩石怪
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[134]** obj3（数据引用）
 
 > 青色の扉の鍵を手に入れた。
 >
-EN: Got a blue key.
+译文：拿到了蓝钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[141]** obj89（数据引用）
 
 > 壁がくずれた！
 >
-EN: The wall collapsed!
+译文：墙壁塌了！
 
 **[254]** obj66（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が１００ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 100 points up!
+译文：拿到了红色回复药。生命上升100点！
 
 **[260]** obj80（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が２ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 2 points up!
+译文：拿到了红水晶。攻击力上升2点！
 
 **[302]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 十字架
 >
-EN: A cross
+译文：十字架
 
 ### 20F
 
@@ -1817,73 +1815,73 @@ EN: A cross
 
 > バンパイア「ほほう、貴様か、スケルトンを倒して侵入してきた勇者というのは・・・だがこの私をスケルトン共のようなザコと一緒にするなよ。不死に等しいこの私の力を見せてやろう。さあ、こいっ！」
 >
-EN: Vampire "Well, You beat the skeletons and invaded. Never regard me as small like a skeleton. I will show you that I am as immortal as god. Hey, come on!"
+译文：吸血鬼「哦？你就是打倒骷髅兵闯进来的那个勇者……别把我和骷髅兵那种杂鱼相提并论。让你见识一下近乎不死的我的力量。来吧！」
 
 **[20]** 代码 `strNumber=20` ← eventMT
 
 > バンパイア「ううう・・・よもや、この私までもが敗れるとは・・・どうやら貴様の力は本物のようだな・・・だが、その程度では大魔導師様には絶対にかなわんぞ、せいぜい束の間勝利に酔いしれているがいい・・・」
 >
-EN: Vampire "Good god! I've never dreamed I'd be defeated. There is no doubt of your strength. But you will never win against the Great Magic Master as weak as you are. You shall only celebrate fleeting victory at most."
+译文：吸血鬼「呜……没想到连我也败了……看来你的实力是真的……但就这点本事，绝对敌不过大魔导师大人，你就尽情沉醉在这短暂的胜利里吧……」
 
 **[103]** obj7（数据引用）
 
 > バット
 >
-EN: Bat
+译文：蝙蝠
 
 **[105]** obj46（数据引用）
 
 > 上級僧侶
 >
-EN: Superion Priest
+译文：高级僧侣
 
 **[111]** obj47（数据引用）
 
 > 大バット
 >
-EN: Big Bat
+译文：大蝙蝠
 
 **[114]** obj56（数据引用）
 
 > ロック
 >
-EN: Rock
+译文：岩石怪
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[166]** obj11（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が５０ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 50 points up!
+译文：拿到了红色回复药。生命上升50点！
 
 **[257]** obj76（数据引用）
 
 > 青い回復薬を手に入れた。生命力が４００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 400 points up!
+译文：拿到了蓝色回复药。生命上升400点！
 
 **[260]** obj80（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が２ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 2 points up!
+译文：拿到了红水晶。攻击力上升2点！
 
 **[263]** obj83（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が２ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 2 points up!
+译文：拿到了蓝水晶。防御力上升2点！
 
 ### 21F
 
@@ -1891,19 +1889,19 @@ EN: Got a blue crystal. Your defensive power was 2 points up!
 
 > 「このブロックに、この魔法の塔の主である大魔導師がいるが、今のおまえさんでは戦っても死にに行くようなものじゃろう。とりあえず、うまくやりすごして上のブロックに行くのが正解じゃ。」
 >
-EN: "The Great Magic Master is in this area. He is a proprietor of this magic tower. At your strenght, to attack him means death. It stands to reason that you should not face him, but rather, get items on higher levels first."
+译文：「这个区域里有这座魔法之塔的主人——大魔导师，以你现在的本事去挑战，等于去送死。总之先想办法避开他，往上面的区域去才是正解。」
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 ### 22F
 
@@ -1911,13 +1909,13 @@ EN: Went down the stairs.
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 ### 23F
 
@@ -1925,19 +1923,19 @@ EN: Went down the stairs.
 
 > 「わしが言うことは何もない。この階に、あるメッセージが隠されているじゃろう。」
 >
-EN: "I have nothing to say. A certain message may be hidden in this room."
+译文：「我没什么可说的。这一层里藏着某条讯息。」
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 ### 24F
 
@@ -1945,13 +1943,13 @@ EN: Went down the stairs.
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 ### 25F
 
@@ -1959,25 +1957,25 @@ EN: Went down the stairs.
 
 > 大魔導師「・・・ジ・・・ユウシャ・・・・・コロス・・・」
 >
-EN: Great Magic Master "-K-I-L-L- -A-N- -I-N-V-A-D-E-R- "
+译文：大魔导师「……你……勇者……杀……」
 
 **[126]** obj96（数据引用）
 
 > 大魔導師
 >
-EN: Great Magic Master
+译文：大魔导师
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 ### 26F
 
@@ -1985,31 +1983,31 @@ EN: Went down the stairs.
 
 > 「・・・ジ・・・トキハキタレリ・・・エラバレシモノヨ、シヲオソレヌナラバジクウノモンヲクグリテ、ワガモトヘクルガヨイ・・・」
 >
-EN: "Now is the time. You were chosen. If you aren't afraid of Death, you should go through the gate of Time and Space, and come to me."
+译文：「……时……时机已至……被选中之人啊，若不惧死，便穿过地宫之门，到我这里来……」
 
 **[23]** obj44（数据引用）
 
 > 勇者「これはっ……！人形だっ！」
 >
-EN: The brave man says "Oh! What? This is a doll!"
+译文：勇者「这是……！是人偶！」
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[183]** obj79（数据引用）
 
 > 溶岩が流れている。
 >
-EN: The lava is really hot.
+译文：熔岩在流动。
 
 ### 27F
 
@@ -2017,19 +2015,19 @@ EN: The lava is really hot.
 
 > 「この階まで来た段階で、生命力１５００、攻撃力８０、防御力９８、鍵５個、紫の鍵が１個あれば、ほぼ理想的と言えるじゃろう。」
 >
-EN: "In the stage of this floor, if your strength is 1500, offensive power is 80, defensive power is 98, you have five keys, and one blue key, you are almost ideal."
+译文：「爬到这一层时，如果生命1500、攻击力80、防御力98、钥匙5把、紫钥匙1把，那可以说相当理想了。」
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 ### 28F
 
@@ -2037,19 +2035,19 @@ EN: Went down the stairs.
 
 > 「鍵１個を１００ＧＯＬＤで買うよ。鍵を売るかい？」
 >
-EN: "I will buy your keys at 100 Gold a piece. Will you sell me keys?"
+译文：「一把钥匙我出100金币收。要卖钥匙吗？」
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 ### 29F
 
@@ -2057,25 +2055,25 @@ EN: Went down the stairs.
 
 > 盗賊「このブロックに最後のボスと捕まったプリンセスがいるはずだが、今はまだ戦うのは早すぎるだろうな。」
 >
-EN: The thief says "The last boss and the captured princess must be in this area. Hmm, I wonder if we should wait before fighting him."
+译文：盗贼「这个区域应该有最后的首领和被囚禁的公主，不过现在打还太早了吧。」
 
 **[29]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 盗賊「おお、来たか。ちゃんと、抜け穴を開通させておいたぜ、この抜け穴を通ればドラゴンの後ろに出られるから、そこから上の階に行くんだな。」
 >
-EN: The thief says "There you are. I have just finished the tunnel. As you go through it, you will get to the Dragon. And then you should go up."
+译文：盗贼「哦，你来了。地道我已经好好打通了，穿过这条地道就能到龙的身后，从那里往上爬就行。」
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 ### 30F
 
@@ -2083,25 +2081,25 @@ EN: Went down the stairs.
 
 > Ｇスライム
 >
-EN: Green Slime
+译文：绿史莱姆
 
 **[101]** obj6（数据引用）
 
 > Ｒスライム
 >
-EN: Red Slime
+译文：红史莱姆
 
 **[102]** obj45（数据引用）
 
 > Ｂスライム
 >
-EN: Big Slime
+译文：大史莱姆
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 ### 31F
 
@@ -2109,109 +2107,109 @@ EN: Went down the stairs.
 
 > 「二刀流の剣士は攻撃力がものすごく高い。まともに戦えば大きなダメージを受けるだろう。一撃で倒せるようになるまで、戦わない方がよかろう。」
 >
-EN: "The offensive power of the swordsman who uses two swords is too high. He can use two swords at the same time. You will lose much strength if you fight him normally. You should never fight him before your attacks are stronger than his."
+译文：「二刀流剑士的攻击力非常高，正面交手会吃大亏。在能一击打倒他之前，最好别去惹他。」
 
 **[66]** obj163（数据引用）
 
 > 「この塔は５０階建てだが、実際には４９階までしか行けないようだ。」
 >
-EN: "This tower is 50 stories high, but in reality it seems that you cannot go up to the 50th floor."
+译文：「这座塔号称50层，实际上好像只能走到49层。」
 
 **[83]** obj172（数据引用）
 
 > 「もう、話す事はないよ。」
 >
-EN: "Be careful. I have nothing more to say."
+译文：「我已经没什么可说的了。」
 
 **[92]** obj162（数据引用）
 
 > 「鍵を４個と紫の鍵をセットにして１０００ＧＯＬＤだ！買うかい？」
 >
-EN: "I will sell four keys and a blue key for 1000 Gold! Will you buy them?"
+译文：「4把钥匙加紫钥匙一套，1000金币！买吗？」
 
 **[113]** obj49（数据引用）
 
 > ゾンビナイト
 >
-EN: Zombie Knight
+译文：丧尸骑士
 
 **[121]** obj91（数据引用）
 
 > 騎　士
 >
-EN: Knight
+译文：骑士
 
 **[122]** obj92（数据引用）
 
 > 剣　士
 >
-EN: Swordsman
+译文：剑士
 
 **[123]** obj93（数据引用）
 
 > 兵　士
 >
-EN: Soldier
+译文：士兵
 
 **[124]** obj94（数据引用）
 
 > 死霊兵士
 >
-EN: Ghost Soldier
+译文：亡灵士兵
 
 **[125]** obj95（数据引用）
 
 > スライムマン
 >
-EN: Slime Man
+译文：史莱姆人
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[134]** obj3（数据引用）
 
 > 青色の扉の鍵を手に入れた。
 >
-EN: Got a blue key.
+译文：拿到了蓝钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[255]** obj67（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が２００ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 200 points up!
+译文：拿到了红色回复药。生命上升200点！
 
 **[258]** obj77（数据引用）
 
 > 青い回復薬を手に入れた。生命力が８００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 800 points up!
+译文：拿到了蓝色回复药。生命上升800点！
 
 **[261]** obj81（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が４ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 4 points up!
+译文：拿到了红水晶。攻击力上升4点！
 
 **[264]** obj84（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が４ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 4 points up!
+译文：拿到了蓝水晶。防御力上升4点！
 
 ### 32F
 
@@ -2219,91 +2217,91 @@ EN: Got a blue crystal. Your defensive power was 4 points up!
 
 > 金騎士「貴様だな、第１、第２ブロックのボスを倒し登ってきた勇者というのは。だがそれも、ここで終わりだ！ここのブロックのボスである私が自ら貴様の首を上げてやるわっ！覚悟しろっ！」
 >
-EN: The Golden Knight says "You are a brave man beating the bosses of the first and second areas, and ascending the tower. But the game is over now. Here and Now, I will beat you for myself! Give up!"
+译文：金骑士「就是你吧，打倒了第一、第二区域首领爬上来的那个勇者。不过到此为止了！作为本区域的首领，我亲自来取你的首级！放马过来！」
 
 **[28]** 代码 `strNumber=28` ← eventMT
 
 > 金騎士「ううう……今回はこのぐらいにしておいてやる……４０階まで登ってこれたら今度は本気で相手をしてやるからなっ！覚えておけっ！」"
 >
-EN: The Golden Knight says "You think you're pretty strong, huh? If you can make it to the 40th floor, I shall fight with you again. There, you will die!
+译文：金骑士「呜……这次就到此为止……你要是能爬到40楼，下次我可就认真对付你了！记住了！」
 
 **[107]** obj15（数据引用）
 
 > 門番Ｂ
 >
-EN: Gate-Keeper B
+译文：门卫 B
 
 **[121]** obj91（数据引用）
 
 > 騎　士
 >
-EN: Knight
+译文：骑士
 
 **[123]** obj93（数据引用）
 
 > 兵　士
 >
-EN: Soldier
+译文：士兵
 
 **[124]** obj94（数据引用）
 
 > 死霊兵士
 >
-EN: Ghost Soldier
+译文：亡灵士兵
 
 **[125]** obj95（数据引用）
 
 > スライムマン
 >
-EN: Slime Man
+译文：史莱姆人
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[134]** obj3（数据引用）
 
 > 青色の扉の鍵を手に入れた。
 >
-EN: Got a blue key.
+译文：拿到了蓝钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[206]** obj22（数据引用）
 
 > 「この祭壇に
 >
-EN: "If you offer me
+译文：「向这座祭坛奉献
 
 **[258]** obj77（数据引用）
 
 > 青い回復薬を手に入れた。生命力が８００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 800 points up!
+译文：拿到了蓝色回复药。生命上升800点！
 
 **[261]** obj81（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が４ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 4 points up!
+译文：拿到了红水晶。攻击力上升4点！
 
 **[264]** obj84（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が４ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 4 points up!
+译文：拿到了蓝水晶。防御力上升4点！
 
 ### 33F
 
@@ -2311,79 +2309,79 @@ EN: Got a blue crystal. Your defensive power was 4 points up!
 
 > 「急がば回れじゃ。」
 >
-EN: "More haste, less speed."
+译文：「欲速则不达。」
 
 **[113]** obj49（数据引用）
 
 > ゾンビナイト
 >
-EN: Zombie Knight
+译文：丧尸骑士
 
 **[122]** obj92（数据引用）
 
 > 剣　士
 >
-EN: Swordsman
+译文：剑士
 
 **[123]** obj93（数据引用）
 
 > 兵　士
 >
-EN: Soldier
+译文：士兵
 
 **[124]** obj94（数据引用）
 
 > 死霊兵士
 >
-EN: Ghost Soldier
+译文：亡灵士兵
 
 **[125]** obj95（数据引用）
 
 > スライムマン
 >
-EN: Slime Man
+译文：史莱姆人
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[158]** obj32（数据引用）
 
 > 騎士の剣を手に入れた。攻撃力が４０ポイントアップ！
 >
-EN: Got a Sword of Knight! Your offensive power was 40 points up!
+译文：拿到了骑士剑。攻击力上升40点！
 
 **[255]** obj67（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が２００ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 200 points up!
+译文：拿到了红色回复药。生命上升200点！
 
 **[258]** obj77（数据引用）
 
 > 青い回復薬を手に入れた。生命力が８００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 800 points up!
+译文：拿到了蓝色回复药。生命上升800点！
 
 **[272]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 騎士の剣
 >
-EN: Knight
+译文：骑士剑
 
 ### 34F
 
@@ -2391,97 +2389,97 @@ EN: Knight
 
 > Ｇスライム
 >
-EN: Green Slime
+译文：绿史莱姆
 
 **[101]** obj6（数据引用）
 
 > Ｒスライム
 >
-EN: Red Slime
+译文：红史莱姆
 
 **[102]** obj45（数据引用）
 
 > Ｂスライム
 >
-EN: Big Slime
+译文：大史莱姆
 
 **[103]** obj7（数据引用）
 
 > バット
 >
-EN: Bat
+译文：蝙蝠
 
 **[121]** obj91（数据引用）
 
 > 騎　士
 >
-EN: Knight
+译文：骑士
 
 **[122]** obj92（数据引用）
 
 > 剣　士
 >
-EN: Swordsman
+译文：剑士
 
 **[123]** obj93（数据引用）
 
 > 兵　士
 >
-EN: Soldier
+译文：士兵
 
 **[124]** obj94（数据引用）
 
 > 死霊兵士
 >
-EN: Ghost Soldier
+译文：亡灵士兵
 
 **[125]** obj95（数据引用）
 
 > スライムマン
 >
-EN: Slime Man
+译文：史莱姆人
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[255]** obj67（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が２００ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 200 points up!
+译文：拿到了红色回复药。生命上升200点！
 
 **[258]** obj77（数据引用）
 
 > 青い回復薬を手に入れた。生命力が８００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 800 points up!
+译文：拿到了蓝色回复药。生命上升800点！
 
 **[261]** obj81（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が４ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 4 points up!
+译文：拿到了红水晶。攻击力上升4点！
 
 **[264]** obj84（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が４ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 4 points up!
+译文：拿到了蓝水晶。防御力上升4点！
 
 ### 35F
 
@@ -2489,43 +2487,43 @@ EN: Got a blue crystal. Your defensive power was 4 points up!
 
 > 盗賊「このブロックのボスの金騎士は弱いくせに態度だけはでかいから、この塔の副将格の魔導師ゼノには嫌われているらしい。」
 >
-EN: The thief says "The Golden Knight (who is the boss of this area) has a strong attitude in spite of being weak. It is for this reason that he is disliked by the Magic Serg. Zeno, who is the sub commander of this tower."
+译文：盗贼「这个区域的首领金骑士又弱又只会摆架子，听说塔里的副将魔导师 Zeno 很讨厌他。」
 
 **[99]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 盗賊「ようまたあったな！無事だったか？これは聞いた話なんだが、２５階のボスを倒すと『時空の門』がどこかにできるらしいぞ。」
 >
-EN: The thief says "Ah!, we meet again! Thank goodness you're alive! I heard that if you beat the boss of 25th floor, 'the gate of time and space' will appear somewhere."
+译文：盗贼「哟，又见面了！你没事吧？这是我听来的消息——据说打倒25楼的首领，某处就会出现『时空之门』。」
 
 **[119]** obj74（数据引用）
 
 > ドラゴン
 >
-EN: Dragon
+译文：龙
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[141]** obj89（数据引用）
 
 > 壁がくずれた！
 >
-EN: The wall collapsed!
+译文：墙壁塌了！
 
 **[310]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 雪の結晶
 >
-EN: The snow crystal
+译文：雪花结晶
 
 ### 36F
 
@@ -2533,73 +2531,73 @@ EN: The snow crystal
 
 > 「この階の４つの抜け穴をうまく使えば、強い敵とは戦わずに上の階に行けるじゃろう。」
 >
-EN: "You may be able to go upstairs without fighting strong enemies, if you could use four tunnels skillfully in this floor."
+译文：「只要用好这一层的四处地道，就能不跟强敌交手直接上去。」
 
 **[113]** obj49（数据引用）
 
 > ゾンビナイト
 >
-EN: Zombie Knight
+译文：丧尸骑士
 
 **[121]** obj91（数据引用）
 
 > 騎　士
 >
-EN: Knight
+译文：骑士
 
 **[122]** obj92（数据引用）
 
 > 剣　士
 >
-EN: Swordsman
+译文：剑士
 
 **[123]** obj93（数据引用）
 
 > 兵　士
 >
-EN: Soldier
+译文：士兵
 
 **[124]** obj94（数据引用）
 
 > 死霊兵士
 >
-EN: Ghost Soldier
+译文：亡灵士兵
 
 **[125]** obj95（数据引用）
 
 > スライムマン
 >
-EN: Slime Man
+译文：史莱姆人
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[141]** obj89（数据引用）
 
 > 壁がくずれた！
 >
-EN: The wall collapsed!
+译文：墙壁塌了！
 
 **[258]** obj77（数据引用）
 
 > 青い回復薬を手に入れた。生命力が８００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 800 points up!
+译文：拿到了蓝色回复药。生命上升800点！
 
 ### 37F
 
@@ -2607,103 +2605,103 @@ EN: Got a blue elixir. Your vital power was 800 points up!
 
 > 「この階の宝物庫にある宝を取るためにはマトックが必要じゃ。」
 >
-EN: "You need the mattock in order to get the treasure which is in the item warehouse on this floor."
+译文：「要取这一层宝物库里的宝物，需要镐。」
 
 **[121]** obj91（数据引用）
 
 > 騎　士
 >
-EN: Knight
+译文：骑士
 
 **[122]** obj92（数据引用）
 
 > 剣　士
 >
-EN: Swordsman
+译文：剑士
 
 **[123]** obj93（数据引用）
 
 > 兵　士
 >
-EN: Soldier
+译文：士兵
 
 **[124]** obj94（数据引用）
 
 > 死霊兵士
 >
-EN: Ghost Soldier
+译文：亡灵士兵
 
 **[125]** obj95（数据引用）
 
 > スライムマン
 >
-EN: Slime Man
+译文：史莱姆人
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[134]** obj3（数据引用）
 
 > 青色の扉の鍵を手に入れた。
 >
-EN: Got a blue key.
+译文：拿到了蓝钥匙。
 
 **[135]** obj28（数据引用）
 
 > 赤色の扉の鍵を手に入れた。
 >
-EN: Got a red key.
+译文：拿到了红钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[174]** obj105（数据引用）
 
 > 破壊の玉を手に入れた！
 >
-EN: Got the Destructible Ball!
+译文：拿到了破坏之玉！
 
 **[255]** obj67（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が２００ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 200 points up!
+译文：拿到了红色回复药。生命上升200点！
 
 **[258]** obj77（数据引用）
 
 > 青い回復薬を手に入れた。生命力が８００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 800 points up!
+译文：拿到了蓝色回复药。生命上升800点！
 
 **[261]** obj81（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が４ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 4 points up!
+译文：拿到了红水晶。攻击力上升4点！
 
 **[264]** obj84（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が４ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 4 points up!
+译文：拿到了蓝水晶。防御力上升4点！
 
 **[305]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 破壊の玉
 >
-EN: The Destructible Ball
+译文：破坏之玉
 
 ### 38F
 
@@ -2711,109 +2709,109 @@ EN: The Destructible Ball
 
 > 「門番のいる所には必ず門があるよ。逆に門のある階には、それを守っている敵がいるよ。だから……。」
 >
-EN: "There is never a gate without a Gate-Keeper. Conversely there are always enemies who keep the gate on floors that have gates. So,"
+译文：「有门卫的地方一定有门；反过来说，有门的楼层就有守卫它的敌人。所以……。」
 
 **[83]** obj172（数据引用）
 
 > 「もう、話す事はないよ。」
 >
-EN: "Be careful. I have nothing more to say."
+译文：「我已经没什么可说的了。」
 
 **[93]** obj164（数据引用）
 
 > 「鍵３個を大サービスの２００ＧＯＬＤで売るよ！早い者勝ちだよ！」
 >
-EN: "I will sell three keys at special price (200 gold). First come, first served."
+译文：「3把钥匙大酬宾，200金币就卖！先到先得哦！」
 
 **[107]** obj15（数据引用）
 
 > 門番Ｂ
 >
-EN: Gate-Keeper B
+译文：门卫 B
 
 **[112]** obj48（数据引用）
 
 > ゾンビ
 >
-EN: Zombie
+译文：丧尸
 
 **[121]** obj91（数据引用）
 
 > 騎　士
 >
-EN: Knight
+译文：骑士
 
 **[122]** obj92（数据引用）
 
 > 剣　士
 >
-EN: Swordsman
+译文：剑士
 
 **[123]** obj93（数据引用）
 
 > 兵　士
 >
-EN: Soldier
+译文：士兵
 
 **[124]** obj94（数据引用）
 
 > 死霊兵士
 >
-EN: Ghost Soldier
+译文：亡灵士兵
 
 **[125]** obj95（数据引用）
 
 > スライムマン
 >
-EN: Slime Man
+译文：史莱姆人
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[163]** obj37（数据引用）
 
 > 騎士の盾を手に入れた。防御力４０がポイントアップ！
 >
-EN: Got a Shield of Knight! Your defensive power was 40 points up!
+译文：拿到了骑士盾。防御力上升40点！
 
 **[255]** obj67（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が２００ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 200 points up!
+译文：拿到了红色回复药。生命上升200点！
 
 **[258]** obj77（数据引用）
 
 > 青い回復薬を手に入れた。生命力が８００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 800 points up!
+译文：拿到了蓝色回复药。生命上升800点！
 
 **[264]** obj84（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が４ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 4 points up!
+译文：拿到了蓝水晶。防御力上升4点！
 
 **[277]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 騎士の盾
 >
-EN: Knight
+译文：骑士盾
 
 ### 39F
 
@@ -2821,103 +2819,103 @@ EN: Knight
 
 > 「３時になれば空間移動の秘宝が現れるじゃろう。」
 >
-EN: "At three o'clock, the secret treasure that lets one travel in space will appear."
+译文：「到了3点，空间转移秘宝就会出现。」
 
 **[75]** obj169（数据引用）
 
 > 「神盾は、魔法使いたちの魔法攻撃を防ぐ力があるらしい。……しかし、この盾は幻の階に隠されているそうだ。」
 >
-EN: "The sacred shield can defend you against magic attacks. But I heard this shield is hidden on a floor that doesn't exist."
+译文：「神圣盾好像能挡住魔法师们的魔法攻击。……不过这面盾被藏在虚幻之层。」
 
 **[83]** obj172（数据引用）
 
 > 「もう、話す事はないよ。」
 >
-EN: "Be careful. I have nothing more to say."
+译文：「我已经没什么可说的了。」
 
 **[94]** obj166（数据引用）
 
 > 「紫の鍵が３個で２０００ＧＯＬＤだが、買うかい？」
 >
-EN: "2000 Golds for three blue keys. Deal?"
+译文：「3把紫钥匙2000金币，买吗？」
 
 **[121]** obj91（数据引用）
 
 > 騎　士
 >
-EN: Knight
+译文：骑士
 
 **[122]** obj92（数据引用）
 
 > 剣　士
 >
-EN: Swordsman
+译文：剑士
 
 **[123]** obj93（数据引用）
 
 > 兵　士
 >
-EN: Soldier
+译文：士兵
 
 **[124]** obj94（数据引用）
 
 > 死霊兵士
 >
-EN: Ghost Soldier
+译文：亡灵士兵
 
 **[125]** obj95（数据引用）
 
 > スライムマン
 >
-EN: Slime Man
+译文：史莱姆人
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[255]** obj67（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が２００ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 200 points up!
+译文：拿到了红色回复药。生命上升200点！
 
 **[261]** obj81（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が４ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 4 points up!
+译文：拿到了红水晶。攻击力上升4点！
 
 **[264]** obj84（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が４ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 4 points up!
+译文：拿到了蓝水晶。防御力上升4点！
 
 **[306]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 空間転移の秘宝
 >
-EN: The Warp Staff
+译文：空间转移秘宝
 
 **[307]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 昇華の翼
 >
-EN: Wings to fly up
+译文：升华之翼
 
 ### 40F
 
@@ -2925,133 +2923,133 @@ EN: Wings to fly up
 
 > 金騎士「よくきたな。今度はさっきの様な訳にはいかんぞ！この屈辱は１０倍にして返してくれるわっ！死霊兵士突撃！」
 >
-EN: The Golden Knight says "I wonder how you were able to come so far. I will make sure you go no further. I will humiliate you 10 times as much as you've disgraced this tower. Ghost Soldiers, charge!"
+译文：金骑士「来得好。这次可不会像刚才那样了！这份屈辱我要十倍奉还！亡灵士兵，突击！」
 
 **[32]** 代码 `strNumber=32` ← eventMT
 
 > 金騎士「ふふん、こんなのは小手調べだっ！兵士突撃！」
 >
-EN: The Golden Knight says "Humph, that was nothing! Soldiers, charge!"
+译文：金骑士「哼，这只是试探！士兵，突击！」
 
 **[33]** 代码 `strNumber=33` ← eventMT
 
 > 金騎士「まだまだ、これからっ！剣士突撃！」
 >
-EN: The Golden Knight says "We are only beginning. Let's fight from now on. Swordsmen, charge!"
+译文：金骑士「还没完，这才开始！剑士，突击！」
 
 **[34]** 代码 `strNumber=34` ← eventMT
 
 > 金騎士「うぬぬ……だが、これはどうだっ！騎士突撃！」
 >
-EN: The Golden Knight says "Heck! How about this attack? Knights, charge!"
+译文：金骑士「唔唔……那这招如何！骑士，突击！」
 
 **[35]** 代码 `strNumber=35` ← eventMT
 
 > 金騎士「うう……私の部下達を……許さんっ！許さんぞ！今度は手加減はしてやらんっ！覚悟しろ！」
 >
-EN: The Golden Knight says "How dare you defeat my followers? Never shall I forgive you! Now I won't use discretion. Give up!"
+译文：金骑士「呜……我的部下们……不可饶恕！绝不饶你！这次我不会再留情！准备好！」
 
 **[36]** 代码 `strNumber=36` ← eventMT
 
 > 金騎士「ごほっ……今回はこのへんで……はあはあ……許しておいてやる……。だが次にやる時は今度こそ本当に本気で相手をしてやるからなっ！覚悟しておけっ！」
 >
-EN: The Golden Knight says "I will unwillingly forgive you this time. But we shall quarrel seriously when we meet again. You had better give up!"
+译文：金骑士「咳……这次就到这里……呼、呼……先放过你……但下次动手时我可真会全力对付你！给我记着！」
 
 **[37]** 代码 `strNumber=37` ← eventMT
 
 > 金騎士「あっ……！ゼノ様……。あと一歩という所で、勇者を取り逃がしてしまいました。どうか、お許しを……。」
 >
-EN: The Golden Knight says "Oh! Sir Magic Serg. Zeno. I was not able to catch the brave man. Please forgive me."
+译文：金骑士「啊……！Zeno 大人……只差一步，却让勇者跑了。请您宽恕……」
 
 **[38]** 代码 `strNumber=38` ← eventMT
 
 > 魔導師ゼノ「取り逃がしただと……？逃げてきたのは貴様の方ではないかっ！この恥知らずめがっ！貴様のような臆病者はこの塔には不要だっ！ここで、死ねっ！」
 >
-EN: The Magic Serg. Zeno replies "You weren't? I dare you to say that again. You come running up here like a coward and tell me you couldn't do your job. What shame! This tower has no need for the likes of you! You've failed me for the last time. You shall now die."
+译文：魔导师 Zeno「让他跑了……？逃回来的不是你吗！你这不知羞耻的东西！像你这样的胆小鬼，这座塔不需要！就在这里，去死吧！」
 
 **[39]** 代码 `strNumber=39` ← eventMT
 
 > 金騎士「ああ、どうか、お許し……ぎゃあ～～～っ！！！」
 >
-EN: The Golden Knight says "Oh God, please forgive me! Ah!"
+译文：金骑士「啊，请您宽恕……嘎啊——！！！」
 
 **[40]** 代码 `strNumber=40` ← eventMT
 
 > 魔導師ゼノ「お見苦しいところをお見せしたな……。だが、安心してもらおう。私はこのようなゴミとはわけが違う。もし、お前が上まで登ってこれたなら今度は、私が直々にお相手しよう。待っているぞ……。」
 >
-EN: The Magic Serg. Zeno says "I behaved unbecomingly. But don't worry. I quite different from such a fellow. If you should come up to me, I would fight with you directly. I'm waiting for you."
+译文：魔导师 Zeno「让你看到难堪的一幕了……不过你放心。我和这种垃圾可不一样。如果你真能爬上来，下次就由我亲自奉陪。我等着你……。」
 
 **[120]** obj90（数据引用）
 
 > 金騎士
 >
-EN: Golden Knight
+译文：金骑士
 
 **[121]** obj91（数据引用）
 
 > 騎　士
 >
-EN: Knight
+译文：骑士
 
 **[122]** obj92（数据引用）
 
 > 剣　士
 >
-EN: Swordsman
+译文：剑士
 
 **[123]** obj93（数据引用）
 
 > 兵　士
 >
-EN: Soldier
+译文：士兵
 
 **[124]** obj94（数据引用）
 
 > 死霊兵士
 >
-EN: Ghost Soldier
+译文：亡灵士兵
 
 **[125]** obj95（数据引用）
 
 > スライムマン
 >
-EN: Slime Man
+译文：史莱姆人
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[255]** obj67（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が２００ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 200 points up!
+译文：拿到了红色回复药。生命上升200点！
 
 **[258]** obj77（数据引用）
 
 > 青い回復薬を手に入れた。生命力が８００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 800 points up!
+译文：拿到了蓝色回复药。生命上升800点！
 
 **[261]** obj81（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が４ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 4 points up!
+译文：拿到了红水晶。攻击力上升4点！
 
 **[264]** obj84（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が４ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 4 points up!
+译文：拿到了蓝水晶。防御力上升4点！
 
 ### 41F
 
@@ -3059,91 +3057,91 @@ EN: Got a blue crystal. Your defensive power was 4 points up!
 
 > 魔導師
 >
-EN: Magic Sergeant
+译文：魔导师
 
 **[127]** obj97（数据引用）
 
 > 吸血コウモリ
 >
-EN: Vampire Bat
+译文：吸血蝙蝠
 
 **[128]** obj98（数据引用）
 
 > Ｋスライム
 >
-EN: SlimeLord
+译文：史莱姆王
 
 **[129]** obj99（数据引用）
 
 > 魔術師Ａ
 >
-EN: Magician A
+译文：魔术师 A
 
 **[130]** obj100（数据引用）
 
 > 魔術師Ｂ
 >
-EN: Magician B
+译文：魔术师 B
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[134]** obj3（数据引用）
 
 > 青色の扉の鍵を手に入れた。
 >
-EN: Got a blue key.
+译文：拿到了蓝钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[141]** obj89（数据引用）
 
 > 壁がくずれた！
 >
-EN: The wall collapsed!
+译文：墙壁塌了！
 
 **[256]** obj68（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が２５０ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 250 points up!
+译文：拿到了红色回复药。生命上升250点！
 
 **[259]** obj78（数据引用）
 
 > 青い回復薬を手に入れた。生命力が１０００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 1000 points up!
+译文：拿到了蓝色回复药。生命上升1000点！
 
 **[262]** obj82（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が５ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 5 points up!
+译文：拿到了红水晶。攻击力上升5点！
 
 **[265]** obj85（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が５ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 5 points up!
+译文：拿到了蓝水晶。防御力上升5点！
 
 **[308]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 降臨の翼
 >
-EN: Wings to fly down
+译文：降临之翼
 
 ### 42F
 
@@ -3151,85 +3149,85 @@ EN: Wings to fly down
 
 > 「魔術師は隣接すると魔法攻撃をしてくる。魔導師ははさまれると生命力を半分にする攻撃をしてくる。魔導師のはさみ攻撃は自分の生命力が高いほど受けるダメージが大きいはずじゃから気をつけてな。」
 >
-EN: "A Magician will attack using magic when he is next to you. The Magic Sergeants will attack and divide the vital power in half when you are caught between two. As for an attack on both sides from the Magic Sergeant, the stronger you are, the more damage you take. So, please be careful."
+译文：「魔术师一贴身就会用魔法攻击。魔导师被夹在中间时会用把你的生命减半的攻击。魔导师的夹击，你自己的生命越高受到的伤害越大，得当心。」
 
 **[116]** obj58（数据引用）
 
 > 魔導師
 >
-EN: Magic Sergeant
+译文：魔导师
 
 **[127]** obj97（数据引用）
 
 > 吸血コウモリ
 >
-EN: Vampire Bat
+译文：吸血蝙蝠
 
 **[128]** obj98（数据引用）
 
 > Ｋスライム
 >
-EN: SlimeLord
+译文：史莱姆王
 
 **[129]** obj99（数据引用）
 
 > 魔術師Ａ
 >
-EN: Magician A
+译文：魔术师 A
 
 **[130]** obj100（数据引用）
 
 > 魔術師Ｂ
 >
-EN: Magician B
+译文：魔术师 B
 
 **[131]** obj101（数据引用）
 
 > 黒騎士
 >
-EN: Dark Knight
+译文：黑骑士
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[134]** obj3（数据引用）
 
 > 青色の扉の鍵を手に入れた。
 >
-EN: Got a blue key.
+译文：拿到了蓝钥匙。
 
 **[135]** obj28（数据引用）
 
 > 赤色の扉の鍵を手に入れた。
 >
-EN: Got a red key.
+译文：拿到了红钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[259]** obj78（数据引用）
 
 > 青い回復薬を手に入れた。生命力が１０００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 1000 points up!
+译文：拿到了蓝色回复药。生命上升1000点！
 
 **[265]** obj85（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が５ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 5 points up!
+译文：拿到了蓝水晶。防御力上升5点！
 
 ### 43F
 
@@ -3237,85 +3235,85 @@ EN: Got a blue crystal. Your defensive power was 5 points up!
 
 > 魔導師
 >
-EN: Magic Sergeant
+译文：魔导师
 
 **[127]** obj97（数据引用）
 
 > 吸血コウモリ
 >
-EN: Vampire Bat
+译文：吸血蝙蝠
 
 **[128]** obj98（数据引用）
 
 > Ｋスライム
 >
-EN: SlimeLord
+译文：史莱姆王
 
 **[129]** obj99（数据引用）
 
 > 魔術師Ａ
 >
-EN: Magician A
+译文：魔术师 A
 
 **[130]** obj100（数据引用）
 
 > 魔術師Ｂ
 >
-EN: Magician B
+译文：魔术师 B
 
 **[131]** obj101（数据引用）
 
 > 黒騎士
 >
-EN: Dark Knight
+译文：黑骑士
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[134]** obj3（数据引用）
 
 > 青色の扉の鍵を手に入れた。
 >
-EN: Got a blue key.
+译文：拿到了蓝钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[164]** obj38（数据引用）
 
 > 聖　盾を手に入れた。防御力が５０ポイントアップ！
 >
-EN: Got a Holy Shield! Your defensive power was 50 points up!
+译文：拿到了圣盾。防御力上升50点！
 
 **[256]** obj68（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が２５０ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 250 points up!
+译文：拿到了红色回复药。生命上升250点！
 
 **[259]** obj78（数据引用）
 
 > 青い回復薬を手に入れた。生命力が１０００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 1000 points up!
+译文：拿到了蓝色回复药。生命上升1000点！
 
 **[278]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 聖　盾
 >
-EN: Holy
+译文：圣盾
 
 ### 44F
 
@@ -3323,31 +3321,31 @@ EN: Holy
 
 > 門番Ａ
 >
-EN: Gate-Keeper A
+译文：门卫 A
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[165]** obj39（数据引用）
 
 > 神　盾を手に入れた。防御力が１００ポイントアップ！
 >
-EN: Got a Sacred Shield! Your defensive power was 100 points up!
+译文：拿到了神圣盾。防御力上升100点！
 
 **[256]** obj68（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が２５０ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 250 points up!
+译文：拿到了红色回复药。生命上升250点！
 
 **[279]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 神　盾
 >
-EN: Sacred
+译文：神圣盾
 
 ### 45F
 
@@ -3355,109 +3353,109 @@ EN: Sacred
 
 > 「この塔の４４階は幻の階じゃ。普通の階段を登り降りしたのでは行くことができないらしい。ワープでもしないかぎり行くことは不可能じゃろう。」
 >
-EN: "The 44th floor in this tower is an illusion. It seems that we cannot go to there even if we use the stairs. I think that it is impossible to get there without teleporting."
+译文：「这座塔的44层是虚幻之层。光靠走楼梯是上不去的，据说不用传送就根本到不了。」
 
 **[75]** obj169（数据引用）
 
 > 「神盾は、魔法使いたちの魔法攻撃を防ぐ力があるらしい。……しかし、この盾は幻の階に隠されているそうだ。」
 >
-EN: "The sacred shield can defend you against magic attacks. But I heard this shield is hidden on a floor that doesn't exist."
+译文：「神圣盾好像能挡住魔法师们的魔法攻击。……不过这面盾被藏在虚幻之层。」
 
 **[83]** obj172（数据引用）
 
 > 「もう、話す事はないよ。」
 >
-EN: "Be careful. I have nothing more to say."
+译文：「我已经没什么可说的了。」
 
 **[95]** obj168（数据引用）
 
 > 「１０００ＧＯＬＤで生命力を２０００ポイント回復してあげるよ。」
 >
-EN: "I will increase your life 2000 points at 1000 Gold."
+译文：「1000金币，给你回复2000点生命。」
 
 **[116]** obj58（数据引用）
 
 > 魔導師
 >
-EN: Magic Sergeant
+译文：魔导师
 
 **[127]** obj97（数据引用）
 
 > 吸血コウモリ
 >
-EN: Vampire Bat
+译文：吸血蝙蝠
 
 **[128]** obj98（数据引用）
 
 > Ｋスライム
 >
-EN: SlimeLord
+译文：史莱姆王
 
 **[129]** obj99（数据引用）
 
 > 魔術師Ａ
 >
-EN: Magician A
+译文：魔术师 A
 
 **[130]** obj100（数据引用）
 
 > 魔術師Ｂ
 >
-EN: Magician B
+译文：魔术师 B
 
 **[131]** obj101（数据引用）
 
 > 黒騎士
 >
-EN: Dark Knight
+译文：黑骑士
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[176]** obj107（数据引用）
 
 > 昇華の翼を手に入れた！
 >
-EN: Got wings to fly up!
+译文：拿到了升华之翼！
 
 **[259]** obj78（数据引用）
 
 > 青い回復薬を手に入れた。生命力が１０００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 1000 points up!
+译文：拿到了蓝色回复药。生命上升1000点！
 
 **[262]** obj82（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が５ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 5 points up!
+译文：拿到了红水晶。攻击力上升5点！
 
 **[265]** obj85（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が５ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 5 points up!
+译文：拿到了蓝水晶。防御力上升5点！
 
 **[307]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 昇華の翼
 >
-EN: Wings to fly up
+译文：升华之翼
 
 ### 46F
 
@@ -3465,115 +3463,115 @@ EN: Wings to fly up
 
 > 「４１階は完全に左右対称になっておる。だから……。」
 >
-EN: "The 41st floor is perfectly symmetrical, and therefore,"
+译文：「41层是完全左右对称的。所以……。」
 
 **[101]** obj6（数据引用）
 
 > Ｒスライム
 >
-EN: Red Slime
+译文：红史莱姆
 
 **[108]** obj9（数据引用）
 
 > スケルトンＣ
 >
-EN: Skeleton C
+译文：骷髅兵 C
 
 **[111]** obj47（数据引用）
 
 > 大バット
 >
-EN: Big Bat
+译文：大蝙蝠
 
 **[112]** obj48（数据引用）
 
 > ゾンビ
 >
-EN: Zombie
+译文：丧尸
 
 **[121]** obj91（数据引用）
 
 > 騎　士
 >
-EN: Knight
+译文：骑士
 
 **[122]** obj92（数据引用）
 
 > 剣　士
 >
-EN: Swordsman
+译文：剑士
 
 **[123]** obj93（数据引用）
 
 > 兵　士
 >
-EN: Soldier
+译文：士兵
 
 **[127]** obj97（数据引用）
 
 > 吸血コウモリ
 >
-EN: Vampire Bat
+译文：吸血蝙蝠
 
 **[128]** obj98（数据引用）
 
 > Ｋスライム
 >
-EN: SlimeLord
+译文：史莱姆王
 
 **[129]** obj99（数据引用）
 
 > 魔術師Ａ
 >
-EN: Magician A
+译文：魔术师 A
 
 **[130]** obj100（数据引用）
 
 > 魔術師Ｂ
 >
-EN: Magician B
+译文：魔术师 B
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[180]** obj111（数据引用）
 
 > 魔法の鍵を手に入れた！
 >
-EN: Got the magic key!
+译文：拿到了魔法钥匙！
 
 **[206]** obj22（数据引用）
 
 > 「この祭壇に
 >
-EN: "If you offer me
+译文：「向这座祭坛奉献
 
 **[256]** obj68（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が２５０ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 250 points up!
+译文：拿到了红色回复药。生命上升250点！
 
 **[262]** obj82（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が５ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 5 points up!
+译文：拿到了红水晶。攻击力上升5点！
 
 **[311]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 魔法の鍵
 >
-EN: The magic key
+译文：魔法钥匙
 
 ### 47F
 
@@ -3581,91 +3579,91 @@ EN: The magic key
 
 > 「ドラゴンを倒す気なら、聖剣と聖盾、それにドラゴンスレーヤーを持って、なおかつレベルが高くなければならないだろう。」
 >
-EN: "If you want to beat the Dragon, you must have a holy sword, a holy shield, and a Dragon slayer, and also you must be high level."
+译文：「想打倒龙，得带上圣剑、圣盾，再加屠龙匕，而且等级还得够高才行。」
 
 **[83]** obj172（数据引用）
 
 > 「もう、話す事はないよ。」
 >
-EN: "Be careful. I have nothing more to say."
+译文：「我已经没什么可说的了。」
 
 **[96]** obj170（数据引用）
 
 > 「超希少品のスーパーマトックを４０００ＧＯＬＤで買わないかい？」
 >
-EN: "Would you like to buy a super mattock (it's very rare) for 4000 Gold?"
+译文：「超稀有的超级镐，4000金币，买不买？」
 
 **[127]** obj97（数据引用）
 
 > 吸血コウモリ
 >
-EN: Vampire Bat
+译文：吸血蝙蝠
 
 **[128]** obj98（数据引用）
 
 > Ｋスライム
 >
-EN: SlimeLord
+译文：史莱姆王
 
 **[129]** obj99（数据引用）
 
 > 魔術師Ａ
 >
-EN: Magician A
+译文：魔术师 A
 
 **[130]** obj100（数据引用）
 
 > 魔術師Ｂ
 >
-EN: Magician B
+译文：魔术师 B
 
 **[133]** obj1（数据引用）
 
 > 扉の鍵を手に入れた。
 >
-EN: Got a key.
+译文：拿到了门钥匙。
 
 **[134]** obj3（数据引用）
 
 > 青色の扉の鍵を手に入れた。
 >
-EN: Got a blue key.
+译文：拿到了蓝钥匙。
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[256]** obj68（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が２５０ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 250 points up!
+译文：拿到了红色回复药。生命上升250点！
 
 **[262]** obj82（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が５ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 5 points up!
+译文：拿到了红水晶。攻击力上升5点！
 
 **[265]** obj85（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が５ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 5 points up!
+译文：拿到了蓝水晶。防御力上升5点！
 
 **[312]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > スーパーマトック
 >
-EN: The Super Magic Mattock
+译文：超级镐
 
 ### 48F
 
@@ -3673,91 +3671,91 @@ EN: The Super Magic Mattock
 
 > 「サイコロの５の目の形には、魔を封じ込める力があるという。このブロックのボスと戦う時には、このことを頭にいれておきなされ。」
 >
-EN: "It is said that the symbol of 5 on a pair of dice has the force of sealing magic. You had better memorize it till you fight the boss of this area."
+译文：「骰子上5点的形状有封印魔力的力量。跟这个区域的首领交手时，把这件事记在心里。」
 
 **[116]** obj58（数据引用）
 
 > 魔導師
 >
-EN: Magic Sergeant
+译文：魔导师
 
 **[127]** obj97（数据引用）
 
 > 吸血コウモリ
 >
-EN: Vampire Bat
+译文：吸血蝙蝠
 
 **[128]** obj98（数据引用）
 
 > Ｋスライム
 >
-EN: SlimeLord
+译文：史莱姆王
 
 **[129]** obj99（数据引用）
 
 > 魔術師Ａ
 >
-EN: Magician A
+译文：魔术师 A
 
 **[130]** obj100（数据引用）
 
 > 魔術師Ｂ
 >
-EN: Magician B
+译文：魔术师 B
 
 **[131]** obj101（数据引用）
 
 > 黒騎士
 >
-EN: Dark Knight
+译文：黑骑士
 
 **[139]** 地形4、地形6、地形8 等47项（数据引用）
 
 > 階段を上った。
 >
-EN: Went up the stairs.
+译文：上了楼梯。
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[159]** obj33（数据引用）
 
 > 聖　剣を手に入れた。攻撃力が５０ポイントアップ！
 >
-EN: Got a Holy Sword! Your offensive power was 50 points up!
+译文：拿到了圣剑。攻击力上升50点！
 
 **[256]** obj68（数据引用）
 
 > 赤い回復薬を手に入れた。生命力が２５０ポイントアップ！
 >
-EN: Got a red elixir. Your vital power was 250 points up!
+译文：拿到了红色回复药。生命上升250点！
 
 **[259]** obj78（数据引用）
 
 > 青い回復薬を手に入れた。生命力が１０００ポイントアップ！
 >
-EN: Got a blue elixir. Your vital power was 1000 points up!
+译文：拿到了蓝色回复药。生命上升1000点！
 
 **[262]** obj82（数据引用）
 
 > 赤のクリスタルを手に入れた。攻撃力が５ポイントアップ！
 >
-EN: Got a red crystal. Your offensive power was 5 points up!
+译文：拿到了红水晶。攻击力上升5点！
 
 **[265]** obj85（数据引用）
 
 > 青のクリスタルを手に入れた。防御力が５ポイントアップ！
 >
-EN: Got a blue crystal. Your defensive power was 5 points up!
+译文：拿到了蓝水晶。防御力上升5点！
 
 **[273]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 聖　剣
 >
-EN: Holy
+译文：圣剑
 
 ### 49F
 
@@ -3765,25 +3763,25 @@ EN: Holy
 
 > 魔術師Ａ
 >
-EN: Magician A
+译文：魔术师 A
 
 **[131]** obj101（数据引用）
 
 > 黒騎士
 >
-EN: Dark Knight
+译文：黑骑士
 
 **[140]** 地形5、地形7、地形9 等46项（数据引用）
 
 > 階段を下った。
 >
-EN: Went down the stairs.
+译文：下了楼梯。
 
 **[309]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > ドラゴンスレーヤー
 >
-EN: The Dragon Slayer
+译文：屠龙匕
 
 ### 50F
 
@@ -3791,79 +3789,79 @@ EN: The Dragon Slayer
 
 > 魔導師ゼノ「よくぞ、ここまで、たどりついたものだ。誉めてやろう。約束どおり、この私が直々に相手をしよう。さあ、来るがいい。」
 >
-EN: The Magic Serg. Zeno "It's amazing that you found your way here at last. I compliment you. Now, as promised, I'll fight with you, man to man!"
+译文：魔导师 Zeno「居然能走到这里，值得称赞。如约，由我亲自做你的对手。来吧。」
 
 **[42]** 代码 `strNumber=42` ← eventMT
 
 > 魔導師ゼノ「うっ……この陣形は……まずいっ！」
 >
-EN: The Magic Serg. Zeno "Alas..."
+译文：魔导师 Zeno「唔……这个阵形……不妙！」
 
 **[43]** 代码 `strNumber=43` ← eventMT
 
 > 勇者「おまえはっ……！どうしてこんな所に！」
 >
-EN: The brave man says "Who? It's you! Why are you in such a place ?"
+译文：勇者「你……！怎么会在这里！」
 
 **[44]** 代码 `strNumber=44` ← eventMT
 
 > 盗賊「ふふふ……ここにいるという事は、答えは１つしかあるまい。こういう事だっ！」
 >
-EN: The thief says "Humph. There is only one reason why I'm here. And this is it!"
+译文：盗贼「呵呵呵……既然我在这里，答案就只有一个。就是这样！」
 
 **[45]** 代码 `strNumber=45` ← eventMT
 
 > 勇者「あっ！おまえはゼノッ！生きていたのか！？」
 >
-EN: The brave man says "Huh? Hey! You're Zeno! Were you still alive ?"
+译文：勇者「啊！你是 Zeno！你还活着！？」
 
 **[46]** 代码 `strNumber=46` ← eventMT
 
 > 魔導師ゼノ「あんなことで倒されるものか。あれは、おまえの戦士としての知性を試したにすぎん。」
 >
-EN: The Magic Serg. Zeno says "I will never die. I merely tested your intelligence as a soldier."
+译文：魔导师 Zeno「我怎么可能因为那种事就倒下。那不过是试试你作为战士的才智罢了。」
 
 **[47]** 代码 `strNumber=47` ← eventMT
 
 > 勇者「なにっ！？……どういうことだっ！どうして、こんな事を……！？」
 >
-EN: The brave man says "Huh? What do you mean? Why did you do such a thing ?"
+译文：勇者「什么！？……什么意思！为什么要做这种事……！？」
 
 **[48]** 代码 `strNumber=48` ← eventMT
 
 > 魔導師ゼノ「おまえの持つ神剣ウェポナー、そして私の持つ全能の杖インテリオン。この２つの力が合わさる時、偉大なる知恵を手に入れる事ができるという……。しかし、それには、その剣の力を十分に発揮できる能力を持った戦士が必要となるのだ。」
 >
-EN: The Magic Serg. Zeno says "The Sacred Sword 'Weaponer' which you have and The Omniscient Staff 'Intellion' which I have, Legend says that whoever unites the two will recieve great wisdom. But to this end, it must be assured that the soldier who does so can handle the the power of that sword."
+译文：魔导师 Zeno「你手上的神剑 Weaponer，以及我手上的全能之杖 Intherion。据说这两股力量合而为一之时，就能得到伟大的智慧……。但这需要一个能让那把剑发挥全部力量的战士。」
 
 **[49]** 代码 `strNumber=49` ← eventMT
 
 > 勇者「その戦士が俺だというのか……！？」
 >
-EN: The brave man says "What are you saying... Am I the soldier ?"
+译文：勇者「那个战士就是我……！？」
 
 **[50]** 代码 `strNumber=50` ← eventMT
 
 > 魔導師ゼノ「そうだ……しかし、おまえの技量はその神剣ウェポナーを使いこなすには十分ではなかった。だから、私は偽りの情報を流し、様々なワナをこの塔にしかけ、おまえが来るのを待っていたのだ。そして、予定通り、おまえは神剣を扱うのに十分な力を身につけてここまで来た。」
 >
-EN: The Magic Serg. Zeno says "Yes. But when you came here, your ability wasn't sufficient to master the sacred sword 'Weaponer'."For that reason, I gave false information, set various traps in this tower, and waited for you to come. You came to here master the power enough to using the sacred sword as arranged beforehand.
+译文：魔导师 Zeno「没错……但你的本事还不足以驾驭神剑 Weaponer。所以我放出假消息，在塔里布下各种陷阱，等着你来。而你也如我所料，练成了足以驾驭神剑的力量，走到了这里。」
 
 **[51]** 代码 `strNumber=51` ← eventMT
 
 > 勇者「では、姫がさらわれたという情報も、俺をここまで、おびき寄せる為のワナだったというのかっ！？」
 >
-EN: The brave man replies "Well, this means that the rumour that a princess was trapped here... was actually a lie in order to get me here, wasn't it ?"
+译文：勇者「那么，公主被掳走的消息，也是为了把我引到这里来的圈套吗！？」
 
 **[52]** 代码 `strNumber=52` ← eventMT
 
 > 魔導師ゼノ「その通りだ。そして、後は私がおまえの力を取りこめば、この茶番劇も終わりとなる……。時は来たれり……我全能なる力を用いて、神剣を砕き偉大なる知恵を手に入れん……。ゆくぞっ！神剣の戦士よ！」
 >
-EN: The Magic Serg. Zeno says "Yes, that's right. And now, if we can work together, this farce will end. Now is the time to act. Using omniscient power, We shall break the sacred sword and recieve great enlightenment. Soldier of the Sacred Sword! Let's finish this!"
+译文：魔导师 Zeno「正是。接下来只要夺取你的力量，这场闹剧就结束了……。时机已至……我就用这全能之力，击碎神剑，取得伟大的智慧……。上吧，神剑的战士！」
 
 **[54]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 魔導師ゼノ「ゴホッ！おのれ、この私が倒されるとは……、しかしこれぐらいで死ぬような私ではない！おぬしともう一度、戦う日が来ることを楽しみに待っているぞ！」
 >
-EN: The Magic Serg. Zeno says "You villain. Little did I expect to be beaten. But I would never die in such a way. I'll be looking forward to fighting with you again."
+译文：魔导师 Zeno「咳！可恶，我居然会被打倒……不过我可不是这点伤就会死的人！我很期待与你再战的那一天！」
 
 ### 无楼层归属
 
@@ -3876,704 +3874,705 @@ EN: The Magic Serg. Zeno says "You villain. Little did I expect to be beaten. Bu
 
 > 「お金が足りないよ！」
 >
-EN: "You don't have enough money."
+译文：「钱不够啊！」
 
 **[72]** obj167（数据引用）
 
 > 「この塔のどこかに、幸運の金貨というものがあって、それを持っていると敵を倒したときに得られるお金が２倍になるそうだ。」
 >
-EN: "There is a Lucky Gold somewhere in this tower. If you have it, you can get twice as much money when you beat an enemy."
+译文：「这座塔的某处有个叫幸运金币的东西，带着它打倒敌人能拿到两倍的钱。」
 
 **[97]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 表示する情報がありません。
 >
-EN: You don't have an informations any more.
+译文：没有可显示的信息。
 
 **[98]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 「まいどーっ！」
 >
-EN: "Thank you very much."
+译文：「欢迎光临！」
 
 **[115]** obj57（数据引用）
 
 > 魔導師ゼノ
 >
-EN: Magic Serg. Zeno
+译文：魔导师 Zeno
 
 **[117]** obj59（数据引用）
 
 > バンパイア
 >
-EN: Vampire
+译文：吸血鬼
 
 **[136]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 扉が開いた。
 >
-EN: The door has opened.
+译文：门开了。
 
 **[137]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 青色の扉が開いた。
 >
-EN: The blue door has opened.
+译文：蓝门开了。
 
 **[138]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 赤色の扉が開いた。
 >
-EN: The red door has opened.
+译文：红门开了。
 
 **[142]** obj24（数据引用）
 
 > 勇者のオーブを手に入れた！
 >
-EN: Got the orb of the hero.
+译文：得到了勇者宝珠！
 
 **[143]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 老人がいる。
 >
-EN: You see an old man.
+译文：有个老人。
 
 **[144]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 商人がいる。
 >
-EN: You see a merchant.
+译文：有个商人。
 
 **[145]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 妖精がいる。
 >
-EN: You see a fairy.
+译文：有个妖精。
 
 **[146]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 盗賊がいる。
 >
-EN: You see a thief.
+译文：有个盗贼。
 
 **[147]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 扉の鍵がない！
 >
-EN: Don't have the key.
+译文：没有门钥匙！
 
 **[148]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 青色の鍵がない！
 >
-EN: Don't have the blue key.
+译文：没有蓝钥匙！
 
 **[149]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 赤色の鍵がない！
 >
-EN: Don't have the red key.
+译文：没有红钥匙！
 
 **[150]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 階段がある。
 >
-EN: You see stairs.
+译文：有楼梯。
 
 **[151]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 飛翔のオーブは階段のとなりでなくては使えない！
 >
-EN: You must be near the stairs to use the orb of flying!
+译文：飞翔宝珠只能在楼梯旁边使用！
 
 **[154]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 飛翔のオーブを使った！
 >
-EN: Used the orb of flying!
+译文：使用了飞翔宝珠！
 
 **[155]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 祭壇がある。
 >
-EN: You see an altar.
+译文：有祭坛。
 
 **[171]** obj103（数据引用）
 
 > 十字架を手に入れた！バンパイア、ゾンビに対する攻撃力が２倍になった！
 >
-EN: Got a cross! Your offensive power against Vampires and Zombies has doubled.
+译文：拿到了十字架！对吸血鬼、丧尸的攻击力翻倍了！
 
 **[172]** obj104（数据引用）
 
 > エリクサーを手に入れた！
 >
-EN: Recieved the Magic Elixir.
+译文：拿到了圣水！
 
 **[173]** obj114（数据引用）
 
 > マトックを手に入れた！
 >
-EN: Got the Magic Mattock.
+译文：拿到了镐！
 
 **[175]** obj106（数据引用）
 
 > 空間転移の秘宝を手に入れた！
 >
-EN: Got the Warp Staff!
+译文：拿到了空间转移秘宝！
 
 **[177]** obj108（数据引用）
 
 > 降臨の翼を手に入れた！
 >
-EN: Got wings to fly down!
+译文：拿到了降临之翼！
 
 **[178]** obj109（数据引用）
 
 > ドラゴンスレーヤーを手に入れた！ドラゴンに対する攻撃力が２倍になった！
 >
-EN: Got the Dragon Slayer! Your attack power against the Dragon has doubled!
+译文：拿到了屠龙匕！对龙的攻击力翻倍了！
 
 **[179]** obj110（数据引用）
 
 > 雪の結晶を手に入れた！
 >
-EN: Got the snow crystal!
+译文：拿到了雪花结晶！
 
 **[181]** obj112（数据引用）
 
 > スーパーマトックを手に入れた！
 >
-EN: Got the Super Magic Mattock!
+译文：拿到了超级镐！
 
 **[184]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > この階にいるモンスターの生命力、攻撃力、防御力、プレーヤーの受けるダメージを検索
 >
-EN: Looking up the results of battling these monsters.
+译文：查询本层怪物的生命、攻击、防御以及玩家将受到的伤害
 
 **[185]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 命
 >
-EN: Vital power:
+译文：生命
 
 **[186]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 攻
 >
-EN: Offensive power:
+译文：攻击
 
 **[187]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 防
 >
-EN: Defensive power:
+译文：防御
 
 **[188]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 予想ダメージ
 >
-EN: Expected damage:
+译文：预计伤害
 
 **[189]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 攻撃不可能
 >
-EN: Attack is impossible!
+译文：无法攻击
 
 **[190]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > エリクサーを使った！生命力が
 >
-EN: Used the Magic Elixir. Your vital power was
+译文：使用了圣水！生命
 
 **[191]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > マトックを使った！四方の壁が崩れた！
 >
-EN: Used the Magic Mattock! The walls fell down!
+译文：使用了镐！四面的墙壁崩塌了！
 
 **[192]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 破壊の玉を使った！四方の敵が倒れた！
 >
-EN: Used The Destructible Ball! Enemies on all sides died!
+译文：使用了破坏之玉！四面的敌人倒下了！
 
 **[193]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 空間転移した！
 >
-EN: Warped!
+译文：空间转移了！
 
 **[194]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 昇華の翼を使った！
 >
-EN: Used the wing to fly up!
+译文：使用了升华之翼！
 
 **[195]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 降臨の翼を使った！
 >
-EN: Used the wing to fly down!
+译文：使用了降临之翼！
 
 **[196]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 雪の結晶を使った！
 >
-EN: Used the snow crystal!
+译文：使用了雪花结晶！
 
 **[197]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 魔法の鍵を使った！この階の扉がすべて開いた！
 >
-EN: Used the Magic Key! All these doors opened on this floor.
+译文：使用了魔法钥匙！本层所有的门都打开了！
 
 **[198]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > スーパーマトックを使った！この階の壁がすべて崩れた！
 >
-EN: Used the Super Magic Mattock! All the walls fell down on this floor!
+译文：使用了超级镐！本层所有的墙壁都崩塌了！
 
 **[199]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 転送先に障害物があって空間転移ができない！
 >
-EN: Can't warp (There's an object in the way).
+译文：传送目的地有障碍物，无法空间转移！
 
 **[200]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 上の階に障害物があって転移ができない！
 >
-EN: Can't go upstairs (it's blocked)!
+译文：上层有障碍物，无法转移！
 
 **[201]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 下の階に障害物があって転移ができない！
 >
-EN: Can't go downstairs (it's blocked)!
+译文：下层有障碍物，无法转移！
 
 **[202]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 溶岩が固まって道ができた！
 >
-EN: The lava cooled and turned to stone.
+译文：熔岩凝固，出现了道路！
 
 **[203]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > をたおした！
 >
-EN: You've beat
+译文：被打倒了！
 
 **[204]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > ＧＯＬＤを
 >
-EN: . Recieved
+译文：金币
 
 **[205]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 枚手に入れた！
 >
-EN: Gold.
+译文：枚到手！
 
 **[207]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > ＧＯＬＤ寄進すれば望みをかなえてやろう。寄進するか？」
 >
-EN: Gold, I will grant your request. Will you?"
+译文：金币，我就实现你的愿望。要奉献吗？」
 
 **[208]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 「どの望みをかなえて欲しいのだ？」
 >
-EN: "What option shall you choose?"
+译文：「你希望实现哪个愿望？」
 
 **[209]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > ・生命力を
 >
-EN: Your life recovers by
+译文：・生命
 
 **[210]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > ポイント回復
 >
-EN: points.
+译文：点回复
 
 **[211]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > ・攻撃力を
 >
-EN: The offensive power is raised
+译文：・攻击力
 
 **[212]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > ポイントアップ
 >
-EN: points.
+译文：点提升
 
 **[213]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > ・防御力を
 >
-EN: The defensive power is raised
+译文：・防御力
 
 **[214]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > ・やっぱりやめる
 >
-EN: Then I won't do it after all.
+译文：・还是算了
 
 **[215]** 代码 `strNumber=215` ← saidan
 
 > 「金がたらん！」
 >
-EN: "You don't have enough money!"
+译文：「钱不够！」
 
 **[216]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 塔
 >
-EN: Tower
+译文：塔
 
 **[217]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 階
 >
-EN: F
+译文：层
 
 **[218]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 生命力
 >
-EN: Life
+译文：生命
 
 **[219]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 攻撃力
 >
-EN: Offense
+译文：攻击力
 
 **[220]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 防御力
 >
-EN: Defense
+译文：防御力
 
 **[221]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 相手の防御力が高すぎて攻撃ができない！
 >
-EN: You can't battle him. Because his defensive power is too high!
+译文：对方防御力太高，无法攻击！
 
 **[224]** obj69（数据引用）
 
 > 「この階までのあなたの生命力、防御力、攻撃力、鍵の個数からあなたの実力を評価すると・・・
 >
-EN: "Judging by your vital power, offensive power, defensive power, and number of keys, you have
+译文：「根据你到这一层为止的生命、防御、攻击和钥匙数量来评价你的实力……
 
 **[225]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 点です。
 >
-EN: points.
+译文：分。
 
 **[226]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > うーん、この点数だとこれから先へ進むのは、かなり無理があるでしょう。」
 >
-EN: If you have that many points, you might want to reconsider going higher..."
+译文：嗯……这个分数，要再往前推进恐怕相当勉强吧。」
 
 **[227]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > いまひとつですね。これから先はかなり苦戦するでしょう。」
 >
-EN: A bit below average. Maybe you should try harder."
+译文：还差一点。接下来会相当苦战吧。」
 
 **[228]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > まあまあですね。この点数ならこれから先もなんとかなるでしょう。」
 >
-EN: You are ordinary. You might get by okay!"
+译文：马马虎虎。这个分数的话，往后还能应付吧。」
 
 **[229]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > なかなかのものです。もう少し頑張れば称号を差し上げましょう。」
 >
-EN: Doing fine! If you wish to continue, I will give you a special rank..."
+译文：相当不错。再努力一点就给你称号吧。」
 
 **[230]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > おめでとう！満点です。
 >
-EN: Congratulations! Your score is GREAT!
+译文：恭喜！满分。
 
 **[231]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > よくがんばりましたね。
 >
-EN: Do you wish to go on?
+译文：真是努力了。
 
 **[232]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > あなたには
 >
-EN: I give you the special rank of
+译文：你
 
 **[233]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 『戦士』
 >
-EN: FIGHTER
+译文：『战士』
 
 **[234]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 『勇者』
 >
-EN: BRAVE MAN
+译文：『勇者』
 
 **[235]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 『英雄』
 >
-EN: HERO
+译文：『英雄』
 
 **[236]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 『剣帝』
 >
-EN: SWORD EMPEROR
+译文：『剑帝』
 
 **[237]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 『闘神』
 >
-EN: FIGHTER GOD
+译文：『斗神』
 
 **[238]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > の称号を差し上げましょう。
 >
-EN: .
+译文：的称号授予你吧。
 
 **[239]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > これから先もこの調子でね。」
 >
-EN: You may as well play as good as you have from this point on."
+译文：往后也照这个势头。」
 
 **[240]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > ここまでおつかれさまでした。」
 >
-EN: It was nice fight so far."
+译文：到这里辛苦了。」
 
 **[241]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 魔術師Ａの魔法攻撃だ！生命力が２００ポイント減少！
 >
-EN: Your vital power decreased 200 points by magic attack of Magician A!
+译文：魔术师 A 的魔法攻击！生命减少200点！
 
 **[242]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 魔術師Ｂの魔法攻撃だ！生命力が１００ポイント減少！
 >
-EN: Your vital power decreased 100 points by magic attack of Magician B!
+译文：魔术师 B 的魔法攻击！生命减少100点！
 
 **[243]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 魔導師の魔法攻撃だ！生命力が半減！
 >
-EN: Your vital power decreased in half by the magic attack of Magic Master!
+译文：魔导师的魔法攻击！生命减半！
 
 **[245]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 道が壁に変わった！
 >
-EN: The road changed to the wall!
+译文：道路变成了墙壁！
 
 **[246]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > セーブデータがありません。
 >
-EN: Nobody saved that game yet.
+译文：没有存档数据。
 
 **[247]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 階段を移動中
 >
-EN: You are using the stairs.
+译文：正在通过楼梯
 
 **[248]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > おめでとう！得点が第
 >
-EN: Congratulations! You win the
+译文：恭喜！得分排第
 
 **[249]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 位の成績でした。
 >
-EN: place with the points which you got.
+译文：名。
 
 **[250]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > データをロード(読み込み)しました。
 >
-EN: Loaded the Game.
+译文：已读取存档。
 
 **[251]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > データをセーブ(保存)しました。
 >
-EN: Saved the Game.
+译文：已保存存档。
 
 **[252]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 鍵を持ってないよ！
 >
-EN: You don't have a key!
+译文：你没有钥匙！
 
 **[253]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > このデータはロードできません。
 >
-EN: This Game can't load.
+译文：无法读取该数据。
 
 **[267]** 地形116、地形117（数据引用）
 
 > 0
 >
-EN: 0
+译文：0
 
 **[268]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > Magic Tower Ver0.8a
+译文：Magic Tower Ver0.8a
 
 **[269]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > ドラゴンが火を吹いた！生命力が１０００ポイント減少！
 >
-EN: Dragon blew on the fire! Your vital power decreased 1000 points.
+译文：龙喷出了火焰！生命减少1000点！
 
 **[280]** 代码 `strNumber=280` ← eventMT
 
 > 「生命力がなくなりました。再挑戦してください。」
 >
-EN: "You have perished in Magic Tower. Please try again!"
+译文：「生命已经耗尽。请重新挑战。」
 
 **[281]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 上書きします。よろしいですか？
 >
-EN: Over write. Is it true ?
+译文：将覆盖存档。可以吗？
 
 **[282]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 情報番号
 >
-EN: Information No.
+译文：情报编号
 
 **[283]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 「願いをかなえたぞ！」
 >
-EN: "Your wish came true."
+译文：「愿望已经实现了！」
 
 **[284]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 実行中...
 >
-EN: Executing...
+译文：执行中...
 
 **[285]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > セーブできません。ポリシーツールで入出力の設定をして下さい。
 >
-EN: Can't save this game. Please set by policytool.
+译文：无法保存。请用策略工具设置读写权限。
 
 **[286]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > ランキングデータを初期化しました。
 >
-EN: Initialized Ranking data.
+译文：排行榜数据已初始化。
 
 **[287]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > ランキングデータを初期化できません。ポリシーツールで入出力の設定をして下さい。
 >
-EN: Can't initialize this raning data. Please set by policytool.
+译文：无法初始化排行榜数据。请用策略工具设置读写权限。
 
 **[288]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > このデータはロードできません。
 >
-EN: This data can't load.
+译文：无法读取该数据。
 
 **[289]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > Wav サウンドオン！
 >
-EN: Wav sound on.
+译文：Wav 音效开启！
 
 **[290]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > Midiバックグラウンドミュージックオン！
 >
-EN: Midi Background music on.
+译文：Midi 背景音乐开启！
 
 **[291]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > サウンドオフ！　ＢＧＭオフ！
 >
-EN: Sound and Background music off.
+译文：音效关闭！ＢＧＭ关闭！
 
 **[292]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > サウンドオフ！
 >
-EN: Sound off.
+译文：音效关闭！
 
 **[293]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > バックグラウンドミュージックオフ！
 >
-EN: Background music off.
+译文：背景音乐关闭！
 
 **[294]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > Au サウンドオン！
 >
-EN: Au sound on.
+译文：Au 音效开启！
 
 **[295]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > Auバックグラウンドミュージックオン！
 >
-EN: Au Background music on.
+译文：Au 背景音乐开启！
 
 **[296]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > 「遊んでくれてありがとう！　まだ完成できていません。　楽しみに待っていてね！」
 >
-EN: "Thank you for playing this game. Please wait for completing."
+译文：「谢谢你玩到这里！还没做完。敬请期待！」
 
 **[297]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > ポイント回復
 >
-EN: points up!
+译文：点回复
 
 **[298]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > ＧＯＬＤを
 >
-EN: Got
+译文：金币
 
 **[314]** 运行时按计算下标引用（未在静态数据/常量赋值中定位）
 
 > アイテムを使用します。よろしいですか？
 >
-EN: Do you use this item?
+译文：要使用道具吗？

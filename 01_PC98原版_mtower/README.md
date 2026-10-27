@@ -377,8 +377,8 @@ np2kai 01_PC98原版_mtower.fdi
 
 ## 塔内文案（已拆分为独立文件）
 
-309 条对话 / 提示文案（日英双语 + 引用方式）见 **[magic_tower1_texts.md](magic_tower1_texts.md)**，
-机读版为 [magic_tower1_texts.csv](magic_tower1_texts.csv)。md 按**出现楼层**分章：0F–50F 共 51 章 +
+309 条对话 / 提示文案（日文原文 + 中文译文 + 引用方式）见 **[magic_tower1_texts.md](magic_tower1_texts.md)**，
+机读版为 [magic_tower1_texts.csv](magic_tower1_texts.csv)（含 `text_jp` / `text_en` / `text_zh`）。中文译文以 2004 年《魔塔50层》Flash 汉化版（`flash/mota50.swf`）为底本。md 按**出现楼层**分章：0F–50F 共 51 章 +
 1 章「无楼层归属」，同层条目按编号升序，多层出现的文案在各层章各写一遍（正文 621 块，另 118 条无楼层归属）；分组与原始
 `floors` 字符串保留在 CSV 里。拆分原因：该附录约占本文件 3/4 篇幅，
 把版本说明、地图数据与战力表挤到很后面，不利于快速阅读。重排脚本见 `tools/texts_rebucket.py`。
