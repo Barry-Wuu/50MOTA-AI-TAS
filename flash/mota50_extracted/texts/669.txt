@@ -1,0 +1,23 @@
+<?> 
+--- RECORDSEPARATOR ---
+括号内为快捷键简名
+--- RECORDSEPARATOR ---
+    <
+--- RECORDSEPARATOR ---
+空格
+--- RECORDSEPARATOR ---
+>
+--- RECORDSEPARATOR ---
+帮助
+--- RECORDSEPARATOR ---
+   <S>
+--- RECORDSEPARATOR ---
+保存到内存
+--- RECORDSEPARATOR ---
+   <L>
+--- RECORDSEPARATOR ---
+读内存数据
+--- RECORDSEPARATOR ---
+   <R>
+--- RECORDSEPARATOR ---
+重新开始

@@ -1,0 +1,85 @@
+伤害计算规则：
+--- RECORDSEPARATOR ---
+    
+--- RECORDSEPARATOR ---
+防御方的生命力
+--- RECORDSEPARATOR ---
+ = 
+--- RECORDSEPARATOR ---
+防御方的生命力
+--- RECORDSEPARATOR ---
+ - 
+--- RECORDSEPARATOR ---
+攻击方攻击力
+--- RECORDSEPARATOR ---
+ + 
+--- RECORDSEPARATOR ---
+防御方防御力
+--- RECORDSEPARATOR ---
+ 
+--- RECORDSEPARATOR ---
+    
+--- RECORDSEPARATOR ---
+若防御方的生命力
+--- RECORDSEPARATOR ---
+>0 
+--- RECORDSEPARATOR ---
+则攻防易位
+--- RECORDSEPARATOR ---
+    
+--- RECORDSEPARATOR ---
+所以按同样的路径进行游戏你能得到同样的结果。
+--- RECORDSEPARATOR ---
+商店售价规律：
+--- RECORDSEPARATOR ---
+    
+--- RECORDSEPARATOR ---
+新的售价
+--- RECORDSEPARATOR ---
+ = 
+--- RECORDSEPARATOR ---
+旧的价格
+--- RECORDSEPARATOR ---
+ + 
+--- RECORDSEPARATOR ---
+（
+--- RECORDSEPARATOR ---
+ 20 * 
+--- RECORDSEPARATOR ---
+已购次数
+--- RECORDSEPARATOR ---
+ 
+--- RECORDSEPARATOR ---
+）
+--- RECORDSEPARATOR ---
+    
+--- RECORDSEPARATOR ---
+在更高楼层的商店能用同样的价格获得更好的回报
+--- RECORDSEPARATOR ---
+通关建议：
+--- RECORDSEPARATOR ---
+    
+--- RECORDSEPARATOR ---
+考虑到幸运金币的作用所以建议在能顺利过关的情况下尽量保留没必要
+--- RECORDSEPARATOR ---
+的杀怪物留到取得幸运金币后处理，钱也尽量保留到更高楼层使用。
+--- RECORDSEPARATOR ---
+    
+--- RECORDSEPARATOR ---
+如：在第
+--- RECORDSEPARATOR ---
+4
+--- RECORDSEPARATOR ---
+层只加
+--- RECORDSEPARATOR ---
+2
+--- RECORDSEPARATOR ---
+次防御（既共只用
+--- RECORDSEPARATOR ---
+60
+--- RECORDSEPARATOR ---
+个金币）多余的钱到
+--- RECORDSEPARATOR ---
+12
+--- RECORDSEPARATOR ---
+楼用

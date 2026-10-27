@@ -1,0 +1,5 @@
+<H>
+--- RECORDSEPARATOR ---
+预测当前楼层
+--- RECORDSEPARATOR ---
+怪物的伤害

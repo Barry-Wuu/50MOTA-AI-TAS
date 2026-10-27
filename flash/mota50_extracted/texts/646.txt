@@ -1,0 +1,3 @@
+按攻击和防御
+--- RECORDSEPARATOR ---
+恢复生命点数

@@ -1,0 +1,16 @@
+_global.MainEvent_str = "";
+_global.CurObj_array[6].IconNo = 100;
+_global.CurObj_array[6].EventNo = 0;
+_global.Icon_mc_crt(6);
+_global.CurObj_array[9].IconNo = 100;
+_global.CurObj_array[9].EventNo = 0;
+_global.Icon_mc_crt(9);
+_global.CurObj_array[20].IconNo = 100;
+_global.CurObj_array[20].EventNo = 0;
+_global.Icon_mc_crt(20);
+_global.CurObj_array[10].IconNo = 27;
+_global.CurObj_array[10].EventNo = 0;
+_global.Icon_mc_crt(10);
+_global.CurObj_array[18].IconNo = 100;
+_global.CurObj_array[18].EventNo = 0;
+_global.Icon_mc_crt(18);

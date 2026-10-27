@@ -1,0 +1,17 @@
+var i = _global.EndGridNo;
+_global.MainEvent_str = "";
+_global.CurObj_array[i - 12].IconNo = 61;
+_global.CurObj_array[i - 12].EventNo = 0;
+_global.Icon_mc_crt(i - 12);
+_global.CurObj_array[i - 10].IconNo = 61;
+_global.CurObj_array[i - 10].EventNo = 0;
+_global.Icon_mc_crt(i - 10);
+_global.CurObj_array[i + 10].IconNo = 61;
+_global.CurObj_array[i + 10].EventNo = 0;
+_global.Icon_mc_crt(i + 10);
+_global.CurObj_array[i + 12].IconNo = 61;
+_global.CurObj_array[i + 12].EventNo = 0;
+_global.Icon_mc_crt(i + 12);
+_global.CurObj_array[i].IconNo = 63;
+_global.CurObj_array[i].EventNo = 0;
+_global.Icon_mc_crt(i);

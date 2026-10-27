@@ -1,0 +1,7 @@
+取得屠龙匕后
+--- RECORDSEPARATOR ---
+你的攻击力加倍
+--- RECORDSEPARATOR ---
+打败它可取得
+--- RECORDSEPARATOR ---
+冰冻魔法

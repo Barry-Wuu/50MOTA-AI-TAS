@@ -1,0 +1,7 @@
+通过
+--- RECORDSEPARATOR ---
+2
+--- RECORDSEPARATOR ---
+个魔法卫士的中间
+--- RECORDSEPARATOR ---
+你会被扣一半的血

@@ -1,0 +1,5 @@
+到下一层楼
+--- RECORDSEPARATOR ---
+当前楼层
+--- RECORDSEPARATOR ---
+-1

@@ -64,7 +64,7 @@ ruffle.exe -g gl --no-gui --width 640 --height 420 --storage memory mota50.swf
 
 ## 资源提取包
 
-`mota50_extracted.zip` — 2,648,346 B（2.52 MB），2,645 个文件，由 FFDec 21.1.0 `-export all` 一次性生成。
+`mota50_extracted/` — 2,645 个文件，由 FFDec 21.1.0 `-export all` 一次性生成，已解压入库，可直接在仓库内检索与查看。
 
 | 目录 | 文件数 | 内容 |
 |---|---|---|
@@ -79,17 +79,11 @@ ruffle.exe -g gl --no-gui --width 640 --height 420 --storage memory mota50.swf
 | `fonts/` | 1 | 内嵌字体（TTF） |
 | `symbolClass/` | 1 | SymbolClass 映射（CSV） |
 
-SHA-256：`d8be9a633830c50b8d3d7a22e65f59950caa0f4adf73891508c2193febbcb7fd`
+SHA-256（原始压缩包 `mota50_extracted.zip`，2,648,346 B，已删除）：`d8be9a633830c50b8d3d7a22e65f59950caa0f4adf73891508c2193febbcb7fd`
 
-解压：
+代码入口：`mota50_extracted/scripts/frame_1/DoAction.as`（主时间轴第 1 帧）、`scripts/frame_2/DoAction.as`，以及各 `scripts/DefineSprite_*/frame_1/DoAction.as` 与 `CLIPACTIONRECORD onClipEvent(...).as`（按钮与影片剪辑事件）。
 
-```bash
-unzip mota50_extracted.zip -d extracted
-```
-
-代码入口：`scripts/frame_1/DoAction.as`（主时间轴第 1 帧）、`scripts/frame_2/DoAction.as`，以及各 `scripts/DefineSprite_*/frame_1/DoAction.as` 与 `CLIPACTIONRECORD onClipEvent(...).as`（按钮与影片剪辑事件）。
-
-游戏数值（怪物攻防血、道具、楼层数据）在 `scripts/frame_1/DoAction.as` 的 AS2 数组初始化段中。
+游戏数值（怪物攻防血、道具、楼层数据）在 `mota50_extracted/scripts/frame_1/DoAction.as` 的 AS2 数组初始化段中。
 
 ## 校验方式
 

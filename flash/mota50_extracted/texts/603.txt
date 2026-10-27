@@ -1,0 +1,77 @@
+    
+--- RECORDSEPARATOR ---
+一次在开发的空闲时间同事向我推荐了胖老鼠工作室的魔塔游戏，玩过后令我对
+--- RECORDSEPARATOR ---
+falsh
+--- RECORDSEPARATOR ---
+发生了兴趣，同时感到魔塔游戏才
+--- RECORDSEPARATOR ---
+20
+--- RECORDSEPARATOR ---
+层太简单不过瘾，最后终于让我找到了原版
+--- RECORDSEPARATOR ---
+的魔塔游戏。
+--- RECORDSEPARATOR ---
+    http://www.vector.co.jp/vpack/browse/person/an013374.html
+--- RECORDSEPARATOR ---
+    
+--- RECORDSEPARATOR ---
+数次通关后令我不得不佩服游戏作者的构思和游戏参数设定在前
+--- RECORDSEPARATOR ---
+20
+--- RECORDSEPARATOR ---
+层几乎只有一
+--- RECORDSEPARATOR ---
+条通关路经。今年在工作中我需要使用
+--- RECORDSEPARATOR ---
+falsh, 
+--- RECORDSEPARATOR ---
+所以产生用
+--- RECORDSEPARATOR ---
+flash
+--- RECORDSEPARATOR ---
+汉化此游戏，通过作
+--- RECORDSEPARATOR ---
+游戏熟悉
+--- RECORDSEPARATOR ---
+falsh
+--- RECORDSEPARATOR ---
+脚本的想法。
+--- RECORDSEPARATOR ---
+    
+--- RECORDSEPARATOR ---
+通过一个多月的摸索我终于完工了，此游戏内的图标和剧情均来自原游戏，主时
+--- RECORDSEPARATOR ---
+间轴只有
+--- RECORDSEPARATOR ---
+2
+--- RECORDSEPARATOR ---
+帧所有场景动态产生。希望有兴趣制作
+--- RECORDSEPARATOR ---
+falsh
+--- RECORDSEPARATOR ---
+游戏的同好能与我联系，本人
+--- RECORDSEPARATOR ---
+现在缺少创意。
+--- RECORDSEPARATOR ---
+    mail:czl_flash@hotmail.com
+--- RECORDSEPARATOR ---
+    2004.01.31 
+--- RECORDSEPARATOR ---
+增加存盘功能，右键菜单
+--- RECORDSEPARATOR ---
+->
+--- RECORDSEPARATOR ---
+设置
+--- RECORDSEPARATOR ---
+->
+--- RECORDSEPARATOR ---
+本地存储
+--- RECORDSEPARATOR ---
+-> 1M 
+--- RECORDSEPARATOR ---
+以上
+--- RECORDSEPARATOR ---
+                                                     2004.01 
+--- RECORDSEPARATOR ---
+温州
