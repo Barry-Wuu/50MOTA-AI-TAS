@@ -42,7 +42,7 @@ HTTP 200，`Content-Length: 237139`，`Content-Type: application/x-shockwave-fla
 
 ## 版本定位（无魔改）
 
-按 HTML5 魔塔广场（h5mota.com）社区对【50层魔塔原版】的主流定义，2004 年 50 层魔塔 Flash 汉化版即公认原版基线（该定义依据为复刻版累计游玩量约 75 万人次，断崖式领先）。
+按 HTML5 魔塔广场（h5mota.com）社区对“50层魔塔原版”的主流定义，2004 年 50 层魔塔 Flash 汉化版即公认原版基线（该定义依据为复刻版累计游玩量约 75 万人次，断崖式领先）。
 
 本文件为该原版本身，未做任何修改：
 
@@ -61,6 +61,35 @@ ruffle.exe -g gl --no-gui --width 640 --height 420 --storage memory mota50.swf
 ```
 
 日志：`Loaded SWF version 6, resolution 640x420 @ 18 FPS`，无错误。唯一警告是 `Unknown device font "宋体"`，Ruffle 自动 fallback，不影响显示。
+
+## 资源提取包
+
+`mota50_extracted.zip` — 2,648,346 B（2.52 MB），2,645 个文件，由 FFDec 21.1.0 `-export all` 一次性生成。
+
+| 目录 | 文件数 | 内容 |
+|---|---|---|
+| `sprites/` | 1,833 | DefineSprite 逐帧 PNG |
+| `scripts/` | 271 | AS1/AS2 反编译源码（.as） |
+| `shapes/` | 192 | DefineShape 矢量图（SVG） |
+| `texts/` | 160 | DefineEditText 文本 |
+| `images/` | 159 | 位图（PNG） |
+| `buttons/` | 18 | DefineButton2（PNG） |
+| `sounds/` | 8 | 音频（DefineSound 共 7 个 tag，导出 8 个文件） |
+| `frames/` | 2 | 主时间轴帧 |
+| `fonts/` | 1 | 内嵌字体（TTF） |
+| `symbolClass/` | 1 | SymbolClass 映射（CSV） |
+
+SHA-256：`d8be9a633830c50b8d3d7a22e65f59950caa0f4adf73891508c2193febbcb7fd`
+
+解压：
+
+```bash
+unzip mota50_extracted.zip -d extracted
+```
+
+代码入口：`scripts/frame_1/DoAction.as`（主时间轴第 1 帧）、`scripts/frame_2/DoAction.as`，以及各 `scripts/DefineSprite_*/frame_1/DoAction.as` 与 `CLIPACTIONRECORD onClipEvent(...).as`（按钮与影片剪辑事件）。
+
+游戏数值（怪物攻防血、道具、楼层数据）在 `scripts/frame_1/DoAction.as` 的 AS2 数组初始化段中。
 
 ## 校验方式
 
