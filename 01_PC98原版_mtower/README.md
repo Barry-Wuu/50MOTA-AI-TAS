@@ -36,8 +36,8 @@
 ├── magic_tower1_entities.csv    # 全部实体布点（层,y,x,obj,kind,role,名称,HP/ATK/DEF/GOLD）
 ├── magic_tower1_monsters.csv    # 怪物与道具战力总表
 ├── magic_tower1_dynamic.csv     # 事件后才出现的隐藏物体 / 动态地形
-├── magic_tower1_texts.md          # 塔内全部文案（日/英 + 引用方式 + 出现层），由 README 拆出
-├── magic_tower1_texts.csv         # 上述文案的机读版（309 行）
+├── magic_tower1_texts.md          # 塔内全部文案（按 0F–50F 楼层分章，日/英 + 引用方式），由 README 拆出
+├── magic_tower1_texts.csv         # 上述文案的机读版（309 行，含原始 floors / group 字段）
 ├── magic_tower1_rows.csv        # 大表逐行标记（S 暗墙 / T 隐形块 / E 实体 / B BOSS）
 ├── magic_tower1_walkroute.md    # 走法路线、危险格、00 层通达方式、隐藏物体说明
 ├── hidden_floor_band5.png / floor_00.png / MTower_sheet.gif
@@ -377,6 +377,8 @@ np2kai 01_PC98原版_mtower.fdi
 
 ## 塔内文案（已拆分为独立文件）
 
-309 条对话 / 提示文案（日英双语 + 引用方式 + 出现层）见 **[magic_tower1_texts.md](magic_tower1_texts.md)**，
-机读版为 [magic_tower1_texts.csv](magic_tower1_texts.csv)。拆分原因：该附录约占本文件 3/4 篇幅，
-把版本说明、地图数据与战力表挤到很后面，不利于快速阅读。
+309 条对话 / 提示文案（日英双语 + 引用方式）见 **[magic_tower1_texts.md](magic_tower1_texts.md)**，
+机读版为 [magic_tower1_texts.csv](magic_tower1_texts.csv)。md 按**出现楼层**分章：0F–50F 共 51 章 +
+1 章「无楼层归属」，同层条目按编号升序，多层出现的文案在各层章各写一遍（正文 604 块）；分组与原始
+`floors` 字符串保留在 CSV 里。拆分原因：该附录约占本文件 3/4 篇幅，
+把版本说明、地图数据与战力表挤到很后面，不利于快速阅读。重排脚本见 `tools/texts_by_floor.py`。
