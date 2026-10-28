@@ -25,6 +25,15 @@ def replay(path='route_plan.csv', upto=None):
     if upto:
         rows = [r for r in rows if int(r[0]) <= upto]
     for r in rows:
+        # 📝 飞行之珠传送行：事件含「飞行之珠传送」→ 用引擎 fly() 精确落地
+        if '飞行之珠传送' in r[5]:
+            lg = w.fly(int(r[1]))
+            if M.blocked(lg):
+                raise RuntimeError('replay fly失败 %s: %s' % (r, lg))
+            if (w.hero.f, w.hero.x, w.hero.y) != (int(r[1]), int(r[2]), int(r[3])):
+                raise RuntimeError('replay fly落点不一致 %s vs %s'
+                                   % ((w.hero.f, w.hero.x, w.hero.y), (r[1], r[2], r[3])))
+            continue
         k = r[4]
         dx, dy = {('8'): (0, -1), ('6'): (1, 0), ('2'): (0, 1), ('4'): (-1, 0)}.get(k, (0, 0))
         if dx == 0 and dy == 0:

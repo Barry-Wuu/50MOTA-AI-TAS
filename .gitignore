@@ -1,0 +1,7 @@
+# 求解器断点快照与运行日志（体积大、可重建，不入库）
+01_PC98原版_mtower/tools/ck_*.pkl
+01_PC98原版_mtower/tools/run*.log
+
+# Python 缓存
+__pycache__/
+*.pyc

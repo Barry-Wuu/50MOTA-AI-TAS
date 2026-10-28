@@ -269,7 +269,7 @@ def main():
     # ── 断点续跑：已跑通的楼层直接读回来，避免每次迭代都重算 1F-3F ──
     done_upto = 1
     for f in range(11, 0, -1):
-        p = '/tmp/mt_ck_%d.pkl' % f
+        p = 'ck_%d.pkl' % f
         if os.path.exists(p):
             with open(p, 'rb') as fp:
                 w = pickle.load(fp)
@@ -278,7 +278,7 @@ def main():
             break
 
     def ck(f, w):
-        with open('/tmp/mt_ck_%d.pkl' % f, 'wb') as fp:
+        with open('ck_%d.pkl' % f, 'wb') as fp:
             pickle.dump(w, fp)
 
     if done_upto == 1:
