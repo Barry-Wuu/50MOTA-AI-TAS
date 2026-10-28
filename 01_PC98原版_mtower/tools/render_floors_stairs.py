@@ -37,6 +37,7 @@ FLOORS_REL = '01_PC98原版_mtower/floors'
 MAP50_REL = '01_PC98原版_mtower/map_50f.png'
 ART = ROOT.parent / '08_Java_MTower08a' / 'art'
 FONT_PATH = '/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc'
+FONT_FALLBACK = ('C:/Windows/Fonts/msyh.ttc', 'C:/Windows/Fonts/simhei.ttf')
 
 CELL, N = 40, 13
 MCELL, MGAP, MPAD = 520, 10, 10
@@ -65,11 +66,18 @@ FLY_IN = {0: (1, 2), 44: (1, 2)}
 
 # 暗格藏物：静态图上完全看不到，撞塌/触发后才露出物件（用户要求补画）
 #   14F(1,3) 暗墙 ter=1 → 红钥匙 obj28（DARKWALL_CELLS）
-#   19F(6,3)/(6,4) 崩塌墙 obj89 → 十字架 obj103（撞任一格获得）
 DARK_ITEMS = {
     (14, 1, 3): ('红钥', (198, 40, 40)),
-    (19, 6, 3): ('十字架', (201, 162, 39)),
-    (19, 6, 4): ('', (201, 162, 39)),
+}
+
+# 暗格藏物（原版贴图版）：不再画色块+文字标签，直接贴 MTower_sheet 的原始精灵
+#   12F(11,1) 撞塌墙 obj89 → 隐藏商人 obj17（"钥匙 1000G 一把"）→ 图集 col7,row5 粉衣坐姿商人
+#   19F(6,3)  撞塌墙 obj89 → 十字架 obj103（对僵尸/吸血鬼伤害×2）→ 图集 col7,row7
+#   ※ 图集 col7,row5 与 12F(1,1) 已画商人像素差=0，可整格直贴（自带暗色壁龛底）；
+#     图集 col7,row7 十字架自带 alpha（灰底 alpha=0），可直接叠在暗纹地板上。
+SPRITE_FIX = {
+    (12, 11, 1): (7, 5),
+    (19, 6, 3): (7, 7),
 }
 
 # ---- 半透明楼梯精灵（上行梯），前景蒙版按亮度提取 ----
@@ -78,13 +86,36 @@ UP = np.asarray(_spr).astype(float)
 _L = UP[..., 0] * 0.299 + UP[..., 1] * 0.587 + UP[..., 2] * 0.114
 MASK = np.clip((_L - 100.0) / (175.0 - 100.0), 0.0, 1.0) * ALPHA
 
+# ---- 原版精灵图集（暗格藏物贴图用） ----
+_SHEET = Image.open(ART / 'MTower_sheet.png').convert('RGBA')
+
+
+def sprite(col, row):
+    return _SHEET.crop((col * CELL, row * CELL, (col + 1) * CELL, (row + 1) * CELL))
+
+
+def draw_sprite_fix(img, ox, oy, fl):
+    """暗格藏物：直接贴原版图集精灵（不加色块、不加文字标签）。"""
+    for (f, x, y), (col, row) in SPRITE_FIX.items():
+        if f != fl:
+            continue
+        sp = sprite(col, row)
+        img.paste(sp, (ox + x * CELL, oy + y * CELL), sp)
+
 _fc = {}
 
 
 def font(sz):
     sz = max(7, int(sz))
     if sz not in _fc:
-        _fc[sz] = ImageFont.truetype(FONT_PATH, sz)
+        for p in (FONT_PATH,) + FONT_FALLBACK:
+            try:
+                _fc[sz] = ImageFont.truetype(p, sz)
+                break
+            except OSError:
+                continue
+        else:
+            _fc[sz] = ImageFont.load_default()
     return _fc[sz]
 
 
@@ -168,6 +199,7 @@ def single_floor(fl):
         hx, hy = GHOST[fl]
         ghost(arr, hx * CELL, hy * CELL)
     img = Image.fromarray(arr.round().clip(0, 255).astype('uint8'))
+    draw_sprite_fix(img, 0, 0, fl)
     dr = ImageDraw.Draw(img, 'RGBA')
     draw_dark(dr, 0, 0, fl)
     draw_points(dr, 0, 0, fl)
@@ -193,6 +225,7 @@ def render_map50():
     dr = ImageDraw.Draw(img, 'RGBA')
     for fl in range(51):
         ox, oy = cell_origin(fl)
+        draw_sprite_fix(img, ox, oy, fl)
         draw_dark(dr, ox, oy, fl)
         draw_points(dr, ox, oy, fl)
     return img
@@ -216,10 +249,11 @@ def legend_image():
            fill=(58, 58, 68))
     d.text((470, yy2 - 1), '紫钻 = 飞行落点(0F/44F)', font=font(12), fill=C_FLY)
     # 暗格藏物
-    yy3 = 112
+    yy3 = 106
     d.rectangle([18, yy3, 34, yy3 + 16], fill=(198, 40, 40, 160), outline=(198, 40, 40))
-    d.rectangle([40, yy3, 56, yy3 + 16], fill=(201, 162, 39, 160), outline=(201, 162, 39))
-    d.text((64, yy3 - 1), '色块 = 暗格藏物（图上本看不到，撞塌/触发后才露出）：14F(1,3)红钥匙、19F(6,3)十字架',
+    d.text((44, yy3 - 1), '红色色块 = 14F(1,3) 暗格里的红钥匙（原图上本看不到）',
+           font=font(12), fill=(58, 58, 68))
+    d.text((18, yy3 + 22), '原版贴图直接补画的暗格藏物：12F(11,1) 隐藏商人、19F(6,3) 十字架',
            font=font(12), fill=(58, 58, 68))
     return lg
 
