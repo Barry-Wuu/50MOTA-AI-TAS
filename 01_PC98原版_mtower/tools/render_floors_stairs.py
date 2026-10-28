@@ -63,6 +63,15 @@ GHOST[24] = SECRET_DOOR[24][0]
 
 FLY_IN = {0: (1, 2), 44: (1, 2)}
 
+# 暗格藏物：静态图上完全看不到，撞塌/触发后才露出物件（用户要求补画）
+#   14F(1,3) 暗墙 ter=1 → 红钥匙 obj28（DARKWALL_CELLS）
+#   19F(6,3)/(6,4) 崩塌墙 obj89 → 十字架 obj103（撞任一格获得）
+DARK_ITEMS = {
+    (14, 1, 3): ('红钥', (198, 40, 40)),
+    (19, 6, 3): ('十字架', (201, 162, 39)),
+    (19, 6, 4): ('', (201, 162, 39)),
+}
+
 # ---- 半透明楼梯精灵（上行梯），前景蒙版按亮度提取 ----
 _spr = Image.open(ART / 'stair_up.png').convert('RGB')
 UP = np.asarray(_spr).astype(float)
@@ -131,6 +140,17 @@ def draw_points(dr, ox, oy, fl):
                 fill=C_FLY + (255,), width=3)
 
 
+def draw_dark(dr, ox, oy, fl):
+    """暗格藏物：半透明色块 + 标签（撞塌/触发后才露出）。"""
+    for (f, x, y), (txt, col) in DARK_ITEMS.items():
+        if f != fl or not txt:
+            continue
+        px, py = ox + x * CELL, oy + y * CELL
+        dr.rectangle([px + 2, py + 2, px + CELL - 3, py + CELL - 3],
+                     fill=col + (120,), outline=col + (255,), width=2)
+        dr.text((px + 3, py + CELL // 2 - 6), txt, font=font(9), fill=(255, 255, 255, 255))
+
+
 def git_show(ref, rel):
     d = subprocess.run(['git', 'show', '%s:%s' % (ref, rel)], cwd=str(REPO),
                        capture_output=True)
@@ -148,7 +168,9 @@ def single_floor(fl):
         hx, hy = GHOST[fl]
         ghost(arr, hx * CELL, hy * CELL)
     img = Image.fromarray(arr.round().clip(0, 255).astype('uint8'))
-    draw_points(ImageDraw.Draw(img, 'RGBA'), 0, 0, fl)
+    dr = ImageDraw.Draw(img, 'RGBA')
+    draw_dark(dr, 0, 0, fl)
+    draw_points(dr, 0, 0, fl)
     return img
 
 
@@ -171,12 +193,13 @@ def render_map50():
     dr = ImageDraw.Draw(img, 'RGBA')
     for fl in range(51):
         ox, oy = cell_origin(fl)
+        draw_dark(dr, ox, oy, fl)
         draw_points(dr, ox, oy, fl)
     return img
 
 
 def legend_image():
-    lg = Image.new('RGB', (600, 118), (251, 250, 247))
+    lg = Image.new('RGB', (620, 150), (251, 250, 247))
     d = ImageDraw.Draw(lg)
     d.text((14, 8), '魔塔1 渲染图图例', font=font(17), fill=(28, 28, 38))
     # 半透明楼梯示意块
@@ -185,13 +208,19 @@ def legend_image():
     d.text((60, yy + 2), '半透明楼梯 = 隐藏上梯（战利品楼梯）：', font=font(13), fill=(58, 58, 68))
     d.text((60, yy + 19), 'BOSS 层杀 BOSS 后出现（10/20/30/40F）；24F 顶部暗门→50F', font=font(12),
            fill=(120, 70, 20))
-    yy2 = 84
+    yy2 = 82
     d.ellipse([18, yy2, 34, yy2 + 16], outline=C_IN, width=3)
     d.line([26 - 4, yy2 + 8, 26 + 4, yy2 + 8], fill=C_IN, width=2)
     d.line([26, yy2 + 4, 26, yy2 + 12], fill=C_IN, width=2)
     d.text((42, yy2 - 1), '绿圈+十字 = 楼梯落点（从下层上来落在本层坐标）', font=font(13),
            fill=(58, 58, 68))
     d.text((470, yy2 - 1), '紫钻 = 飞行落点(0F/44F)', font=font(12), fill=C_FLY)
+    # 暗格藏物
+    yy3 = 112
+    d.rectangle([18, yy3, 34, yy3 + 16], fill=(198, 40, 40, 160), outline=(198, 40, 40))
+    d.rectangle([40, yy3, 56, yy3 + 16], fill=(201, 162, 39, 160), outline=(201, 162, 39))
+    d.text((64, yy3 - 1), '色块 = 暗格藏物（图上本看不到，撞塌/触发后才露出）：14F(1,3)红钥匙、19F(6,3)十字架',
+           font=font(12), fill=(58, 58, 68))
     return lg
 
 
