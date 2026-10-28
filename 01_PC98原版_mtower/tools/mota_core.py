@@ -79,6 +79,11 @@ def stairs_of(f):
 
 
 STAIRS = {f: stairs_of(f) for f in BAND_SLOT}
+# 飞行之珠（obj26）传送落点：到达目标层时落在该层「自下层上来的落点」（= 上行梯旁踏出格）。
+# 数据来自 STAIRS_POINTS.md 的「落点（下层→本层）」第一列（自下方到达），已与 WARP 落地核对。
+FLY_LAND = {1:(2,1),2:(1,2),3:(2,11),4:(11,10),5:(2,11),6:(1,2),7:(11,10),
+            8:(1,2),9:(6,2),10:(1,10),11:(6,10),12:(10,11),13:(2,11),14:(10,11),
+            15:(6,10),16:(6,2),17:(6,10),18:(6,2),19:(1,2),20:(6,10),21:(6,2)}
 # 49F 没有 crop35 的下行梯：其"入口格"就是 eventMT 放 obj57（假魔王/魔导师ゼノ）的 (6,3)
 # （写入点 `bipush 110; bipush 55; Zeno(g,col,row)` → slot8 x=6、band4 y=3 ✅）
 if STAIRS[49][1] is None:
@@ -314,6 +319,28 @@ class World:
                 continue                                  # ✅ 该格静态是怪/BOSS，事件写入不得覆盖（否则 BOSS 消失、怪免打）
             if o:
                 self.set_at(f, x, y, o)
+
+    # -- 动作：飞行之珠传送（须站在楼梯旁） ---------------------------------
+    def fly(self, target_f):
+        """飞行之珠 obj26：站在当前层楼梯旁，传送到任意已到达楼层。
+        落点取 FLY_LAND[target_f]（= 该层上行踏出格），等价于从下层走上来的落点。
+        规则「飛翔のオーブは階段のとなりでなくては使えない！」已由 adjacency 校验。
+        """
+        h = self.hero
+        if 26 not in h.items:
+            return ['飞行之珠：尚未持有 obj26，无法传送']
+        if target_f not in FLY_LAND:
+            return ['飞行之珠：目标层 %d 不可达' % target_f]
+        s = STAIRS.get(h.f)
+        cells = [c for c in (s if s else (None, None)) if c]
+        adj = any(abs(sx - h.x) + abs(sy - h.y) == 1 for (sx, sy) in cells)
+        if not adj:
+            return ['飞行之珠：须站在楼梯旁（当前 %dF(%d,%d) 附近无楼梯）' % (h.f, h.x, h.y)]
+        h.f = target_f
+        h.x, h.y = FLY_LAND[target_f]
+        log = ['飞行之珠传送 → %dF（落点 %s）' % (target_f, FLY_LAND[target_f])]
+        self.apply_floor_events(target_f)
+        return log
 
     # -- 查询 --------------------------------------------------------------
     def at(self, f, x, y):
