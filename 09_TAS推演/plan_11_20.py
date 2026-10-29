@@ -75,7 +75,7 @@ TARGETS = {
          ('O',(9, 3)), ('O',(11, 3)), ('O',(1, 11)), ('O',(11, 11))],
     18: [('M',(11, 3)), ('M',(5, 4)),
          ('O',(9, 1)), ('O',(10, 4)), ('O',(11, 4)), ('O',(2, 4))],
-    19: [('O',(11, 1)), ('O',(4, 1)), ('O',(7, 10)), ('O',(9, 9))],
+    19: [('M',(6, 3)), ('O',(11, 1)), ('O',(4, 1)), ('O',(7, 10)), ('O',(9, 9))],
     20: [('M',(6, 9)), ('M',(6, 8)), ('M',(6, 6))],
 }
 
@@ -191,7 +191,7 @@ class Hero:
         self.minhp = max(self.minhp, -self.hp)
 
 
-def run(altar_def=0, altar_atk=0, verbose=True):
+def run(altar_def=0, altar_atk=0, verbose=True, cnt0=0):
     H = Hero()
     out = []
     for f in range(11, 21):
@@ -271,6 +271,13 @@ def run(altar_def=0, altar_atk=0, verbose=True):
                 H.keys[n] += 1
                 keys.append((c, o))
                 lines.append('拾%s钥%s' % (n, c))
+            elif o == 89:                        # 可撞塌假墙（c3=5，免钥匙）
+                cleared.add(c)
+                if (f, (x, y)) == (19, (6, 3)):  # @5596 撞塌后原地生成 obj103
+                    H.dbl = (48, 49, 59)
+                    lines.append('★撞塌(6,3)假墙 → 十字架（对兽人/兽人武士/吸血鬼 ×2）')
+                else:
+                    lines.append('撞塌假墙%s' % (c,))
             elif M.TYPE.get(M.oatr(o, 3)) == 'MONSTER':
                 r = fight(o, H.atk, H.dfn, H.dbl)
                 if r is None:
@@ -298,7 +305,7 @@ def run(altar_def=0, altar_atk=0, verbose=True):
             lines.append('★(1,3) 暗墙→红钥匙')
         # 20F 吸血鬼
         if f == 20 and (6, 6) in [c for c in path_all]:
-            r = fight(59, H.atk, H.dfn)
+            r = fight(59, H.atk, H.dfn, H.dbl)
             if r:
                 rd, d, g = r
                 H.take(d); H.gold += g
@@ -307,7 +314,7 @@ def run(altar_def=0, altar_atk=0, verbose=True):
         # 12F 祭坛
         if f == 12 and altar_def + altar_atk > 0 and (6, 9) in path_all:
             ka, kd = ALTAR_MUL[12]
-            cost = sum(M.altar_cost(k) for k in range(altar_def + altar_atk))
+            cost = sum(M.altar_cost(k) for k in range(cnt0, cnt0 + altar_def + altar_atk))
             if H.gold >= cost:
                 H.gold -= cost
                 H.dfn += kd * altar_def
