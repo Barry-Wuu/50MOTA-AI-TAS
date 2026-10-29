@@ -5,3 +5,7 @@
 # Python 缓存
 __pycache__/
 *.pyc
+
+# 手工路线执行器的运行日志
+09_TAS推演/run.log
+09_TAS推演/__pycache__/

@@ -24,8 +24,21 @@ KEY = {1: '黄', 3: '蓝', 28: '红'}
 # 35F 魔龙 3×3（obj53-55 / 63-65 / 73-75），不打
 BLOCK = {35: {(x, y) for x in (5, 6, 7) for y in (5, 6, 7)}}
 
-# 凿墙：目标格 -> 触发格（35F (5,10) 盗贼 obj88 → 凿开 (4,9)）
-DIG = {(35, (4, 9)): [(5, 10)]}
+# 凿墙：目标格 -> 触发格（35F (4,9) 由 2F(11,11) 对话远程开好，空触发=恒可通行）
+# 源码链：32F(6,10) 踩 5 次 → 2F(11,11) 生成盗贼 → 清 2F(6,2)(8,2) 門番Ｂ → 2F(11,11) 对话
+#   → map[48][56]=1 把 35F(4,9) 从墙变地板（@5770）。所以本段不需要再走到 35F(5,10) 触发。
+DIG = {(35, (4, 9)): []}
+
+# 2F 支线路径（飞行落点 (1,2) → 打完两只門番Ｂ → (11,11) 对话）
+# 去程：23 步，含蓝门 (3,1)、門番Ｂ(6,2)(8,2) 两战；洞 (9,11) 在两戰后清零可通行
+F2_GO = [(1, 2), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (5, 2), (6, 2), (7, 2), (8, 2),
+         (7, 2), (7, 3), (7, 4), (7, 5), (7, 6), (7, 7), (7, 8), (7, 9), (7, 10), (7, 11),
+         (8, 11), (9, 11), (10, 11), (11, 11)]
+# 回程：从 (11,11) 回到 (1,10)（(1,11) 下行梯旁，满足飞行条件），BFS 实测 29 步，无消耗
+F2_BACK = [(11, 11), (10, 11), (9, 11), (8, 11), (8, 10), (8, 9), (8, 8), (8, 7), (8, 6),
+           (8, 5), (8, 4), (7, 4), (7, 3), (7, 2), (7, 1), (6, 1), (5, 1), (4, 1), (3, 1),
+           (2, 1), (2, 2), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9),
+           (1, 10)]
 
 # 静态落穴（初始就存在，不可踩）：35F (6,3)
 PIT_FIXED = {(35, (6, 3))}
@@ -53,13 +66,14 @@ TARGETS = {
     # 本层 ATK 只有 90/94（<105 打不动），要拿必须等 33F 騎剣后回头，收益仅 DEF+4
     31: [('M', (8, 4)), ('M', (8, 8)), ('M', (4, 4)), ('O', (10, 1)), ('O', (2, 11))],
     32: [('M', (1, 1)), ('M', (2, 2)), ('M', (11, 4)), ('M', (10, 10))],
+    # 33F 先取 (11,3) 蓝药（让路径绕开剑士时已有高 ATK），再拿骑士剑
     33: [('M', (10, 10)), ('M', (11, 3)), ('O', (5, 2)), ('O', (2, 4))],
     34: [('M', (5, 4)), ('M', (7, 4)), ('M', (9, 4)), ('M', (11, 4)),
          ('M', (5, 8)), ('M', (7, 8)), ('M', (9, 8)), ('M', (11, 8)),
          ('M', (11, 1)), ('M', (11, 11)), ('M', (1, 11)),
          ('O', (1, 5)), ('O', (3, 5)), ('O', (1, 7)), ('O', (3, 7)),
          ('O', (3, 1)), ('O', (11, 2)), ('O', (10, 11))],
-    35: [('M', (5, 10))],
+    35: [],
     36: [('M', (1, 11))],
     37: [('M', (11, 1))],
     38: [('M', (2, 7)), ('M', (5, 8)), ('O', (6, 8)), ('O', (11, 11))],
@@ -81,7 +95,7 @@ def passable(f, x, y, cleared, dropped=()):
         return False
     for (df, cell), trig in DIG.items():
         if df == f and cell == (x, y):
-            return all((df,) + t2 in cleared for t2 in trig)
+            return True          # 35F(4,9) 由 2F 对话远程开好，恒可通行
     if o == 20:
         return (f, x, y) in cleared
     if o in DOOR:
@@ -94,6 +108,8 @@ def passable(f, x, y, cleared, dropped=()):
         return True
     if o in M.DECOR_PASS:
         return True
+    if (x, y) in cleared and M.TYPE.get(M.oatr(o, 3)) == 'MONSTER':
+        return True                                # 已击杀怪物 → 空地
     if t == 1:
         return (f, x, y) in M.DARKWALL_CELLS
     return True
@@ -181,6 +197,8 @@ class Hero:
 def run(altar_atk=0, altar_def=0, verbose=True, cnt0=0, start=None):
     H = Hero(**(start or {}))
     out = []
+    did_f2 = False          # 2F 凿墙支线是否已完成
+    sword_granted = False   # 33F 骑士剑 +40 是否已提前结算
     for f in range(31, 39):
         dmg0, atk0, dfn0, gold0 = H.dmg, H.atk, H.dfn, H.gold
         cleared = set()
@@ -192,8 +210,11 @@ def run(altar_atk=0, altar_def=0, verbose=True, cnt0=0, start=None):
 
         def after(path):
             for c in path:
-                if M.obj_raw(f, *c) in DOOR:
+                o = M.obj_raw(f, *c)
+                if o in DOOR:
                     cleared.add(c)
+                elif M.TYPE.get(M.oatr(o, 3)) == 'MONSTER':
+                    cleared.add(c)          # 已击杀：后续再经过按空地计
                 for (df, cell), trig in DIG.items():
                     if df == f and c in trig:
                         cleared.add((df,) + cell)
@@ -201,6 +222,16 @@ def run(altar_atk=0, altar_def=0, verbose=True, cnt0=0, start=None):
                             cleared.add((df,) + t2)
                 if (f, c) in TRAP:
                     dropped.add(TRAP[(f, c)])
+
+        # ── 32F 触发链：进入即踩 (6,10)，原地反复触发 5 次（0 步）──
+        if f == 32:
+            r = fight(90, H.atk, H.dfn, H.dbl)     # obj90 金騎士 120/150/50/100（第 3 次强制战）
+            if r is None:
+                print('  !! 32F 金騎士打不动')
+            else:
+                rd, d, g = r
+                H.take(d); H.gold += g
+                lines_pre = ['金騎士@32F触发链 %d回合 -%d' % (rd, d)]
 
         while tgts:
             best = None
@@ -221,6 +252,46 @@ def run(altar_atk=0, altar_def=0, verbose=True, cnt0=0, start=None):
             path_all += p[1:]
             after(p)
             pos = t
+
+        # ── 33F 拿完剑 → 2F 凿墙支线 → 飞回 33F ──
+        if f == 33 and not did_f2:
+            # 骑士剑 +40 提前结算（否则 2F 支线在 lines 结算前用旧 ATK 打門番Ｂ）
+            if (10, 10) in path_all and not sword_granted:
+                H.atk += 40
+                sword_granted = True
+            # 从剑的位置走到 33F 下行梯旁（(10,1) 是 (11,1) 邻格，可飞行）
+            p = dijkstra(33, pos, (10, 1), cleared, H.atk, dropped=dropped)
+            if p is None:
+                print('  !! 33F 到楼梯旁不可达')
+            else:
+                path_all += p[1:]
+                after(p)
+                pos = (10, 1)
+                f2_lines = ['★飞行→2F']
+
+                # 飞行 → 2F（落 (1,2)），执行支线
+                for c in F2_GO[1:]:
+                    o = M.obj_raw(2, *c)
+                    if o in DOOR:
+                        n, _ = DOOR[o]
+                        H.keys[n] -= 1
+                        f2_lines.append('开%s门%s' % (n, c))
+                    elif M.TYPE.get(M.oatr(o, 3)) == 'MONSTER':
+                        r = fight(o, H.atk, H.dfn, H.dbl)
+                        if r is None:
+                            print('  !! 2F %s@%s 打不动' % (M.oname(o)[:8], c))
+                            continue
+                        rd, d, g = r
+                        H.take(d); H.gold += g
+                        f2_lines.append('%s@%s %d回合 -%d' % (M.oname(o)[:8], c, rd, d))
+                H.steps += len(F2_GO) - 1
+                f2_lines.append('★(11,11)对话 → 35F(4,9)凿开')
+                # 回程（(11,11) → (1,10)，即 (1,11) 下行梯旁）
+                H.steps += len(F2_BACK) - 1
+                f2_lines.append('★飞回33F')
+                did_f2 = True
+                # 飞行回 33F（落点 (10,1)）
+                pos = (10, 1)
 
         p = dijkstra(f, pos, up, cleared, H.atk, dropped=dropped)
         if p is None:
@@ -254,10 +325,18 @@ def run(altar_atk=0, altar_def=0, verbose=True, cnt0=0, start=None):
             elif M.oatr(o, 3) == 3:
                 a = [M.oatr(o, i) for i in range(14)]
                 if a[10]: H.hp += a[10]
-                if a[11]: H.atk += a[11]
+                if a[11]:
+                    if f == 33 and o == 32 and sword_granted:
+                        pass          # 骑士剑已在 2F 支线前结算
+                    else:
+                        H.atk += a[11]
                 if a[12]: H.dfn += a[12]
                 if a[13]: H.gold += a[13]
                 lines.append('拾%s%s' % (M.oname(o)[:16], c))
+        # 32F 触发链
+        if f == 32:
+            lines = lines_pre + lines
+            lines.append('★32F触发链：踩(6,10)×5 → 2F(11,11) 生成盗贼')
         # 32F 祭坛：DEF 优先（本段君主伤害全看 DEF）
         if f == 32 and altar_atk + altar_def > 0 and (10, 10) in path_all:
             n = altar_atk + altar_def
@@ -273,20 +352,24 @@ def run(altar_atk=0, altar_def=0, verbose=True, cnt0=0, start=None):
             H.keys['红'] += 1
             H.keys['黄'] += 4
             lines.append('★清场八只 → 红钥匙(2,6) + 黄钥匙(1,5)(3,5)(1,7)(3,7)')
-        # 35F 盗贼凿墙
-        if f == 35 and (5, 10) in path_all:
-            lines.append('★(5,10) 盗贼 → 凿开 (4,9)')
+        # 33F 2F 支线
+        if f == 33 and did_f2:
+            lines.append('★飞行→2F 清門番Ｂ×2 + (11,11)对话 → 凿开 35F(4,9) → 飞回33F')
+            lines.extend(f2_lines)
         # 38F 骑士盾
         if f == 38:
             lines.append('★骑士の盾 obj37 @(2,7)')
         H.steps += len(path_all) - 1
-        out.append(dict(f=f, steps=len(path_all) - 1, lines=lines, hp=H.hp,
+        f_steps = len(path_all) - 1
+        if f == 33 and did_f2:
+            f_steps += len(F2_GO) - 1 + len(F2_BACK) - 1
+        out.append(dict(f=f, steps=f_steps, lines=lines, hp=H.hp,
                         atk=H.atk, dfn=H.dfn, gold=H.gold, dmg=H.dmg - dmg0,
                         atk0=atk0, dfn0=dfn0, ky=H.keys['黄'], kb=H.keys['蓝'],
                         kr=H.keys['红']))
         if verbose:
             print('F%-2d %3d步 战损%-5d | ATK%-3d DEF%-3d 金%-5d 钥 黄%+d 蓝%+d 红%+d'
-                  % (f, len(path_all) - 1, H.dmg - dmg0, H.atk, H.dfn, H.gold,
+                  % (f, f_steps, H.dmg - dmg0, H.atk, H.dfn, H.gold,
                      H.keys['黄'], H.keys['蓝'], H.keys['红']))
             print('    ' + ' | '.join(lines))
     print()
@@ -310,12 +393,13 @@ def export(rows, path):
 if __name__ == '__main__':
     import plan_11_20 as A
     r1, H1 = A.run(3, 0, verbose=False)
+    # 不传 hp：Hero 从 0 开始，minhp = 本段相对起点需带血量（与旧文档口径一致）
     st = dict(atk=H1.atk, dfn=H1.dfn, gold=H1.gold,
-              ky=H1.keys['黄'], kb=H1.keys['蓝'], kr=H1.keys['红'], hp=H1.hp)
+              ky=H1.keys['黄'], kb=H1.keys['蓝'], kr=H1.keys['红'])
     print('20F 出口：ATK%d DEF%d 金%d 钥 黄%+d 蓝%+d 红%+d  (11F-20F 战损 %d / %d 步)'
           % (H1.atk, H1.dfn, H1.gold, H1.keys['黄'], H1.keys['蓝'], H1.keys['红'],
              H1.dmg, H1.steps))
     print()
     rows, H = run(2, 2, cnt0=3, start=st)
-    export(rows, r'D:/B++/WorkBuddy/mota_tas_tmp2/repo/09_TAS推演/魔塔1_route_31F到38F_骑士盾_v2.csv')
+    export(rows, r'D:/B++/WorkBuddy/mota_tas_tmp2/repo/09_TAS推演/魔塔1_route_31F到38F_骑士盾_v3.csv')
     print('CSV 已写入 repo/09_TAS推演/')

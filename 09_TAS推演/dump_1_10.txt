@@ -1,0 +1,636 @@
+======================================================================
+1F   stairs up/down = ((1, 1), None)
+======================================================================
+--- terrain (#=墙 .=地板 S=楼梯) ---
+y1   S  .  .  .  .  .  .  .  .  .  .  #
+y2   #  #  #  #  #  #  #  #  #  #  .  #
+y3   .  .  .  .  .  #  .  .  .  #  .  #
+y4   .  .  .  #  .  #  .  .  .  #  .  #
+y5   #  .  #  #  .  #  #  #  .  #  .  #
+y6   .  .  .  #  .  .  .  .  .  #  .  #
+y7   .  .  .  #  .  #  #  #  #  #  .  #
+y8   #  .  #  #  .  .  .  .  .  .  .  #
+y9   .  .  .  #  #  .  #  #  #  .  #  #
+y10  .  .  .  #  .  .  .  #  .  .  .  #
+y11  .  .  .  #  .  .  .  #  .  .  .  #
+y12  #  #  #  #  #  #  #  #  #  #  #  #
+--- obj 编号 ---
+y1   .  .  5  6  5  .  .  .  .  .  .  .
+y2   .  .  .  .  .  .  .  .  .  .  .  .
+y3  11  .  .  2  .  . 13  1  .  .  .  .
+y4   .  9  .  .  .  . 14 11  .  .  .  .
+y5   .  2  .  .  .  .  .  .  2  .  .  .
+y6   1  .  .  .  .  2  7  8  7  .  .  .
+y7   . 10  .  .  .  .  .  .  .  .  .  .
+y8   .  2  .  .  .  .  .  .  .  .  .  .
+y9   .  .  .  .  .  2  .  .  .  2  .  .
+y10 11  .  1  .  1  .  .  .  .  7  .  .
+y11 11 26  1  .  .  .  .  .  5 12  5  .
+y12  .  .  .  .  .  .  .  .  .  .  .  .
+--- obj 明细 ---
+  ( 3, 1) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+  ( 4, 1) obj6    Ｒスライム          type=MONSTER MON hp45 atk20 def2 g2
+  ( 5, 1) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+  ( 1, 3) obj11   赤い回復薬を手に入れた。生命 type=STATUS 
+  ( 4, 3) obj2                   type=DOOR   DOOR/黄门
+  ( 7, 3) obj13   赤のクリスタルを手に入れた。 type=STATUS 
+  ( 8, 3) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 2, 4) obj9    スケルトンＣ         type=MONSTER MON hp50 atk42 def6 g6
+  ( 7, 4) obj14   青のクリスタルを手に入れた。 type=STATUS 
+  ( 8, 4) obj11   赤い回復薬を手に入れた。生命 type=STATUS 
+  ( 2, 5) obj2                   type=DOOR   DOOR/黄门
+  ( 9, 5) obj2                   type=DOOR   DOOR/黄门
+  ( 1, 6) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 6, 6) obj2                   type=DOOR   DOOR/黄门
+  ( 7, 6) obj7    バット            type=MONSTER MON hp35 atk38 def3 g3
+  ( 8, 6) obj8    僧　侶            type=MONSTER MON hp60 atk32 def8 g5
+  ( 9, 6) obj7    バット            type=MONSTER MON hp35 atk38 def3 g3
+  ( 2, 7) obj10   スケルトンＢ         type=MONSTER MON hp55 atk52 def12 g8
+  ( 2, 8) obj2                   type=DOOR   DOOR/黄门
+  ( 6, 9) obj2                   type=DOOR   DOOR/黄门
+  (10, 9) obj2                   type=DOOR   DOOR/黄门
+  ( 1,10) obj11   赤い回復薬を手に入れた。生命 type=STATUS 
+  ( 3,10) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 5,10) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  (10,10) obj7    バット            type=MONSTER MON hp35 atk38 def3 g3
+  ( 1,11) obj11   赤い回復薬を手に入れた。生命 type=STATUS 
+  ( 2,11) obj26   飛翔のオーブを手に入れた！  type=ITEM   
+  ( 3,11) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 9,11) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+  (10,11) obj12   青い回復薬を手に入れた。生命 type=STATUS 
+  (11,11) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+
+======================================================================
+2F   stairs up/down = ((1, 11), (1, 1))
+======================================================================
+--- terrain (#=墙 .=地板 S=楼梯) ---
+y1   S  .  .  .  .  .  .  .  .  .  .  #
+y2   .  .  #  #  .  .  .  .  .  #  #  #
+y3   .  #  #  #  #  #  .  #  #  #  #  #
+y4   .  #  .  .  #  .  .  .  #  .  .  #
+y5   .  #  .  .  .  .  .  .  .  .  .  #
+y6   .  #  #  #  #  .  .  .  #  #  #  #
+y7   .  #  .  .  #  .  .  .  #  .  .  #
+y8   .  #  .  .  .  .  .  .  .  .  .  #
+y9   .  #  #  #  #  .  .  .  #  #  #  #
+y10  .  #  .  .  #  .  .  .  #  .  .  #
+y11  S  #  .  .  .  .  .  .  .  .  .  #
+y12  #  #  #  #  #  #  #  #  #  #  #  #
+--- obj 编号 ---
+y1   .  .  4  .  .  .  .  .  .  .  .  .
+y2   .  .  .  .  . 15  . 15  .  .  .  .
+y3   .  .  .  .  .  .  .  .  .  .  .  .
+y4   .  .  1  1  .  .  .  .  .  .174  .
+y5   .  .  1  . 19  .  .  . 19  .  .  .
+y6   .  .  .  .  .  .  .  .  .  .  .  .
+y7   .  . 87  .  .  .  .  .  .  .152  .
+y8   .  .  .  . 19  .  .  . 19  .  .  .
+y9   .  .  .  .  .  .  .  .  .  .  .  .
+y10  .  . 12 12  .  .  .  .  .  .  .  .
+y11  .  . 12  . 19  .  .  . 19  .  .  .
+y12  .  .  .  .  .  .  .  .  .  .  .  .
+--- obj 明细 ---
+  ( 3, 1) obj4                   type=DOOR   DOOR/蓝门
+  ( 6, 2) obj15   門番Ｂ            type=MONSTER MON hp100 atk180 def110 g100
+  ( 8, 2) obj15   門番Ｂ            type=MONSTER MON hp100 atk180 def110 g100
+  ( 3, 4) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 4, 4) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  (11, 4) obj174  「やあ、助けてくれてありがと type=MESSAGE 
+  ( 3, 5) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 5, 5) obj19                  type=NORMAL 
+  ( 9, 5) obj19                  type=NORMAL 
+  ( 3, 7) obj87   盗賊「おお無事か！おまえ、こ type=MESSAGE 
+  (11, 7) obj152  「おお、助けてくれてありがと type=MESSAGE 
+  ( 5, 8) obj19                  type=NORMAL 
+  ( 9, 8) obj19                  type=NORMAL 
+  ( 3,10) obj12   青い回復薬を手に入れた。生命 type=STATUS 
+  ( 4,10) obj12   青い回復薬を手に入れた。生命 type=STATUS 
+  ( 3,11) obj12   青い回復薬を手に入れた。生命 type=STATUS 
+  ( 5,11) obj19                  type=NORMAL 
+  ( 9,11) obj19                  type=NORMAL 
+
+======================================================================
+3F   stairs up/down = ((11, 11), (1, 11))
+======================================================================
+--- terrain (#=墙 .=地板 S=楼梯) ---
+y1   .  .  #  .  .  .  #  .  #  .  .  #
+y2   .  .  #  .  .  .  #  .  .  .  .  #
+y3   .  .  #  .  .  .  #  .  #  #  #  #
+y4   .  #  #  #  .  #  #  .  #  .  .  #
+y5   .  .  .  .  .  .  .  .  .  .  .  #
+y6   .  #  #  .  .  .  #  .  #  #  #  #
+y7   .  .  #  #  .  #  #  .  #  .  .  #
+y8   .  .  #  .  .  .  #  .  .  .  .  #
+y9   .  .  #  .  .  .  #  .  #  #  #  #
+y10  #  #  #  #  .  #  #  .  #  .  .  #
+y11  S  .  .  .  .  .  #  .  .  .  S  #
+y12  #  #  #  #  #  #  #  #  #  #  #  #
+--- obj 编号 ---
+y1   1 14  .  1 12  1  .  .  .  . 11  .
+y2   . 11  . 12  1 12  .  .  2  7  .  .
+y3   8  .  .  1  3  1  .  .  .  .  .  .
+y4   2  .  .  .  .  .  .  .  .  .153  .
+y5   .  .  7  .  .  .  5  .  .  .  .  .
+y6   2  .  .  .  .  .  .  .  .  .  .  .
+y7   9  .  .  .  .  .  .  .  .  . 11  .
+y8   .  1  .  .  .  .  .  .  2  8  1  .
+y9  11 13  .  .  .  .  .  .  .  .  .  .
+y10  .  .  .  .  .  .  .  6  .  .  .  .
+y11  .  .  .  .  .  .  .  .  2  .  .  .
+y12  .  .  .  .  .  .  .  .  .  .  .  .
+--- obj 明细 ---
+  ( 1, 1) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 2, 1) obj14   青のクリスタルを手に入れた。 type=STATUS 
+  ( 4, 1) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 5, 1) obj12   青い回復薬を手に入れた。生命 type=STATUS 
+  ( 6, 1) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  (11, 1) obj11   赤い回復薬を手に入れた。生命 type=STATUS 
+  ( 2, 2) obj11   赤い回復薬を手に入れた。生命 type=STATUS 
+  ( 4, 2) obj12   青い回復薬を手に入れた。生命 type=STATUS 
+  ( 5, 2) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 6, 2) obj12   青い回復薬を手に入れた。生命 type=STATUS 
+  ( 9, 2) obj2                   type=DOOR   DOOR/黄门
+  (10, 2) obj7    バット            type=MONSTER MON hp35 atk38 def3 g3
+  ( 1, 3) obj8    僧　侶            type=MONSTER MON hp60 atk32 def8 g5
+  ( 4, 3) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 5, 3) obj3    青色の扉の鍵を手に入れた。  type=KEY    KEY/蓝钥
+  ( 6, 3) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 1, 4) obj2                   type=DOOR   DOOR/黄门
+  (11, 4) obj153  「おぬしにこの勇者のオーブを type=MESSAGE 
+  ( 3, 5) obj7    バット            type=MONSTER MON hp35 atk38 def3 g3
+  ( 7, 5) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+  ( 1, 6) obj2                   type=DOOR   DOOR/黄门
+  ( 1, 7) obj9    スケルトンＣ         type=MONSTER MON hp50 atk42 def6 g6
+  (11, 7) obj11   赤い回復薬を手に入れた。生命 type=STATUS 
+  ( 2, 8) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 9, 8) obj2                   type=DOOR   DOOR/黄门
+  (10, 8) obj8    僧　侶            type=MONSTER MON hp60 atk32 def8 g5
+  (11, 8) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 1, 9) obj11   赤い回復薬を手に入れた。生命 type=STATUS 
+  ( 2, 9) obj13   赤のクリスタルを手に入れた。 type=STATUS 
+  ( 8,10) obj6    Ｒスライム          type=MONSTER MON hp45 atk20 def2 g2
+  ( 9,11) obj2                   type=DOOR   DOOR/黄门
+
+======================================================================
+4F   stairs up/down = ((1, 11), (11, 11))
+======================================================================
+--- terrain (#=墙 .=地板 S=楼梯) ---
+y1   .  .  .  #  .  .  .  #  .  .  .  #
+y2   .  .  .  #  .  .  .  #  .  .  .  #
+y3   .  .  .  #  .  .  .  #  .  .  .  #
+y4   #  .  #  #  #  .  #  #  #  .  #  #
+y5   .  .  .  .  .  .  .  .  .  .  .  #
+y6   .  .  .  #  #  #  #  #  #  #  #  #
+y7   .  .  .  .  .  .  .  .  .  .  .  #
+y8   .  #  #  .  #  #  #  .  #  #  .  #
+y9   .  #  .  .  .  #  .  .  .  #  .  #
+y10  .  #  .  .  .  #  .  .  .  #  .  #
+y11  S  #  .  .  .  #  .  .  .  #  S  #
+y12  #  #  #  #  #  #  #  #  #  #  #  #
+--- obj 编号 ---
+y1   .  3  .  . 21 22 23  .  .175  .  .
+y2  11  .  1  .  .  .  .  .  1  . 12  .
+y3   .  .  .  .  .  .  .  .  . 10  .  .
+y4   .  2  .  .  .  4  .  .  .  2  .  .
+y5   .  8  .  2  .  6  .  .  9  .  .  .
+y6   .  .  .  .  .  .  .  .  .  .  .  .
+y7   6  .  5  .  .  .  .  .  .  2  .  .
+y8   2  .  .  2  .  .  .  2  .  .  .  .
+y9   .  .  .  7  .  .  .  8  .  .  .  .
+y10  .  .  5  .  1  . 13  . 11  .  .  .
+y11  .  .  1  5  1  .  .  5  .  .  .  .
+y12  .  .  .  .  .  .  .  .  .  .  .  .
+--- obj 明细 ---
+  ( 2, 1) obj3    青色の扉の鍵を手に入れた。  type=KEY    KEY/蓝钥
+  ( 5, 1) obj21                  type=NORMAL 
+  ( 6, 1) obj22   「この祭壇に         type=SAIDAN 
+  ( 7, 1) obj23                  type=NORMAL 
+  (10, 1) obj175  「この塔には鍵で開けられる扉 type=MESSAGE 
+  ( 1, 2) obj11   赤い回復薬を手に入れた。生命 type=STATUS 
+  ( 3, 2) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 9, 2) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  (11, 2) obj12   青い回復薬を手に入れた。生命 type=STATUS 
+  (10, 3) obj10   スケルトンＢ         type=MONSTER MON hp55 atk52 def12 g8
+  ( 2, 4) obj2                   type=DOOR   DOOR/黄门
+  ( 6, 4) obj4                   type=DOOR   DOOR/蓝门
+  (10, 4) obj2                   type=DOOR   DOOR/黄门
+  ( 2, 5) obj8    僧　侶            type=MONSTER MON hp60 atk32 def8 g5
+  ( 4, 5) obj2                   type=DOOR   DOOR/黄门
+  ( 6, 5) obj6    Ｒスライム          type=MONSTER MON hp45 atk20 def2 g2
+  ( 9, 5) obj9    スケルトンＣ         type=MONSTER MON hp50 atk42 def6 g6
+  ( 1, 7) obj6    Ｒスライム          type=MONSTER MON hp45 atk20 def2 g2
+  ( 3, 7) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+  (10, 7) obj2                   type=DOOR   DOOR/黄门
+  ( 1, 8) obj2                   type=DOOR   DOOR/黄门
+  ( 4, 8) obj2                   type=DOOR   DOOR/黄门
+  ( 8, 8) obj2                   type=DOOR   DOOR/黄门
+  ( 4, 9) obj7    バット            type=MONSTER MON hp35 atk38 def3 g3
+  ( 8, 9) obj8    僧　侶            type=MONSTER MON hp60 atk32 def8 g5
+  ( 3,10) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+  ( 5,10) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 7,10) obj13   赤のクリスタルを手に入れた。 type=STATUS 
+  ( 9,10) obj11   赤い回復薬を手に入れた。生命 type=STATUS 
+  ( 3,11) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 4,11) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+  ( 5,11) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 8,11) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+
+======================================================================
+5F   stairs up/down = ((1, 1), (1, 11))
+======================================================================
+--- terrain (#=墙 .=地板 S=楼梯) ---
+y1   S  #  .  .  .  .  #  .  .  .  .  #
+y2   .  #  .  .  #  .  #  .  .  #  .  #
+y3   .  .  .  .  #  .  #  .  .  #  .  #
+y4   #  #  #  .  #  .  #  .  .  #  .  #
+y5   .  .  .  .  #  .  #  #  #  #  .  #
+y6   .  .  .  .  #  .  .  .  .  .  .  #
+y7   #  .  #  #  #  .  #  #  #  #  .  #
+y8   .  .  .  .  #  .  #  .  .  .  .  #
+y9   .  .  .  .  #  .  #  .  #  #  #  #
+y10  #  #  #  #  #  .  #  .  #  .  .  #
+y11  S  .  .  .  .  .  #  .  .  .  .  #
+y12  #  #  #  #  #  #  #  #  #  #  #  #
+--- obj 编号 ---
+y1   .  .  .  6  2  .  .  .  .  2  .  .
+y2   .  .  .  .  .  1  .  5  5  .  6  .
+y3   .  2  7  .  .  .  .  1  1  .  .  .
+y4   .  .  .  2  .  7  .  1  1  .  .  .
+y5   1  .  8  .  .  .  .  .  .  .  .  .
+y6   1  .  .  7  .  .  5  .  .  .  .  .
+y7   . 10  .  .  .  .  .  .  .  .  6  .
+y8   .  .  .  .  .  5  .  .  .  .  .  .
+y9  14  1 11 25  .  .  .  2  .  .  .  .
+y10  .  .  .  .  .  .  .  .  .  .  .  .
+y11  .  .  .  .  .  .  .  . 89  . 30  .
+y12  .  .  .  .  .  .  .  .  .  .  .  .
+--- obj 明细 ---
+  ( 4, 1) obj6    Ｒスライム          type=MONSTER MON hp45 atk20 def2 g2
+  ( 5, 1) obj2                   type=DOOR   DOOR/黄门
+  (10, 1) obj2                   type=DOOR   DOOR/黄门
+  ( 6, 2) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 8, 2) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+  ( 9, 2) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+  (11, 2) obj6    Ｒスライム          type=MONSTER MON hp45 atk20 def2 g2
+  ( 2, 3) obj2                   type=DOOR   DOOR/黄门
+  ( 3, 3) obj7    バット            type=MONSTER MON hp35 atk38 def3 g3
+  ( 8, 3) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 9, 3) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 4, 4) obj2                   type=DOOR   DOOR/黄门
+  ( 6, 4) obj7    バット            type=MONSTER MON hp35 atk38 def3 g3
+  ( 8, 4) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 9, 4) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 1, 5) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 3, 5) obj8    僧　侶            type=MONSTER MON hp60 atk32 def8 g5
+  ( 1, 6) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 4, 6) obj7    バット            type=MONSTER MON hp35 atk38 def3 g3
+  ( 7, 6) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+  ( 2, 7) obj10   スケルトンＢ         type=MONSTER MON hp55 atk52 def12 g8
+  (11, 7) obj6    Ｒスライム          type=MONSTER MON hp45 atk20 def2 g2
+  ( 6, 8) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+  ( 1, 9) obj14   青のクリスタルを手に入れた。 type=STATUS 
+  ( 2, 9) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 3, 9) obj11   赤い回復薬を手に入れた。生命 type=STATUS 
+  ( 4, 9) obj25   知恵のオーブを手に入れた！  type=ITEM   
+  ( 8, 9) obj2                   type=DOOR   DOOR/黄门
+  ( 9,11) obj89   壁がくずれた！        type=DOOR   
+  (11,11) obj30   鉄の剣を手に入れた。攻撃力が type=STATUS 
+
+======================================================================
+6F   stairs up/down = ((11, 11), (1, 1))
+======================================================================
+--- terrain (#=墙 .=地板 S=楼梯) ---
+y1   S  #  .  .  #  .  .  .  .  .  .  #
+y2   .  #  .  .  #  .  #  #  #  #  .  #
+y3   .  #  #  .  #  .  #  .  .  .  .  #
+y4   .  .  .  .  .  .  #  .  .  .  .  #
+y5   .  #  #  #  #  .  #  #  #  #  #  #
+y6   .  .  .  .  .  .  .  .  .  .  .  #
+y7   #  #  #  #  #  .  #  #  #  #  .  #
+y8   .  .  .  .  #  .  .  .  .  .  .  #
+y9   .  .  .  .  #  .  #  #  .  #  .  #
+y10  .  #  #  #  #  .  #  .  .  #  .  #
+y11  .  .  .  .  .  .  #  .  .  #  S  #
+y12  #  #  #  #  #  #  #  #  #  #  #  #
+--- obj 编号 ---
+y1   .  .  1  1  .  .  8  .  1  5  .  .
+y2   .  .  1  1  .  .  .  .  .  .  2  .
+y3   .  .  .  6  .  .  . 11  .  9  .  .
+y4   .  2  2  .  2  .  . 18  .  .  7  .
+y5   .  .  .  .  .  .  .  .  .  .  .  .
+y6   .  .  6  8  .  1  .  9 10  .  .  .
+y7   .  .  .  .  .  .  .  .  .  .  .  .
+y8   8  .  . 42  .  .  2  2  .  2  .  .
+y9   .  7  . 14  .  .  .  .  6  .  6  .
+y10  2  .  .  .  .  .  .  .  .  .  .  .
+y11  .  5  .  .  9  .  . 11 11  .  .  .
+y12  .  .  .  .  .  .  .  .  .  .  .  .
+--- obj 明细 ---
+  ( 3, 1) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 4, 1) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 7, 1) obj8    僧　侶            type=MONSTER MON hp60 atk32 def8 g5
+  ( 9, 1) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  (10, 1) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+  ( 3, 2) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 4, 2) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  (11, 2) obj2                   type=DOOR   DOOR/黄门
+  ( 4, 3) obj6    Ｒスライム          type=MONSTER MON hp45 atk20 def2 g2
+  ( 8, 3) obj11   赤い回復薬を手に入れた。生命 type=STATUS 
+  (10, 3) obj9    スケルトンＣ         type=MONSTER MON hp50 atk42 def6 g6
+  ( 2, 4) obj2                   type=DOOR   DOOR/黄门
+  ( 3, 4) obj2                   type=DOOR   DOOR/黄门
+  ( 5, 4) obj2                   type=DOOR   DOOR/黄门
+  ( 8, 4) obj18   「紫の鍵を大特価の５０ＧＯＬ type=SELL   
+  (11, 4) obj7    バット            type=MONSTER MON hp35 atk38 def3 g3
+  ( 3, 6) obj6    Ｒスライム          type=MONSTER MON hp45 atk20 def2 g2
+  ( 4, 6) obj8    僧　侶            type=MONSTER MON hp60 atk32 def8 g5
+  ( 6, 6) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 8, 6) obj9    スケルトンＣ         type=MONSTER MON hp50 atk42 def6 g6
+  ( 9, 6) obj10   スケルトンＢ         type=MONSTER MON hp55 atk52 def12 g8
+  ( 1, 8) obj8    僧　侶            type=MONSTER MON hp60 atk32 def8 g5
+  ( 4, 8) obj42   「商人から物を買うと、あとで type=MESSAGE 
+  ( 7, 8) obj2                   type=DOOR   DOOR/黄门
+  ( 8, 8) obj2                   type=DOOR   DOOR/黄门
+  (10, 8) obj2                   type=DOOR   DOOR/黄门
+  ( 2, 9) obj7    バット            type=MONSTER MON hp35 atk38 def3 g3
+  ( 4, 9) obj14   青のクリスタルを手に入れた。 type=STATUS 
+  ( 9, 9) obj6    Ｒスライム          type=MONSTER MON hp45 atk20 def2 g2
+  (11, 9) obj6    Ｒスライム          type=MONSTER MON hp45 atk20 def2 g2
+  ( 1,10) obj2                   type=DOOR   DOOR/黄门
+  ( 2,11) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+  ( 5,11) obj9    スケルトンＣ         type=MONSTER MON hp50 atk42 def6 g6
+  ( 8,11) obj11   赤い回復薬を手に入れた。生命 type=STATUS 
+  ( 9,11) obj11   赤い回復薬を手に入れた。生命 type=STATUS 
+
+======================================================================
+7F   stairs up/down = ((1, 1), (11, 11))
+======================================================================
+--- terrain (#=墙 .=地板 S=楼梯) ---
+y1   S  #  .  #  .  .  .  #  .  #  .  #
+y2   .  #  .  #  .  .  .  #  .  #  .  #
+y3   .  #  .  #  .  #  .  #  .  #  .  #
+y4   .  #  .  #  .  #  .  #  .  #  .  #
+y5   .  #  .  #  .  #  .  #  .  #  .  #
+y6   .  .  .  .  .  .  .  .  .  .  .  #
+y7   .  #  .  #  .  #  .  #  .  #  .  #
+y8   .  #  .  #  .  #  .  #  .  #  .  #
+y9   .  #  .  #  .  #  .  #  .  #  .  #
+y10  .  #  .  #  .  #  .  #  .  #  .  #
+y11  .  .  .  #  .  #  .  #  .  #  S  #
+y12  #  #  #  #  #  #  #  #  #  #  #  #
+--- obj 编号 ---
+y1   .  . 13  .  . 41  .  .  1  .  5  .
+y2   .  . 11  .  .  .  .  .  1  .  6  .
+y3   .  .  7  .  6  . 10  . 11  .  5  .
+y4   .  .  .  .  .  .  .  .  .  .  .  .
+y5   2  .  2  .  4  .  2  .  9  .  2  .
+y6   . 10  .  8  .  .  .  .  .  .  .  .
+y7   2  .  2  .  2  .  2  . 10  .  2  .
+y8   .  .  .  .  .  .  .  .  .  .  .  .
+y9   .  .  .  .  7  .  6  . 12  .  .  .
+y10  5  .  5  .  1  .  8  .  1  .  .  .
+y11  .  6  .  .  1  . 12  .  1  .  .  .
+y12  .  .  .  .  .  .  .  .  .  .  .  .
+--- obj 明细 ---
+  ( 3, 1) obj13   赤のクリスタルを手に入れた。 type=STATUS 
+  ( 6, 1) obj41   「鍵を５個セットで５０ＧＯＬ type=SELL   
+  ( 9, 1) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  (11, 1) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+  ( 3, 2) obj11   赤い回復薬を手に入れた。生命 type=STATUS 
+  ( 9, 2) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  (11, 2) obj6    Ｒスライム          type=MONSTER MON hp45 atk20 def2 g2
+  ( 3, 3) obj7    バット            type=MONSTER MON hp35 atk38 def3 g3
+  ( 5, 3) obj6    Ｒスライム          type=MONSTER MON hp45 atk20 def2 g2
+  ( 7, 3) obj10   スケルトンＢ         type=MONSTER MON hp55 atk52 def12 g8
+  ( 9, 3) obj11   赤い回復薬を手に入れた。生命 type=STATUS 
+  (11, 3) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+  ( 1, 5) obj2                   type=DOOR   DOOR/黄门
+  ( 3, 5) obj2                   type=DOOR   DOOR/黄门
+  ( 5, 5) obj4                   type=DOOR   DOOR/蓝门
+  ( 7, 5) obj2                   type=DOOR   DOOR/黄门
+  ( 9, 5) obj9    スケルトンＣ         type=MONSTER MON hp50 atk42 def6 g6
+  (11, 5) obj2                   type=DOOR   DOOR/黄门
+  ( 2, 6) obj10   スケルトンＢ         type=MONSTER MON hp55 atk52 def12 g8
+  ( 4, 6) obj8    僧　侶            type=MONSTER MON hp60 atk32 def8 g5
+  ( 1, 7) obj2                   type=DOOR   DOOR/黄门
+  ( 3, 7) obj2                   type=DOOR   DOOR/黄门
+  ( 5, 7) obj2                   type=DOOR   DOOR/黄门
+  ( 7, 7) obj2                   type=DOOR   DOOR/黄门
+  ( 9, 7) obj10   スケルトンＢ         type=MONSTER MON hp55 atk52 def12 g8
+  (11, 7) obj2                   type=DOOR   DOOR/黄门
+  ( 5, 9) obj7    バット            type=MONSTER MON hp35 atk38 def3 g3
+  ( 7, 9) obj6    Ｒスライム          type=MONSTER MON hp45 atk20 def2 g2
+  ( 9, 9) obj12   青い回復薬を手に入れた。生命 type=STATUS 
+  ( 1,10) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+  ( 3,10) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+  ( 5,10) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 7,10) obj8    僧　侶            type=MONSTER MON hp60 atk32 def8 g5
+  ( 9,10) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 2,11) obj6    Ｒスライム          type=MONSTER MON hp45 atk20 def2 g2
+  ( 5,11) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 7,11) obj12   青い回復薬を手に入れた。生命 type=STATUS 
+  ( 9,11) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+
+======================================================================
+8F   stairs up/down = ((6, 1), (1, 1))
+======================================================================
+--- terrain (#=墙 .=地板 S=楼梯) ---
+y1   S  .  .  .  .  S  .  #  .  .  .  #
+y2   .  .  #  #  .  .  .  #  .  .  .  #
+y3   .  #  #  #  #  .  #  #  .  .  .  #
+y4   .  #  .  .  .  .  .  #  #  .  #  #
+y5   .  #  #  #  #  #  .  #  .  .  .  #
+y6   .  .  .  .  .  #  .  #  .  .  .  #
+y7   #  #  #  #  .  #  .  #  #  .  #  #
+y8   .  .  .  .  .  .  .  .  .  .  .  #
+y9   .  #  #  #  #  #  #  #  #  #  .  #
+y10  .  .  #  .  .  #  .  .  #  .  .  #
+y11  .  .  .  .  .  #  .  .  .  .  .  #
+y12  #  #  #  #  #  #  #  #  #  #  #  #
+--- obj 编号 ---
+y1   .  .  2  2  .  .  .  .  1  .  1  .
+y2   .  .  .  .  .  .  5  .  . 28  .  .
+y3   2  .  .  .  .  2  .  . 12  . 11  .
+y4   .  .  1  1  1  .  .  .  . 20  .  .
+y5  11  .  .  .  .  .  8  . 29  . 29  .
+y6   .  6  5  6  .  .  .  .  .  .  .  .
+y7   .  .  .  .  2  .  7  .  .  2  .  .
+y8   .  .  .  7  .  9  .  8  .  .  .  .
+y9   2  .  .  .  .  .  .  .  .  .  2  .
+y10  5  .  . 13  1  .  3 11  .  .  9  .
+y11  .  7  4  1 14  .  1  .  2 10  .  .
+y12  .  .  .  .  .  .  .  .  .  .  .  .
+--- obj 明细 ---
+  ( 3, 1) obj2                   type=DOOR   DOOR/黄门
+  ( 4, 1) obj2                   type=DOOR   DOOR/黄门
+  ( 9, 1) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  (11, 1) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 7, 2) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+  (10, 2) obj28   赤色の扉の鍵を手に入れた。  type=KEY    KEY/红钥
+  ( 1, 3) obj2                   type=DOOR   DOOR/黄门
+  ( 6, 3) obj2                   type=DOOR   DOOR/黄门
+  ( 9, 3) obj12   青い回復薬を手に入れた。生命 type=STATUS 
+  (11, 3) obj11   赤い回復薬を手に入れた。生命 type=STATUS 
+  ( 3, 4) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 4, 4) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 5, 4) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  (10, 4) obj20                  type=NORMAL 
+  ( 1, 5) obj11   赤い回復薬を手に入れた。生命 type=STATUS 
+  ( 7, 5) obj8    僧　侶            type=MONSTER MON hp60 atk32 def8 g5
+  ( 9, 5) obj29   門番Ｃ            type=MONSTER MON hp50 atk48 def22 g12
+  (11, 5) obj29   門番Ｃ            type=MONSTER MON hp50 atk48 def22 g12
+  ( 2, 6) obj6    Ｒスライム          type=MONSTER MON hp45 atk20 def2 g2
+  ( 3, 6) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+  ( 4, 6) obj6    Ｒスライム          type=MONSTER MON hp45 atk20 def2 g2
+  ( 5, 7) obj2                   type=DOOR   DOOR/黄门
+  ( 7, 7) obj7    バット            type=MONSTER MON hp35 atk38 def3 g3
+  (10, 7) obj2                   type=DOOR   DOOR/黄门
+  ( 4, 8) obj7    バット            type=MONSTER MON hp35 atk38 def3 g3
+  ( 6, 8) obj9    スケルトンＣ         type=MONSTER MON hp50 atk42 def6 g6
+  ( 8, 8) obj8    僧　侶            type=MONSTER MON hp60 atk32 def8 g5
+  ( 1, 9) obj2                   type=DOOR   DOOR/黄门
+  (11, 9) obj2                   type=DOOR   DOOR/黄门
+  ( 1,10) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+  ( 4,10) obj13   赤のクリスタルを手に入れた。 type=STATUS 
+  ( 5,10) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 7,10) obj3    青色の扉の鍵を手に入れた。  type=KEY    KEY/蓝钥
+  ( 8,10) obj11   赤い回復薬を手に入れた。生命 type=STATUS 
+  (11,10) obj9    スケルトンＣ         type=MONSTER MON hp50 atk42 def6 g6
+  ( 2,11) obj7    バット            type=MONSTER MON hp35 atk38 def3 g3
+  ( 3,11) obj4                   type=DOOR   DOOR/蓝门
+  ( 4,11) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 5,11) obj14   青のクリスタルを手に入れた。 type=STATUS 
+  ( 7,11) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 9,11) obj2                   type=DOOR   DOOR/黄门
+  (10,11) obj10   スケルトンＢ         type=MONSTER MON hp55 atk52 def12 g8
+
+======================================================================
+9F   stairs up/down = ((1, 11), (6, 1))
+======================================================================
+--- terrain (#=墙 .=地板 S=楼梯) ---
+y1   .  .  .  .  .  S  .  .  .  .  .  #
+y2   .  .  .  #  .  .  .  #  .  .  .  #
+y3   .  #  #  #  #  .  #  #  #  #  .  #
+y4   .  .  .  #  .  .  .  .  .  .  .  #
+y5   .  .  .  .  .  .  .  #  #  .  #  #
+y6   #  #  #  #  #  #  .  #  .  .  .  #
+y7   .  .  .  .  .  #  .  #  .  #  .  #
+y8   .  .  #  .  .  #  .  #  #  #  .  #
+y9   .  #  #  #  .  #  .  #  .  .  .  #
+y10  .  .  #  .  .  #  .  #  .  .  .  #
+y11  S  .  .  .  .  .  .  .  .  .  .  #
+y12  #  #  #  #  #  #  #  #  #  #  #  #
+--- obj 编号 ---
+y1   .  .  9  2  .  .  .  2  5  . 11  .
+y2   .  1  .  .  .  .  .  .  .  5  .  .
+y3  10  .  .  .  .  4  .  .  .  .  .  .
+y4   .  1  .  .  1  .  1  2  2  .  .  .
+y5  14  .  7  2  . 13  .  .  . 89  .  .
+y6   .  .  .  .  .  .  6  .  .  . 10  .
+y7   1  .  2 10  1  .  .  . 35  .  .  .
+y8  10  .  .  .  .  .  .  .  .  .  2  .
+y9   2  .  .  .  2  .  .  .  1  .  8  .
+y10  . 11  .  .  9  .  7  .  .  9  .  .
+y11  .  .  4  .  .  2  .  2  8  . 11  .
+y12  .  .  .  .  .  .  .  .  .  .  .  .
+--- obj 明细 ---
+  ( 3, 1) obj9    スケルトンＣ         type=MONSTER MON hp50 atk42 def6 g6
+  ( 4, 1) obj2                   type=DOOR   DOOR/黄门
+  ( 8, 1) obj2                   type=DOOR   DOOR/黄门
+  ( 9, 1) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+  (11, 1) obj11   赤い回復薬を手に入れた。生命 type=STATUS 
+  ( 2, 2) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  (10, 2) obj5    Ｇスライム          type=MONSTER MON hp35 atk18 def1 g1
+  ( 1, 3) obj10   スケルトンＢ         type=MONSTER MON hp55 atk52 def12 g8
+  ( 6, 3) obj4                   type=DOOR   DOOR/蓝门
+  ( 2, 4) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 5, 4) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 7, 4) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 8, 4) obj2                   type=DOOR   DOOR/黄门
+  ( 9, 4) obj2                   type=DOOR   DOOR/黄门
+  ( 1, 5) obj14   青のクリスタルを手に入れた。 type=STATUS 
+  ( 3, 5) obj7    バット            type=MONSTER MON hp35 atk38 def3 g3
+  ( 4, 5) obj2                   type=DOOR   DOOR/黄门
+  ( 6, 5) obj13   赤のクリスタルを手に入れた。 type=STATUS 
+  (10, 5) obj89   壁がくずれた！        type=DOOR   
+  ( 7, 6) obj6    Ｒスライム          type=MONSTER MON hp45 atk20 def2 g2
+  (11, 6) obj10   スケルトンＢ         type=MONSTER MON hp55 atk52 def12 g8
+  ( 1, 7) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 3, 7) obj2                   type=DOOR   DOOR/黄门
+  ( 4, 7) obj10   スケルトンＢ         type=MONSTER MON hp55 atk52 def12 g8
+  ( 5, 7) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  ( 9, 7) obj35   鉄の盾を手に入れた。防御力が type=STATUS 
+  ( 1, 8) obj10   スケルトンＢ         type=MONSTER MON hp55 atk52 def12 g8
+  (11, 8) obj2                   type=DOOR   DOOR/黄门
+  ( 1, 9) obj2                   type=DOOR   DOOR/黄门
+  ( 5, 9) obj2                   type=DOOR   DOOR/黄门
+  ( 9, 9) obj1    扉の鍵を手に入れた。     type=KEY    KEY/黄钥
+  (11, 9) obj8    僧　侶            type=MONSTER MON hp60 atk32 def8 g5
+  ( 2,10) obj11   赤い回復薬を手に入れた。生命 type=STATUS 
+  ( 5,10) obj9    スケルトンＣ         type=MONSTER MON hp50 atk42 def6 g6
+  ( 7,10) obj7    バット            type=MONSTER MON hp35 atk38 def3 g3
+  (10,10) obj9    スケルトンＣ         type=MONSTER MON hp50 atk42 def6 g6
+  ( 3,11) obj4                   type=DOOR   DOOR/蓝门
+  ( 6,11) obj2                   type=DOOR   DOOR/黄门
+  ( 8,11) obj2                   type=DOOR   DOOR/黄门
+  ( 9,11) obj8    僧　侶            type=MONSTER MON hp60 atk32 def8 g5
+  (11,11) obj11   赤い回復薬を手に入れた。生命 type=STATUS 
+
+======================================================================
+10F   stairs up/down = (None, (1, 11))
+======================================================================
+--- terrain (#=墙 .=地板 S=楼梯) ---
+y1   .  .  .  .  .  .  .  .  .  .  .  #
+y2   #  #  #  #  .  .  .  #  #  #  #  #
+y3   .  .  .  #  #  .  #  #  .  .  .  #
+y4   .  .  .  .  .  .  .  .  .  .  .  #
+y5   #  #  #  #  .  .  .  #  #  #  #  #
+y6   .  .  .  #  #  .  #  #  .  .  .  #
+y7   .  .  .  #  #  .  #  #  .  .  .  #
+y8   .  .  .  #  #  .  #  #  .  .  .  #
+y9   .  #  .  #  #  .  #  #  .  #  .  #
+y10  .  #  .  #  .  .  .  #  .  #  .  #
+y11  S  #  .  .  .  .  .  .  .  #  .  #
+y12  #  #  #  #  #  #  #  #  #  #  #  #
+--- obj 编号 ---
+y1   .  .  .  .  .  .  .  .  .  .  .  .
+y2   .  .  .  .  .  .  .  .  .  .  .  .
+y3   9  9  9  .  . 16  .  .  9  9  9  .
+y4   . 10  . 20  .  .  . 20  . 10  .  .
+y5   .  .  .  .  .  .  .  .  .  .  .  .
+y6   9 14  9  .  .  .  .  .  9 13  9  .
+y7   . 10  .  .  .  .  .  .  . 10  .  .
+y8   .  .  .  .  .  .  .  .  .  .  .  .
+y9   2  .  2  .  . 27  .  .  2  .  2  .
+y10  .  .  .  .  .  .  .  .  .  .  .  .
+y11  .  .  .  8  .  .  .  8  .  . 12  .
+y12  .  .  .  .  .  .  .  .  .  .  .  .
+--- obj 明细 ---
+  ( 1, 3) obj9    スケルトンＣ         type=MONSTER MON hp50 atk42 def6 g6
+  ( 2, 3) obj9    スケルトンＣ         type=MONSTER MON hp50 atk42 def6 g6
+  ( 3, 3) obj9    スケルトンＣ         type=MONSTER MON hp50 atk42 def6 g6
+  ( 6, 3) obj16   スケルトンＡ         type=MONSTER MON hp100 atk65 def15 g30
+  ( 9, 3) obj9    スケルトンＣ         type=MONSTER MON hp50 atk42 def6 g6
+  (10, 3) obj9    スケルトンＣ         type=MONSTER MON hp50 atk42 def6 g6
+  (11, 3) obj9    スケルトンＣ         type=MONSTER MON hp50 atk42 def6 g6
+  ( 2, 4) obj10   スケルトンＢ         type=MONSTER MON hp55 atk52 def12 g8
+  ( 4, 4) obj20                  type=NORMAL 
+  ( 8, 4) obj20                  type=NORMAL 
+  (10, 4) obj10   スケルトンＢ         type=MONSTER MON hp55 atk52 def12 g8
+  ( 1, 6) obj9    スケルトンＣ         type=MONSTER MON hp50 atk42 def6 g6
+  ( 2, 6) obj14   青のクリスタルを手に入れた。 type=STATUS 
+  ( 3, 6) obj9    スケルトンＣ         type=MONSTER MON hp50 atk42 def6 g6
+  ( 9, 6) obj9    スケルトンＣ         type=MONSTER MON hp50 atk42 def6 g6
+  (10, 6) obj13   赤のクリスタルを手に入れた。 type=STATUS 
+  (11, 6) obj9    スケルトンＣ         type=MONSTER MON hp50 atk42 def6 g6
+  ( 2, 7) obj10   スケルトンＢ         type=MONSTER MON hp55 atk52 def12 g8
+  (10, 7) obj10   スケルトンＢ         type=MONSTER MON hp55 atk52 def12 g8
+  ( 1, 9) obj2                   type=DOOR   DOOR/黄门
+  ( 3, 9) obj2                   type=DOOR   DOOR/黄门
+  ( 6, 9) obj27                  type=DOOR   DOOR/红门
+  ( 9, 9) obj2                   type=DOOR   DOOR/黄门
+  (11, 9) obj2                   type=DOOR   DOOR/黄门
+  ( 4,11) obj8    僧　侶            type=MONSTER MON hp60 atk32 def8 g5
+  ( 8,11) obj8    僧　侶            type=MONSTER MON hp60 atk32 def8 g5
+  (11,11) obj12   青い回復薬を手に入れた。生命 type=STATUS 
+

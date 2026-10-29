@@ -245,6 +245,12 @@ _TRAP_GUARD_CELLS = set()          # 由剧本自己放置的格，不进"进层
 #    若照搬成进层覆盖，红门会凭空变成可通行装饰，红钥匙门槛被整个跳过。
 BOSS_DOOR_CELLS = {(20, 6, 9)}
 
+# ✅ 2F 奖励 NPC：静态初始是 obj174(+1000G)/obj152(ATK/DEF×1.03)，
+#    dyn_raw 里的 obj173/obj151 是「对话后」的替换（MTower.java @3751/@3761），
+#    不是进层即写入。若照搬成进层覆盖，1000G 与 +3% 将永远拿不到。
+#    cell_now 字段同样证实：cell_now=obj174/obj152，draw_obj=173/151。
+KEEP_STATIC_NPC_CELLS = {(2, 11, 4), (2, 11, 7)}
+
 # ✅ 14F(1,3) 红钥匙（见 BOSS 的第二把钥匙，8F 那把已用于 10F 红门）
 #    Java MTower.java:3801-3808 实证：该格原版地形值是 **3（暗墙）**，并非实墙。
 #    进入 14F 且周围三格(mapObject[14][40/42]、[15][41])清空后执行：
@@ -322,6 +328,8 @@ class World:
                 continue                                  # 属于 3F 剧本，触发时才放
             if (f, x, y) in BOSS_DOOR_CELLS:
                 continue                                  # ✅ 红门保持 obj27，须红钥匙开启（见 BOSS 的门槛）
+            if (f, x, y) in KEEP_STATIC_NPC_CELLS:
+                continue                                  # ✅ 2F 奖励 NPC 保持静态 obj174/152（对话后才替换）
             base = self.cells.get((f, x, y), 0)
             if base and TYPE.get(oatr(base, 3)) == 'MONSTER':
                 continue                                  # ✅ 该格静态是怪/BOSS，事件写入不得覆盖（否则 BOSS 消失、怪免打）
