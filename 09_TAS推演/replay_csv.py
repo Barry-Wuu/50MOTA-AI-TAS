@@ -17,6 +17,8 @@ def replay(fn, maxrows=None, quiet=False):
     rows = list(csv.DictReader(io.open(SRC + fn, encoding='utf-8', errors='replace')))
     if maxrows:
         rows = rows[:maxrows]
+    # 兼容 def/dfn 两种列名
+    def_col = 'def' if 'def' in rows[0] else 'dfn'
     w = M.World.new()
     h = w.hero
     bad = []
@@ -25,6 +27,15 @@ def replay(fn, maxrows=None, quiet=False):
     for i, r in enumerate(rows):
         tf, tx, ty = int(r['floor']), int(r['x']), int(r['y'])
         ev = (r['event'] or '').strip()
+        # ✅ 祭坛菜单无法从动作方向推断：从事件文本识别本次献祭的 policy
+        #    （'祭坛献金20G → dfn+10' / 'atk+10' / 'hp+200'）
+        if '祭坛献金' in ev:
+            if 'dfn+10' in ev:
+                w.altar_policy = 'dfn'
+            elif 'atk+10' in ev:
+                w.altar_policy = 'atk'
+            elif 'hp+200' in ev:
+                w.altar_policy = 'hp'
         nxt = None
         if i + 1 < len(rows):
             nf, nx, ny = int(rows[i + 1]['floor']), int(rows[i + 1]['x']), int(rows[i + 1]['y'])
@@ -39,7 +50,7 @@ def replay(fn, maxrows=None, quiet=False):
                 if (hh.f, hh.x, hh.y) != (tf, tx, ty):
                     continue
                 sc = 0
-                for k, cur in (('hp', hh.hp), ('atk', hh.atk), ('def', hh.dfn), ('gold', hh.gold)):
+                for k, cur in (('hp', hh.hp), ('atk', hh.atk), (def_col, hh.dfn), ('gold', hh.gold)):
                     if cur == int(r[k]):
                         sc += 1
                 for k, kk in (('ky', 'y'), ('kb', 'b'), ('kr', 'r')):
@@ -57,7 +68,7 @@ def replay(fn, maxrows=None, quiet=False):
             w.move(*ok)
         # 比对
         mism = []
-        for k, cur in (('hp', h.hp), ('atk', h.atk), ('def', h.dfn), ('gold', h.gold)):
+        for k, cur in (('hp', h.hp), ('atk', h.atk), (def_col, h.dfn), ('gold', h.gold)):
             want = int(r[k])
             if cur != want:
                 mism.append('%s 记录%s 实得%s' % (k, want, cur))
