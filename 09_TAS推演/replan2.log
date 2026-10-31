@@ -1,0 +1,18 @@
+﻿剧本段完成: {'hp': 400, 'atk': 10, 'dfn': 10, 'gold': 4, 'ky': 0, 'kb': 0, 'kr': 0} pos 2 1 10
+
+--- 阶段 1：2F 越狱 → 3F 拿蓝钥匙 / 蓝药 ---
+ok {'hp': 400, 'atk': 10, 'dfn': 10, 'gold': 4, 'ky': 0, 'kb': 0, 'kr': 0}
+python : Traceback (most recent call last):
+At line:15 char:1497
++ ... es\@vscode\ripgrep\bin'; python replan2.py > replan2.log 2>&1; Get-Co ...
++                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "D:\B++\WorkBuddy\mota_tas_tmp2\repo\09_TAS推演\replan2.py", line 369, in <module>
+    print('3F 扫图次数', sweep())
+  File "D:\B++\WorkBuddy\mota_tas_tmp2\repo\09_TAS推演\replan2.py", line 292, in sweep
+    dist, prev = dijkstra_floor(allow_altar=altar_ready())
+  File "D:\B++\WorkBuddy\mota_tas_tmp2\repo\09_TAS推演\replan2.py", line 195, in dijkstra_floor
+    prev[v] = u
+MemoryError

@@ -1,0 +1,558 @@
+=== 越狱完成局面 ===
+  2F(1,10)  HP400 ATK10 DEF10 GOLD4  黄0 蓝0 红0
+  道具: []
+
+========================================================================
+1F  up/down=((1, 1), None)
+       0  1  2  3  4  5  6  7  8  9 10 11 12
+y0    #  #  #  #  #  #  #  #  #  #  #  #  #
+y1    #  S  .  .  .  .  .  .  .  .  .  .  #
+y2    #  #  #  #  #  #  #  #  #  #  #  .  #
+y3    #  h  .  .  y  .  #  a  k  .  #  .  #
+y4    #  .  c  .  #  .  #  d  h  .  #  .  #
+y5    #  #  y  #  #  .  #  #  #  y  #  .  #
+y6    #  k  .  .  #  .  y  v  m  v  #  .  #
+y7    #  .  b  .  #  .  #  #  #  #  #  .  #
+y8    #  #  y  #  #  .  .  .  .  .  .  .  #
+y9    #  .  .  .  #  #  .  #  #  #  y  #  #
+y10   #  h  .  k  #  .  .  .  #  .  v  .  #
+y11   #  h  o  k  #  .  .  .  #  s  H  s  #
+y12   #  #  #  #  #  #  #  #  #  #  #  #  #
+--- 剩余物件 ---
+  ( 1, 3) obj11   赤い回復薬を手に入れた。 STATUS   HP+50 ATK+0 DEF+0
+  ( 4, 3) obj2                 DOOR     
+  ( 7, 3) obj13   赤のクリスタルを手に入れ STATUS   HP+0 ATK+1 DEF+0
+  ( 8, 3) obj1    扉の鍵を手に入れた。   KEY      
+  ( 2, 4) obj9    スケルトンＣ       MONSTER  hp50 atk42 def6 g6
+  ( 7, 4) obj14   青のクリスタルを手に入れ STATUS   HP+0 ATK+0 DEF+1
+  ( 8, 4) obj11   赤い回復薬を手に入れた。 STATUS   HP+50 ATK+0 DEF+0
+  ( 2, 5) obj2                 DOOR     
+  ( 9, 5) obj2                 DOOR     
+  ( 1, 6) obj1    扉の鍵を手に入れた。   KEY      
+  ( 6, 6) obj2                 DOOR     
+  ( 7, 6) obj7    バット          MONSTER  hp35 atk38 def3 g3
+  ( 8, 6) obj8    僧　侶          MONSTER  hp60 atk32 def8 g5
+  ( 9, 6) obj7    バット          MONSTER  hp35 atk38 def3 g3
+  ( 2, 7) obj10   スケルトンＢ       MONSTER  hp55 atk52 def12 g8
+  ( 2, 8) obj2                 DOOR     
+  (10, 9) obj2                 DOOR     
+  ( 1,10) obj11   赤い回復薬を手に入れた。 STATUS   HP+50 ATK+0 DEF+0
+  ( 3,10) obj1    扉の鍵を手に入れた。   KEY      
+  (10,10) obj7    バット          MONSTER  hp35 atk38 def3 g3
+  ( 1,11) obj11   赤い回復薬を手に入れた。 STATUS   HP+50 ATK+0 DEF+0
+  ( 2,11) obj26   飛翔のオーブを手に入れた ITEM     
+  ( 3,11) obj1    扉の鍵を手に入れた。   KEY      
+  ( 9,11) obj5    Ｇスライム        MONSTER  hp35 atk18 def1 g1
+  (10,11) obj12   青い回復薬を手に入れた。 STATUS   HP+200 ATK+0 DEF+0
+  (11,11) obj5    Ｇスライム        MONSTER  hp35 atk18 def1 g1
+
+========================================================================
+2F  up/down=((1, 11), (1, 1))
+       0  1  2  3  4  5  6  7  8  9 10 11 12
+y0    #  #  #  #  #  #  #  #  #  #  #  #  #
+y1    #  S  .  b  .  .  .  .  .  .  .  .  #
+y2    #  .  .  #  #  .  G  .  G  .  #  #  #
+y3    #  .  #  #  #  #  #  .  #  #  #  #  #
+y4    #  .  #  k  k  #  .  .  .  #  .  n  #
+y5    #  .  #  k  .  %  .  .  .  %  .  .  #
+y6    #  .  #  #  #  #  .  .  .  #  #  #  #
+y7    #  .  .  .  .  #  .  .  .  #  .  n  #
+y8    #  .  #  .  .  %  .  .  .  %  .  .  #
+y9    #  .  #  #  #  #  .  .  .  #  #  #  #
+y10   #  .  #  H  H  #  .  .  .  #  .  .  #
+y11   #  S  #  H  .  %  .  .  .  %  .  n  #
+y12   #  #  #  #  #  #  #  #  #  #  #  #  #
+--- 剩余物件 ---
+  ( 3, 1) obj4                 DOOR     
+  ( 6, 2) obj15   門番Ｂ          MONSTER  hp100 atk180 def110 g100
+  ( 8, 2) obj15   門番Ｂ          MONSTER  hp100 atk180 def110 g100
+  ( 3, 4) obj1    扉の鍵を手に入れた。   KEY      
+  ( 4, 4) obj1    扉の鍵を手に入れた。   KEY      
+  (11, 4) obj174  「やあ、助けてくれてあり MESSAGE  
+  ( 3, 5) obj1    扉の鍵を手に入れた。   KEY      
+  ( 5, 5) obj19                NORMAL   
+  ( 9, 5) obj19                NORMAL   
+  (11, 7) obj152  「おお、助けてくれてあり MESSAGE  
+  ( 5, 8) obj19                NORMAL   
+  ( 9, 8) obj19                NORMAL   
+  ( 3,10) obj12   青い回復薬を手に入れた。 STATUS   HP+200 ATK+0 DEF+0
+  ( 4,10) obj12   青い回復薬を手に入れた。 STATUS   HP+200 ATK+0 DEF+0
+  ( 3,11) obj12   青い回復薬を手に入れた。 STATUS   HP+200 ATK+0 DEF+0
+  ( 5,11) obj19                NORMAL   
+  ( 9,11) obj19                NORMAL   
+  (11,11) obj88   盗賊「よおっ！無事だった MESSAGE  
+
+========================================================================
+3F  up/down=((11, 11), (1, 11))
+       0  1  2  3  4  5  6  7  8  9 10 11 12
+y0    #  #  #  #  #  #  #  #  #  #  #  #  #
+y1    #  k  d  #  k  H  k  #  .  #  .  h  #
+y2    #  .  h  #  H  k  H  #  .  y  v  .  #
+y3    #  m  .  #  k  K  k  #  .  #  #  #  #
+y4    #  y  #  #  #  .  #  #  .  #  .  n  #
+y5    #  .  .  v  .  .  .  s  .  .  .  .  #
+y6    #  y  #  #  .  .  .  #  .  #  #  #  #
+y7    #  c  .  #  #  .  #  #  .  #  .  h  #
+y8    #  .  k  #  .  .  .  #  .  y  m  k  #
+y9    #  h  a  #  .  .  .  #  .  #  #  #  #
+y10   #  #  #  #  #  .  #  #  q  #  .  .  #
+y11   #  S  .  .  .  .  .  #  .  y  .  S  #
+y12   #  #  #  #  #  #  #  #  #  #  #  #  #
+--- 剩余物件 ---
+  ( 1, 1) obj1    扉の鍵を手に入れた。   KEY      
+  ( 2, 1) obj14   青のクリスタルを手に入れ STATUS   HP+0 ATK+0 DEF+1
+  ( 4, 1) obj1    扉の鍵を手に入れた。   KEY      
+  ( 5, 1) obj12   青い回復薬を手に入れた。 STATUS   HP+200 ATK+0 DEF+0
+  ( 6, 1) obj1    扉の鍵を手に入れた。   KEY      
+  (11, 1) obj11   赤い回復薬を手に入れた。 STATUS   HP+50 ATK+0 DEF+0
+  ( 2, 2) obj11   赤い回復薬を手に入れた。 STATUS   HP+50 ATK+0 DEF+0
+  ( 4, 2) obj12   青い回復薬を手に入れた。 STATUS   HP+200 ATK+0 DEF+0
+  ( 5, 2) obj1    扉の鍵を手に入れた。   KEY      
+  ( 6, 2) obj12   青い回復薬を手に入れた。 STATUS   HP+200 ATK+0 DEF+0
+  ( 9, 2) obj2                 DOOR     
+  (10, 2) obj7    バット          MONSTER  hp35 atk38 def3 g3
+  ( 1, 3) obj8    僧　侶          MONSTER  hp60 atk32 def8 g5
+  ( 4, 3) obj1    扉の鍵を手に入れた。   KEY      
+  ( 5, 3) obj3    青色の扉の鍵を手に入れた KEY      
+  ( 6, 3) obj1    扉の鍵を手に入れた。   KEY      
+  ( 1, 4) obj2                 DOOR     
+  (11, 4) obj153  「おぬしにこの勇者のオー MESSAGE  
+  ( 3, 5) obj7    バット          MONSTER  hp35 atk38 def3 g3
+  ( 7, 5) obj5    Ｇスライム        MONSTER  hp35 atk18 def1 g1
+  ( 1, 6) obj2                 DOOR     
+  ( 1, 7) obj9    スケルトンＣ       MONSTER  hp50 atk42 def6 g6
+  (11, 7) obj11   赤い回復薬を手に入れた。 STATUS   HP+50 ATK+0 DEF+0
+  ( 2, 8) obj1    扉の鍵を手に入れた。   KEY      
+  ( 9, 8) obj2                 DOOR     
+  (10, 8) obj8    僧　侶          MONSTER  hp60 atk32 def8 g5
+  (11, 8) obj1    扉の鍵を手に入れた。   KEY      
+  ( 1, 9) obj11   赤い回復薬を手に入れた。 STATUS   HP+50 ATK+0 DEF+0
+  ( 2, 9) obj13   赤のクリスタルを手に入れ STATUS   HP+0 ATK+1 DEF+0
+  ( 8,10) obj6    Ｒスライム        MONSTER  hp45 atk20 def2 g2
+  ( 9,11) obj2                 DOOR     
+
+========================================================================
+4F  up/down=((1, 11), (11, 11))
+       0  1  2  3  4  5  6  7  8  9 10 11 12
+y0    #  #  #  #  #  #  #  #  #  #  #  #  #
+y1    #  .  K  .  #  ?  T  ?  #  .  n  .  #
+y2    #  h  .  k  #  .  .  .  #  k  .  H  #
+y3    #  .  .  .  #  .  .  .  #  .  b  .  #
+y4    #  #  y  #  #  #  b  #  #  #  y  #  #
+y5    #  .  m  .  y  .  q  .  .  c  .  .  #
+y6    #  .  .  .  #  #  #  #  #  #  #  #  #
+y7    #  q  .  s  .  .  .  .  .  .  y  .  #
+y8    #  y  #  #  y  #  #  #  y  #  #  .  #
+y9    #  .  #  .  v  .  #  .  m  .  #  .  #
+y10   #  .  #  s  .  k  #  a  .  h  #  .  #
+y11   #  S  #  k  s  k  #  .  s  .  #  S  #
+y12   #  #  #  #  #  #  #  #  #  #  #  #  #
+--- 剩余物件 ---
+  ( 2, 1) obj3    青色の扉の鍵を手に入れた KEY      
+  ( 5, 1) obj21                NORMAL   
+  ( 6, 1) obj22   「この祭壇に       SAIDAN   
+  ( 7, 1) obj23                NORMAL   
+  (10, 1) obj175  「この塔には鍵で開けられ MESSAGE  
+  ( 1, 2) obj11   赤い回復薬を手に入れた。 STATUS   HP+50 ATK+0 DEF+0
+  ( 3, 2) obj1    扉の鍵を手に入れた。   KEY      
+  ( 9, 2) obj1    扉の鍵を手に入れた。   KEY      
+  (11, 2) obj12   青い回復薬を手に入れた。 STATUS   HP+200 ATK+0 DEF+0
+  (10, 3) obj10   スケルトンＢ       MONSTER  hp55 atk52 def12 g8
+  ( 2, 4) obj2                 DOOR     
+  ( 6, 4) obj4                 DOOR     
+  (10, 4) obj2                 DOOR     
+  ( 2, 5) obj8    僧　侶          MONSTER  hp60 atk32 def8 g5
+  ( 4, 5) obj2                 DOOR     
+  ( 6, 5) obj6    Ｒスライム        MONSTER  hp45 atk20 def2 g2
+  ( 9, 5) obj9    スケルトンＣ       MONSTER  hp50 atk42 def6 g6
+  ( 1, 7) obj6    Ｒスライム        MONSTER  hp45 atk20 def2 g2
+  ( 3, 7) obj5    Ｇスライム        MONSTER  hp35 atk18 def1 g1
+  (10, 7) obj2                 DOOR     
+  ( 1, 8) obj2                 DOOR     
+  ( 4, 8) obj2                 DOOR     
+  ( 8, 8) obj2                 DOOR     
+  ( 4, 9) obj7    バット          MONSTER  hp35 atk38 def3 g3
+  ( 8, 9) obj8    僧　侶          MONSTER  hp60 atk32 def8 g5
+  ( 3,10) obj5    Ｇスライム        MONSTER  hp35 atk18 def1 g1
+  ( 5,10) obj1    扉の鍵を手に入れた。   KEY      
+  ( 7,10) obj13   赤のクリスタルを手に入れ STATUS   HP+0 ATK+1 DEF+0
+  ( 9,10) obj11   赤い回復薬を手に入れた。 STATUS   HP+50 ATK+0 DEF+0
+  ( 3,11) obj1    扉の鍵を手に入れた。   KEY      
+  ( 4,11) obj5    Ｇスライム        MONSTER  hp35 atk18 def1 g1
+  ( 5,11) obj1    扉の鍵を手に入れた。   KEY      
+  ( 8,11) obj5    Ｇスライム        MONSTER  hp35 atk18 def1 g1
+
+========================================================================
+5F  up/down=((1, 1), (1, 11))
+       0  1  2  3  4  5  6  7  8  9 10 11 12
+y0    #  #  #  #  #  #  #  #  #  #  #  #  #
+y1    #  S  #  .  q  y  .  #  .  .  y  .  #
+y2    #  .  #  .  .  #  k  #  s  s  #  q  #
+y3    #  .  y  v  .  #  .  #  k  k  #  .  #
+y4    #  #  #  #  y  #  v  #  k  k  #  .  #
+y5    #  k  .  m  .  #  .  #  #  #  #  .  #
+y6    #  k  .  .  v  #  .  s  .  .  .  .  #
+y7    #  #  b  #  #  #  .  #  #  #  #  q  #
+y8    #  .  .  .  .  #  s  #  .  .  .  .  #
+y9    #  d  k  h  o  #  .  #  y  #  #  #  #
+y10   #  #  #  #  #  #  .  #  .  #  .  .  #
+y11   #  S  .  .  .  .  .  #  .  ?  .  W  #
+y12   #  #  #  #  #  #  #  #  #  #  #  #  #
+--- 剩余物件 ---
+  ( 4, 1) obj6    Ｒスライム        MONSTER  hp45 atk20 def2 g2
+  ( 5, 1) obj2                 DOOR     
+  (10, 1) obj2                 DOOR     
+  ( 6, 2) obj1    扉の鍵を手に入れた。   KEY      
+  ( 8, 2) obj5    Ｇスライム        MONSTER  hp35 atk18 def1 g1
+  ( 9, 2) obj5    Ｇスライム        MONSTER  hp35 atk18 def1 g1
+  (11, 2) obj6    Ｒスライム        MONSTER  hp45 atk20 def2 g2
+  ( 2, 3) obj2                 DOOR     
+  ( 3, 3) obj7    バット          MONSTER  hp35 atk38 def3 g3
+  ( 8, 3) obj1    扉の鍵を手に入れた。   KEY      
+  ( 9, 3) obj1    扉の鍵を手に入れた。   KEY      
+  ( 4, 4) obj2                 DOOR     
+  ( 6, 4) obj7    バット          MONSTER  hp35 atk38 def3 g3
+  ( 8, 4) obj1    扉の鍵を手に入れた。   KEY      
+  ( 9, 4) obj1    扉の鍵を手に入れた。   KEY      
+  ( 1, 5) obj1    扉の鍵を手に入れた。   KEY      
+  ( 3, 5) obj8    僧　侶          MONSTER  hp60 atk32 def8 g5
+  ( 1, 6) obj1    扉の鍵を手に入れた。   KEY      
+  ( 4, 6) obj7    バット          MONSTER  hp35 atk38 def3 g3
+  ( 7, 6) obj5    Ｇスライム        MONSTER  hp35 atk18 def1 g1
+  ( 2, 7) obj10   スケルトンＢ       MONSTER  hp55 atk52 def12 g8
+  (11, 7) obj6    Ｒスライム        MONSTER  hp45 atk20 def2 g2
+  ( 6, 8) obj5    Ｇスライム        MONSTER  hp35 atk18 def1 g1
+  ( 1, 9) obj14   青のクリスタルを手に入れ STATUS   HP+0 ATK+0 DEF+1
+  ( 2, 9) obj1    扉の鍵を手に入れた。   KEY      
+  ( 3, 9) obj11   赤い回復薬を手に入れた。 STATUS   HP+50 ATK+0 DEF+0
+  ( 4, 9) obj25   知恵のオーブを手に入れた ITEM     
+  ( 8, 9) obj2                 DOOR     
+  ( 9,11) obj89   壁がくずれた！      DOOR     
+  (11,11) obj30   鉄の剣を手に入れた。攻撃 STATUS   HP+0 ATK+10 DEF+0
+
+========================================================================
+6F  up/down=((11, 11), (1, 1))
+       0  1  2  3  4  5  6  7  8  9 10 11 12
+y0    #  #  #  #  #  #  #  #  #  #  #  #  #
+y1    #  S  #  k  k  #  .  m  .  k  s  .  #
+y2    #  .  #  k  k  #  .  #  #  #  #  y  #
+y3    #  .  #  #  q  #  .  #  h  .  c  .  #
+y4    #  .  y  y  .  y  .  #  $  .  .  v  #
+y5    #  .  #  #  #  #  .  #  #  #  #  #  #
+y6    #  .  .  q  m  .  k  .  c  b  .  .  #
+y7    #  #  #  #  #  #  .  #  #  #  #  .  #
+y8    #  m  .  .  n  #  .  y  y  .  y  .  #
+y9    #  .  v  .  d  #  .  #  #  q  #  q  #
+y10   #  y  #  #  #  #  .  #  .  .  #  .  #
+y11   #  .  s  .  .  c  .  #  h  h  #  S  #
+y12   #  #  #  #  #  #  #  #  #  #  #  #  #
+--- 剩余物件 ---
+  ( 3, 1) obj1    扉の鍵を手に入れた。   KEY      
+  ( 4, 1) obj1    扉の鍵を手に入れた。   KEY      
+  ( 7, 1) obj8    僧　侶          MONSTER  hp60 atk32 def8 g5
+  ( 9, 1) obj1    扉の鍵を手に入れた。   KEY      
+  (10, 1) obj5    Ｇスライム        MONSTER  hp35 atk18 def1 g1
+  ( 3, 2) obj1    扉の鍵を手に入れた。   KEY      
+  ( 4, 2) obj1    扉の鍵を手に入れた。   KEY      
+  (11, 2) obj2                 DOOR     
+  ( 4, 3) obj6    Ｒスライム        MONSTER  hp45 atk20 def2 g2
+  ( 8, 3) obj11   赤い回復薬を手に入れた。 STATUS   HP+50 ATK+0 DEF+0
+  (10, 3) obj9    スケルトンＣ       MONSTER  hp50 atk42 def6 g6
+  ( 2, 4) obj2                 DOOR     
+  ( 3, 4) obj2                 DOOR     
+  ( 5, 4) obj2                 DOOR     
+  ( 8, 4) obj18   「紫の鍵を大特価の５０Ｇ SELL     
+  (11, 4) obj7    バット          MONSTER  hp35 atk38 def3 g3
+  ( 3, 6) obj6    Ｒスライム        MONSTER  hp45 atk20 def2 g2
+  ( 4, 6) obj8    僧　侶          MONSTER  hp60 atk32 def8 g5
+  ( 6, 6) obj1    扉の鍵を手に入れた。   KEY      
+  ( 8, 6) obj9    スケルトンＣ       MONSTER  hp50 atk42 def6 g6
+  ( 9, 6) obj10   スケルトンＢ       MONSTER  hp55 atk52 def12 g8
+  ( 1, 8) obj8    僧　侶          MONSTER  hp60 atk32 def8 g5
+  ( 4, 8) obj42   「商人から物を買うと、あ MESSAGE  
+  ( 7, 8) obj2                 DOOR     
+  ( 8, 8) obj2                 DOOR     
+  (10, 8) obj2                 DOOR     
+  ( 2, 9) obj7    バット          MONSTER  hp35 atk38 def3 g3
+  ( 4, 9) obj14   青のクリスタルを手に入れ STATUS   HP+0 ATK+0 DEF+1
+  ( 9, 9) obj6    Ｒスライム        MONSTER  hp45 atk20 def2 g2
+  (11, 9) obj6    Ｒスライム        MONSTER  hp45 atk20 def2 g2
+  ( 1,10) obj2                 DOOR     
+  ( 2,11) obj5    Ｇスライム        MONSTER  hp35 atk18 def1 g1
+  ( 5,11) obj9    スケルトンＣ       MONSTER  hp50 atk42 def6 g6
+  ( 8,11) obj11   赤い回復薬を手に入れた。 STATUS   HP+50 ATK+0 DEF+0
+  ( 9,11) obj11   赤い回復薬を手に入れた。 STATUS   HP+50 ATK+0 DEF+0
+
+========================================================================
+7F  up/down=((1, 1), (11, 11))
+       0  1  2  3  4  5  6  7  8  9 10 11 12
+y0    #  #  #  #  #  #  #  #  #  #  #  #  #
+y1    #  S  #  a  #  .  $  .  #  k  #  s  #
+y2    #  .  #  h  #  .  .  .  #  k  #  q  #
+y3    #  .  #  v  #  q  #  b  #  h  #  s  #
+y4    #  .  #  .  #  .  #  .  #  .  #  .  #
+y5    #  y  #  y  #  b  #  y  #  c  #  y  #
+y6    #  .  b  .  m  .  .  .  .  .  .  .  #
+y7    #  y  #  y  #  y  #  y  #  b  #  y  #
+y8    #  .  #  .  #  .  #  .  #  .  #  .  #
+y9    #  .  #  .  #  v  #  q  #  H  #  .  #
+y10   #  s  #  s  #  k  #  m  #  k  #  .  #
+y11   #  .  q  .  #  k  #  H  #  k  #  S  #
+y12   #  #  #  #  #  #  #  #  #  #  #  #  #
+--- 剩余物件 ---
+  ( 3, 1) obj13   赤のクリスタルを手に入れ STATUS   HP+0 ATK+1 DEF+0
+  ( 6, 1) obj41   「鍵を５個セットで５０Ｇ SELL     
+  ( 9, 1) obj1    扉の鍵を手に入れた。   KEY      
+  (11, 1) obj5    Ｇスライム        MONSTER  hp35 atk18 def1 g1
+  ( 3, 2) obj11   赤い回復薬を手に入れた。 STATUS   HP+50 ATK+0 DEF+0
+  ( 9, 2) obj1    扉の鍵を手に入れた。   KEY      
+  (11, 2) obj6    Ｒスライム        MONSTER  hp45 atk20 def2 g2
+  ( 3, 3) obj7    バット          MONSTER  hp35 atk38 def3 g3
+  ( 5, 3) obj6    Ｒスライム        MONSTER  hp45 atk20 def2 g2
+  ( 7, 3) obj10   スケルトンＢ       MONSTER  hp55 atk52 def12 g8
+  ( 9, 3) obj11   赤い回復薬を手に入れた。 STATUS   HP+50 ATK+0 DEF+0
+  (11, 3) obj5    Ｇスライム        MONSTER  hp35 atk18 def1 g1
+  ( 1, 5) obj2                 DOOR     
+  ( 3, 5) obj2                 DOOR     
+  ( 5, 5) obj4                 DOOR     
+  ( 7, 5) obj2                 DOOR     
+  ( 9, 5) obj9    スケルトンＣ       MONSTER  hp50 atk42 def6 g6
+  (11, 5) obj2                 DOOR     
+  ( 2, 6) obj10   スケルトンＢ       MONSTER  hp55 atk52 def12 g8
+  ( 4, 6) obj8    僧　侶          MONSTER  hp60 atk32 def8 g5
+  ( 1, 7) obj2                 DOOR     
+  ( 3, 7) obj2                 DOOR     
+  ( 5, 7) obj2                 DOOR     
+  ( 7, 7) obj2                 DOOR     
+  ( 9, 7) obj10   スケルトンＢ       MONSTER  hp55 atk52 def12 g8
+  (11, 7) obj2                 DOOR     
+  ( 5, 9) obj7    バット          MONSTER  hp35 atk38 def3 g3
+  ( 7, 9) obj6    Ｒスライム        MONSTER  hp45 atk20 def2 g2
+  ( 9, 9) obj12   青い回復薬を手に入れた。 STATUS   HP+200 ATK+0 DEF+0
+  ( 1,10) obj5    Ｇスライム        MONSTER  hp35 atk18 def1 g1
+  ( 3,10) obj5    Ｇスライム        MONSTER  hp35 atk18 def1 g1
+  ( 5,10) obj1    扉の鍵を手に入れた。   KEY      
+  ( 7,10) obj8    僧　侶          MONSTER  hp60 atk32 def8 g5
+  ( 9,10) obj1    扉の鍵を手に入れた。   KEY      
+  ( 2,11) obj6    Ｒスライム        MONSTER  hp45 atk20 def2 g2
+  ( 5,11) obj1    扉の鍵を手に入れた。   KEY      
+  ( 7,11) obj12   青い回復薬を手に入れた。 STATUS   HP+200 ATK+0 DEF+0
+  ( 9,11) obj1    扉の鍵を手に入れた。   KEY      
+
+========================================================================
+8F  up/down=((6, 1), (1, 1))
+       0  1  2  3  4  5  6  7  8  9 10 11 12
+y0    #  #  #  #  #  #  #  #  #  #  #  #  #
+y1    #  S  .  y  y  .  S  .  #  k  .  k  #
+y2    #  .  .  #  #  .  .  s  #  .  R  .  #
+y3    #  y  #  #  #  #  y  #  #  H  .  h  #
+y4    #  .  #  k  k  k  .  .  #  #  ?  #  #
+y5    #  h  #  #  #  #  #  m  #  g  .  g  #
+y6    #  .  q  s  q  .  #  .  #  .  .  .  #
+y7    #  #  #  #  #  y  #  v  #  #  y  #  #
+y8    #  .  .  .  v  .  c  .  m  .  .  .  #
+y9    #  y  #  #  #  #  #  #  #  #  #  y  #
+y10   #  s  .  #  a  k  #  K  h  #  .  c  #
+y11   #  .  v  b  k  d  #  k  .  y  b  .  #
+y12   #  #  #  #  #  #  #  #  #  #  #  #  #
+--- 剩余物件 ---
+  ( 3, 1) obj2                 DOOR     
+  ( 4, 1) obj2                 DOOR     
+  ( 9, 1) obj1    扉の鍵を手に入れた。   KEY      
+  (11, 1) obj1    扉の鍵を手に入れた。   KEY      
+  ( 7, 2) obj5    Ｇスライム        MONSTER  hp35 atk18 def1 g1
+  (10, 2) obj28   赤色の扉の鍵を手に入れた KEY      
+  ( 1, 3) obj2                 DOOR     
+  ( 6, 3) obj2                 DOOR     
+  ( 9, 3) obj12   青い回復薬を手に入れた。 STATUS   HP+200 ATK+0 DEF+0
+  (11, 3) obj11   赤い回復薬を手に入れた。 STATUS   HP+50 ATK+0 DEF+0
+  ( 3, 4) obj1    扉の鍵を手に入れた。   KEY      
+  ( 4, 4) obj1    扉の鍵を手に入れた。   KEY      
+  ( 5, 4) obj1    扉の鍵を手に入れた。   KEY      
+  (10, 4) obj20                NORMAL   
+  ( 1, 5) obj11   赤い回復薬を手に入れた。 STATUS   HP+50 ATK+0 DEF+0
+  ( 7, 5) obj8    僧　侶          MONSTER  hp60 atk32 def8 g5
+  ( 9, 5) obj29   門番Ｃ          MONSTER  hp50 atk48 def22 g12
+  (11, 5) obj29   門番Ｃ          MONSTER  hp50 atk48 def22 g12
+  ( 2, 6) obj6    Ｒスライム        MONSTER  hp45 atk20 def2 g2
+  ( 3, 6) obj5    Ｇスライム        MONSTER  hp35 atk18 def1 g1
+  ( 4, 6) obj6    Ｒスライム        MONSTER  hp45 atk20 def2 g2
+  ( 5, 7) obj2                 DOOR     
+  ( 7, 7) obj7    バット          MONSTER  hp35 atk38 def3 g3
+  (10, 7) obj2                 DOOR     
+  ( 4, 8) obj7    バット          MONSTER  hp35 atk38 def3 g3
+  ( 6, 8) obj9    スケルトンＣ       MONSTER  hp50 atk42 def6 g6
+  ( 8, 8) obj8    僧　侶          MONSTER  hp60 atk32 def8 g5
+  ( 1, 9) obj2                 DOOR     
+  (11, 9) obj2                 DOOR     
+  ( 1,10) obj5    Ｇスライム        MONSTER  hp35 atk18 def1 g1
+  ( 4,10) obj13   赤のクリスタルを手に入れ STATUS   HP+0 ATK+1 DEF+0
+  ( 5,10) obj1    扉の鍵を手に入れた。   KEY      
+  ( 7,10) obj3    青色の扉の鍵を手に入れた KEY      
+  ( 8,10) obj11   赤い回復薬を手に入れた。 STATUS   HP+50 ATK+0 DEF+0
+  (11,10) obj9    スケルトンＣ       MONSTER  hp50 atk42 def6 g6
+  ( 2,11) obj7    バット          MONSTER  hp35 atk38 def3 g3
+  ( 3,11) obj4                 DOOR     
+  ( 4,11) obj1    扉の鍵を手に入れた。   KEY      
+  ( 5,11) obj14   青のクリスタルを手に入れ STATUS   HP+0 ATK+0 DEF+1
+  ( 7,11) obj1    扉の鍵を手に入れた。   KEY      
+  ( 9,11) obj2                 DOOR     
+  (10,11) obj10   スケルトンＢ       MONSTER  hp55 atk52 def12 g8
+
+========================================================================
+9F  up/down=((1, 11), (6, 1))
+       0  1  2  3  4  5  6  7  8  9 10 11 12
+y0    #  #  #  #  #  #  #  #  #  #  #  #  #
+y1    #  .  .  c  y  .  S  .  y  s  .  h  #
+y2    #  .  k  .  #  .  .  .  #  .  s  .  #
+y3    #  b  #  #  #  #  b  #  #  #  #  .  #
+y4    #  .  k  .  #  k  .  k  y  y  .  .  #
+y5    #  d  .  v  y  .  a  .  #  #  ?  #  #
+y6    #  #  #  #  #  #  #  q  #  .  .  b  #
+y7    #  k  .  y  b  k  #  .  #  D  #  .  #
+y8    #  b  .  #  .  .  #  .  #  #  #  y  #
+y9    #  y  #  #  #  y  #  .  #  k  .  m  #
+y10   #  .  h  #  .  c  #  v  #  .  c  .  #
+y11   #  S  .  b  .  .  y  .  y  m  .  h  #
+y12   #  #  #  #  #  #  #  #  #  #  #  #  #
+--- 剩余物件 ---
+  ( 3, 1) obj9    スケルトンＣ       MONSTER  hp50 atk42 def6 g6
+  ( 4, 1) obj2                 DOOR     
+  ( 8, 1) obj2                 DOOR     
+  ( 9, 1) obj5    Ｇスライム        MONSTER  hp35 atk18 def1 g1
+  (11, 1) obj11   赤い回復薬を手に入れた。 STATUS   HP+50 ATK+0 DEF+0
+  ( 2, 2) obj1    扉の鍵を手に入れた。   KEY      
+  (10, 2) obj5    Ｇスライム        MONSTER  hp35 atk18 def1 g1
+  ( 1, 3) obj10   スケルトンＢ       MONSTER  hp55 atk52 def12 g8
+  ( 6, 3) obj4                 DOOR     
+  ( 2, 4) obj1    扉の鍵を手に入れた。   KEY      
+  ( 5, 4) obj1    扉の鍵を手に入れた。   KEY      
+  ( 7, 4) obj1    扉の鍵を手に入れた。   KEY      
+  ( 8, 4) obj2                 DOOR     
+  ( 9, 4) obj2                 DOOR     
+  ( 1, 5) obj14   青のクリスタルを手に入れ STATUS   HP+0 ATK+0 DEF+1
+  ( 3, 5) obj7    バット          MONSTER  hp35 atk38 def3 g3
+  ( 4, 5) obj2                 DOOR     
+  ( 6, 5) obj13   赤のクリスタルを手に入れ STATUS   HP+0 ATK+1 DEF+0
+  (10, 5) obj89   壁がくずれた！      DOOR     
+  ( 7, 6) obj6    Ｒスライム        MONSTER  hp45 atk20 def2 g2
+  (11, 6) obj10   スケルトンＢ       MONSTER  hp55 atk52 def12 g8
+  ( 1, 7) obj1    扉の鍵を手に入れた。   KEY      
+  ( 3, 7) obj2                 DOOR     
+  ( 4, 7) obj10   スケルトンＢ       MONSTER  hp55 atk52 def12 g8
+  ( 5, 7) obj1    扉の鍵を手に入れた。   KEY      
+  ( 9, 7) obj35   鉄の盾を手に入れた。防御 STATUS   HP+0 ATK+0 DEF+10
+  ( 1, 8) obj10   スケルトンＢ       MONSTER  hp55 atk52 def12 g8
+  (11, 8) obj2                 DOOR     
+  ( 1, 9) obj2                 DOOR     
+  ( 5, 9) obj2                 DOOR     
+  ( 9, 9) obj1    扉の鍵を手に入れた。   KEY      
+  (11, 9) obj8    僧　侶          MONSTER  hp60 atk32 def8 g5
+  ( 2,10) obj11   赤い回復薬を手に入れた。 STATUS   HP+50 ATK+0 DEF+0
+  ( 5,10) obj9    スケルトンＣ       MONSTER  hp50 atk42 def6 g6
+  ( 7,10) obj7    バット          MONSTER  hp35 atk38 def3 g3
+  (10,10) obj9    スケルトンＣ       MONSTER  hp50 atk42 def6 g6
+  ( 3,11) obj4                 DOOR     
+  ( 6,11) obj2                 DOOR     
+  ( 8,11) obj2                 DOOR     
+  ( 9,11) obj8    僧　侶          MONSTER  hp60 atk32 def8 g5
+  (11,11) obj11   赤い回復薬を手に入れた。 STATUS   HP+50 ATK+0 DEF+0
+
+========================================================================
+10F  up/down=(None, (1, 11))
+       0  1  2  3  4  5  6  7  8  9 10 11 12
+y0    #  #  #  #  #  #  #  #  #  #  #  #  #
+y1    #  .  .  .  .  .  .  .  .  .  .  .  #
+y2    #  #  #  #  #  .  .  .  #  #  #  #  #
+y3    #  c  c  c  #  #  A  #  #  c  c  c  #
+y4    #  .  b  .  ?  .  .  .  ?  .  b  .  #
+y5    #  #  #  #  #  .  .  .  #  #  #  #  #
+y6    #  c  d  c  #  #  .  #  #  c  a  c  #
+y7    #  .  b  .  #  #  .  #  #  .  b  .  #
+y8    #  .  .  .  #  #  .  #  #  .  .  .  #
+y9    #  y  #  y  #  #  r  #  #  y  #  y  #
+y10   #  .  #  .  #  .  .  .  #  .  #  .  #
+y11   #  S  #  .  m  .  .  .  m  .  #  H  #
+y12   #  #  #  #  #  #  #  #  #  #  #  #  #
+--- 剩余物件 ---
+  ( 1, 3) obj9    スケルトンＣ       MONSTER  hp50 atk42 def6 g6
+  ( 2, 3) obj9    スケルトンＣ       MONSTER  hp50 atk42 def6 g6
+  ( 3, 3) obj9    スケルトンＣ       MONSTER  hp50 atk42 def6 g6
+  ( 6, 3) obj16   スケルトンＡ       MONSTER  hp100 atk65 def15 g30
+  ( 9, 3) obj9    スケルトンＣ       MONSTER  hp50 atk42 def6 g6
+  (10, 3) obj9    スケルトンＣ       MONSTER  hp50 atk42 def6 g6
+  (11, 3) obj9    スケルトンＣ       MONSTER  hp50 atk42 def6 g6
+  ( 2, 4) obj10   スケルトンＢ       MONSTER  hp55 atk52 def12 g8
+  ( 4, 4) obj20                NORMAL   
+  ( 8, 4) obj20                NORMAL   
+  (10, 4) obj10   スケルトンＢ       MONSTER  hp55 atk52 def12 g8
+  ( 1, 6) obj9    スケルトンＣ       MONSTER  hp50 atk42 def6 g6
+  ( 2, 6) obj14   青のクリスタルを手に入れ STATUS   HP+0 ATK+0 DEF+1
+  ( 3, 6) obj9    スケルトンＣ       MONSTER  hp50 atk42 def6 g6
+  ( 9, 6) obj9    スケルトンＣ       MONSTER  hp50 atk42 def6 g6
+  (10, 6) obj13   赤のクリスタルを手に入れ STATUS   HP+0 ATK+1 DEF+0
+  (11, 6) obj9    スケルトンＣ       MONSTER  hp50 atk42 def6 g6
+  ( 2, 7) obj10   スケルトンＢ       MONSTER  hp55 atk52 def12 g8
+  (10, 7) obj10   スケルトンＢ       MONSTER  hp55 atk52 def12 g8
+  ( 1, 9) obj2                 DOOR     
+  ( 3, 9) obj2                 DOOR     
+  ( 6, 9) obj27                DOOR     
+  ( 9, 9) obj2                 DOOR     
+  (11, 9) obj2                 DOOR     
+  ( 4,11) obj8    僧　侶          MONSTER  hp60 atk32 def8 g5
+  ( 8,11) obj8    僧　侶          MONSTER  hp60 atk32 def8 g5
+  (11,11) obj12   青い回復薬を手に入れた。 STATUS   HP+200 ATK+0 DEF+0
+
+========================================================================
+11F  up/down=((11, 11), (6, 11))
+       0  1  2  3  4  5  6  7  8  9 10 11 12
+y0    #  #  #  #  #  #  #  #  #  #  #  #  #
+y1    #  .  .  .  #  a  .  y  .  #  h  k  #
+y2    #  .  D  .  #  .  v  #  Z  #  .  .  #
+y3    #  .  .  .  #  y  #  #  .  y  .  .  #
+y4    #  #  ?  #  #  .  V  #  #  #  #  S  #
+y5    #  M  .  M  #  Z  .  y  M  .  #  .  #
+y6    #  .  .  .  #  #  #  #  .  h  #  .  #
+y7    #  H  .  .  V  .  .  y  S  .  #  .  #
+y8    #  #  b  #  #  #  #  #  #  #  #  V  #
+y9    #  .  V  .  S  y  .  .  .  .  v  .  #
+y10   #  k  .  .  .  #  .  #  #  y  #  .  #
+y11   #  k  k  k  k  #  S  #  H  V  #  S  #
+y12   #  #  #  #  #  #  #  #  #  #  #  #  #
+--- 剩余物件 ---
+  ( 5, 1) obj80   赤のクリスタルを手に入れ STATUS   HP+0 ATK+2 DEF+0
+  ( 7, 1) obj2                 DOOR     
+  (10, 1) obj66   赤い回復薬を手に入れた。 STATUS   HP+100 ATK+0 DEF+0
+  (11, 1) obj1    扉の鍵を手に入れた。   KEY      
+  ( 2, 2) obj36   銀の盾を手に入れた。防御 STATUS   HP+0 ATK+0 DEF+20
+  ( 6, 2) obj7    バット          MONSTER  hp35 atk38 def3 g3
+  ( 8, 2) obj48   ゾンビ          MONSTER  hp260 atk85 def5 g18
+  ( 5, 3) obj2                 DOOR     
+  ( 9, 3) obj2                 DOOR     
+  ( 2, 4) obj20                NORMAL   
+  ( 6, 4) obj47   大バット         MONSTER  hp60 atk100 def8 g12
+  (11, 4) obj45   Ｂスライム        MONSTER  hp130 atk60 def3 g8
+  ( 1, 5) obj46   上級僧侶         MONSTER  hp100 atk95 def30 g22
+  ( 3, 5) obj46   上級僧侶         MONSTER  hp100 atk95 def30 g22
+  ( 5, 5) obj48   ゾンビ          MONSTER  hp260 atk85 def5 g18
+  ( 7, 5) obj2                 DOOR     
+  ( 8, 5) obj46   上級僧侶         MONSTER  hp100 atk95 def30 g22
+  ( 9, 6) obj66   赤い回復薬を手に入れた。 STATUS   HP+100 ATK+0 DEF+0
+  ( 1, 7) obj76   青い回復薬を手に入れた。 STATUS   HP+400 ATK+0 DEF+0
+  ( 4, 7) obj47   大バット         MONSTER  hp60 atk100 def8 g12
+  ( 7, 7) obj2                 DOOR     
+  ( 8, 7) obj45   Ｂスライム        MONSTER  hp130 atk60 def3 g8
+  ( 2, 8) obj4                 DOOR     
+  (11, 8) obj47   大バット         MONSTER  hp60 atk100 def8 g12
+  ( 2, 9) obj47   大バット         MONSTER  hp60 atk100 def8 g12
+  ( 4, 9) obj45   Ｂスライム        MONSTER  hp130 atk60 def3 g8
+  ( 5, 9) obj2                 DOOR     
+  (10, 9) obj7    バット          MONSTER  hp35 atk38 def3 g3
+  ( 1,10) obj1    扉の鍵を手に入れた。   KEY      
+  ( 9,10) obj2                 DOOR     
+  ( 1,11) obj1    扉の鍵を手に入れた。   KEY      
+  ( 2,11) obj1    扉の鍵を手に入れた。   KEY      
+  ( 3,11) obj1    扉の鍵を手に入れた。   KEY      
+  ( 4,11) obj1    扉の鍵を手に入れた。   KEY      
+  ( 8,11) obj76   青い回復薬を手に入れた。 STATUS   HP+400 ATK+0 DEF+0
+  ( 9,11) obj47   大バット         MONSTER  hp60 atk100 def8 g12

@@ -1,0 +1,784 @@
+# -*- coding: utf-8 -*-
+"""把 merged_route.json + 原著贴图渲染成一个自包含的交互式网页。
+- 楼层底图：01_PC98原版_mtower/floors/floor_XX.png（原版美术，无损 WebP 内嵌）
+- 勇者标记：mota_art/MTower.gif 顶行勇者帧（col3,row0）
+输出：1F到31F_推演全过程.html
+"""
+import io, os, json, base64
+from PIL import Image
+
+DED = r'D:/B++/WorkBuddy/mota_tas_tmp2/repo/09_TAS推演/'
+FLOORS_DIR = r'D:/B++/WorkBuddy/mota_tas_tmp2/repo/01_PC98原版_mtower/floors/'
+SHEET = r'D:/B++/WorkBuddy/mota_tas_tmp2/repo/mota_art/MTower.gif'
+
+data = json.load(io.open(DED + 'merged_route.json', encoding='utf-8'))
+
+# 底图里烙死的原勇者：1F(6,11) 与 MTower.gif 正面帧逐像素完全一致（diff 0.00）。
+# 路线第 1 步时勇者已在 (6,10)，所以该格从第一步起就应还原成地面（步序 -1 = 永远覆盖）。
+data.setdefault('cons', {}).setdefault('1', []).insert(0, [6, 11, -1, 'f'])
+
+js = json.dumps(data, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
+
+
+def data_uri(img, **kw):
+    b = io.BytesIO()
+    img.save(b, 'WEBP', **kw)
+    return 'data:image/webp;base64,' + base64.b64encode(b.getvalue()).decode()
+
+
+imgs = {}
+for f in range(1, 32):
+    p = FLOORS_DIR + 'floor_%02d.png' % f
+    imgs[str(f)] = data_uri(Image.open(p).convert('RGBA'), lossless=True)
+
+
+# ---- 每层的"地板贴图"：从该层纯地板格（地形0且无物件）里取最接近中位样板的一格 ----
+import numpy as np
+
+
+def floor_tile(f):
+    fl = data['floors'][str(f)]
+    ter, objs = fl['terrain'], fl['objs']
+    cands = [(x, y) for y in range(13) for x in range(13)
+             if ter[y][x] == 0 and ('%d,%d' % (x, y)) not in objs]
+    if not cands:
+        cands = [(x, y) for y in range(13) for x in range(13) if ter[y][x] == 0]
+    im = Image.open(FLOORS_DIR + 'floor_%02d.png' % f).convert('RGB')
+    a = np.asarray(im).astype(np.int16)
+    tiles = np.stack([a[y * 40:y * 40 + 40, x * 40:x * 40 + 40] for x, y in cands])
+    med = np.median(tiles, axis=0)
+    diffs = np.abs(tiles - med).mean(axis=(1, 2, 3))
+    best = int(np.argmin(diffs))
+    return Image.fromarray(tiles[best].astype(np.uint8))
+
+
+tiles = {str(f): data_uri(floor_tile(f), lossless=True) for f in range(1, 32)}
+tile_js = json.dumps(tiles, ensure_ascii=False, separators=(',', ':'))
+
+sheet = Image.open(SHEET).convert('RGBA')
+# 顶行 40×40 勇者帧（c0 黑底、c1 空，角色从 c2 起）：c2 背面=上，c4 正面=下，c6 朝左，c8 朝右
+HERO_COL = {'↑': 2, '↓': 4, '←': 6, '→': 8}
+hero_js = json.dumps({k: data_uri(sheet.crop((c * 40, 0, c * 40 + 40, 40)), lossless=True)
+                      for k, c in HERO_COL.items()}, ensure_ascii=False)
+
+# 楼梯贴图（与 11F(11,11) 静态上梯格逐像素一致，diff 0.00）：上行 (280,160)、下行 (320,160)
+STAIR_XY = {'u': (280, 160), 'd': (320, 160)}
+stair_js = json.dumps({k: data_uri(sheet.crop((x, y, x + 40, y + 40)), lossless=True)
+                       for k, (x, y) in STAIR_XY.items()}, ensure_ascii=False)
+
+img_js = json.dumps(imgs, ensure_ascii=False, separators=(',', ':'))
+
+HTML = r'''<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>魔塔1 · 1F→31F 推演逐格校验（修正 2F 栅栏门：7F 暴毙）</title>
+<style>
+:root{
+  --bg:#0d1017; --panel:#161a24; --panel2:#1c2130; --line:#293040;
+  --txt:#dfe6f2; --dim:#8b97ad; --accent:#4cc9f0; --gold:#f5c542;
+  --red:#ff5d5d; --green:#3ecf8e; --blue:#4d8dff; --purple:#b07cff; --orange:#ff9f43;
+  --mapsize:min(520px, calc(100vh - 350px));
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--txt);font:13px/1.5 "Segoe UI","Microsoft YaHei",system-ui,sans-serif;
+  display:flex;flex-direction:column;overflow:hidden}
+header{flex:0 0 auto;display:flex;align-items:center;gap:18px;padding:8px 14px;
+  background:linear-gradient(90deg,#11151f,#151a26);border-bottom:1px solid var(--line)}
+header h1{font-size:16px;margin:0;font-weight:600;letter-spacing:.5px;white-space:nowrap}
+header h1 em{color:var(--accent);font-style:normal}
+.chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center;flex:1}
+.chip{background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:3px 10px;
+  font-size:11.5px;color:var(--dim);white-space:nowrap}
+.chip b{color:var(--txt);font-weight:600}
+.chip.ok{border-color:#1f6b4f;color:#9fe8c8}
+.chip.warn{border-color:#7a5a1c;color:#ffd98a}
+main{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 404px;gap:12px;padding:12px;overflow:hidden}
+.leftcol{display:flex;flex-direction:column;gap:12px;min-height:0;overflow:hidden}
+.rightcol{display:flex;flex-direction:column;gap:12px;min-height:0;overflow:auto;padding-right:2px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px}
+.cardhead{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--line)}
+.cardhead h2{font-size:13px;margin:0;font-weight:600;letter-spacing:.4px}
+.cardhead .sub{color:var(--dim);font-size:11.5px}
+.cardhead .sp{flex:1}
+
+/* ---------- 地图（原著贴图） ---------- */
+.mapcard{padding:10px 12px 12px}
+.maprow{display:flex;gap:16px;align-items:flex-start}
+#mapbox{position:relative;flex:0 0 auto;width:var(--mapsize);aspect-ratio:1/1;
+  border:2px solid #3a3f52;border-radius:6px;background:#000 center/100% 100% no-repeat;
+  image-rendering:pixelated;box-shadow:0 4px 18px rgba(0,0,0,.5)}
+#psvg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+#consumeLayer,#patchLayer{position:absolute;inset:0;pointer-events:none;z-index:1}
+.cons{position:absolute;width:7.6923%;height:7.6923%;transform:translate(-50%,-50%);
+  background-image:var(--tile);background-size:100% 100%;background-repeat:no-repeat;
+  image-rendering:pixelated}
+.cons.ku{background-image:var(--up)}
+.cons.kd{background-image:var(--down)}
+#consumeLayer.hint .cons{outline:1px dashed rgba(62,207,142,.9);outline-offset:-1px}
+.patch{position:absolute;width:7.6923%;height:7.6923%;transform:translate(-50%,-50%);
+  border:2px dashed #ff9f43;border-radius:4px;background:rgba(255,159,67,.10);
+  display:flex;align-items:flex-end;justify-content:center}
+.patch span{font-size:9px;color:#ffd9a8;background:rgba(30,18,6,.85);padding:0 3px;border-radius:3px;
+  transform:translateY(6px);white-space:nowrap}
+#marker{position:absolute;width:7.6923%;height:7.6923%;transform:translate(-50%,-50%);z-index:3;
+  pointer-events:none}
+#heroImg{width:100%;height:100%;image-rendering:pixelated;
+  filter:drop-shadow(0 0 5px rgba(76,201,240,.95)) drop-shadow(0 0 12px rgba(76,201,240,.5))}
+#dirbadge{position:absolute;right:-3px;top:-3px;width:15px;height:15px;border-radius:50%;
+  background:#0e2a3a;border:1px solid var(--accent);color:#bfeeff;font-size:10px;line-height:13px;
+  text-align:center;font-weight:700}
+#mapside{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px}
+.floorname{font-size:20px;font-weight:700;letter-spacing:1px}
+.floorname span{font-size:12px;color:var(--dim);font-weight:400;margin-left:6px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.stat{background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:6px 8px}
+.stat i{display:block;font-style:normal;color:var(--dim);font-size:11px}
+.stat b{font-size:14px;color:var(--txt)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 10px;font-size:11px;color:var(--dim)}
+.legend span{display:flex;align-items:center;gap:4px}
+.dot{width:11px;height:11px;border-radius:3px;display:inline-block;border:1px solid #000}
+.toggle{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--dim);cursor:pointer}
+
+/* ---------- 控制条 ---------- */
+.controls{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+.btn{background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:7px;
+  padding:5px 10px;font-size:12px;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:#12384a;border-color:#1d6d8f;color:#bfeeff}
+.btn.primary:hover{background:#164a63}
+#slider{flex:1;min-width:120px;accent-color:var(--accent)}
+#stepno{width:64px;background:#0f131c;border:1px solid var(--line);color:var(--txt);border-radius:6px;
+  padding:4px 6px;font-size:12px;text-align:center}
+.ctrllabel{font-size:11.5px;color:var(--dim);white-space:nowrap}
+
+/* ---------- 步骤表 ---------- */
+.stepcard{flex:1;min-height:150px;display:flex;flex-direction:column;overflow:hidden}
+.stepcard .cardhead{padding:7px 12px}
+.tablewrap{flex:1;overflow:auto}
+table{border-collapse:collapse;width:100%;font-size:12px}
+thead th{position:sticky;top:0;background:#141926;z-index:2;text-align:left;font-weight:600;
+  color:var(--dim);padding:5px 7px;border-bottom:1px solid var(--line);white-space:nowrap;font-size:11.5px}
+tbody td{padding:3px 7px;border-bottom:1px solid #1e2431;white-space:nowrap;vertical-align:middle}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:#1a2030}
+tbody tr.sel{background:#12303f;box-shadow:inset 3px 0 0 var(--accent)}
+tbody tr.mmrow{box-shadow:inset 3px 0 0 var(--gold)}
+tbody tr.mmrow.sel{box-shadow:inset 3px 0 0 var(--gold),inset 0 0 0 1px #1d6d8f}
+tbody tr.blk{box-shadow:inset 3px 0 0 var(--red)}
+tbody tr.invrow{box-shadow:inset 3px 0 0 var(--orange);background:#241a0e}
+tbody tr.deadrow{box-shadow:inset 3px 0 0 var(--red);background:#2a1212}
+tbody tr.unrow td{color:#5f6b80;opacity:.72}
+tbody tr.noterow td{color:var(--dim)}
+td.num{color:var(--dim);text-align:right;font-variant-numeric:tabular-nums}
+td.dir{text-align:center;color:var(--accent);font-weight:700}
+td.ev{max-width:290px;overflow:hidden;text-overflow:ellipsis}
+td.ev .tag{display:inline-block;font-size:10px;padding:0 4px;border-radius:3px;margin-right:4px;background:#233047;color:#9db4d8}
+td.ev .tag.b{background:#3a2020;color:#ffb0b0}
+td.note{color:var(--gold);font-size:11px;max-width:200px;overflow:hidden;text-overflow:ellipsis}
+td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
+.dpos{color:var(--green)} .dneg{color:var(--red)} .d0{color:#55617a}
+.seg{display:inline-block;width:16px;height:16px;line-height:16px;text-align:center;border-radius:4px;
+  font-size:10px;font-weight:700;color:#fff}
+.seg.A{background:#2a6f97}.seg.B{background:#6a4c93}.seg.C{background:#8a5a2b}
+
+/* ---------- 右侧 ---------- */
+.rightcol .card{padding:0}
+.statebody{padding:10px 12px;display:flex;flex-direction:column;gap:9px}
+.stephead{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.stephead .no{font-size:20px;font-weight:700;letter-spacing:.5px}
+.pill{font-size:11px;padding:2px 7px;border-radius:20px;border:1px solid var(--line);color:var(--dim)}
+.pill.ok{border-color:#1f6b4f;color:#9fe8c8;background:#0e2a20}
+.pill.note{border-color:#7a5a1c;color:#ffd98a;background:#2a2110}
+.pill.blocked{background:#3a1414;border-color:#7a2020;color:#ffb0b0}
+.pill.invalid{background:#3a2410;border-color:#8a5a1b;color:#ffc078}
+.pill.dead{background:#3a1414;border-color:#ff2d2d;color:#ffc9c9;font-weight:700}
+.pill.unreachable{background:#20242f;border-color:#39404f;color:#8b97ad}
+.pill.skip{background:#2a2110;border-color:#7a5a1c;color:#ffd98a}
+.evline{font-size:13px;color:var(--txt);word-break:break-all}
+.logline{font-size:11.5px;color:var(--dim);word-break:break-all}
+.posline{font-size:12px;color:var(--dim)}
+.posline b{color:var(--txt)}
+.statgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+.sbox{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:7px 9px}
+.sbox i{display:block;font-style:normal;color:var(--dim);font-size:10.5px;letter-spacing:.5px}
+.sbox .val{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+.sbox .from{font-size:11px;color:#6d7891}
+.sbox .dl{font-size:11.5px;margin-left:4px}
+.keyrow{display:flex;gap:8px}
+.keyrow .kk{flex:1;text-align:center;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:5px}
+.keyrow .kk i{font-style:normal;font-size:10.5px;color:var(--dim);display:block}
+.keyrow .kk b{font-size:15px}
+.warnbox{background:#2a2110;border:1px solid #7a5a1c;border-radius:8px;padding:7px 9px;font-size:11.5px;color:#ffd98a}
+.warnbox b{color:#ffe6a8}
+.okbox{background:#0e2a20;border:1px solid #1f6b4f;border-radius:8px;padding:7px 9px;font-size:11.5px;color:#9fe8c8}
+
+.floorchips{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:10px 12px}
+.fchip{background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:5px 6px;cursor:pointer;text-align:center}
+.fchip:hover{border-color:var(--accent)}
+.fchip b{display:block;font-size:13px}
+.fchip i{font-style:normal;font-size:10px;color:var(--dim)}
+.fchip.active{border-color:var(--accent);background:#12303f;box-shadow:0 0 0 1px rgba(76,201,240,.3)}
+.fchip.warnf{border-color:#6d4f1c}
+.fchip.A b{color:#7fc3e8}.fchip.B b{color:#c3a3ff}.fchip.C b{color:#ffc078}
+
+.issueitem{padding:8px 12px;border-bottom:1px solid #1e2431;cursor:pointer}
+.issueitem:last-child{border-bottom:none}
+.issueitem:hover{background:#1a2030}
+.issueitem .ih{display:flex;gap:7px;align-items:center;margin-bottom:2px}
+.issueitem .ln{font-size:11px;color:var(--dim)}
+.issueitem .msg{font-size:11.5px;color:#c9d2e2;line-height:1.45}
+.kindbadge{font-size:10px;padding:1px 6px;border-radius:10px;font-weight:600}
+.kindbadge.coord{background:#2a2110;color:#ffd98a}
+.kindbadge.patch{background:#2a1a35;color:#d7a6ff}
+.kindbadge.mismatch{background:#3a1414;color:#ffb0b0}
+.kindbadge.blocked{background:#3a1414;color:#ffb0b0}
+.kindbadge.gate{background:#3a2410;color:#ffc078}
+.kindbadge.dead{background:#3a1414;color:#ffc9c9}
+
+/* ---------- 标记层：栅栏门 / 不可得 / 暴毙 ---------- */
+#markLayer{position:absolute;inset:0;pointer-events:none;z-index:2}
+.mk{position:absolute;width:7.6923%;height:7.6923%;transform:translate(-50%,-50%);
+  display:flex;align-items:center;justify-content:center;font-weight:700}
+.mk.gate{background:rgba(255,93,93,.22);border:2px solid #ff5d5d;border-radius:4px}
+.mk.gate::after{content:'✕';color:#ff8a8a;font-size:15px;text-shadow:0 0 4px #000}
+.mk.loot{background:rgba(139,151,173,.16);border:2px dashed #8b97ad;border-radius:4px}
+.mk.loot::after{content:'✕';color:#aab6cc;font-size:14px;text-shadow:0 0 4px #000}
+.mk.death{background:rgba(255,45,45,.28);border:2px solid #ff2d2d;border-radius:50%;
+  animation:mkpulse 1.2s infinite}
+.mk.death::after{content:'☠';color:#fff;font-size:16px;text-shadow:0 0 6px #ff2d2d}
+@keyframes mkpulse{0%,100%{box-shadow:0 0 0 0 rgba(255,45,45,.65)}50%{box-shadow:0 0 0 8px rgba(255,45,45,0)}}
+.verify{padding:10px 12px;display:flex;flex-direction:column;gap:7px;font-size:11.5px;color:var(--dim)}
+.verify b{color:var(--txt)}
+.hl{cursor:pointer;border-bottom:1px dashed #4a5568}
+.hl:hover{color:var(--accent);border-color:var(--accent)}
+
+#psvg .full{fill:none;stroke:#2f3a4f;stroke-width:1.1;stroke-dasharray:3 3}
+#psvg .vis{fill:none;stroke:#4cc9f0;stroke-width:2;stroke-linejoin:round;
+  filter:drop-shadow(0 0 2px rgba(76,201,240,.9))}
+#psvg .visn{fill:none;stroke:#ffd98a;stroke-width:2;stroke-dasharray:4 3}
+
+@media (max-width:1080px){
+  body{overflow:auto}
+  main{grid-template-columns:1fr;overflow:visible}
+  .rightcol{overflow:visible}
+  .stepcard{min-height:300px}
+  :root{--mapsize:min(520px, 92vw)}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>魔塔1 <em>1F→31F</em> 推演逐格校验 <span style="font-size:11px;color:#ff9f43;font-weight:400">· 已修正 2F 栅栏门 → 7F 暴毙</span></h1>
+  <div class="chips" id="chips"></div>
+</header>
+
+<main>
+  <section class="leftcol">
+    <div class="card mapcard">
+      <div class="maprow">
+        <div id="mapbox">
+          <svg id="psvg" viewBox="0 0 520 520" preserveAspectRatio="none"></svg>
+          <div id="consumeLayer"></div>
+          <div id="patchLayer"></div>
+          <div id="markLayer"></div>
+          <div id="marker"><img id="heroImg" alt="勇者"><span id="dirbadge">·</span></div>
+        </div>
+        <div id="mapside">
+          <div>
+            <div class="floorname" id="floorname">1F</div>
+            <div class="posline" id="posline"></div>
+          </div>
+          <div class="stats" id="floostats"></div>
+          <div class="legend" id="legend"></div>
+          <label class="toggle"><input type="checkbox" id="consToggle"> 给已消耗格描边（默认已还原成地面）</label>
+        </div>
+      </div>
+      <div class="controls">
+        <button class="btn" id="btnFirst" title="首步">⏮</button>
+        <button class="btn" id="btnPrev" title="上一步">◀</button>
+        <button class="btn primary" id="btnNext" title="下一步">下一步 ▶</button>
+        <button class="btn" id="btnLast" title="末步">⏭</button>
+        <button class="btn" id="btnPrevEv" title="上一个事件">↑ 上一事件</button>
+        <button class="btn" id="btnNextEv" title="下一个事件">↓ 下一事件</button>
+        <button class="btn" id="btnPlay" title="自动播放">▶ 播放</button>
+        <input id="slider" type="range" min="1" max="__TOTAL__" value="1">
+        <span class="ctrllabel" id="stepLabel">1 / __TOTAL__</span>
+        <input id="stepno" type="number" min="1" max="__TOTAL__" value="1">
+        <button class="btn" id="btnGo">跳转</button>
+      </div>
+    </div>
+
+    <div class="card stepcard">
+      <div class="cardhead">
+        <h2 id="tblTitle">本层步骤</h2>
+        <span class="sub" id="tblSub"></span>
+        <span class="sp"></span>
+        <label class="ctrllabel"><input type="checkbox" id="keyonly"> 只看关键步（事件 / 战斗 / 开门 / 拾取 / 异常）</label>
+      </div>
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th>步</th><th>段</th><th>楼层 (x,y)</th><th>方向</th><th>事件 / 日志</th>
+              <th>HP</th><th>ATK</th><th>DEF</th><th>G</th><th>钥匙</th><th>Δ</th><th>备注</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <aside class="rightcol">
+    <div class="card">
+      <div class="cardhead"><h2>本步状态（引擎实算）</h2><span class="sp"></span><span class="sub" id="stateSub"></span></div>
+      <div class="statebody" id="stateBody"></div>
+    </div>
+
+    <div class="card">
+      <div class="cardhead"><h2>校验结论 / 问题清单</h2><span class="sp"></span><span class="sub" id="issueSub"></span></div>
+      <div class="verify" id="verifyBox"></div>
+      <div id="issueList"></div>
+    </div>
+
+    <div class="card">
+      <div class="cardhead"><h2>楼层导航</h2><span class="sp"></span><span class="sub">点击跳到该层第一步</span></div>
+      <div class="floorchips" id="floorchips"></div>
+    </div>
+  </aside>
+</main>
+
+<script>
+const D = __DATA__;
+const IMG = __IMG__;
+const TILE = __TILE__;
+const STAIR = __STAIR__;
+const CONS = D.cons || {};
+const HERO = __HERO_JSON__;
+(function(){
+'use strict';
+const ST = D.steps, FL = D.floors, ISSUES = D.issues || [];
+const TOTAL = ST.length;
+const byFloor = {}, firstOf = {};
+ST.forEach(function(s,i){
+  (byFloor[s.f] = byFloor[s.f] || []).push(i);
+  if(firstOf[s.f] === undefined) firstOf[s.f] = i;
+});
+
+const CELL=40, N=13, MAPW=CELL*N;
+const PATCHES = [{f:29,x:6,y:3,label:'暗道补丁'},{f:30,x:6,y:1,label:'清场生成梯'}];
+
+const svgEl = document.getElementById('psvg');
+const markerEl = document.getElementById('marker');
+const mapbox = document.getElementById('mapbox');
+const consumeLayer = document.getElementById('consumeLayer');
+const patchLayer = document.getElementById('patchLayer');
+const tbody = document.getElementById('tbody');
+const slider = document.getElementById('slider');
+const stepno = document.getElementById('stepno');
+
+let sel = 0, tableFloor = -1, keyOnly = false, lastKeyOnly = false, playTimer = null, showCons = false;
+
+const DIRV = {'↑':[0,-1],'↓':[0,1],'←':[-1,0],'→':[1,0],'·':[0,0],'':[0,0]};
+const SEGCLS = {A:'A',B:'B',C:'C'};
+const STLABEL = {ok:'正常',note:'标注行',blocked:'无法执行',skip:'未执行',
+  invalid:'违规未执行',dead:'暴毙',unreachable:'未执行'};
+const EXEC = {ok:1,note:1,dead:1};
+
+function esc(t){ return String(t==null?'':t).replace(/[&<>"']/g, function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+}); }
+function posOf(s){ return s.p ? s.p : [s.f,s.x,s.y]; }
+function actualFloor(){ return posOf(ST[sel])[0]; }
+function pct(v){ return ((v*CELL+CELL/2)/MAPW*100).toFixed(4)+'%'; }
+function cx(x){ return x*CELL+CELL/2; }
+function cy(y){ return y*CELL+CELL/2; }
+function dspan(v){
+  if(!v) return '<span class="d0">0</span>';
+  return '<span class="'+(v>0?'dpos':'dneg')+'">'+(v>0?'+':'')+v+'</span>';
+}
+function deltaText(s){
+  const a=[];
+  if(s.dh) a.push('HP'+(s.dh>0?'+':'')+s.dh);
+  if(s.da) a.push('A'+(s.da>0?'+':'')+s.da);
+  if(s.dd) a.push('D'+(s.dd>0?'+':'')+s.dd);
+  if(s.dg) a.push('G'+(s.dg>0?'+':'')+s.dg);
+  return a.length?a.join(' '):'—';
+}
+function isKeyStep(s){
+  return !!(s.l) || !!(s.mm) || s.st!=='ok' || s.st==='note';
+}
+
+/* ---------------- 地图（原著贴图 + 路径 + 勇者） ---------------- */
+function renderMap(){
+  const f = actualFloor();
+  const fl = FL[f];
+  if(!fl) return;
+  mapbox.style.backgroundImage = 'url("'+(IMG[String(f)]||'')+'")';
+
+  // 已消耗格（击杀/拾取/开门/撞暗墙/交谈NPC…）→ 还原成地面；楼梯格上的人走了则还原成楼梯
+  const cons = CONS[String(f)] || [];
+  consumeLayer.style.setProperty('--tile', 'url("' + (TILE[String(f)] || '') + '")');
+  consumeLayer.style.setProperty('--up', 'url("' + (STAIR.u || '') + '")');
+  consumeLayer.style.setProperty('--down', 'url("' + (STAIR.d || '') + '")');
+  consumeLayer.innerHTML = cons.filter(function(c){ return c[2] <= sel; }).map(function(c){
+    return '<div class="cons k'+(c[3]||'f')+'" style="left:'+pct(c[0])+';top:'+pct(c[1])+'"></div>';
+  }).join('');
+
+  // 补丁格
+  patchLayer.innerHTML = PATCHES.filter(function(p){return p.f===f;}).map(function(p){
+    return '<div class="patch" style="left:'+pct(p.x)+';top:'+pct(p.y)+'"><span>'+esc(p.label)+'</span></div>';
+  }).join('');
+
+  // 标记层：2F 栅栏门 / 门后不可得战利品 / 暴毙点
+  const MK = (D.markers||{})[String(f)] || [];
+  document.getElementById('markLayer').innerHTML = MK.map(function(m){
+    return '<div class="mk '+m.t+'" style="left:'+pct(m.x)+';top:'+pct(m.y)+'" title="'+esc(m.label)+'"></div>';
+  }).join('');
+
+  // 路径
+  const full = (fl.path||[]);
+  const vis=[];
+  for(let i=0;i<=sel;i++){
+    const s=ST[i], p=posOf(s);
+    if(p[0]!==f || !EXEC[s.st]) continue;
+    const pt=[p[1],p[2]];
+    if(!vis.length || vis[vis.length-1][0]!==pt[0] || vis[vis.length-1][1]!==pt[1]) vis.push(pt);
+  }
+  function poly(pts, cls){
+    // 同一层可能多次进出：相邻点不相邻（跨越楼梯/传送）时断开，避免画出穿墙直线
+    const segs=[]; let cur=[];
+    for(let i=0;i<pts.length;i++){
+      if(i>0){
+        const d=Math.abs(pts[i][0]-pts[i-1][0])+Math.abs(pts[i][1]-pts[i-1][1]);
+        if(d>1){ if(cur.length>1) segs.push(cur); cur=[]; }
+      }
+      cur.push(pts[i]);
+    }
+    if(cur.length>1) segs.push(cur);
+    return segs.map(function(a){
+      return '<polyline class="'+cls+'" points="'+a.map(function(p){ return cx(p[0])+','+cy(p[1]); }).join(' ')+'"/>';
+    }).join('');
+  }
+  svgEl.innerHTML = poly(full,'full')+poly(vis,'vis');
+
+  // 勇者
+  const cur=ST[sel], p=posOf(cur);
+  markerEl.style.left = pct(p[1]);
+  markerEl.style.top  = pct(p[2]);
+  document.getElementById('heroImg').src = HERO[cur.d] || HERO['↓'];
+  document.getElementById('dirbadge').textContent = (cur.d && cur.d!=='·') ? cur.d : '·';
+
+  // 地图侧栏
+  document.getElementById('floorname').innerHTML = f+'F <span>第 '+cur.i+' 步的实际位置</span>';
+  let pos='';
+  if(cur.p && (cur.p[0]!==cur.f || cur.p[1]!==cur.x || cur.p[2]!==cur.y)){
+    pos='路线标注 '+cur.f+'F('+cur.x+','+cur.y+') → 引擎落点 <b>'+cur.p[0]+'F('+cur.p[1]+','+cur.p[2]+')</b>';
+  }else{
+    pos='坐标 <b>'+cur.f+'F('+cur.x+','+cur.y+')</b>　方向 '+(cur.d||'·');
+  }
+  document.getElementById('posline').innerHTML = pos;
+
+  const st=fl;
+  const entry = st.entry ? ('HP '+st.entry.hp+' / A '+st.entry.atk+' / D '+st.entry.dfn) : '—';
+  const exit  = st.exit  ? ('HP '+st.exit.hp +' / A '+st.exit.atk +' / D '+st.exit.dfn) : '—';
+  document.getElementById('floostats').innerHTML =
+    '<div class="stat"><i>本层步数</i><b>'+st.steps+'</b></div>'+
+    '<div class="stat"><i>战损</i><b>'+st.loss+'</b></div>'+
+    '<div class="stat"><i>击杀</i><b>'+st.kills+'</b></div>'+
+    '<div class="stat"><i>开门 / 拾取</i><b>'+st.doors+' / '+st.pickups+'</b></div>'+
+    '<div class="stat"><i>首次进入</i><b style="font-size:11px;font-weight:400">'+entry+'</b></div>'+
+    '<div class="stat"><i>最后离开</i><b style="font-size:11px;font-weight:400">'+exit+'</b></div>';
+}
+
+/* ---------------- 状态面板 ---------------- */
+function renderState(){
+  const s=ST[sel];
+  const prev = sel>0 ? ST[sel-1] : null;
+  const b = prev
+    ? {hp:prev.hp, a:prev.a, df:prev.df, g:prev.g, ky:prev.ky, kb:prev.kb, kr:prev.kr}
+    : {hp:s.hp-s.dh, a:s.a-s.da, df:s.df-s.dd, g:s.g-s.dg, ky:0, kb:0, kr:0};
+  const ev = s.e || s.l || '（纯移动）';
+  let h='';
+  h += '<div class="stephead">'+
+       '<span class="no">#'+s.i+'</span>'+
+       '<span class="seg '+SEGCLS[s.s]+'">'+s.s+'</span>'+
+       '<span class="pill '+s.st+'">'+(STLABEL[s.st]||s.st)+'</span>'+
+       (s.rs?('<span class="pill">录制行 #'+s.rs+'</span>'):'')+
+       '</div>';
+  h += '<div class="evline">'+esc(ev)+'</div>';
+  if(s.l && s.l!==s.e) h += '<div class="logline">引擎日志：'+esc(s.l)+'</div>';
+  const p=posOf(s);
+  h += '<div class="posline">位置：<b>'+s.f+'F('+s.x+','+s.y+')</b>　方向 <b>'+(s.d||'·')+'</b>'+
+       ((p[0]!==s.f||p[1]!==s.x||p[2]!==s.y) ? '　<span style="color:var(--gold)">引擎落点 '+p[0]+'F('+p[1]+','+p[2]+')</span>' : '')+
+       '</div>';
+  let src='';
+  if(s.s==='C'){
+    const ln=s.i-D.verify.steps_ab;
+    src = (ln>=1 && ln<=144)
+      ? '来源：21F→30F 路线 CSV 数据第 '+ln+' 条 · 引擎实算'
+      : '来源：30F 清场后补丁生成的上行梯 · 落到 31F(6,2)';
+  }else if(s.rs){
+    src = '来源：录制路线 CSV 第 '+s.rs+' 行 · 逐行重放与录制状态一致';
+  }
+  if(src) h += '<div class="logline">'+esc(src)+'</div>';
+  h += '<div class="statgrid">'+
+       '<div class="sbox"><i>HP 生命</i><span class="val">'+s.hp+'</span><span class="dl">'+dspan(s.dh)+'</span><div class="from">'+b.hp+' → '+s.hp+'</div></div>'+
+       '<div class="sbox"><i>ATK 攻击</i><span class="val">'+s.a+'</span><span class="dl">'+dspan(s.da)+'</span><div class="from">'+b.a+' → '+s.a+'</div></div>'+
+       '<div class="sbox"><i>DEF 防御</i><span class="val">'+s.df+'</span><span class="dl">'+dspan(s.dd)+'</span><div class="from">'+b.df+' → '+s.df+'</div></div>'+
+       '<div class="sbox"><i>GOLD 金币</i><span class="val">'+s.g+'</span><span class="dl">'+dspan(s.dg)+'</span><div class="from">'+b.g+' → '+s.g+'</div></div>'+
+       '</div>';
+  h += '<div class="keyrow">'+
+       '<div class="kk"><i>黄钥匙</i><b>'+s.ky+'</b><div class="from">'+b.ky+' → '+s.ky+'</div></div>'+
+       '<div class="kk"><i>蓝钥匙</i><b>'+s.kb+'</b><div class="from">'+b.kb+' → '+s.kb+'</div></div>'+
+       '<div class="kk"><i>红钥匙</i><b>'+s.kr+'</b><div class="from">'+b.kr+' → '+s.kr+'</div></div>'+
+       '</div>';
+  if(s.mm && s.mm.length){
+    h += '<div class="warnbox"><b>⚠ 坐标/落点差异</b><br>'+s.mm.map(esc).join('<br>')+'</div>';
+  }
+  if(s.st==='ok' && !(s.mm&&s.mm.length)){
+    h += '<div class="okbox">✓ 本步状态由 mota_core 实算，与路线无冲突</div>';
+  }
+  document.getElementById('stateBody').innerHTML = h;
+  document.getElementById('stateSub').textContent = '步 '+s.i+' / '+TOTAL;
+}
+
+/* ---------------- 步骤表 ---------------- */
+function buildTable(f){
+  const list = (byFloor[f]||[]).filter(function(i){ return !keyOnly || isKeyStep(ST[i]); });
+  let h='';
+  for(const i of list){
+    const s=ST[i];
+    let cls='';
+    if(s.mm && s.mm.length) cls+=' mmrow';
+    if(s.st==='blocked') cls+=' blk';
+    if(s.st==='invalid') cls+=' invrow';
+    if(s.st==='dead') cls+=' deadrow';
+    if(s.st==='unreachable') cls+=' unrow';
+    if(s.st==='note'||s.st==='skip') cls+=' noterow';
+    const ev = s.e || s.l || '';
+    let note = '';
+    if(s.mm && s.mm.length) note = s.mm.join('；');
+    else if(s.st==='note') note = '标注行（无实际移动）';
+    else if(s.st==='invalid') note = '2F 栅栏门未开，原路线违规，未执行';
+    else if(s.st==='dead') note = 'HP 不足，路线在此暴毙';
+    else if(s.st==='unreachable') note = '前段已无法继续，未执行';
+    const tag = s.st==='note'?'<span class="tag">标注</span>'
+      : s.st==='blocked'?'<span class="tag b">失败</span>'
+      : s.st==='invalid'?'<span class="tag" style="background:#4a2f12;color:#ffc078">违规</span>'
+      : s.st==='dead'?'<span class="tag b">暴毙</span>'
+      : s.st==='unreachable'?'<span class="tag" style="background:#2a3040;color:#8b97ad">未执行</span>'
+      : '';
+    h += '<tr class="'+cls.trim()+'" data-i="'+i+'">'+
+         '<td class="num">'+s.i+'</td>'+
+         '<td><span class="seg '+SEGCLS[s.s]+'">'+s.s+'</span></td>'+
+         '<td>'+s.f+'F ('+s.x+','+s.y+')</td>'+
+         '<td class="dir">'+(s.d||'·')+'</td>'+
+         '<td class="ev" title="'+esc(ev)+'">'+tag+esc(ev)+'</td>'+
+         '<td>'+s.hp+'</td><td>'+s.a+'</td><td>'+s.df+'</td><td>'+s.g+'</td>'+
+         '<td class="keys">'+s.ky+'/'+s.kb+'/'+s.kr+'</td>'+
+         '<td>'+deltaText(s)+'</td>'+
+         '<td class="note" title="'+esc(note)+'">'+esc(note)+'</td>'+
+         '</tr>';
+  }
+  tbody.innerHTML=h;
+  tableFloor=f; lastKeyOnly=keyOnly;
+  document.getElementById('tblTitle').textContent = f+'F 步骤明细';
+  document.getElementById('tblSub').textContent = list.length+' / '+(byFloor[f]||[]).length+' 行';
+}
+
+function highlightRow(){
+  tbody.querySelectorAll('tr.sel').forEach(function(el){el.classList.remove('sel');});
+  const row = tbody.querySelector('tr[data-i="'+sel+'"]');
+  if(row){
+    row.classList.add('sel');
+    row.scrollIntoView({block:'nearest'});
+  }
+}
+
+/* ---------------- 楼层导航 ---------------- */
+function renderFloors(){
+  let h='';
+  for(let f=1;f<=31;f++){
+    const st=FL[f];
+    if(!st) continue;
+    const warn = ISSUES.some(function(it){return it.floor===f;});
+    h += '<div class="fchip'+(warn?' warnf':'')+'" data-f="'+f+'" title="'+esc(
+        f+'F  步'+st.steps+'  战损'+st.loss+'  击杀'+st.kills+'  开门'+st.doors+'  拾取'+st.pickups+
+        '  最低HP'+(st.minhp==null?'-':st.minhp))+'">'+
+      '<b>'+f+'F</b><i>'+st.steps+'步 · 损'+st.loss+'</i></div>';
+  }
+  const box=document.getElementById('floorchips');
+  box.innerHTML=h;
+  box.querySelectorAll('.fchip').forEach(function(el){
+    el.addEventListener('click', function(){ select(firstOf[+el.dataset.f]||0); });
+  });
+}
+function updateFloorActive(){
+  const f=ST[sel].f;
+  document.querySelectorAll('.fchip').forEach(function(el){
+    el.classList.toggle('active', +el.dataset.f===f);
+  });
+}
+
+/* ---------------- 问题清单 ---------------- */
+function renderIssues(){
+  const flags=[];
+  const seen={};
+  ISSUES.forEach(function(it){ flags.push(it); seen[it.line+'|'+(it.kind||'')]=1; });
+  ST.forEach(function(s){
+    if(s.mm && s.mm.length){
+      const k=s.i+'|coord';
+      if(!seen[k]){ seen[k]=1; flags.push({kind:'coord',line:s.i,floor:s.f,x:s.x,y:s.y,msg:s.mm.join('；')}); }
+    }
+  });
+  flags.sort(function(a,b){return a.line-b.line;});
+  const box=document.getElementById('issueList');
+  if(!flags.length){ box.innerHTML='<div class="verify">无异常</div>'; }
+  else{
+    box.innerHTML = flags.map(function(it){
+      return '<div class="issueitem" data-line="'+it.line+'">'+
+        '<div class="ih"><span class="kindbadge '+(it.kind||'')+'">'+(it.kind||'issue')+'</span>'+
+        '<span class="ln">第 '+it.line+' 步 · '+it.floor+'F('+it.x+','+it.y+')</span></div>'+
+        '<div class="msg">'+esc(it.msg)+'</div></div>';
+    }).join('');
+    box.querySelectorAll('.issueitem').forEach(function(el){
+      el.addEventListener('click', function(){
+        const ln=+el.dataset.line;
+        const idx=ST.findIndex(function(s){return s.i===ln;});
+        if(idx>=0) select(idx);
+      });
+    });
+  }
+  document.getElementById('issueSub').textContent = flags.length+' 个标记点';
+}
+
+/* ---------------- 顶部摘要 ---------------- */
+function renderHeader(){
+  const t=D.total, f=D.final, m=D.minhp, dd=D.dead;
+  let nExec=0, nInv=0, nUn=0;
+  ST.forEach(function(s){ if(s.st==='ok'||s.st==='dead') nExec++; else if(s.st==='invalid') nInv++; else nUn++; });
+  const chips=[
+    '<span class="chip">总步数 <b>'+t.steps+'</b></span>',
+    '<span class="chip ok">引擎实际执行 <b>'+nExec+'</b> 步</span>',
+    '<span class="chip warn">2F 栅栏门违规 <b>'+nInv+'</b> 步（已作废）</span>',
+    '<span class="chip">暴毙后未执行 <b>'+nUn+'</b> 步</span>',
+    '<span class="chip">执行段战损 <b>'+t.loss+'</b> · 击杀 <b>'+t.kills+'</b> · 开门 <b>'+t.doors+'</b> · 拾取 <b>'+t.pickups+'</b></span>',
+    (dd? '<span class="chip" style="border-color:#7a2020;color:#ffb0b0">暴毙点 <b>'+dd.floor+'F('+dd.x+','+dd.y+')</b> HP'+dd.hp+' / 需'+dd.need+'</span>' : ''),
+    '<span class="chip hl" id="minhpChip">最低 HP <b>'+m[0]+'</b> @ '+m[1]+'F('+m[2]+','+m[3]+')</span>'
+  ];
+  document.getElementById('chips').innerHTML=chips.join('');
+  document.getElementById('minhpChip').addEventListener('click', function(){
+    const idx=ST.findIndex(function(s){return s.i===m[4];});
+    if(idx>=0) select(idx);
+  });
+
+  document.getElementById('verifyBox').innerHTML =
+    '<div><b>2F 监狱栅栏门已按原版规则修正</b>：6 个 obj19 栅栏格在 (6,2)(8,2) 两只門番Ｂ清空前不可通行；'+
+    '两只門番Ｂ 为 HP100 / ATK180 / DEF110，而 1F→21F 全程英雄最高 ATK115，永远打不动，故本段内门永不开。</div>'+
+    '<div>原路线第 <b>43–60</b> 行靠穿栅栏门去捡门后 3 瓶青い回復薬（+600HP）与 3 把扉の鍵，属<b>违规</b>；'+
+    '本页把这 <b>18</b> 步标为「违规未执行」，门后 6 格栅栏与战利品在地图上用 ✕ 标出。</div>'+
+    '<div>合法出狱只有一条路：走盗贼凿开的洞 <b>2F(2,7)</b>（第 61–67 行），本页按此执行，HP 全程比原录制少 <b>600</b>。</div>'+
+    '<div>后果：<b>7F(9,7)</b> 打 スケルトンＢ 需掉血 <b>252</b>，实际只剩 <b>204</b> → 暴毙；其后 <b>3027</b> 步全部未执行。</div>'+
+    '<div id="verifyNote" style="color:#ffd98a">合法补救方向（本页尚未执行、需重排）：2F 左侧 x=1 走廊一路连通到 (1,1) 下行梯，'+
+    '可回到 1F；1F 尚余 5 瓶药 —— (1,3)(8,4)(1,10)(1,11) 赤+50、(10,11) 青+200，合计 <b>+400HP</b>，'+
+    '另有未取的赤/青水晶与钥匙。</div>';
+}
+
+/* ---------------- 选择与导航 ---------------- */
+function select(i){
+  i = Math.max(0, Math.min(TOTAL-1, i));
+  sel = i;
+  const f = ST[sel].f;
+  if(f!==tableFloor || keyOnly!==lastKeyOnly) buildTable(f);
+  renderState();
+  renderMap();
+  updateFloorActive();
+  slider.value = sel+1;
+  stepno.value = ST[sel].i;
+  document.getElementById('stepLabel').textContent = ST[sel].i+' / '+TOTAL;
+  highlightRow();
+}
+function nextEvent(dir){
+  let i=sel+dir;
+  while(i>=0 && i<TOTAL){
+    if(isKeyStep(ST[i])){ select(i); return; }
+    i+=dir;
+  }
+}
+function stopPlay(){
+  if(playTimer){ clearInterval(playTimer); playTimer=null; }
+  document.getElementById('btnPlay').textContent='▶ 播放';
+  document.getElementById('btnPlay').classList.remove('primary');
+}
+function togglePlay(){
+  if(playTimer){ stopPlay(); return; }
+  if(sel>=TOTAL-1) select(0);
+  document.getElementById('btnPlay').textContent='❚❚ 暂停';
+  document.getElementById('btnPlay').classList.add('primary');
+  playTimer=setInterval(function(){
+    if(sel>=TOTAL-1){ stopPlay(); return; }
+    select(sel+1);
+  }, 320);
+}
+
+document.getElementById('btnFirst').onclick=function(){ select(0); stopPlay(); };
+document.getElementById('btnPrev').onclick=function(){ select(sel-1); stopPlay(); };
+document.getElementById('btnNext').onclick=function(){ select(sel+1); stopPlay(); };
+document.getElementById('btnLast').onclick=function(){ select(TOTAL-1); stopPlay(); };
+document.getElementById('btnPrevEv').onclick=function(){ nextEvent(-1); stopPlay(); };
+document.getElementById('btnNextEv').onclick=function(){ nextEvent(1); stopPlay(); };
+document.getElementById('btnPlay').onclick=togglePlay;
+slider.addEventListener('input', function(){ stopPlay(); select(+slider.value-1); });
+document.getElementById('btnGo').onclick=function(){
+  const n=parseInt(stepno.value,10);
+  if(!isNaN(n)){ const idx=ST.findIndex(function(s){return s.i===n;}); if(idx>=0){ stopPlay(); select(idx); } }
+};
+stepno.addEventListener('keydown', function(e){ if(e.key==='Enter') document.getElementById('btnGo').click(); });
+document.getElementById('keyonly').addEventListener('change', function(e){
+  keyOnly=e.target.checked; buildTable(ST[sel].f); highlightRow();
+});
+document.getElementById('consToggle').addEventListener('change', function(e){
+  showCons=e.target.checked; consumeLayer.classList.toggle('hint', showCons);
+});
+document.addEventListener('keydown', function(e){
+  if(e.target.tagName==='INPUT' && e.target.type!=='range') return;
+  if(e.key==='ArrowRight'){ e.preventDefault(); stopPlay(); select(sel+1); }
+  else if(e.key==='ArrowLeft'){ e.preventDefault(); stopPlay(); select(sel-1); }
+  else if(e.key==='PageDown'){ e.preventDefault(); stopPlay(); select(sel+20); }
+  else if(e.key==='PageUp'){ e.preventDefault(); stopPlay(); select(sel-20); }
+  else if(e.key==='Home'){ e.preventDefault(); stopPlay(); select(0); }
+  else if(e.key==='End'){ e.preventDefault(); stopPlay(); select(TOTAL-1); }
+});
+
+/* ---------------- 图例 ---------------- */
+document.getElementById('legend').innerHTML =
+  '<span><i class="dot" style="background:#4cc9f0"></i>本层已走路径</span>'+
+  '<span><i class="dot" style="background:#2f3a4f"></i>本层完整路线</span>'+
+  '<span><i class="dot" style="background:#ff9f43;border-color:#ff9f43"></i>补丁格</span>'+
+  '<span><i class="dot" style="background:#3ecf8e"></i>已消耗→地面</span>'+
+  '<span>底图 = 原版贴图</span>';
+
+/* ---------------- 初始化 ---------------- */
+renderHeader();
+renderIssues();
+renderFloors();
+select(0);
+})();
+</script>
+</body>
+</html>
+'''
+
+html = (HTML.replace('__DATA__', js)
+            .replace('__IMG__', img_js)
+            .replace('__TILE__', tile_js)
+            .replace('__STAIR__', stair_js)
+            .replace('__HERO_JSON__', hero_js)
+            .replace('__TOTAL__', str(data['total']['steps'])))
+out = DED + '1F到31F_推演全过程.html'
+io.open(out, 'w', encoding='utf-8').write(html)
+print('wrote', out, len(html), 'bytes')

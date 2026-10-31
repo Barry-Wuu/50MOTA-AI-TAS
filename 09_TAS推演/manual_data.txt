@@ -1,0 +1,136 @@
+﻿=== 道具数值 (id: type hp atk def gold) ===
+  obj1    8        KEY       hp=0    atk=0    def=0    gold=0    扉の鍵を手に入れた。
+  obj2    5        DOOR      hp=0    atk=0    def=0    gold=0    
+  obj3    8        KEY       hp=0    atk=0    def=0    gold=0    青色の扉の鍵を手に入れた。
+  obj4    5        DOOR      hp=0    atk=0    def=0    gold=0    
+  obj11   3        STATUS    hp=50   atk=0    def=0    gold=0    赤い回復薬を手に入れた。生命力が５０ポイントアップ！
+  obj12   3        STATUS    hp=200  atk=0    def=0    gold=0    青い回復薬を手に入れた。生命力が２００ポイントアップ！
+  obj13   3        STATUS    hp=0    atk=1    def=0    gold=0    赤のクリスタルを手に入れた。攻撃力が１ポイントアップ！
+  obj14   3        STATUS    hp=0    atk=0    def=1    gold=0    青のクリスタルを手に入れた。防御力が１ポイントアップ！
+  obj19   0        NORMAL    hp=0    atk=0    def=0    gold=0    
+  obj20   0        NORMAL    hp=0    atk=0    def=0    gold=0    
+  obj21   0        NORMAL    hp=0    atk=0    def=0    gold=0    
+  obj22   7        SAIDAN    hp=0    atk=0    def=0    gold=0    「この祭壇に
+  obj23   0        NORMAL    hp=0    atk=0    def=0    gold=0    
+  obj26   4        ITEM      hp=0    atk=0    def=0    gold=0    飛翔のオーブを手に入れた！
+  obj27   5        DOOR      hp=0    atk=0    def=0    gold=0    
+  obj28   8        KEY       hp=0    atk=0    def=0    gold=0    赤色の扉の鍵を手に入れた。
+  obj29   6        MONSTER   hp=50   atk=48   def=22   gold=12   門番Ｃ
+  obj30   3        STATUS    hp=0    atk=10   def=0    gold=0    鉄の剣を手に入れた。攻撃力が１０ポイントアップ！
+  obj35   3        STATUS    hp=0    atk=0    def=10   gold=0    鉄の盾を手に入れた。防御力が１０ポイントアップ！
+  obj41   14       SELL      hp=0    atk=0    def=0    gold=50   「鍵を５個セットで５０ＧＯＬＤで売るよ! 買わないかい?」
+  obj87   1        MESSAGE   hp=0    atk=0    def=0    gold=0    盗賊「おお無事か！おまえ、ここの魔導師に捕まってこの牢屋に入れられてたんだよ。で、今まで気を失っていた訳だ。にしても、おまえ運がいいぜ。ちょうど抜け穴が完成したときに来るんだからな。そういう訳で俺は今から脱走するところだ。おまえもついてこい。」
+  obj89   5        DOOR      hp=0    atk=0    def=0    gold=0    壁がくずれた！
+  obj152  1        MESSAGE   hp=0    atk=0    def=0    gold=0    「おお、助けてくれてありがとうよ。お礼に、そなたの攻撃力と防御力を３％だけあげてやろう」（攻撃力と防御力が上がった!）
+  obj174  1        MESSAGE   hp=0    atk=0    def=0    gold=0    「やあ、助けてくれてありがとう。少ないけれど、お礼にとっておいてくれ！」（１０００ＧＯＬＤもらった!）
+  obj16   6        MONSTER   hp=100  atk=65   def=15   gold=30   スケルトンＡ
+  obj5    6        MONSTER   hp=35   atk=18   def=1    gold=1    Ｇスライム
+  obj6    6        MONSTER   hp=45   atk=20   def=2    gold=2    Ｒスライム
+  obj7    6        MONSTER   hp=35   atk=38   def=3    gold=3    バット
+  obj8    6        MONSTER   hp=60   atk=32   def=8    gold=5    僧　侶
+  obj9    6        MONSTER   hp=50   atk=42   def=6    gold=6    スケルトンＣ
+  obj10   6        MONSTER   hp=55   atk=52   def=12   gold=8    スケルトンＢ
+  obj15   6        MONSTER   hp=100  atk=180  def=110  gold=100  門番Ｂ
+  obj58   6        MONSTER   hp=230  atk=450  def=100  gold=100  魔導師
+
+=== 楼梯 STAIRS / WARP (1..11F) ===
+   1F up/down=((1, 1), None)
+   2F up/down=((1, 11), (1, 1))
+   3F up/down=((11, 11), (1, 11))
+   4F up/down=((1, 11), (11, 11))
+   5F up/down=((1, 1), (1, 11))
+   6F up/down=((11, 11), (1, 1))
+   7F up/down=((1, 1), (11, 11))
+   8F up/down=((6, 1), (1, 1))
+   9F up/down=((1, 11), (6, 1))
+  10F up/down=(None, (1, 11))
+  11F up/down=((11, 11), (6, 11))
+  WARP:
+    (0, 1, 1) -> (1, 2, 1)
+    (1, 1, 1) -> (2, 1, 2)
+    (2, 1, 1) -> (1, 2, 1)
+    (2, 1, 11) -> (3, 2, 11)
+    (3, 1, 11) -> (2, 1, 10)
+    (3, 11, 11) -> (4, 11, 10)
+    (4, 1, 11) -> (5, 2, 11)
+    (4, 11, 11) -> (3, 10, 11)
+    (5, 1, 1) -> (6, 1, 2)
+    (5, 1, 11) -> (4, 1, 10)
+    (6, 1, 1) -> (5, 1, 2)
+    (6, 11, 11) -> (7, 11, 10)
+    (7, 1, 1) -> (8, 1, 2)
+    (7, 11, 11) -> (6, 11, 10)
+    (8, 1, 1) -> (7, 1, 2)
+    (8, 6, 1) -> (9, 6, 2)
+    (9, 1, 11) -> (10, 1, 10)
+    (9, 6, 1) -> (8, 6, 2)
+    (10, 1, 11) -> (9, 1, 10)
+    (11, 6, 11) -> (10, 6, 10)
+    (11, 11, 11) -> (12, 10, 11)
+
+=== 11F 地图 ===
+--- terrain ---
+y0   #############
+y1   #...#....#..#
+y2   #...#..#.#..#
+y3   #...#.##....#
+y4   ##.##..####.#
+y5   #...#.....#.#
+y6   #...####..#.#
+y7   #.........#.#
+y8   ##.########.#
+y9   #...........#
+y10  #....#.##.#.#
+y11  #....#S#..#S#
+y12  #############
+--- obj ---
+y0     .   .   .   .   .   .   .   .   .   .   .   .   . 
+y1     .   .   .   .   . 80    . 2     .   . 66  1     . 
+y2     .   . 36    .   .   . 7     . 48    .   .   .   . 
+y3     .   .   .   .   . 2     .   .   . 2     .   .   . 
+y4     .   . 20    .   .   . 47    .   .   .   . 45    . 
+y5     . 46    . 46    . 48    . 2   46    .   .   .   . 
+y6     .   .   .   .   .   .   .   .   . 66    .   .   . 
+y7     . 76    .   . 47    .   . 2   45    .   .   .   . 
+y8     .   . 4     .   .   .   .   .   .   .   . 47    . 
+y9     .   . 47    . 45  2     .   .   .   . 7     .   . 
+y10    . 1     .   .   .   .   .   .   . 2     .   .   . 
+y11    . 1   1   1   1     .   .   . 76  47    .   .   . 
+y12    .   .   .   .   .   .   .   .   .   .   .   .   . 
+--- obj detail ---
+  ( 5, 1) obj80   赤のクリスタルを手に type=STATUS   hp=0 atk=2 def=0 g=0
+  ( 7, 1) obj2               type=DOOR     hp=0 atk=0 def=0 g=0
+  (10, 1) obj66   赤い回復薬を手に入れ type=STATUS   hp=100 atk=0 def=0 g=0
+  (11, 1) obj1    扉の鍵を手に入れた。 type=KEY      hp=0 atk=0 def=0 g=0
+  ( 2, 2) obj36   銀の盾を手に入れた。 type=STATUS   hp=0 atk=0 def=20 g=0
+  ( 6, 2) obj7    バット        type=MONSTER  hp=35 atk=38 def=3 g=3
+  ( 8, 2) obj48   ゾンビ        type=MONSTER  hp=260 atk=85 def=5 g=18
+  ( 5, 3) obj2               type=DOOR     hp=0 atk=0 def=0 g=0
+  ( 9, 3) obj2               type=DOOR     hp=0 atk=0 def=0 g=0
+  ( 2, 4) obj20              type=NORMAL   hp=0 atk=0 def=0 g=0
+  ( 6, 4) obj47   大バット       type=MONSTER  hp=60 atk=100 def=8 g=12
+  (11, 4) obj45   Ｂスライム      type=MONSTER  hp=130 atk=60 def=3 g=8
+  ( 1, 5) obj46   上級僧侶       type=MONSTER  hp=100 atk=95 def=30 g=22
+  ( 3, 5) obj46   上級僧侶       type=MONSTER  hp=100 atk=95 def=30 g=22
+  ( 5, 5) obj48   ゾンビ        type=MONSTER  hp=260 atk=85 def=5 g=18
+  ( 7, 5) obj2               type=DOOR     hp=0 atk=0 def=0 g=0
+  ( 8, 5) obj46   上級僧侶       type=MONSTER  hp=100 atk=95 def=30 g=22
+  ( 9, 6) obj66   赤い回復薬を手に入れ type=STATUS   hp=100 atk=0 def=0 g=0
+  ( 1, 7) obj76   青い回復薬を手に入れ type=STATUS   hp=400 atk=0 def=0 g=0
+  ( 4, 7) obj47   大バット       type=MONSTER  hp=60 atk=100 def=8 g=12
+  ( 7, 7) obj2               type=DOOR     hp=0 atk=0 def=0 g=0
+  ( 8, 7) obj45   Ｂスライム      type=MONSTER  hp=130 atk=60 def=3 g=8
+  ( 2, 8) obj4               type=DOOR     hp=0 atk=0 def=0 g=0
+  (11, 8) obj47   大バット       type=MONSTER  hp=60 atk=100 def=8 g=12
+  ( 2, 9) obj47   大バット       type=MONSTER  hp=60 atk=100 def=8 g=12
+  ( 4, 9) obj45   Ｂスライム      type=MONSTER  hp=130 atk=60 def=3 g=8
+  ( 5, 9) obj2               type=DOOR     hp=0 atk=0 def=0 g=0
+  (10, 9) obj7    バット        type=MONSTER  hp=35 atk=38 def=3 g=3
+  ( 1,10) obj1    扉の鍵を手に入れた。 type=KEY      hp=0 atk=0 def=0 g=0
+  ( 9,10) obj2               type=DOOR     hp=0 atk=0 def=0 g=0
+  ( 1,11) obj1    扉の鍵を手に入れた。 type=KEY      hp=0 atk=0 def=0 g=0
+  ( 2,11) obj1    扉の鍵を手に入れた。 type=KEY      hp=0 atk=0 def=0 g=0
+  ( 3,11) obj1    扉の鍵を手に入れた。 type=KEY      hp=0 atk=0 def=0 g=0
+  ( 4,11) obj1    扉の鍵を手に入れた。 type=KEY      hp=0 atk=0 def=0 g=0
+  ( 8,11) obj76   青い回復薬を手に入れ type=STATUS   hp=400 atk=0 def=0 g=0
+  ( 9,11) obj47   大バット       type=MONSTER  hp=60 atk=100 def=8 g=12
