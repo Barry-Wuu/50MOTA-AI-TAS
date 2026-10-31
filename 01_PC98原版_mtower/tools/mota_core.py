@@ -103,7 +103,13 @@ if STAIRS[49][1] is None:
 KEY_OF = {1: 'y', 3: 'b', 28: 'r'}                  # 📝 黄/蓝/红钥匙
 DOOR_OF = {2: 'y', 4: 'b', 27: 'r'}                 # ⚠️ 门色按 id 顺序推断，尚未从指令流确认
 SOLID_TYPES = {5, 7, 11, 14, 15}                   # DOOR/SAIDAN/SCORE/SELL/BUY：撞上而非穿过
-DECOR_PASS = {21, 23}                             # 饰件：可踩；obj19 实机验证不可踩（np2kai 实测 2026-10，撞击无位移）
+DECOR_PASS = set()                                # 饰件：可踩；obj19 实机验证不可踩（np2kai 实测 2026-10，撞击无位移）
+# ✅ 祭坛本体由 3 格构成：中央 obj22(SAIDAN) + 左右 obj21/obj23（type0，但属于祭坛，不可踩）。
+#    实机/用户确认：祭坛左右两格不能穿过。obj21/23 全塔只出现在 4F/12F/32F/46F 祭坛两侧。
+ALTAR_SIDE = {21, 23}
+# ✅ 2F 监狱栅栏门 obj19：Java MTower.java directCheck（a[3]==0 && a[4]==0 → 不放行）与 np2kai 实测
+#    都表明不可通行；@3764 只在 (6,2)(8,2) 两只門番Ｂ obj15 清空后，一次性把 6 格全部清零（开门动画）。
+GATE_2F = {(2, 5, 5), (2, 9, 5), (2, 5, 8), (2, 9, 8), (2, 5, 11), (2, 9, 11)}
 
 # ---- 商店（BUY/SELL 物件按 id 直接建模，避免 type14/15 命名歧义） ----------
 # 依据：yesnoJudge 中 mdataBuff==id 分支（mtower.jvm 行 25143 起）+ OA[id][13]=价格。
@@ -403,6 +409,13 @@ class World:
             elif DIG_WALLS.get((f, nx, ny)) not in self.cleared:
                 return ['blocked:墙']               # 未触发=普通墙；触发后直接放行（log 由落格时带出）
         o = self.at(f, nx, ny)
+        if o in ALTAR_SIDE:
+            # ✅ 祭坛左右两格 obj21/obj23 属于祭坛本体，不可踩入
+            return ['blocked:祭坛侧格 obj%d（祭坛本体不可踩）' % o]
+        if o == 19 and (f, nx, ny) in GATE_2F:
+            # ✅ 2F 监狱栅栏门：两只門番Ｂ清空前不可通行（Java directCheck / np2kai 实测）；
+            #    清空后由下方击杀分支把 6 格一并 cleared，届时 at() 返回 0，不再进这里。
+            return ['blocked:2F 监狱栅栏门 obj19（须先击败 (6,2)(8,2) 两只門番Ｂ）']
         # ✅ 修正（此处原为死锁 bug）：20F 的「进入」与「离开」是两套独立机制，不能混为一谈。
         #    · 进入：(20,6,9) 是红门 obj27，必须持红钥匙 obj28 开启 —— 见 BOSS 的基本门槛。
         #      开门由下方 ty == 'DOOR' 分支统一处理（无红钥匙挡路、有则消耗 1 把），
@@ -435,6 +448,11 @@ class World:
                     return [f'打不过 obj{o}（需掉血 {loss}，剩 {h.hp}）']
                 h.hp -= loss; h.gold += gold; self.cleared.add((f, nx, ny))
                 log.append(f'击杀 obj{o} {oname(o)[:8]} 掉血{loss} +金{gold}')
+                if f == 2 and o == 15 and self.at(2, 6, 2) == 0 and self.at(2, 8, 2) == 0:
+                    # ✅ @3764：两只門番Ｂ清空 → 播 6 号开门动画，6 个 obj19 栅栏格一并清零
+                    for gx, gy in ((5, 5), (9, 5), (5, 8), (9, 8), (5, 11), (9, 11)):
+                        self.cleared.add((2, gx, gy))
+                    log.append('★2F 两只門番Ｂ已清 → 6 扇监狱栅栏门 obj19 打开')
                 if f == 49:
                     self.after_49(log)
                 if f == 10 and o == 16:
