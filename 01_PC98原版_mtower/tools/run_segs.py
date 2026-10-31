@@ -359,6 +359,59 @@ def main():
     if not run_segs(w, 10, S['10a'], '10F'): return 1
 
     print('\n第一区（1F-10F）收集完成:', st(w.hero))
+
+    H = segs_route.SEGS_HEAL
+    F = segs_route.SEGS_FINAL
+
+    print('\n=== BOSS 前补血路线（攻略 §4.2）===')
+    print('\n--- 10F→9F 右下 ---')
+    if not stair(w, 1, 11, '10F(1,11)->9F'): return 1
+    if not run_segs(w, 9, H['9d'], '9F补血'): return 1
+
+    print('\n--- 9F→4F 右上 ---')
+    if not stair(w, 6, 1, '9F(6,1)->8F'): return 1
+    if not stair(w, 1, 1, '8F(1,1)->7F'): return 1
+    if not stair(w, 11, 11, '7F(11,11)->6F'): return 1
+    if not stair(w, 1, 1, '6F(1,1)->5F'): return 1
+    if not stair(w, 1, 11, '5F(1,11)->4F'): return 1
+    if not run_segs(w, 4, H['4f'], '4F补血'): return 1
+
+    print('\n--- 4F→8F 右中 ---')
+    if not stair(w, 1, 11, '4F(1,11)->5F'): return 1
+    if not stair(w, 1, 1, '5F(1,1)->6F'): return 1
+    if not stair(w, 11, 11, '6F(11,11)->7F'): return 1
+    if not stair(w, 1, 1, '7F(1,1)->8F'): return 1
+    if not run_segs(w, 8, H['8c'], '8F补血'): return 1
+
+    print('\n--- 8F→7F 右数第3列 ---')
+    if not stair(w, 1, 1, '8F(1,1)->7F'): return 1
+    if not run_segs(w, 7, H['7d'], '7F补血'): return 1
+
+    print('\n--- 7F→1F 右下 ---')
+    if not stair(w, 11, 11, '7F(11,11)->6F'): return 1
+    if not stair(w, 1, 1, '6F(1,1)->5F'): return 1
+    if not stair(w, 1, 11, '5F(1,11)->4F'): return 1
+    if not stair(w, 11, 11, '4F(11,11)->3F'): return 1
+    if not stair(w, 1, 11, '3F(1,11)->2F'): return 1
+    if not stair(w, 1, 1, '2F(1,1)->1F'): return 1
+    if not run_segs(w, 1, H['1d'], '1F补血'): return 1
+
+    print('\n--- 上 10F ---')
+    if not stair(w, 1, 1, '1F(1,1)->2F'): return 1
+    if not stair(w, 1, 11, '2F(1,11)->3F'): return 1
+    if not stair(w, 11, 11, '3F(11,11)->4F'): return 1
+    if not stair(w, 1, 11, '4F(1,11)->5F'): return 1
+    if not stair(w, 1, 1, '5F(1,1)->6F'): return 1
+    if not stair(w, 11, 11, '6F(11,11)->7F'): return 1
+    if not stair(w, 1, 1, '7F(1,1)->8F'): return 1
+    if not stair(w, 6, 1, '8F(6,1)->9F'): return 1
+    if not stair(w, 1, 11, '9F(1,11)->10F'): return 1
+
+    print('\n=== 10F 决战 ===')
+    if not run_segs(w, 10, F['10b'], '10F决战'): return 1
+    if not stair(w, 6, 11, '10F(6,11)->11F（BOSS 死后上行梯）'): return 1
+
+    print('\n★★ 第一区完成，进 11F:', st(w.hero))
     return 0
 
 
