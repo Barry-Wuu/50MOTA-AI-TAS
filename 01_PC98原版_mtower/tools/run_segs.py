@@ -41,6 +41,8 @@ def _stair_cells(w, f):
         s.add((6, 11))
     if f == 20 and getattr(w, 'boss20', False):
         s.add((6, 1))
+    if f == 30 and getattr(w, 'slime30', False):
+        s.add((6, 1))
     return s
 
 
@@ -65,6 +67,8 @@ def _cost(w, f, nx, ny):
         return True, 1
     ty = M.TYPE.get(M.oatr(o, 3))
     if o == 89:                      # 暗墙：撞塌后本人直接进入该格
+        return True, 3
+    if o == 115:                     # 隐形砖块（23F「Go 0F」字形 44 块）：撞即破，可通行
         return True, 3
     if o in M.KEY_OF or ty in ('STATUS', 'ITEM', 'NORMAL', 'SCORE', 'MESSAGE'):
         return True, 1
@@ -823,10 +827,121 @@ def main():
     if not stair(w, 6, 1, '20F(6,1)->21F（BOSS 死后上行梯）'): return 1
     print(chr(10) + '★★★ 第二区完成，进 21F:', st(w.hero))
 
-    return 0
-    if not goto(w, 7, 3, '17F 大バット(7,3)'): return 1
-    if not goto(w, 6, 2, '17F 上梯旁'): return 1
-    if not stair(w, 6, 1, '17F(6,1)->18F'): return 1
+    # ================= 第三区 21F-30F（攻略 §6 速通区）=================
+    G = segs_route.SEGS_21
+    print(chr(10) + '--- 21F ---')
+    if not run_segs(w, 21, G['21a'], '21F'): return 1
+    if not stair(w, 6, 11, '21F(6,11)->22F'): return 1
+
+    print(chr(10) + '--- 22F ---')
+    if not run_segs(w, 22, G['22a'], '22F'): return 1
+    if not stair(w, 6, 6, '22F(6,6)->23F'): return 1
+
+    print(chr(10) + '--- 23F（44 块隐形砖撞出 "Go 0F"）---')
+    if not run_segs(w, 23, G['23a'], '23F'): return 1
+    if not stair(w, 11, 1, '23F(11,1)->24F'): return 1
+
+    print(chr(10) + '--- 24F ---')
+    if not run_segs(w, 24, G['24a'], '24F'): return 1
+    if not stair(w, 2, 10, '24F(2,10)->25F'): return 1
+
+    print(chr(10) + '--- 25F（跳过红门后的大魔導師）---')
+    if not run_segs(w, 25, G['25a'], '25F'): return 1
+    if not stair(w, 1, 11, '25F(1,11)->26F'): return 1
+
+    print(chr(10) + '--- 26F（跳过熔岩假公主）---')
+    if not run_segs(w, 26, G['26a'], '26F'): return 1
+    if not stair(w, 2, 10, '26F(2,10)->27F'): return 1
+
+    print(chr(10) + '--- 27F ---')
+    if not run_segs(w, 27, G['27a'], '27F'): return 1
+    if not stair(w, 11, 11, '27F(11,11)->28F'): return 1
+
+    print(chr(10) + '--- 28F（商人 100G/把 回收黄钥匙，本路线暂不卖）---')
+    if not run_segs(w, 28, G['28a'], '28F'): return 1
+    if not stair(w, 1, 11, '28F(1,11)->29F'): return 1
+
+    print(chr(10) + '--- 29F（小偷挖开 (6,3) 暗道）---')
+    if not run_segs(w, 29, G['29a'], '29F'): return 1
+    if not stair(w, 6, 11, '29F(6,11)->30F'): return 1
+
+    print(chr(10) + '--- 30F（六只史莱姆零损清光 → 现上行梯）---')
+    if not run_segs(w, 30, G['30a'], '30F'): return 1
+    if not stair(w, 6, 1, '30F(6,1)->31F（六只清空后上行梯）'): return 1
+
+    print(chr(10) + '★★★ 第三区完成，进 31F:', st(w.hero))
+
+    # ---------- 下塔 31F→20F 补血（攻略 §7.2 32F 段「下 20F 拿两个血瓶」）----------
+    print(chr(10) + '--- 下塔 31F -> 20F ---')
+    if not stair(w, 6, 1, '31F(6,1)->30F'): return 1
+    if not goto(w, 6, 10, '30F 到(6,10)'): return 1
+    if not stair(w, 6, 11, '30F(6,11)->29F'): return 1
+    if not goto(w, 6, 1, '29F x6 竖列上行'): return 1
+    if not goto(w, 1, 1, '29F y1 走廊西行'): return 1
+    if not goto(w, 1, 10, '29F x1 竖列下行'): return 1
+    if not stair(w, 1, 11, '29F(1,11)->28F'): return 1
+    if not goto(w, 10, 11, '28F y11 东行'): return 1
+    if not stair(w, 11, 11, '28F(11,11)->27F'): return 1
+    if not goto(w, 2, 11, '27F y11 西行'): return 1
+    if not stair(w, 2, 10, '27F(2,10)->26F'): return 1
+    if not stair(w, 1, 11, '26F(1,11)->25F'): return 1
+    if not stair(w, 2, 10, '25F(2,10)->24F'): return 1
+    if not stair(w, 1, 11, '24F(1,11)->23F'): return 1
+    if not stair(w, 1, 1, '23F(1,1)->22F'): return 1
+    if not stair(w, 6, 11, '22F(6,11)->21F'): return 1
+    if not stair(w, 6, 1, '21F(6,1)->20F'): return 1
+
+    print(chr(10) + '--- 20F 中央区补血（3 蓝药 + 6 晶石，零战斗）---')
+    if not run_segs(w, 20, G['20b'], '20F补血'): return 1
+
+    # ---------- 回 31F ----------
+    print(chr(10) + '--- 回 31F ---')
+    if not stair(w, 6, 1, '20F(6,1)->21F（吸血鬼死后上行梯）'): return 1
+    if not goto(w, 6, 10, '21F 到(6,10)'): return 1
+    if not stair(w, 6, 11, '21F(6,11)->22F'): return 1
+    if not goto(w, 6, 7, '22F 到(6,7)'): return 1
+    if not stair(w, 6, 6, '22F(6,6)->23F'): return 1
+    if not goto(w, 11, 2, '23F 到(11,2)'): return 1
+    if not stair(w, 11, 1, '23F(11,1)->24F'): return 1
+    if not stair(w, 2, 10, '24F(2,10)->25F'): return 1
+    if not stair(w, 1, 11, '25F(1,11)->26F'): return 1
+    if not stair(w, 2, 10, '26F(2,10)->27F'): return 1
+    if not goto(w, 10, 11, '27F 到(10,11)'): return 1
+    if not stair(w, 11, 11, '27F(11,11)->28F'): return 1
+    if not goto(w, 2, 11, '28F 到(2,11)'): return 1
+    if not stair(w, 1, 11, '28F(1,11)->29F'): return 1
+    if not goto(w, 1, 1, '29F y1 东行'): return 1
+    if not goto(w, 6, 1, '29F 到(6,1)'): return 1
+    if not goto(w, 6, 10, '29F x6 竖列下行'): return 1
+    if not stair(w, 6, 11, '29F(6,11)->30F'): return 1
+    if not goto(w, 6, 2, '30F 到(6,2)'): return 1
+    if not stair(w, 6, 1, '30F(6,1)->31F'): return 1
+    print(chr(10) + '★ 补血完成，回 31F:', st(w.hero))
+
+    # ================= 第四区 31F-40F（攻略 §7）=================
+    Q = segs_route.SEGS_31
+    print(chr(10) + '--- 31F（两只兽人武士）---')
+    if not run_segs(w, 31, Q['31a'], '31F'): return 1
+    if not stair(w, 6, 11, '31F(6,11)->32F'): return 1
+    print(chr(10) + '★★ 进 32F:', st(w.hero))
+
+    print(chr(10) + '--- 32F 左下区取钥 ---')
+    if not run_segs(w, 32, Q['32a'], '32F取钥'): return 1
+
+    # 回 31F 取右上区 (8,8) 蓝药 +800（现在有 5 黄钥）
+    print(chr(10) + '--- 回 31F 取蓝药(8,8) ---')
+    if not stair(w, 6, 11, '32F(6,11)->31F'): return 1
+    if not run_segs(w, 31, Q['31b'], '31F蓝药'): return 1
+    if not stair(w, 6, 11, '31F(6,11)->32F'): return 1
+    print('回 32F:', st(w.hero))
+
+    print(chr(10) + '--- 32F 右上区取蓝药(11,4) ---')
+    if not run_segs(w, 32, Q['32b'], '32F右上'): return 1
+
+    print(chr(10) + '--- 32F 左上区晶石 + 上 33F ---')
+    if not run_segs(w, 32, Q['32c'], '32F左上'): return 1
+    if not stair(w, 11, 1, '32F(11,1)->33F（金騎士清掉后）'): return 1
+    print(chr(10) + '★★ 进 33F:', st(w.hero))
 
     return 0
 

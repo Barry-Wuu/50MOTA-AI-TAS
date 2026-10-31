@@ -140,6 +140,12 @@ MAGIC_HALF_ATK = {58, 96}       # ⚠️ 魔导师/大魔导师战斗前削减�
 DIG_WALLS = {(15, 8, 1): (15, 9, 1),
              (35, 4, 9): (35, 5, 10)}                # 35F 同机制（dynamic.csv L137 / L68 盗贼）
 DIG_TRIG = {v: k for k, v in DIG_WALLS.items()}   # 触发格 → 被挖开的墙格
+# 📝 29F 小偷暗道（dynamic.csv 实证：29F(6,4)(7,2) 均为 obj88 MESSAGE「この大ダコが道をふさいて…抜け穴が…」，
+#    29F(6,3) 记作 `draw_obj=1 / variants:'3' / cell_now=eventMT` = 撞小偷偷完后该格变黄钥匙 obj1 且墙开）。
+#    前提：23F 把 44 块 obj115 隐形砖全撞掉（"Go 0F" 字形）。两个触发格挖同一格。
+DIG29_TRIG = {(29, 7, 2), (29, 6, 4)}
+DIG29_WALL = (29, 6, 3)
+DIG_TRIG.update({t: DIG29_WALL for t in DIG29_TRIG})
 # 📝 祭坛（README「祭壇」节：4 座 4F/12F/32F/46F，obj22 type=7）
 #    4 项菜单：生命力 / 攻击力 / 防御力 / 取消（yesnoNumber=9，文案 206/207-）
 ALTAR_CELLS = {(4, 6, 1), (12, 6, 9), (32, 10, 10), (46, 6, 1)}   # ✅ 引擎 obj_raw 实测坐标
@@ -332,6 +338,7 @@ class World:
     bought: Set = None                # 已购物的商人格子（防重复购买）
     boss10: bool = False             # 10F BOSS（obj16 スケルトンＡ）已击败 → (6,11) 生上行梯
     boss20: bool = False             # 20F BOSS（obj59 バンパイア/吸血鬼）已击败 → (20,6,1) 现出上行梯
+    slime30: bool = False            # 30F 六只史莱姆已清 → (30,6,4)(6,7) 落穴消失、(30,6,1) 现上行梯
     altar_k: int = 0                  # 📝 本存档累计祭坛已使用次数（决定下一次代价）
     altar_policy: str = 'atk'         # 📝 祭坛菜单选择：hp / atk / dfn（A* 无法处理菜单，按策略预设）
 
@@ -556,7 +563,12 @@ class World:
         h.x, h.y = nx, ny
         if (f, nx, ny) in DIG_TRIG:                   # 📝 盗贼格是 eventMT 动态生成（静态表 obj=0），
             self.cleared.add((f, nx, ny))             #    踩到即交谈，凿开对应墙格
-            log.append('盗賊「…大ダコの抜け穴がようやく…」→ 凿开暗道 %s' % (DIG_TRIG[(f, nx, ny)],))
+            tg = DIG_TRIG[(f, nx, ny)]
+            log.append('盗賊「…大ダコの抜け穴がようやく…」→ 凿开暗道 %s' % (tg,))
+            if f == 29:                                # 29F：挖开 (6,3)，该格同现黄钥匙 obj1
+                self.ter_over[DIG29_WALL] = 1          # MA[1][3]==0 → 地板
+                self.over[DIG29_WALL] = 1
+                log.append('29F(6,3) 暗道打通，现黄钥匙 obj1')
         if self.terrain_at(f, nx, ny) == 2:
             w = warp_to(f, nx, ny)
             if w:
@@ -577,6 +589,28 @@ class World:
             h.f, h.x, h.y = (21, 6, 2)
             log.append('楼梯 → 21F（吸血鬼死后上行梯）')
             self.apply_floor_events(21)
+        elif f == 30 and self.slime30 and (nx, ny) == (6, 1):
+            # 📝 30F 同构（资料笔记 §event 表：清掉 (3,5)(4,5)(5,5)(7,5)(8,5)(9,5) 六只后
+            #    (6,4)(6,7) 落穴消失、(6,1) 出现上行楼梯 map=70）→ 落 31F(6,2)
+            h.f, h.x, h.y = (31, 6, 2)
+            log.append('楼梯 → 31F（六只史莱姆清空后上行梯）')
+            self.apply_floor_events(31)
+        # 📝 30F BOSS 层（六只史莱姆）：踩 (6,6) 触发 → (6,4)(6,7) 变落穴（ter_over=墙，封环）；
+        #    六只全清后落穴消失、slime30=True，(6,1) 才现上行梯（见上方 elif f == 30 分支）。
+        #    依据：资料笔记 §event「30F 踩(6,6)(环内) → (6,4)(6,7) 变落穴，把 6 只史莱姆和你一起封在环里」+
+        #          「清掉六只 → 落穴消失；(6,1) 出现上行楼梯 map=70」。
+        if h.f == 30:
+            if (nx, ny) == (6, 6) and not self.slime30:
+                self.ter_over[(30, 6, 4)] = 3
+                self.ter_over[(30, 6, 7)] = 3
+                log.append('30F 踩(6,6) → (6,4)(6,7) 变落穴，与六只史莱姆同封环内')
+            if not self.slime30 and all(
+                    (30, x, y) in self.cleared for (x, y) in
+                    ((3, 5), (4, 5), (5, 5), (7, 5), (8, 5), (9, 5))):
+                self.slime30 = True
+                self.ter_over.pop((30, 6, 4), None)
+                self.ter_over.pop((30, 6, 7), None)
+                log.append('30F 六只史莱姆清空 → 落穴消失，(6,1) 现上行梯')
         if h.f == 3 and (nx, ny) == TRAP_3F['trigger'] and not self.trap_done:
             h.x, h.y = nx, ny
             return self.do_trap3F(log)
@@ -738,6 +772,7 @@ def _clone(self):
     w.ter_over = dict(self.ter_over)
     w.event_mode = self.event_mode; w.trap_mode = self.trap_mode; w.caveats = set(self.caveats)
     w.bought = set(self.bought); w.boss10 = self.boss10; w.boss20 = self.boss20
+    w.slime30 = self.slime30
     w.altar_k = self.altar_k; w.altar_policy = self.altar_policy
     return w
 
