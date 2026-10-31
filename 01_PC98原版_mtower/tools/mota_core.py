@@ -292,6 +292,13 @@ KEEP_STATIC_NPC_CELLS = {(2, 11, 4), (2, 11, 7)}
 #    原引擎把 terrain=1 当死墙直接 blocked，导致红钥匙永远拿不到、20F 红门开不了。
 DARKWALL_CELLS = {(14, 1, 3)}
 
+# ✅ 数据修正（2026-10-31）：PC98 源地图 magic_tower1_map_50f.json 的 1F 底排
+#   (1,4,11) 与 (1,8,11) 被写成地形墙（tile 3），导致左下「飞行之珠 obj26」房间
+#   从底排与主区完全隔断、无法到达。飞行之珠是四区（31-40F）跨层调度的核心道具，
+#   原版魔塔 1F 底排为连续走廊，此处把这两个缺口补回可通行地板（obj=0）。
+#   验证：打开后从起点 (6,11) 经 (5,11)(4,11)(3,11) 0 门直达 orb；不影响 1F→2F 主路线。
+OPEN_WALLS = {(1, 4, 11), (1, 8, 11)}
+
 TRAP_3F = dict(                                        # ✅ 指令行 31937/32084/32094/32107/32325..32404
     trigger=(5, 9),                                    #    中央格＝勇者所站处
     set_hp=400, set_atk=10, set_dfn=10,
@@ -403,6 +410,8 @@ class World:
         self.over[(f, x, y)] = o
 
     def terrain_at(self, f, x, y):
+        if (f, x, y) in OPEN_WALLS:
+            return 0
         t = self.ter_over.get((f, x, y))
         if t is not None:
             return MA[t][3] if t < len(MA) else 1

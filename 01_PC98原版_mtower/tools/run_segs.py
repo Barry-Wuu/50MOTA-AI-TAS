@@ -27,6 +27,38 @@ def st(h):
         h.hp, h.atk, h.dfn, h.gold, h.keys['y'], h.keys['b'], h.keys['r'], h.f, h.x, h.y)
 
 
+# ---- 逐格 TRACE 录制（供 build_current.py 生成 merged_route.json）----
+TRACE = []          # 每步：dict(floor,x,y,dir,before,after,cl,log,kind)
+TRACE_LAST = set()  # 上一步的 w.cleared，用于算本步新消耗格
+RECORDING = os.environ.get('RECORD_TRACE') == '1'
+
+
+def _snap(h):
+    return dict(hp=h.hp, atk=h.atk, dfn=h.dfn, gold=h.gold,
+                ky=h.keys.get('y', 0), kb=h.keys.get('b', 0), kr=h.keys.get('r', 0),
+                items=sorted(h.items))
+
+
+def _delta(a, b):
+    return dict(hp=b['hp'] - a['hp'], atk=b['atk'] - a['atk'], dfn=b['dfn'] - a['dfn'],
+                gold=b['gold'] - a['gold'], ky=b['ky'] - a['ky'],
+                kb=b['kb'] - a['kb'], kr=b['kr'] - a['kr'])
+
+
+def _trace(w, before, dch, lg, kind='move'):
+    """记录一步：before/after 快照 + 本步新消耗格 + 日志。"""
+    global TRACE_LAST
+    if not RECORDING:
+        return
+    after = _snap(w.hero)
+    cl = sorted(w.cleared - TRACE_LAST)
+    TRACE_LAST = set(w.cleared)
+    TRACE.append(dict(floor=w.hero.f, x=w.hero.x, y=w.hero.y, dir=dch,
+                      before=before, after=after, cl=cl,
+                      log=';'.join(lg) if lg else '', kind=kind))
+
+
+
 def _passable(w, f, nx, ny):
     return _cost(w, f, nx, ny)[0]
 
@@ -92,6 +124,7 @@ def _step(w, d):
     """走一步。开门/购物/对话后英雄不移动 → 补走一步。返回 (ok, log)"""
     broke = ('blocked', '打不动', '打不过', '无', '不可通行', '买不起', '祭坛金币不足')
     b = (w.hero.f, w.hero.x, w.hero.y)
+    before = _snap(w.hero)
     lg = w.move(*d)
     if lg and any(t in lg[0] for t in broke):
         return False, lg
@@ -102,6 +135,7 @@ def _step(w, d):
         if lg2 and any(t in lg2[0] for t in broke):
             return False, lg2
         lg = lg + lg2
+    _trace(w, before, d, lg, 'move')
     return True, lg
 
 
@@ -184,6 +218,24 @@ def stair(w, sx, sy, label=''):
     return False
 
 
+def fly(w, target_f, label=''):
+    """飞行之珠 obj26：英雄须站在当前层楼梯旁，传送到 target_f（落点 FLY_LAND）。"""
+    h = w.hero
+    before = _snap(w.hero)
+    lg = w.fly(target_f)
+    # 失败消息形如「飞行之珠：尚未持有…」「飞行之珠：目标层…」「飞行之珠：须站在…」（带全角冒号）；
+    # 成功消息是「飞行之珠传送 → …」（无冒号）。用「飞行之珠：」或「无法」判定失败。
+    if lg and ('飞行之珠：' in lg[0] or '无法' in lg[0]):
+        print('  !! 飞行失败 %dF→%dF: %s' % (h.f, target_f, lg))
+        return False
+    _trace(w, before, '·', lg, 'fly')
+    REC.append((w.hero.f, w.hero.x, w.hero.y, w.hero.hp, w.hero.atk, w.hero.dfn,
+                w.hero.gold, w.hero.keys['y'], w.hero.keys['b'], w.hero.keys['r'],
+                ';'.join(lg)[:80], 'FLY'))
+    print('  %-22s %s' % (label, st(w.hero)))
+    return True
+
+
 def run_segs(w, f, segs, tag=''):
     for (x, y, lab) in segs:
         if not goto(w, x, y, '%s(%d,%d) %s' % (tag or '%dF' % f, x, y, lab)):
@@ -192,7 +244,10 @@ def run_segs(w, f, segs, tag=''):
 
 
 def main():
-    global LAST_W
+    global LAST_W, TRACE_LAST
+    if RECORDING:
+        TRACE.clear()
+        TRACE_LAST = set()
     w = M.World.new()
     LAST_W = w
     h = w.hero
@@ -874,6 +929,9 @@ def main():
 
     print(chr(10) + '★★★ 第三区完成，进 31F:', st(w.hero))
 
+    if os.environ.get('STOP_31F') == '1':
+        return 0
+
     # ---------- 下塔 31F→20F 补血（攻略 §7.2 32F 段「下 20F 拿两个血瓶」）----------
     print(chr(10) + '--- 下塔 31F -> 20F ---')
     if not stair(w, 6, 1, '31F(6,1)->30F'): return 1
@@ -983,6 +1041,21 @@ def main():
     if not run_segs(w, 35, Q['35a'], '35F'): return 1
     if not stair(w, 11, 1, '35F(11,1)->36F'): return 1
     print(chr(10) + '★★ 进 36F:', st(w.hero))
+
+    # ================= 36F-40F（攻略 §7.2 下半段）=================
+    print(chr(10) + '--- 36F 暗道绕行 ---')
+    if not run_segs(w, 36, Q['36a'], '36F'): return 1
+    if not stair(w, 11, 11, '36F(11,11)->37F'): return 1
+    print(chr(10) + '★★ 进 37F:', st(w.hero))
+
+    print(chr(10) + '--- 37F 飞 12F（不取血瓶，避开 騎士/剣士）---')
+    if not fly(w, 12, '37F→12F（飞行之珠）'): return 1
+    print(chr(10) + '★★ 到 12F:', st(w.hero))
+
+    print(chr(10) + '--- 12F 暗道找商人买红钥匙 ---')
+    if not run_segs(w, 12, Q['12a'], '12F'): return 1
+    if not fly(w, 38, '12F→38F（飞行之珠）'): return 1
+    print(chr(10) + '★★ 到 38F:', st(w.hero))
 
     return 0
 

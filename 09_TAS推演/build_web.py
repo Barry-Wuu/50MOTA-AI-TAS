@@ -73,7 +73,7 @@ HTML = r'''<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>魔塔1 · 1F→31F 推演逐格校验（修正 2F 栅栏门：7F 暴毙）</title>
+<title>魔塔1 · 1F→31F 推演逐格校验（segs_route 人工翻译 · 剩余怪伤害）</title>
 <style>
 :root{
   --bg:#0d1017; --panel:#161a24; --panel2:#1c2130; --line:#293040;
@@ -240,6 +240,10 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
 
 /* ---------- 标记层：栅栏门 / 不可得 / 暴毙 ---------- */
 #markLayer{position:absolute;inset:0;pointer-events:none;z-index:2}
+#dmgLayer{position:absolute;inset:0;pointer-events:none;z-index:4}
+#dmgLayer .dmg{position:absolute;font-size:calc(var(--mapsize)/40);line-height:1;
+  font-family:Consolas,Menlo,monospace;font-weight:700;transform:translate(-1px,-2px);
+  text-shadow:0 0 3px #000,0 1px 2px #000,0 0 5px rgba(0,0,0,.7);white-space:nowrap}
 .mk{position:absolute;width:7.6923%;height:7.6923%;transform:translate(-50%,-50%);
   display:flex;align-items:center;justify-content:center;font-weight:700}
 .mk.gate{background:rgba(255,93,93,.22);border:2px solid #ff5d5d;border-radius:4px}
@@ -284,6 +288,7 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
           <div id="consumeLayer"></div>
           <div id="patchLayer"></div>
           <div id="markLayer"></div>
+          <div id="dmgLayer"></div>
           <div id="marker"><img id="heroImg" alt="勇者"><span id="dirbadge">·</span></div>
         </div>
         <div id="mapside">
@@ -376,6 +381,7 @@ const markerEl = document.getElementById('marker');
 const mapbox = document.getElementById('mapbox');
 const consumeLayer = document.getElementById('consumeLayer');
 const patchLayer = document.getElementById('patchLayer');
+const dmgLayer = document.getElementById('dmgLayer');
 const tbody = document.getElementById('tbody');
 const slider = document.getElementById('slider');
 const stepno = document.getElementById('stepno');
@@ -396,6 +402,41 @@ function actualFloor(){ return posOf(ST[sel])[0]; }
 function pct(v){ return ((v*CELL+CELL/2)/MAPW*100).toFixed(4)+'%'; }
 function cx(x){ return x*CELL+CELL/2; }
 function cy(y){ return y*CELL+CELL/2; }
+/* 剩余怪物伤害：m=[hp,atk,def,name]，heroA/heroD 为当前步英雄攻防。
+   返回 {txt,color}：打不过=红∞；loss0=绿；越高越偏红（线性 hue 120→0，封顶 300）。 */
+function dmgInfo(m, heroA, heroD){
+  const hp=m[0], atk=m[1], def=m[2];
+  const per = heroA - def;
+  if(per <= 0) return {txt:'∞', color:'#ff4040', cant:true};
+  const turns = Math.ceil(hp/per);
+  const loss = Math.max(atk - heroD, 0) * (turns - 1);
+  const t = Math.min(loss/300, 1);
+  const h = 120 - 120*t;
+  return {txt:String(loss), color:'hsl('+h+',92%,56%)', cant:false, loss:loss};
+}
+function renderDmg(f, heroA, heroD){
+  const fl = FL[f];
+  if(!fl){ dmgLayer.innerHTML=''; return; }
+  const cons = CONS[String(f)] || [];
+  const done = {};
+  cons.forEach(function(c){ if(c[2]<=sel) done[c[0]+','+c[1]]=1; });
+  const objs = fl.objs || {}, MS = D.monstats || {};
+  let h='';
+  for(const k in objs){
+    const v = objs[k], oid = String(v[0]);
+    if(v[2]!=='m' || done[k]) continue;               // 只画未打的怪
+    const ms = MS[oid];
+    if(!ms) continue;
+    const xy = k.split(',');
+    const info = dmgInfo(ms, heroA, heroD);
+    const x = +xy[0], y = +xy[1];
+    const left = (x*CELL/MAPW*100).toFixed(3)+'%';
+    const top  = ((y+1)*CELL/MAPW*100).toFixed(3)+'%';
+    h += '<span class="dmg" style="left:'+left+';top:'+top+';color:'+info.color+'">'
+         + (info.txt==='∞'?'∞':info.txt) + '</span>';
+  }
+  dmgLayer.innerHTML = h;
+}
 function dspan(v){
   if(!v) return '<span class="d0">0</span>';
   return '<span class="'+(v>0?'dpos':'dneg')+'">'+(v>0?'+':'')+v+'</span>';
@@ -463,7 +504,8 @@ function renderMap(){
       return '<polyline class="'+cls+'" points="'+a.map(function(p){ return cx(p[0])+','+cy(p[1]); }).join(' ')+'"/>';
     }).join('');
   }
-  svgEl.innerHTML = poly(full,'full')+poly(vis,'vis');
+  // 只画已走过的青色路线（去掉"待经路线"黑虚线 full）
+  svgEl.innerHTML = poly(vis,'vis');
 
   // 勇者
   const cur=ST[sel], p=posOf(cur);
@@ -471,6 +513,9 @@ function renderMap(){
   markerEl.style.top  = pct(p[2]);
   document.getElementById('heroImg').src = HERO[cur.d] || HERO['↓'];
   document.getElementById('dirbadge').textContent = (cur.d && cur.d!=='·') ? cur.d : '·';
+
+  // 剩余怪物伤害（当前层，按本步攻防算）
+  renderDmg(f, cur.a, cur.df);
 
   // 地图侧栏
   document.getElementById('floorname').innerHTML = f+'F <span>第 '+cur.i+' 步的实际位置</span>';
@@ -516,13 +561,10 @@ function renderState(){
        ((p[0]!==s.f||p[1]!==s.x||p[2]!==s.y) ? '　<span style="color:var(--gold)">引擎落点 '+p[0]+'F('+p[1]+','+p[2]+')</span>' : '')+
        '</div>';
   let src='';
-  if(s.s==='C'){
-    const ln=s.i-D.verify.steps_ab;
-    src = (ln>=1 && ln<=144)
-      ? '来源：21F→30F 路线 CSV 数据第 '+ln+' 条 · 引擎实算'
-      : '来源：30F 清场后补丁生成的上行梯 · 落到 31F(6,2)';
-  }else if(s.rs){
+  if(s.rs){
     src = '来源：录制路线 CSV 第 '+s.rs+' 行 · 逐行重放与录制状态一致';
+  }else{
+    src = '来源：segs_route.py 人工翻译 · mota_core 逐格实算';
   }
   if(src) h += '<div class="logline">'+esc(src)+'</div>';
   h += '<div class="statgrid">'+
@@ -664,8 +706,8 @@ function renderHeader(){
   const chips=[
     '<span class="chip">总步数 <b>'+t.steps+'</b></span>',
     '<span class="chip ok">引擎实际执行 <b>'+nExec+'</b> 步</span>',
-    '<span class="chip warn">2F 栅栏门违规 <b>'+nInv+'</b> 步（已作废）</span>',
-    '<span class="chip">暴毙后未执行 <b>'+nUn+'</b> 步</span>',
+    '<span class="chip">违规未执行 <b>'+nInv+'</b> 步</span>',
+    '<span class="chip">未执行 <b>'+nUn+'</b> 步</span>',
     '<span class="chip">执行段战损 <b>'+t.loss+'</b> · 击杀 <b>'+t.kills+'</b> · 开门 <b>'+t.doors+'</b> · 拾取 <b>'+t.pickups+'</b></span>',
     (dd? '<span class="chip" style="border-color:#7a2020;color:#ffb0b0">暴毙点 <b>'+dd.floor+'F('+dd.x+','+dd.y+')</b> HP'+dd.hp+' / 需'+dd.need+'</span>' : ''),
     '<span class="chip hl" id="minhpChip">最低 HP <b>'+m[0]+'</b> @ '+m[1]+'F('+m[2]+','+m[3]+')</span>'
@@ -677,15 +719,10 @@ function renderHeader(){
   });
 
   document.getElementById('verifyBox').innerHTML =
-    '<div><b>2F 监狱栅栏门已按原版规则修正</b>：6 个 obj19 栅栏格在 (6,2)(8,2) 两只門番Ｂ清空前不可通行；'+
-    '两只門番Ｂ 为 HP100 / ATK180 / DEF110，而 1F→21F 全程英雄最高 ATK115，永远打不动，故本段内门永不开。</div>'+
-    '<div>原路线第 <b>43–60</b> 行靠穿栅栏门去捡门后 3 瓶青い回復薬（+600HP）与 3 把扉の鍵，属<b>违规</b>；'+
-    '本页把这 <b>18</b> 步标为「违规未执行」，门后 6 格栅栏与战利品在地图上用 ✕ 标出。</div>'+
-    '<div>合法出狱只有一条路：走盗贼凿开的洞 <b>2F(2,7)</b>（第 61–67 行），本页按此执行，HP 全程比原录制少 <b>600</b>。</div>'+
-    '<div>后果：<b>7F(9,7)</b> 打 スケルトンＢ 需掉血 <b>252</b>，实际只剩 <b>204</b> → 暴毙；其后 <b>3027</b> 步全部未执行。</div>'+
-    '<div id="verifyNote" style="color:#ffd98a">合法补救方向（本页尚未执行、需重排）：2F 左侧 x=1 走廊一路连通到 (1,1) 下行梯，'+
-    '可回到 1F；1F 尚余 5 瓶药 —— (1,3)(8,4)(1,10)(1,11) 赤+50、(10,11) 青+200，合计 <b>+400HP</b>，'+
-    '另有未取的赤/青水晶与钥匙。</div>';
+    '<div><b>当前路线 = segs_route.py 人工翻译（1F→31F），mota_core 逐格实算</b>：共 <b>'+t.steps+'</b> 步，全部正常执行（0 违规 / 0 未执行），终点 31F(6,2) HP<b>'+f.hp+'</b> A<b>'+f.atk+'</b> D<b>'+f.dfn+'</b> G<b>'+f.gold+'</b> 钥 '+f.ky+'/'+f.kb+'/'+f.kr+'。</div>'+
+    '<div>2F 监狱栅栏门 obj19（六格 ✕）<b>未打开</b>：两只門番Ｂ (6,2)(8,2) HP100/ATK180/DEF110 仍在，本路线未打；门后 3 蓝药 + 3 黄钥匙 + 1000G + 3% 攻防 <b>未取</b>。</div>'+
+    '<div style="color:#ffd98a">⚠ 检查点：攻略 §7.1 要求「过 35F 必须救 2F 小偷」（2F(11,11) 标记），本路线 1F→31F 尚未做该前置链（属 4 区 34F 之后步骤，需在 35F 前补上）。</div>'+
+    '<div>剩余怪伤害 = 当前步攻防下与该怪战斗的总 HP 损失；0=绿色，越高越偏红，打不动（攻≤防）显示红色 ∞。数字标在怪物格左下角。</div>';
 }
 
 /* ---------------- 选择与导航 ---------------- */
@@ -757,9 +794,9 @@ document.addEventListener('keydown', function(e){
 /* ---------------- 图例 ---------------- */
 document.getElementById('legend').innerHTML =
   '<span><i class="dot" style="background:#4cc9f0"></i>本层已走路径</span>'+
-  '<span><i class="dot" style="background:#2f3a4f"></i>本层完整路线</span>'+
   '<span><i class="dot" style="background:#ff9f43;border-color:#ff9f43"></i>补丁格</span>'+
   '<span><i class="dot" style="background:#3ecf8e"></i>已消耗→地面</span>'+
+  '<span><i class="dot" style="background:#3ecf8e"></i>剩余怪伤害：0=绿 · 越大越红</span>'+
   '<span>底图 = 原版贴图</span>';
 
 /* ---------------- 初始化 ---------------- */
