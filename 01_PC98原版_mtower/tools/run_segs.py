@@ -943,6 +943,39 @@ def main():
     if not stair(w, 11, 1, '32F(11,1)->33F（金騎士清掉后）'): return 1
     print(chr(10) + '★★ 进 33F:', st(w.hero))
 
+    print(chr(10) + '--- 33F 取骑士剑 + 蓝药 ---')
+    if not run_segs(w, 33, Q['33a'], '33F'): return 1
+
+    print(chr(10) + '--- 33F 上 34F ---')
+    if not run_segs(w, 33, Q['33b'], '33F上行'): return 1
+    if not stair(w, 1, 1, '33F(1,1)->34F'): return 1
+    print(chr(10) + '★★ 进 34F:', st(w.hero))
+
+    # ---------- 34F 入口缺黄钥 → 回 32F 取 (11,5) ----------
+    print(chr(10) + '--- 回 32F 补黄钥 ---')
+    if not goto(w, 2, 1, '34F 回(2,1)'): return 1
+    if not stair(w, 1, 1, '34F(1,1)->33F'): return 1
+    if not goto(w, 10, 1, '33F 到(10,1)'): return 1
+    if not stair(w, 11, 1, '33F(11,1)->32F'): return 1
+    if not run_segs(w, 32, Q['32d'], '32F补钥'): return 1
+    if not stair(w, 11, 1, '32F(11,1)->33F'): return 1
+    # ⚠️ 33F 上行梯是 (1,1)，(11,1) 是回 32F 的下行梯 → 必须横穿整层
+    if not goto(w, 10, 1, '33F 到(10,1)'): return 1
+    if not goto(w, 9, 1, '33F y1 西行'): return 1
+    if not goto(w, 7, 1, '（黄门已开）'): return 1
+    if not goto(w, 6, 1, '（スライムマン已清）'): return 1
+    if not goto(w, 5, 1, ''): return 1
+    if not goto(w, 4, 1, '（ゾンビナイト已清）'): return 1
+    if not goto(w, 3, 1, '（黄门已开）'): return 1
+    if not goto(w, 2, 1, ''): return 1
+    if not stair(w, 1, 1, '33F(1,1)->34F'): return 1
+    print('回 34F:', st(w.hero))
+
+    print(chr(10) + '--- 34F ---')
+    if not run_segs(w, 34, Q['34a'], '34F'): return 1
+    if not stair(w, 6, 11, '34F(6,11)->35F'): return 1
+    print(chr(10) + '★★ 进 35F:', st(w.hero))
+
     return 0
 
 
