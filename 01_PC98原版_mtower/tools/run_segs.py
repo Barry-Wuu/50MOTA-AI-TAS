@@ -59,6 +59,9 @@ def _cost(w, f, nx, ny):
         # 暗墙（14F(1,3)）：撞塌后可踩入，露出 obj28 红钥匙
         if (f, nx, ny) in M.DARKWALL_CELLS:
             return True, 3
+        # 35F 密道：x=4 竖列是一排 obj89「壁がくずれた」，地形仍是墙 → 撞塌即通
+        if w.at(f, nx, ny) == 89:
+            return True, 3
         return False, 0
     if (nx, ny) in _stair_cells(w, f):
         return False, 0
@@ -975,6 +978,11 @@ def main():
     if not run_segs(w, 34, Q['34a'], '34F'): return 1
     if not stair(w, 6, 11, '34F(6,11)->35F'): return 1
     print(chr(10) + '★★ 进 35F:', st(w.hero))
+
+    print(chr(10) + '--- 35F 密道绕魔龙 ---')
+    if not run_segs(w, 35, Q['35a'], '35F'): return 1
+    if not stair(w, 11, 1, '35F(11,1)->36F'): return 1
+    print(chr(10) + '★★ 进 36F:', st(w.hero))
 
     return 0
 
