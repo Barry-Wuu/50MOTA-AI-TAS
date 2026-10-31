@@ -54,6 +54,9 @@ def _cost(w, f, nx, ny):
         trig = M.DIG_WALLS.get((f, nx, ny))
         if trig is not None and trig in w.cleared:
             return True, 1
+        # 暗墙（14F(1,3)）：撞塌后可踩入，露出 obj28 红钥匙
+        if (f, nx, ny) in M.DARKWALL_CELLS:
+            return True, 3
         return False, 0
     if (nx, ny) in _stair_cells(w, f):
         return False, 0
@@ -596,10 +599,23 @@ def main():
     #    黄钥匙在 17F 是硬通货——(2,10) 黄门后面是 銀の剣 ATK+20（本路线 ATK 唯一大补）。
     #    用 1 把黄钥匙换 +100 HP 不如换 +20 ATK。
     if not goto(w, 7, 3, '16F 黄钥(7,3)'): return 1
+    # ★ ATK69 后 (2,2) 上級僧侶只 -76、(2,1)(2,3) 大バット 1 回合 -0，
+    #   左侧区（(4,2) 黄门后）的 4 把黄钥几乎白拿 —— 这是 16F(11,7) 蓝钥匙的门票。
+    if not goto(w, 4, 2, '16F 黄门(4,2)'): return 1
+    if not goto(w, 3, 1, '16F 黄钥(3,1)'): return 1
+    if not goto(w, 2, 2, '16F 上級僧侶(2,2)'): return 1
+    if not goto(w, 1, 2, '16F 黄钥(1,2)'): return 1
+    if not goto(w, 1, 1, '16F 黄钥(1,1)'): return 1
+    if not goto(w, 1, 3, '16F 黄钥(1,3)'): return 1
     if not goto(w, 6, 3, '16F 回 x6'): return 1
     if not goto(w, 6, 4, '16F 蓝门(6,4)'): return 1
     if not goto(w, 5, 5, '16F 红药(5,5) +100'): return 1
     if not goto(w, 7, 7, '16F 黄钥(7,7)'): return 1
+    # 16F(11,7) 蓝钥匙：19F(6,7) 蓝门 的唯一来源（18F 的蓝钥要留给 (4,1) 上 19F）
+    if not goto(w, 10, 4, '16F 黄门(10,4)'): return 1
+    if not goto(w, 10, 5, '16F ゾンビ(10,5)'): return 1
+    if not goto(w, 9, 6, '16F 黄门(9,6)'): return 1
+    if not goto(w, 11, 7, '16F ★蓝钥匙(11,7)'): return 1
     if not goto(w, 6, 6, '16F ★ゾンビナイト(6,6)'): return 1
     if not goto(w, 6, 7, '16F 下半区'): return 1
     if not goto(w, 6, 8, '16F 黄门(6,8)'): return 1
@@ -612,105 +628,159 @@ def main():
     #   蓝药在右侧区，需先开 (10,10) 黄门，本路线黄钥不足 → 放弃）。
     print(chr(10) + '--- 17F ---')
     if not goto(w, 5, 11, '17F 到(5,11)'): return 1
-    if not goto(w, 2, 11, '17F 经大バット(4,11)'): return 1
+    if not goto(w, 2, 11, '17F 经(4,11)大バット'): return 1
     if not goto(w, 1, 11, '17F 红药(1,11) +100'): return 1
-    if not goto(w, 2, 10, '17F 黄门(2,10)'): return 1
-    if not goto(w, 2, 7, '17F 落穴(2,7)'): return 1
-    if not goto(w, 2, 4, '17F 落穴(2,4)'): return 1
-    if not goto(w, 2, 2, '17F ★銀の剣 ATK+20'): return 1
-    if not goto(w, 2, 11, '17F 回 y11 走廊'): return 1
     if not goto(w, 7, 11, '17F 到(7,11)'): return 1
     if not goto(w, 11, 11, '17F 红药(11,11) +100'): return 1
     if not goto(w, 7, 10, '17F 回(7,10)'): return 1
     if not goto(w, 6, 9, '17F 上級僧侶(6,9)'): return 1
+
+    # ★ 右侧宝库：1 把黄钥匙开 (10,10)，里面是 2 把黄钥 + 蓝药+400 + 红晶+2 + 蓝晶+2
+    #   （实测代价 0 HP。这是本路线最赚的一步：钥匙净 +1 且白拿 400 血 + 4 点属性）
+    if not goto(w, 10, 10, '17F 黄门(10,10)'): return 1
+    if not goto(w, 10, 8, '17F 到(10,8)'): return 1
+    if not goto(w, 10, 6, '17F 落穴(10,7)'): return 1
+    if not goto(w, 9, 8, '17F ゾンビ(9,8)'): return 1
+    if not goto(w, 9, 5, '17F ゾンビナイト(9,5)'): return 1
+    if not goto(w, 10, 4, '17F 回(10,4)'): return 1
+    if not goto(w, 10, 2, '17F ★蓝药(10,2) +400'): return 1
+    if not goto(w, 9, 1, '17F 蓝晶(9,1) DEF+2'): return 1
+    if not goto(w, 11, 1, '17F 红晶(11,1) ATK+2'): return 1
+    if not goto(w, 11, 3, '17F 黄钥(11,3)'): return 1
+    if not goto(w, 9, 3, '17F 黄钥(9,3)'): return 1
+    if not goto(w, 10, 11, '17F 回 y11 走廊'): return 1
+    if not goto(w, 7, 10, '17F 回(7,10)'): return 1
     if not goto(w, 7, 7, '17F Ｂスライム(7,7)'): return 1
     if not goto(w, 7, 6, '17F 到(7,6)'): return 1
-    # 蓝钥匙已在 16F(6,4) 用掉，(7,5) 蓝门开不了。
-    # → 先去打 17F 四只門番Ｃ（ATK65/DEF51 下每只 -1 HP / 12G），凑 15F 商店的 200G 蓝钥匙
-    if not goto(w, 2, 11, '17F 回 y11'): return 1
-    for (x2, y2, nm) in [(1, 11, ''), (2, 6, ''), (1, 5, '門番Ｃ'), (3, 5, '門番Ｃ'),
-                         (1, 8, '門番Ｃ'), (3, 8, '門番Ｃ')]:
-        goto(w, x2, y2, '17F 刷金 ' + nm)
-    print('17F 刷金后:', st(w.hero))
+    # ⚠️ 上梯区入口有二：(7,5) 蓝门、(5,5) 黄门→(5,4)→(5,3)ゾンビナイト。
+    #    蓝钥匙 19F(6,7) 蓝门 还要用（那是上半区唯一入口），必须留住 →
+    #    走 (5,5) 黄门这条，用右侧宝库刚拿到的黄钥匙。
+    if not goto(w, 5, 5, '17F 黄门(5,5)'): return 1
+    if not goto(w, 5, 3, '17F ゾンビナイト(5,3)'): return 1
+    if not goto(w, 6, 2, '17F 上梯旁'): return 1
+    if not stair(w, 6, 1, '17F(6,1)->18F'): return 1
 
-    # ---------- 下 15F 拿蓝药 +400（ATK65 后 (11,6) 上級僧侶 只 -88，净 +312）----------
-    print(chr(10) + '--- 下 15F 蓝药(11,8) ---')
-    if not goto(w, 7, 11, '17F 回(7,11)'): return 1
-    if not stair(w, 6, 11, '17F(6,11)->16F'): return 1
-    if not goto(w, 6, 2, '16F 到(6,2)'): return 1
-    if not stair(w, 6, 1, '16F(6,1)->15F'): return 1
-    for (x2, y2, nm) in [(6, 10, ''), (7, 10, ''), (7, 11, ''), (8, 11, ''), (9, 11, ''),
-                         (9, 10, ''), (9, 9, ''), (9, 8, ''), (9, 7, ''), (9, 6, ''),
-                         (9, 5, ''), (9, 4, ''), (10, 4, ''), (11, 4, ''),
-                         (11, 5, ''), (11, 6, '上級僧侶 -88'), (11, 7, ''),
-                         (11, 8, '★蓝药 +400')]:
-        goto(w, x2, y2, '15F ' + nm)
-    print('15F 蓝药后:', st(w.hero))
+    # ---------- 18F ----------
+    #   落点 (6,2) 在孤立块 (5,1)(6,1)(7,1)(5,2)(6,2)(7,2)，只有两个出口：
+    #     (4,1) 蓝门 → (1,1) 上行梯（需蓝钥匙）
+    #     (8,1) 黄门 → (9,1)僧侣 → (10,3) → (11,3) 蓝钥匙（需黄钥匙）
+    #   17F 右侧宝库给了 2 把黄钥，(5,5) 黄门用掉 1 把 → 到 18F 剩 1 把，
+    #   正好走 (8,1) 那条：拿 (11,3) 蓝钥 → 回头开 (4,1) 上 19F。
+    print(chr(10) + '--- 18F ---')
+    if not goto(w, 8, 1, '18F 黄门(8,1)'): return 1
+    if not goto(w, 9, 1, '18F 上級僧侶(9,1)'): return 1
+    if not goto(w, 9, 3, '18F 到(9,3)'): return 1
+    if not goto(w, 9, 4, '18F ゾンビ(9,4)'): return 1
+    if not goto(w, 10, 4, '18F 到(10,4)'): return 1
+    if not goto(w, 10, 3, '18F 到(10,3)'): return 1
+    if not goto(w, 10, 2, '18F Ｂスライム(10,2)'): return 1
+    # 18F 右侧区还有 4 把黄钥（19F 的 (1,3) 黄门正好要用）
+    if not goto(w, 11, 2, '18F 黄钥(11,2)'): return 1
+    if not goto(w, 11, 1, '18F 黄钥(11,1)'): return 1
+    if not goto(w, 11, 3, '18F ★蓝钥匙(11,3)'): return 1
+    if not goto(w, 11, 4, '18F 黄钥(11,4)'): return 1
+    if not goto(w, 11, 5, '18F 黄钥(11,5)'): return 1
+    if not goto(w, 6, 2, '18F 回 x6'): return 1
+    if not goto(w, 4, 1, '18F 蓝门(4,1)'): return 1
+    if not goto(w, 2, 1, '18F 到(2,1)'): return 1
+    if not stair(w, 1, 1, '18F(1,1)->19F'): return 1
 
-    # ---------- 回 17F 打 (5,7) ゾンビ（18G），凑够 200G 买蓝钥匙 ----------
-    print(chr(10) + '--- 回 17F 打ゾンビ凑金币 ---')
-    for (x2, y2, nm) in [(11, 7, ''), (11, 6, ''), (11, 5, ''), (11, 4, ''), (10, 4, ''),
-                         (9, 4, ''), (9, 5, ''), (9, 6, ''), (9, 7, ''), (9, 8, ''),
-                         (9, 9, ''), (9, 10, ''), (9, 11, ''), (10, 11, ''), (8, 11, ''),
-                         (7, 11, ''), (6, 11, '')]:
-        goto(w, x2, y2, '15F 回 ' + nm)
-    if not stair(w, 6, 11, '15F(6,11)->14F'): return 1
-    if not goto(w, 11, 10, '14F 到(11,10)'): return 1
-    if not stair(w, 11, 11, '14F(11,11)->13F'): return 1
-    if not goto(w, 2, 11, '13F 到(2,11)'): return 1
-    if not stair(w, 1, 11, '13F(1,11)->12F'): return 1
-    if not goto(w, 10, 11, '12F 到(10,11)'): return 1
-    if not stair(w, 11, 11, '12F(11,11)->11F'): return 1
-    if not goto(w, 11, 10, '11F 到(11,10)'): return 1
-    if not stair(w, 11, 11, '11F(11,11)->12F'): return 1
-    if not goto(w, 2, 11, '12F 到(2,11)'): return 1
-    if not stair(w, 1, 11, '12F(1,11)->13F'): return 1
-    if not goto(w, 10, 11, '13F 到(10,11)'): return 1
-    if not stair(w, 11, 11, '13F(11,11)->14F'): return 1
-    if not goto(w, 6, 10, '14F 到(6,10)'): return 1
-    if not stair(w, 6, 11, '14F(6,11)->15F'): return 1
-    if not goto(w, 7, 1, '15F 到(7,1)'): return 1
-    if not stair(w, 6, 1, '15F(6,1)->16F'): return 1
-    if not goto(w, 6, 2, '16F 到(6,2)'): return 1
-    if not goto(w, 6, 10, '16F 到(6,10)'): return 1
-    if not stair(w, 6, 11, '16F(6,11)->17F'): return 1
-    if not goto(w, 6, 9, '17F 到(6,9)'): return 1
-    if not goto(w, 6, 8, '17F 到(6,8)'): return 1
-    if not goto(w, 5, 7, '17F ゾンビ(5,7) 18G'): return 1
-    print('凑金币后:', st(w.hero))
+    # ---------- 19F ----------
+    #   落点 (1,2) 同样是孤立块 (1,1)(1,2)(2,1)(2,2)，唯一出口 (1,3) 黄门。
+    #   目标：十字架（(6,4) 撞暗墙 → (6,3)，对 ゾンビ系/BOSS 伤害×2）、蓝钥(8,1)、红药、红晶。
+    print(chr(10) + '--- 19F ---')
+    if not goto(w, 1, 3, '19F 黄门(1,3)'): return 1
+    if not goto(w, 1, 4, '19F 到(1,4)'): return 1
+    if not goto(w, 1, 5, '19F 到(1,5)'): return 1
+    if not goto(w, 1, 6, '19F 黄门(1,6)'): return 1
+    if not goto(w, 1, 7, '19F 大バット(1,7)'): return 1
+    if not goto(w, 1, 8, '19F 到(1,8)'): return 1
+    if not goto(w, 1, 9, '19F 黄门(1,9)'): return 1
+    if not goto(w, 1, 10, '19F 到(1,10)'): return 1
+    if not goto(w, 1, 11, '19F 上級僧侶(1,11)'): return 1
+    if not goto(w, 2, 11, '19F 到(2,11)'): return 1
+    if not goto(w, 3, 11, '19F 大バット(3,11)'): return 1
+    if not goto(w, 3, 10, '19F 到(3,10)'): return 1
+    if not goto(w, 4, 10, '19F 黄门(4,10)'): return 1
+    if not goto(w, 5, 10, '19F 黄钥(5,10)'): return 1
+    if not goto(w, 6, 10, '19F 黄钥(6,10)'): return 1
+    # 从下往上打通上半区（上半区唯一入口是 (6,7) 蓝门）
+    if not goto(w, 6, 9, '19F ゾンビ(6,9)'): return 1
+    if not goto(w, 6, 8, '19F 到(6,8)'): return 1
+    if not goto(w, 6, 7, '19F 蓝门(6,7)'): return 1
+    # (6,5) 是墙；上半区的封闭环 (4,4)(4,5)(5,4)(5,5) 只能从 (6,6)/(5,6) 两只 ロック 打进去
+    if not goto(w, 6, 6, '19F ロック(6,6)'): return 1
+    if not goto(w, 5, 6, '19F ロック(5,6)'): return 1
+    if not goto(w, 5, 5, '19F 到(5,5)'): return 1
+    if not goto(w, 4, 5, '19F 黄钥(4,5)'): return 1
+    if not goto(w, 4, 4, '19F 到(4,4)'): return 1
+    if not goto(w, 4, 3, '19F ゾンビナイト(4,3)'): return 1
+    if not goto(w, 4, 2, '19F 到(4,2)'): return 1
+    if not goto(w, 5, 1, '19F 到(5,1)'): return 1
+    if not goto(w, 4, 1, '19F 红药(4,1) +100'): return 1
+    if not goto(w, 6, 1, '19F 上級僧侶(6,1)'): return 1
+    if not goto(w, 8, 1, '19F ★蓝钥匙(8,1)'): return 1
+    # 撞暗墙拿十字架（对 ゾンビ系/BOSS 伤害 ×2，20F 吸血鬼必需）
+    if not goto(w, 5, 5, '19F 回(5,5)'): return 1
+    if not goto(w, 5, 4, '19F 到(5,4)'): return 1
+    if not goto(w, 6, 4, '19F ★撞暗墙(6,4)'): return 1
+    if not goto(w, 6, 3, '19F ★★十字架 obj103'): return 1
+    if not goto(w, 6, 4, '19F 回(6,4)'): return 1
+    if not goto(w, 5, 4, '19F 回(5,4)'): return 1
+    if not goto(w, 5, 5, '19F 回(5,5)'): return 1
+    if not goto(w, 6, 6, '19F 到(6,6)'): return 1
+    if not goto(w, 6, 8, '19F 到(6,8)'): return 1
+    if not goto(w, 6, 10, '19F 到(6,10)'): return 1
+    if not stair(w, 6, 11, '19F(6,11)->20F'): return 1
 
-    # ---------- 下 15F(11,11) 商店买蓝钥匙（200G）----------
-    print(chr(10) + '--- 下 15F 买蓝钥匙 ---')
+    # ---------- 回 14F 拿红钥匙（20F 红门 (6,9) 是进 BOSS 区的唯一路）----------
+    print(chr(10) + '--- 回 14F 红钥匙 ---')
+    if not stair(w, 6, 11, '20F(6,11)->19F'): return 1
+    if not goto(w, 1, 2, '19F 到(1,2)'): return 1
+    if not stair(w, 1, 1, '19F(1,1)->18F'): return 1
+    if not goto(w, 6, 2, '18F 到(6,2)'): return 1
+    if not stair(w, 6, 1, '18F(6,1)->17F'): return 1
     if not goto(w, 6, 10, '17F 到(6,10)'): return 1
     if not stair(w, 6, 11, '17F(6,11)->16F'): return 1
     if not goto(w, 6, 2, '16F 到(6,2)'): return 1
     if not stair(w, 6, 1, '16F(6,1)->15F'): return 1
-    for (x2, y2, nm) in [(7, 2, ''), (7, 1, ''), (8, 1, ''), (9, 1, ''), (9, 2, ''),
-                         (10, 2, ''), (11, 2, ''), (11, 3, ''), (11, 4, ''), (10, 4, ''),
-                         (9, 4, ''), (9, 5, ''), (9, 6, ''), (9, 7, ''), (9, 8, ''),
-                         (9, 9, ''), (9, 10, ''), (9, 11, ''), (10, 11, ''),
-                         (11, 11, '★商店：蓝钥匙 200G')]:
-        goto(w, x2, y2, '15F ' + nm)
-    print('买蓝钥匙后:', st(w.hero))
-    if w.hero.keys['b'] < 1:
-        print('  !! 蓝钥匙没买到，金币=%d' % w.hero.gold); return 1
-
-    # ---------- 回 17F 开 (7,5) 蓝门 → 上 18F ----------
-    print(chr(10) + '--- 回 17F 开蓝门上 18F ---')
-    for (x2, y2) in [(10, 11), (9, 11), (9, 10), (9, 9), (9, 8), (9, 7), (9, 6),
-                     (9, 5), (9, 4), (10, 4), (11, 4), (11, 3), (11, 2), (10, 2),
-                     (9, 2), (9, 1), (8, 1), (7, 1), (7, 2), (6, 2), (6, 10),
-                     (7, 10), (7, 11)]:
-        goto(w, x2, y2, '15F 回(6,10)')
+    if not goto(w, 6, 2, '15F 到(6,2)'): return 1
+    if not stair(w, 6, 1, '15F(6,1) 是上行梯，需绕到(6,10)') if False else True: pass
+    if not goto(w, 6, 10, '15F 到(6,10)'): return 1
     if not stair(w, 6, 11, '15F(6,11)->14F'): return 1
+    if not goto(w, 5, 10, '14F 到(5,10)'): return 1
+    if not goto(w, 5, 11, '14F 到(5,11)'): return 1
+    if not goto(w, 4, 11, '14F 黄门(4,11)'): return 1
+    if not goto(w, 3, 11, '14F 到(3,11)'): return 1
+    if not goto(w, 3, 10, '14F 到(3,10)'): return 1
+    if not goto(w, 3, 9, '14F 上級僧侶(3,9)'): return 1
+    if not goto(w, 3, 8, '14F 到(3,8)'): return 1
+    if not goto(w, 3, 7, '14F 黄门(3,7)'): return 1
+    if not goto(w, 3, 5, '14F 到(3,5)'): return 1
+    if not goto(w, 2, 5, '14F 到(2,5)'): return 1
+    if not goto(w, 2, 4, '14F 蓝门(2,4)'): return 1
+    if not goto(w, 2, 3, '14F 到(2,3)'): return 1
+    if not goto(w, 1, 3, '14F ★★红钥匙（暗墙1,3）'): return 1
+    print('红钥匙到手:', st(w.hero))
+
+    # ---------- 12F 祭坛第 6 次（320G）→ ATK81 ----------
+    print(chr(10) + '--- 12F 祭坛第 6 次 ---')
+    if not goto(w, 2, 3, '14F 回(2,3)'): return 1
+    if not goto(w, 3, 5, '14F 回(3,5)'): return 1
+    if not goto(w, 3, 9, '14F 回(3,9)'): return 1
+    if not goto(w, 3, 11, '14F 回(3,11)'): return 1
+    if not goto(w, 5, 10, '14F 回(5,10)'): return 1
     if not goto(w, 11, 10, '14F 到(11,10)'): return 1
     if not stair(w, 11, 11, '14F(11,11)->13F'): return 1
     if not goto(w, 2, 11, '13F 到(2,11)'): return 1
     if not stair(w, 1, 11, '13F(1,11)->12F'): return 1
-    if not goto(w, 10, 11, '12F 到(10,11)'): return 1
-    if not stair(w, 11, 11, '12F(11,11)->11F'): return 1
-    if not goto(w, 11, 10, '11F 到(11,10)'): return 1
-    if not stair(w, 11, 11, '11F(11,11)->12F'): return 1
+    if not goto(w, 6, 10, '12F 到祭坛下邻格'): return 1
+    if not goto(w, 6, 9, '12F 祭坛献攻 #6 -320G'): return 1
+    if not goto(w, 6, 10, '12F 退出祭坛'): return 1
+    print('祭坛后:', st(w.hero))
+
+    # ---------- 回 20F ----------
+    print(chr(10) + '--- 回 20F 打 BOSS ---')
     if not goto(w, 2, 11, '12F 到(2,11)'): return 1
     if not stair(w, 1, 11, '12F(1,11)->13F'): return 1
     if not goto(w, 10, 11, '13F 到(10,11)'): return 1
@@ -721,12 +791,37 @@ def main():
     if not stair(w, 6, 1, '15F(6,1)->16F'): return 1
     if not goto(w, 6, 10, '16F 到(6,10)'): return 1
     if not stair(w, 6, 11, '16F(6,11)->17F'): return 1
-    if not goto(w, 6, 9, '17F 到(6,9)'): return 1
-    if not goto(w, 7, 6, '17F 到(7,6)'): return 1
-    if not goto(w, 7, 5, '17F 蓝门(7,5)'): return 1
-    if not goto(w, 7, 3, '17F 大バット(7,3)'): return 1
-    if not goto(w, 6, 2, '17F 上梯旁'): return 1
+    if not goto(w, 6, 2, '17F 到(6,2)'): return 1
     if not stair(w, 6, 1, '17F(6,1)->18F'): return 1
+    if not goto(w, 6, 2, '18F 到(6,2)'): return 1
+    if not goto(w, 2, 1, '18F 到(2,1)'): return 1
+    if not stair(w, 1, 1, '18F(1,1)->19F'): return 1
+    if not goto(w, 1, 3, '19F 到(1,3)'): return 1
+    if not goto(w, 1, 5, '19F 到(1,5)'): return 1
+    if not goto(w, 1, 7, '19F 到(1,7)'): return 1
+    if not goto(w, 1, 9, '19F 到(1,9)'): return 1
+    if not goto(w, 1, 11, '19F 到(1,11)'): return 1
+    if not goto(w, 3, 11, '19F 到(3,11)'): return 1
+    if not goto(w, 3, 10, '19F 到(3,10)'): return 1
+    if not goto(w, 5, 10, '19F 到(5,10)'): return 1
+    if not goto(w, 6, 10, '19F 到(6,10)'): return 1
+    if not stair(w, 6, 11, '19F(6,11)->20F'): return 1
+
+    # ---------- 20F ----------
+    if not goto(w, 6, 9, '20F 红门(6,9)'): return 1
+    if not goto(w, 6, 8, '20F 到(6,8)'): return 1
+    if not goto(w, 10, 4, '20F 蓝药(10,4)（如不可达则跳过）'): print('  20F 蓝药不可达')
+    if not goto(w, 6, 7, '20F 大バット(6,7)'): return 1
+    if not goto(w, 6, 6, '20F ★★★ 吸血鬼(6,6)'): return 1
+    if not goto(w, 6, 8, '20F 回(6,8)'): return 1
+    if not goto(w, 6, 10, '20F 回(6,10)'): return 1
+    print('20F BOSS 后:', st(w.hero))
+    # BOSS 死后 (20,6,1) 现出上行梯
+    if not goto(w, 6, 5, '20F 大バット(6,5)'): return 1
+    if not goto(w, 6, 4, '20F 到(6,4)'): return 1
+    if not goto(w, 6, 2, '20F 经落穴(6,3)'): return 1
+    if not stair(w, 6, 1, '20F(6,1)->21F（BOSS 死后上行梯）'): return 1
+    print(chr(10) + '★★★ 第二区完成，进 21F:', st(w.hero))
 
     return 0
     if not goto(w, 7, 3, '17F 大バット(7,3)'): return 1
