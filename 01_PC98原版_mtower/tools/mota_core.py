@@ -143,7 +143,27 @@ DIG_TRIG = {v: k for k, v in DIG_WALLS.items()}   # 触发格 → 被挖开的�
 # 📝 祭坛（README「祭壇」节：4 座 4F/12F/32F/46F，obj22 type=7）
 #    4 项菜单：生命力 / 攻击力 / 防御力 / 取消（yesnoNumber=9，文案 206/207-）
 ALTAR_CELLS = {(4, 6, 1), (12, 6, 9), (32, 10, 10), (46, 6, 1)}   # ✅ 引擎 obj_raw 实测坐标
-ALTAR_GAIN = {'hp': 200, 'atk': 10, 'dfn': 10}    # 档位常量（saidan 绘制数值）
+ALTAR_GAIN = {'hp': 200, 'atk': 10, 'dfn': 10}    # 兜底档位常量（saidan 绘制数值）
+# ✅ 逐层档位（2026-10-31 修正）：原实现按全塔统一 +10，与攻略实录的 L 值序列对不上。
+#    直接证据：
+#      · §4.2「4F（回）…若选择开商店则蓝门加防（L≈658，D14）」→ 4F 加防 +4（DEF 10→14）
+#      · §5.2「12F：升 2 次防 1 次攻（L≈316，A34/D50）」→ 12F 加攻 +4、加防 +8
+#    间接证据：按 D14 复算 5F回/8F 的 8 处战损全部逐点吻合（G-4 / R-12 / 蝙蝠-48 /
+#    スケルトンC-84 / 僧侶-72），而按 D10 全部偏大。
+#    ⚠️ 4F 的 atk/hp 档位仍未验证（本路线只用加防），32F/46F 沿用既有研究结论。
+ALTAR_GAIN_BY_FLOOR = {
+    4:  {'atk': 2,  'dfn': 4},
+    12: {'atk': 4,  'dfn': 8},
+    32: {'atk': 8,  'dfn': 16},
+    46: {'atk': 10, 'dfn': 20},
+}
+
+
+def altar_gain(f, pol):
+    """取该层祭坛的单项收益；未列出的项回落到 ALTAR_GAIN。"""
+    g = dict(ALTAR_GAIN)
+    g.update(ALTAR_GAIN_BY_FLOOR.get(f, {}))
+    return g[pol]
 
 
 def altar_cost(k):
@@ -519,15 +539,16 @@ class World:
                         return ['祭坛金币不足（需%d，有%d）' % (c, h.gold)]
                     h.gold -= c
                     pol = self.altar_policy if self.altar_policy in ALTAR_GAIN else 'atk'
+                    gain = altar_gain(f, pol)
                     if pol == 'hp':
-                        h.hp += ALTAR_GAIN['hp']
+                        h.hp += gain
                     elif pol == 'atk':
-                        h.atk += ALTAR_GAIN['atk']
+                        h.atk += gain
                     else:
-                        h.dfn += ALTAR_GAIN['dfn']
+                        h.dfn += gain
                     self.altar_k += 1
                     log.append('祭坛献金%dG → %s+%d（第%d次，下次%dG）'
-                               % (c, pol, ALTAR_GAIN[pol], self.altar_k, altar_cost(self.altar_k)))
+                               % (c, pol, gain, self.altar_k, altar_cost(self.altar_k)))
                 else:
                     return [f'不可通行 obj{o}（{ty}）']
             elif ty == 'NORMAL':

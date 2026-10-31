@@ -19,6 +19,7 @@ import segs_route
 
 DIRS = ((1, 0), (-1, 0), (0, 1), (0, -1))
 REC = []
+LAST_W = None
 
 
 def st(h):
@@ -27,34 +28,47 @@ def st(h):
 
 
 def _passable(w, f, nx, ny):
+    return _cost(w, f, nx, ny)[0]
+
+
+def _cost(w, f, nx, ny):
+    """(可否通过, 代价)。代价只用于选路偏好：怪物 100、门 25，避免"顺路打怪"违背攻略。"""
     if not (1 <= nx <= 11 and 1 <= ny <= 11):
-        return False
+        return False, 0
     # 楼梯格不进层内 BFS（踩上去会换层，破坏位置）
     if w.terrain_at(f, nx, ny) in (1, 2):
-        return False
+        return False, 0
     o = w.at(f, nx, ny)
     if not o:
-        return True
+        return True, 1
     ty = M.TYPE.get(M.oatr(o, 3))
+    if o == 89:                      # 暗墙：撞塌后本人直接进入该格
+        return True, 3
     if o in M.KEY_OF or ty in ('STATUS', 'ITEM', 'NORMAL', 'SCORE', 'MESSAGE'):
-        return True
+        return True, 1
     if ty == 'DOOR':
         col = M.DOOR_OF.get(o)
-        return col is not None and w.hero.keys[col] > 0
+        return (col is not None and w.hero.keys[col] > 0), 25
+    if ty == 'SELL':                 # 商店：钱够即可谈（谈完该格 cleared，下一步才能走上去）
+        return (w.hero.gold >= M.SHOP_PRICE.get(o, 0)), 3
+    if ty == 'SAIDAN':               # 祭坛：只有 ALTAR_CELLS 里的本体可踩（献祭后英雄站在祭坛上）
+        return (f, nx, ny) in M.ALTAR_CELLS, 5
     if ty == 'MONSTER':
         r = w.battle(o)
-        return r is not None and r[0] < w.hero.hp
-    return False
+        return (r is not None and r[0] < w.hero.hp), 100
+    return False, 0
 
 
 def _step(w, d):
-    """走一步；开门不移动则补一步。返回 (ok, log)"""
-    broke = ('blocked', '打不动', '打不过', '无', '不可通行')
-    bx, by = w.hero.x, w.hero.y
+    """走一步。开门/购物/对话后英雄不移动 → 补走一步。返回 (ok, log)"""
+    broke = ('blocked', '打不动', '打不过', '无', '不可通行', '买不起', '祭坛金币不足')
+    b = (w.hero.f, w.hero.x, w.hero.y)
     lg = w.move(*d)
     if lg and any(t in lg[0] for t in broke):
         return False, lg
-    if (w.hero.x, w.hero.y) == (bx, by) and lg and '开' in lg[0]:
+    # ⚠️ 必须连楼层一起比：3F(11,10)→4F(11,10) 坐标相同但已换层
+    if (w.hero.f, w.hero.x, w.hero.y) == b and lg:
+        # 交互未位移（开门 obj2/4/27、商店 SELL、祭坛 SAIDAN）→ 补一步真正走进去
         lg2 = w.move(*d)
         if lg2 and any(t in lg2[0] for t in broke):
             return False, lg2
@@ -63,27 +77,34 @@ def _step(w, d):
 
 
 def goto(w, tx, ty, label=''):
-    """BFS 找最短路（只走可通行格），逐步执行。"""
+    """带权最短路（怪物 100 / 门 25 / 空 1），逐步执行。
+       权重只影响"选哪条路"，不影响可达性判断；唯一通路上的怪/门照样会打/开。"""
     h = w.hero
     start = (h.x, h.y)
     if start == (tx, ty):
         return True
+    import heapq
+    dist = {start: 0}
     prev = {start: None}
-    q = deque([start])
+    pq = [(0, start)]
     found = False
-    while q:
-        c = q.popleft()
+    while pq:
+        dcur, c = heapq.heappop(pq)
         if c == (tx, ty):
             found = True
             break
-        for d in DIRS:
-            n = (c[0] + d[0], c[1] + d[1])
-            if n in prev:
+        if dcur > dist.get(c, 1e9):
+            continue
+        for dd in DIRS:
+            n = (c[0] + dd[0], c[1] + dd[1])
+            ok, wc = _cost(w, h.f, *n)
+            if not ok:
                 continue
-            if not _passable(w, h.f, *n):
-                continue
-            prev[n] = c
-            q.append(n)
+            nd = dcur + wc
+            if nd < dist.get(n, 1e9):
+                dist[n] = nd
+                prev[n] = c
+                heapq.heappush(pq, (nd, n))
     if not found:
         print('  !! 不可达 (%d,%d) from %s' % (tx, ty, start))
         return False
@@ -94,13 +115,18 @@ def goto(w, tx, ty, label=''):
         cur = prev[cur]
     seq.reverse()
     for (nx, ny) in seq:
-        ok, lg = _step(w, (nx - w.hero.x, ny - w.hero.y))
+        dx, dy = nx - w.hero.x, ny - w.hero.y
+        f0 = w.hero.f
+        ok, lg = _step(w, (dx, dy))
         if not ok:
             print('  !! 卡在 %s: %s' % (st(w.hero), lg))
             return False
+        if w.hero.f != f0:
+            print('  !! 层内路径误踩楼梯 %dF(%d,%d)：%s' % (f0, nx, ny, lg))
+            return False
         REC.append((w.hero.f, w.hero.x, w.hero.y, w.hero.hp, w.hero.atk, w.hero.dfn,
                     w.hero.gold, w.hero.keys['y'], w.hero.keys['b'], w.hero.keys['r'],
-                    ';'.join(lg)[:80] if lg else '', '%d,%d' % (w.hero.x - nx, w.hero.y - ny)))
+                    ';'.join(lg)[:80] if lg else '', '%d,%d' % (dx, dy)))
     print('  %-22s %s' % (label or '(%d,%d)' % (tx, ty), st(w.hero)))
     return True
 
@@ -137,7 +163,9 @@ def run_segs(w, f, segs, tag=''):
 
 
 def main():
+    global LAST_W
     w = M.World.new()
+    LAST_W = w
     h = w.hero
     h.f, h.x, h.y = 1, 6, 11
     h.hp, h.atk, h.dfn, h.gold = 1000, 100, 100, 0
@@ -167,7 +195,170 @@ def main():
     if not run_segs(w, 3, S['3b'], '3F二次'): return 1
     if not stair(w, 11, 11, '3F(11,11)->4F'): return 1
 
-    print('\n到达 4F:', st(w.hero))
+    print('\n--- 4F 第一次 ---')
+    if not run_segs(w, 4, S[4], '4F'): return 1
+    if not stair(w, 1, 11, '4F(1,11)->5F'): return 1
+
+    print('\n--- 5F 第一次 ---')
+    if not run_segs(w, 5, S[5], '5F'): return 1
+    if not stair(w, 1, 11, '5F(1,11)->4F'): return 1
+
+    print('\n--- 4F 第二次（回）---')
+    w.altar_policy = 'dfn'          # 攻略：4F 祭坛加防（D10→D14）
+    if not run_segs(w, 4, S['4b'], '4F回'): return 1
+    if not stair(w, 1, 11, '4F(1,11)->5F'): return 1
+
+    print('\n--- 5F 第二次（回）---')
+    if not run_segs(w, 5, S['5b'], '5F回'): return 1
+    if not stair(w, 1, 1, '5F(1,1)->6F'): return 1
+
+    print('\n--- 6F 第一次 ---')
+    if not run_segs(w, 6, S[6], '6F'): return 1
+    if not stair(w, 11, 11, '6F(11,11)->7F'): return 1
+
+    print('\n--- 7F 第一次 ---')
+    if not run_segs(w, 7, S[7], '7F'): return 1
+    if not stair(w, 1, 1, '7F(1,1)->8F'): return 1
+
+    print('\n--- 8F ---')
+    if not run_segs(w, 8, S[8], '8F'): return 1
+    if not stair(w, 6, 1, '8F(6,1)->9F'): return 1
+
+    print('\n--- 9F 段1（→铁盾）---')
+    if not run_segs(w, 9, S['9a'], '9F'): return 1
+
+    print('\n--- 9F 补钥：下 6F 取 (9,1) 黄钥（打 (7,1) 僧侣 -32）---')
+    # ⚠️ 攻略未列此步：攻略 9F「过两个黄门」假定手上有 3 把黄钥匙，本路线到 9F 只有 2 把。
+    #    7F 的「5 把/50G」商人在蓝门(5,5) 之后，而蓝钥匙必须留给 11F 银盾（抉择 5），故不走。
+    #    6F (9,1) 黄钥只需打 (7,1) 僧侣（60/32/8，D24 时 -32），是当前唯一不耗钥匙/金币的补充。
+    if not stair(w, 6, 1, '9F(6,1)->8F'): return 1
+    if not stair(w, 1, 1, '8F(1,1)->7F'): return 1
+    if not stair(w, 11, 11, '7F(11,11)->6F'): return 1
+    if not run_segs(w, 6, [(6, 1, ''), (7, 1, '僧侶 -32'), (9, 1, '黄钥')], '6F补钥'): return 1
+    if not stair(w, 11, 11, '6F(11,11)->7F'): return 1
+    if not stair(w, 1, 1, '7F(1,1)->8F'): return 1
+    if not stair(w, 6, 1, '8F(6,1)->9F'): return 1
+
+    print('\n--- 9F 段2（→赤晶/青晶，然后下 7F）---')
+    if not run_segs(w, 9, S['9b'], '9F'): return 1
+    if not stair(w, 6, 1, '9F(6,1)->8F'): return 1
+    if not stair(w, 1, 1, '8F(1,1)->7F'): return 1
+
+    print('\n- 7F 段2')
+    if not run_segs(w, 7, S['7b'], '7F回'): return 1
+    if not stair(w, 11, 11, '7F(11,11)->6F'): return 1
+    if not stair(w, 1, 1, '6F(1,1)->5F'): return 1
+    if not stair(w, 1, 11, '5F(1,11)->4F'): return 1
+    if not stair(w, 11, 11, '4F(11,11)->3F'): return 1
+
+    print('\n- 3F 段2')
+    if not run_segs(w, 3, S['3c'], '3F回'): return 1
+    if not stair(w, 11, 11, '3F(11,11)->4F'): return 1
+
+    print('\n- 4F 段3（回）')
+    if not run_segs(w, 4, S['4c'], '4F回'): return 1
+    if not stair(w, 1, 11, '4F(1,11)->5F'): return 1
+    if not stair(w, 1, 1, '5F(1,1)->6F'): return 1
+    if not stair(w, 11, 11, '6F(11,11)->7F'): return 1
+    if not stair(w, 1, 1, '7F(1,1)->8F'): return 1
+
+    print('\n- 8F 段2（回）')
+    if not run_segs(w, 8, S['8b'], '8F回'): return 1
+    if not stair(w, 1, 1, '8F(1,1)->7F'): return 1
+    if not stair(w, 11, 11, '7F(11,11)->6F'): return 1
+    if not stair(w, 1, 1, '6F(1,1)->5F'): return 1
+    if not stair(w, 1, 11, '5F(1,11)->4F'): return 1
+    if not stair(w, 11, 11, '4F(11,11)->3F'): return 1
+    if not stair(w, 1, 11, '3F(1,11)->2F'): return 1
+    if not stair(w, 1, 1, '2F(1,1)->1F'): return 1
+
+    print('\n- 1F 段2（回）')
+    if not run_segs(w, 1, S['1b'], '1F回'): return 1
+    if not stair(w, 1, 1, '1F(1,1)->2F'): return 1
+    if not stair(w, 1, 11, '2F(1,11)->3F'): return 1
+    if not stair(w, 11, 11, '3F(11,11)->4F'): return 1
+
+    print('\n- 4F 段4（回）')
+    if not run_segs(w, 4, S['4d'], '4F回'): return 1
+    if not stair(w, 1, 11, '4F(1,11)->5F'): return 1
+    if not stair(w, 1, 1, '5F(1,1)->6F'): return 1
+
+    print('\n- 6F 段2（回）')
+    if not run_segs(w, 6, S['6b'], '6F回'): return 1
+    if not stair(w, 1, 1, '6F(1,1)->5F'): return 1
+    if not stair(w, 1, 11, '5F(1,11)->4F'): return 1
+    if not stair(w, 11, 11, '4F(11,11)->3F'): return 1
+
+    print('\n- 3F 段3（回）')
+    if not run_segs(w, 3, S['3d'], '3F回'): return 1
+    if not stair(w, 11, 11, '3F(11,11)->4F'): return 1
+
+    print('\n- 4F 段5（回）')
+    if not run_segs(w, 4, S['4e'], '4F回'): return 1
+    if not stair(w, 1, 11, '4F(1,11)->5F'): return 1
+
+    print('\n- 5F 段3（回）')
+    if not run_segs(w, 5, S['5c'], '5F回'): return 1
+    if not stair(w, 1, 11, '5F(1,11)->4F'): return 1
+
+    print('\n到 4F（第6次）:', st(w.hero))
+
+    print('\n--- 4F 段6（回）：左下打绿史莱姆 → 补钥 ---')
+    if not run_segs(w, 4, [(4, 8, '黄门(4,8) 已开'), (4, 9, ''), (4, 10, ''),
+                           (4, 11, 'Ｇスライム -1')], '4F回'): return 1
+
+    print('\n--- 补钥：6F 蓝钥匙(50G) → 7F 蓝门(5,5) → 5 黄钥匙(50G) ---')
+    # ⚠️ 攻略未列：本路线黄钥匙账持续偏紧（9F/1F 都需要连续两把黄门）。
+    #    6F(8,4) 卖蓝钥匙 50G；拿到后开 7F 蓝门(5,5)，(6,1) 卖 5 黄钥匙 50G。零 HP 代价。
+    #    代价：金币 -100，蓝钥匙被 7F(5,5) 用掉 → 11F 银盾前须另找（8F(7,10) 蓝钥匙仍在）
+    if not stair(w, 1, 11, '4F(1,11)->5F'): return 1
+    if not stair(w, 1, 1, '5F(1,1)->6F'): return 1
+    if not run_segs(w, 6, [(11, 2, '黄门(11,2)'), (11, 3, ''), (11, 4, 'バット -8'),
+                           (10, 4, ''), (9, 4, ''),
+                           (9, 3, ''), (8, 3, '赤薬 +50'), (8, 4, '商店：蓝钥匙 50G')], '6F买蓝钥'): return 1
+    if not stair(w, 11, 11, '6F(11,11)->7F'): return 1
+    if not run_segs(w, 7, [(5, 6, 'y6 走廊'), (5, 5, '蓝门(5,5)'), (5, 4, ''),
+                           (5, 3, 'Ｒスライム -1'), (5, 2, ''), (6, 2, ''),
+                           (6, 1, '商店：5 黄钥匙 50G')], '7F买黄钥'): return 1
+
+    print('\n--- 下 1F（7F→6F→5F→4F→3F→2F→1F）---')
+    if not stair(w, 11, 11, '7F(11,11)->6F'): return 1
+    if not stair(w, 1, 1, '6F(1,1)->5F'): return 1
+    if not stair(w, 1, 11, '5F(1,11)->4F'): return 1
+    if not stair(w, 11, 11, '4F(11,11)->3F'): return 1
+    if not stair(w, 1, 11, '3F(1,11)->2F'): return 1
+    if not stair(w, 1, 1, '2F(1,1)->1F'): return 1
+
+    print('\n到 1F（第3次）:', st(w.hero))
+
+    print('\n- 1F 段3（回）')
+    if not run_segs(w, 1, S['1c'], '1F回'): return 1
+    if not stair(w, 1, 1, '1F(1,1)->2F'): return 1
+    if not stair(w, 1, 11, '2F(1,11)->3F'): return 1
+    if not stair(w, 11, 11, '3F(11,11)->4F'): return 1
+    if not stair(w, 1, 11, '4F(1,11)->5F'): return 1
+    if not stair(w, 1, 1, '5F(1,1)->6F'): return 1
+    if not stair(w, 11, 11, '6F(11,11)->7F'): return 1
+
+    print('\n到 7F（第4次）:', st(w.hero))
+
+    print('\n- 7F 段3（回）')
+    if not run_segs(w, 7, S['7c'], '7F回'): return 1
+    if not stair(w, 1, 1, '7F(1,1)->8F'): return 1
+    if not stair(w, 6, 1, '8F(6,1)->9F'): return 1
+
+    print('\n到 9F（第3次）:', st(w.hero))
+
+    print('\n- 9F 段3（回）')
+    if not run_segs(w, 9, S['9c'], '9F回'): return 1
+    if not stair(w, 1, 11, '9F(1,11)->10F'): return 1
+
+    print('\n到 10F:', st(w.hero))
+
+    print('\n- 10F 下段')
+    if not run_segs(w, 10, S['10a'], '10F'): return 1
+
+    print('\n第一区（1F-10F）收集完成:', st(w.hero))
     return 0
 
 
