@@ -236,6 +236,22 @@ def fly(w, target_f, label=''):
     return True
 
 
+def wing_up(w, label=''):
+    """同层飞行器 obj107 昇華の翼：瞬移到本层上行梯旁踏出格（同层，不动层）。"""
+    h = w.hero
+    before = _snap(w.hero)
+    lg = w.wing_up()
+    if lg and ('尚未持有' in lg[0] or '无上行梯' in lg[0] or '无可走邻格' in lg[0]):
+        print('  !! 昇華の翼失败: %s' % lg)
+        return False
+    _trace(w, before, '·', lg, 'wing')
+    REC.append((w.hero.f, w.hero.x, w.hero.y, w.hero.hp, w.hero.atk, w.hero.dfn,
+                w.hero.gold, w.hero.keys['y'], w.hero.keys['b'], w.hero.keys['r'],
+                ';'.join(lg)[:80], 'WING'))
+    print('  %-22s %s' % (label, st(w.hero)))
+    return True
+
+
 def run_segs(w, f, segs, tag=''):
     for (x, y, lab) in segs:
         if not goto(w, x, y, '%s(%d,%d) %s' % (tag or '%dF' % f, x, y, lab)):
@@ -1034,6 +1050,22 @@ def main():
 
     print(chr(10) + '--- 34F ---')
     if not run_segs(w, 34, Q['34a'], '34F'): return 1
+
+    # ---------- 14F/2F 子访（攻略 §7.2 34F→14F→2F 链：救 2F 小偷 + 补钥匙）----------
+    #   ⚠️ 2F 救小偷是 35F 密道硬前置（盗贼 obj88 需 2F 小偷对话生成）；
+    #      14F 子访给 4 黄钥+1 蓝钥（蓝钥开 2F 蓝门），2F 子访给 3 黄钥+3 蓝药+1000G+3% 攻防。
+    #   用飞行之珠往返（obj26 无限次），无需走 20 层楼梯。
+    print(chr(10) + '--- 飞 14F 子访 ---')
+    if not goto(w, 2, 1, '34F 下梯旁(2,1)'): return 1
+    if not fly(w, 14, '34F→14F'): return 1
+    if not run_segs(w, 14, Q['14s'], '14F子访'): return 1
+    if not goto(w, 6, 10, '14F 上梯旁(6,10)'): return 1
+    if not fly(w, 2, '14F→2F'): return 1
+    if not run_segs(w, 2, Q['2s'], '2F子访'): return 1
+    if not goto(w, 1, 10, '2F 上梯旁(1,10)'): return 1
+    if not fly(w, 34, '2F→34F'): return 1
+    print(chr(10) + '★ 子访完成，回 34F:', st(w.hero))
+
     if not stair(w, 6, 11, '34F(6,11)->35F'): return 1
     print(chr(10) + '★★ 进 35F:', st(w.hero))
 
@@ -1055,7 +1087,152 @@ def main():
     print(chr(10) + '--- 12F 暗道找商人买红钥匙 ---')
     if not run_segs(w, 12, Q['12a'], '12F'): return 1
     if not fly(w, 38, '12F→38F（飞行之珠）'): return 1
-    print(chr(10) + '★★ 到 38F:', st(w.hero))
+    print(chr(10) + '--- 38F 上区（红门+幽灵+买钥）---')
+    if not run_segs(w, 38, Q['38a'], '38F上区'): return 1
+    if not stair(w, 11, 1, '38F(11,1)->39F'): return 1
+    print(chr(10) + '★★ 进 39F:', st(w.hero))
+
+    print(chr(10) + '--- 39F 右上区（幽灵+鬼战士+红宝石）---')
+    if not run_segs(w, 39, Q['39a'], '39F右上'): return 1
+    if not fly(w, 31, '39F→31F（飞行之珠）'): return 1
+    print(chr(10) + '★★ 到 31F:', st(w.hero))
+
+    print(chr(10) + '--- 31F 左上区（双手剑士+钥匙）---')
+    if not run_segs(w, 31, Q['31c'], '31F左上'): return 1
+    if not fly(w, 38, '31F→38F（飞行之珠）'): return 1
+    print(chr(10) + '★★ 回 38F:', st(w.hero))
+
+    print(chr(10) + '--- 38F 骑士盾段（贴右墙+血瓶+骑士+行11+中区+骑士盾）---')
+    if not run_segs(w, 38, Q['38b'], '38F骑士盾'): return 1
+    if not fly(w, 31, '38F→31F（飞行之珠，下梯旁(1,1)）'): return 1
+    print(chr(10) + '★★ 到 31F:', st(w.hero))
+
+    print(chr(10) + '--- 31F 右下区（血瓶+红水晶+黄钥+蓝水晶+血瓶）---')
+    if not run_segs(w, 31, Q['31d'], '31F右下'): return 1
+    if not stair(w, 6, 11, '31F(6,11)->32F'): return 1
+    print(chr(10) + '★★ 进 32F:', st(w.hero))
+
+    print(chr(10) + '--- 32F 祭坛献 ATK×2 + DEF×1（PC-98 补强：A142→A162、D115→D125）---')
+    print('  （A≥150 才可 1 回合秒双手剑士(剣士 HP100/DF50)；骑士 3×(230-D) 需高 DEF）')
+    w.altar_policy = 'atk'
+    if not run_segs(w, 32, Q['32e1'], '32F祭坛ATK×2'): return 1
+    print(chr(10) + '  献 ATK×2 后:', st(w.hero))
+    w.altar_policy = 'dfn'
+    if not run_segs(w, 32, Q['32e2'], '32F祭坛DEF×1'): return 1
+    print(chr(10) + '★ 32F 结束态:', st(w.hero))
+
+    # （2026-11-01 修正）33c 段「回访 33F 血瓶(5,2)」已删除：血瓶 obj67 早在 33b 段
+    #   去程 (5,2) 就被拾取（HP1779→1979，+200 已验证），33c 是重复访问空格，无任何收获。
+
+    # ---------- 4 区下半段（攻略 §7.2 行294-301）----------
+    print(chr(10) + '--- 飞 39F（行295：右下黄门打骑士→血瓶→向左过黄门→双手剑士→蓝宝石→黄门拿钥匙→老头→上楼）---')
+    if not fly(w, 39, '32F→39F'): return 1
+    if not run_segs(w, 39, Q['39c'], '39F'): return 1
+    if not stair(w, 11, 11, '39F(11,11)->40F'): return 1
+    print(chr(10) + '★★ 进 40F:', st(w.hero))
+
+    # 40F 段①（行296）：向左过黄门再蓝门打骑士→拿钥匙+血瓶+红/蓝宝石→下 7F
+    if not run_segs(w, 40, Q['40a'], '40F'): return 1
+    print(chr(10) + '★ 40F 段①结束:', st(w.hero))
+    if not fly(w, 7, '40F→7F'): return 1
+
+    # 7F 段（行297）：上中黄门打骷髅战士→商人 50G 买 5 黄钥匙→上 34F
+    if not run_segs(w, 7, Q['7a'], '7F'): return 1
+    print(chr(10) + '★ 7F 段结束:', st(w.hero))
+    if not fly(w, 34, '7F→34F'): return 1
+
+    # ---------- 34F 第二次（攻略 §7.2 行298：过 8 道黄门屠杀 → 拿红钥匙+黄钥匙 → 左下双手剑士 → 拿血瓶 → 上 40F）----------
+    #   ⚠️ PC-98 与中文 v1.1 基线差异：
+    #     · 34a 段（第一次 34F）已取红钥(2,6)+黄钥(1,5)(3,5)(1,7)(3,7)、血瓶(3,1)、青药(1,11)、
+    #       并杀 スライムマン(2,3)、剣士(1,10)、死霊兵士(3,9)，开了 (2,4)(2,8)(4,10) 三道黄门。
+    #     · 本段剩余：黄钥(6,1)(9,1)(10,1)(10,2)(10,11)、蓝水晶(11,1)+4DEF、血瓶(11,2)(11,10)、
+    #       红水晶(11,11)+4ATK、騎士(7,2)(9,8)、剣士(7,4)、死霊兵士(5,8)、スライムマン(5,2)、
+    #       兵士(9,10)(2,11)(11,4)、Ｇスライム(5,4)、Ｂスライム(9,4)、Ｒスライム(7,8)、バット(11,8)。
+    #     · 只开 4 道黄门 [(4,2)(8,2)(7,5)(8,10)]，不碰 y5/y7 其余门（无钥匙+高战损不值）。
+    if not run_segs(w, 34, Q['34b'], '34F二访'): return 1
+    print(chr(10) + '★ 34F 二访结束:', st(w.hero))
+
+    # 上 40F（行299：过红门决战 → 拿钥匙+红/蓝宝石 → 下 15F）—— 用飞行之珠（34F 楼梯旁）
+    if not fly(w, 40, '34F→40F（飞行之珠）'): return 1
+    print(chr(10) + '★★ 进 40F:', st(w.hero))
+
+    # ⚠️ 40F 决战（行299「过红门决战」）PC-98 现实：北区（红门(6,8) 后）是纯怪死路，
+    #   仅给金币，无任何道具；且要花掉最后 1 把红钥（红12/12 全局恰好=0，一把不能浪费）
+    #   + 掉约 876 HP（D137 时騎士×3=558/死霊×3=129/兵士×3=189），收益 700G 不成比例。
+    #   中文 v1.1 基线 D198 决战近免伤；PC-98 祭坛只 +10/+10，达不到 → 本段跳过红门决战，
+    #   直接飞 15F（行300）。红钥留给 5 区 24F 红门（50F 入口必需）。
+
+    # ---------- 15F（行300：右下商人 200G 买 1 蓝钥匙 → 上 39F）----------
+    if not fly(w, 15, '40F→15F（飞行之珠）'): return 1
+    print(chr(10) + '★★ 进 15F:', st(w.hero))
+    if not run_segs(w, 15, Q['15b'], '15F'): return 1
+    print(chr(10) + '★ 15F 段结束:', st(w.hero))
+    if not fly(w, 39, '15F→39F（飞行之珠）'): return 1
+
+    # ---------- 39F 段③（行301：左下过蓝门取同层飞行器 → 上 41F）----------
+    print(chr(10) + '★★ 进 39F（三访）:', st(w.hero))
+    if not run_segs(w, 39, Q['39d'], '39F三访'): return 1
+    print(chr(10) + '★ 39F 三访结束（已取昇華の翼 obj107）:', st(w.hero))
+
+    # 上 41F（5 区入口）—— 引擎未建模 向上飞行器(obj107)，用 obj26 飞行之珠 fly(41)
+    if not fly(w, 41, '39F→41F（飞行之珠）'): return 1
+    print(chr(10) + '★★ 到 41F（4 区/5 区分界）:', st(w.hero))
+
+    # ================= 第五区 41-50F（攻略 §8） =================
+    # ---------- 41F（§8.2 行321：用同层飞行器飞到下方楼梯口 → 上 42F）----------
+    #   当前 41F(6,2)（下行梯旁）。用 obj107 昇華の翼 同层瞬移到上行梯(6,11)旁踏出格(6,10)，
+    #   省去横穿 2 魔法警卫（扣约 12 血）+ 3 黄钥匙。
+    if not wing_up(w, '41F 昇華の翼→上行梯口(6,10)'): return 1
+    if not stair(w, 6, 11, '41F(6,11)->42F'): return 1
+    print(chr(10) + '★★ 进 42F:', st(w.hero))
+    print('  items@42F:', sorted(w.hero.items))
+
+    # ---------- 42F（§8.2 行322）----------
+    #   剧情骑士队长被杀（已建模：金骑士+4魔導師清场）→ 下 20F 右下打高级法师（不伤）拿血瓶 → 上 42F
+    print(chr(10) + '--- 42F→20F 拿血瓶（飞行之珠，42F(6,10) 邻下行梯(6,11)）---')
+    if not fly(w, 20, '42F→20F（飞行之珠）'): return 1
+    print(chr(10) + '★★ 到 20F:', st(w.hero))
+    if not run_segs(w, 20, Q['42a'], '20F血瓶'): return 1
+    print(chr(10) + '★ 20F 血瓶段结束:', st(w.hero))
+    if not fly(w, 42, '20F→42F（飞行之珠）'): return 1
+    print(chr(10) + '★★ 回 42F:', st(w.hero))
+
+    # ---------- 42F 首次访问·东区右上（§8.2 行322「右中过黄门…拿钥匙→同层飞行→上 43F」）----------
+    #   ⚠️ 只取右上区 5 黄钥+1 蓝钥；避开 (10,8) 魔導師夹击（不碰 2 魔導師，-700 魔法穿行）。
+    #   左下 6 黄钥+1 蓝钥留待后续（需过夹击，HP 代价大，等 43F+ 钥匙预算再定）。
+    print(chr(10) + '--- 42F 东区右上取钥 ---')
+    if not run_segs(w, 42, Q['42b'], '42F东区右上'): return 1
+    print(chr(10) + '★ 42F 东区右上结束（用昇華の翼 → 上行梯(1,1)）:', st(w.hero))
+    if not wing_up(w, '42F 昇華の翼→上行梯口(1,2)'): return 1
+    print('  wing_up:', st(w.hero))
+    if not stair(w, 1, 1, '42F(1,1)->43F'): return 1
+    print(chr(10) + '★★ 进 43F:', st(w.hero))
+
+    # ---------- 43F 首次访问（§8.2 行323「向下过蓝门、过黄门 → 上 45F」）----------
+    print(chr(10) + '--- 43F 首访直穿 ---')
+    if not run_segs(w, 43, Q['43a'], '43F直穿'): return 1
+    if not stair(w, 1, 11, '43F(1,11)->45F'): return 1
+    print(chr(10) + '★★ 进 45F:', st(w.hero))
+
+    # ---------- 45F 首访（§8.2 行324「45F：直接上楼」）----------
+    print(chr(10) + '--- 45F 直上 ---')
+    if not run_segs(w, 45, Q['45a'], '45F直上'): return 1
+    if not stair(w, 11, 1, '45F(11,1)->46F'): return 1
+    print(chr(10) + '★★ 进 46F:', st(w.hero))
+
+    # ---------- 46F 首访（§8.2 行325「下 18F 左上拿血瓶 → 回 46F → 下穿 3 黄门 → 上 47F」）----------
+    #   ① 飞 18F：左上口袋经 11F-20F 段已开的 (4,1) 蓝门 → (1,3) 黄门 → (2,4) 血瓶 +100。
+    #   ② 飞回 46F。③ 直下 x11 列过 3 黄门，(11,9) 邻 魔術師Ｂ -100 → (11,11) 上 47F。
+    print(chr(10) + '--- 46F 首访·跨 18F 拿血瓶 ---')
+    if not fly(w, 18, '46F->18F'): return 1
+    print('  落 18F:', st(w.hero))
+    if not run_segs(w, 18, Q['46b_18F'], '18F左上血瓶'): return 1
+    if not fly(w, 46, '18F->46F'): return 1
+    print('  回 46F:', st(w.hero))
+    print(chr(10) + '--- 46F 下穿 3 黄门 ---')
+    if not run_segs(w, 46, Q['46a'], '46F下穿'): return 1
+    if not stair(w, 11, 11, '46F(11,11)->47F'): return 1
+    print(chr(10) + '★★ 进 47F:', st(w.hero))
 
     return 0
 

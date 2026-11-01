@@ -134,7 +134,14 @@ for _o in SHOP:
 PICKUP_TYPES = {3, 4, 8}                            # STATUS/ITEM/KEY：踏入即拾取
 MONSTER_TYPE = 6
 
-MAGIC_HALF_ATK = {58, 96}       # ⚠️ 魔导师/大魔导师战斗前削减主角 HP（我从未在指令流里逐条确认）
+MAGIC_HALF_ATK = {58, 96}       # ⚠️ 旧模型（战斗前半血）——已被 MAGIC_PASSBY 取代，见下；保留以免破坏引用
+# ✅ 穿行魔法伤害（Java MTower.ichicheck2 L832-931 实证 + PC-98 42F(1,4) 消息互证）：
+#   · 魔導師(58)「夹击」：当左右两格或上下两格**都是**魔導師 → 英雄 HP 减半（你血越多扣越多）
+#   · 魔術師Ａ(99) 邻接 → -200；魔術師Ｂ(100) 邻接 → -100
+#   · 圣盾 obj38 在身 → 全部魔法攻击无效（Java mapObject[73][121]==0 才生效）
+MAGIC_SANDWICH = {58}                   # 夹击→半血
+MAGIC_ADJ_DMG  = {99: 200, 100: 100}    # 邻接→固定伤害
+SACRED_SHIELD  = 38                     # 聖盾
 # 📝 盗贼凿墙事件（dynamic.csv 实证：触发格 obj88 MESSAGE「…大ダコが道をふさいでいて…抜け穴が…」，
 #    目标格 directCheck 墙→地板；35F(5,10)→35F 暗道同机制）。键=被挖开的墙格，值=盗贼触发格
 DIG_WALLS = {(15, 8, 1): (15, 9, 1),
@@ -348,6 +355,7 @@ class World:
     slime30: bool = False            # 30F 六只史莱姆已清 → (30,6,4)(6,7) 落穴消失、(30,6,1) 现上行梯
     altar_k: int = 0                  # 📝 本存档累计祭坛已使用次数（决定下一次代价）
     altar_policy: str = 'atk'         # 📝 祭坛菜单选择：hp / atk / dfn（A* 无法处理菜单，按策略预设）
+    story42: bool = False             # ✅ 42F 剧情：骑士队长已逃（金騎士清场）
 
     @classmethod
     def new(cls, event_mode='on_entry', hero=None, trap_mode='apply'):
@@ -374,6 +382,16 @@ class World:
                 continue                                  # ✅ 该格静态是怪/BOSS，事件写入不得覆盖（否则 BOSS 消失、怪免打）
             if o:
                 self.set_at(f, x, y, o)
+        if f == 42:
+            # ✅ 42F 剧情：金騎士（骑士队长）威胁→受伤逃走（strNumber 27/28），
+            #    不实际战斗。与 3F 同型菱形：中央金騎士 (6,8) + 四角 4 只魔導師伏兵
+            #    (6,7)(5,8)(7,8)(6,9) 全部随剧情清场（同 3F 四角撤走）。
+            #    ✅ 依据：攻略 §8.2 行322 只提「2 初级巫师+2 魔法警卫扣血」——
+            #    那 2 魔法警卫是右侧 (9,8)(11,8) 的静态魔導師，4 只伏兵不是战斗目标；
+            #    且若不清场，42F 起点 (6,10) 会被 (6,9) 伏兵堵死，无法「右中过黄门」。
+            for c in ((42, 6, 8), (42, 6, 7), (42, 5, 8), (42, 7, 8), (42, 6, 9)):
+                self.cleared.add(c)
+            self.story42 = True
 
     # -- 动作：飞行之珠传送（须站在楼梯旁） ---------------------------------
     def fly(self, target_f):
@@ -396,6 +414,33 @@ class World:
         log = ['飞行之珠传送 → %dF（落点 %s）' % (target_f, FLY_LAND[target_f])]
         self.apply_floor_events(target_f)
         return log
+
+    # -- 动作：同层飞行器（昇華の翼 obj107） ---------------------------------
+    def wing_up(self):
+        """昇華の翼 obj107（同层飞行器）：站在本层任意处，瞬移到本层通往上层的
+        楼梯 STAIRS[f][0] 旁的踏出格（原版「昇華の翼 = 上跳一层 → 送到上行梯口」）。
+        落点取上行梯 4 邻格中第一个层内可走且非怪物格。
+        """
+        h = self.hero
+        if 107 not in h.items:
+            return ['昇華の翼：尚未持有 obj107，无法传送']
+        up = STAIRS.get(h.f)
+        up_cell = up[0] if up else None
+        if up_cell is None:
+            return ['昇華の翼：本层 %dF 无上行梯，无法传送' % h.f]
+        sx, sy = up_cell
+        for d in ((0, -1), (0, 1), (-1, 0), (1, 0)):
+            ax, ay = sx + d[0], sy + d[1]
+            if not (1 <= ax <= 11 and 1 <= ay <= 11):
+                continue
+            if self.terrain_at(h.f, ax, ay) == 1:
+                continue                                  # 墙
+            o = self.at(h.f, ax, ay)
+            if o and TYPE.get(oatr(o, 3), '?') == 'MONSTER':
+                continue                                  # 怪格不停留
+            h.x, h.y = ax, ay
+            return ['昇華の翼：同层瞬移到 %dF(%d,%d)（上行梯旁）' % (h.f, ax, ay)]
+        return ['昇華の翼：上行梯 %dF(%d,%d) 无可走邻格' % (h.f, sx, sy)]
 
     # -- 查询 --------------------------------------------------------------
     def at(self, f, x, y):
@@ -428,6 +473,31 @@ class World:
         turns = math.ceil(hp / per)
         loss = max(atk - h.dfn, 0) * (turns - 1)
         return loss, gold * (2 if LUCKY_GOLD in h.items else 1)
+
+    # ✅ 穿行魔法伤害（Java MTower.ichicheck2 L831-931 实证；PC-98 42F(1,4) 消息互证）：
+    #   每步入新格后调用一次（Java 第 1038 行，仅换格时）。圣盾 obj38 在身则全部无效。
+    def check_magic_passby(self, log):
+        h = self.hero
+        if SACRED_SHIELD in h.items:
+            return None                                  # 聖盾：魔法攻击全免疫
+        f, x, y = h.f, h.x, h.y
+        # 1) 魔導師夹击：左右两格或上下两格都是魔導師 → HP 减半
+        L = self.at(f, x - 1, y); R = self.at(f, x + 1, y)
+        U = self.at(f, x, y - 1); D = self.at(f, x, y + 1)
+        if (L in MAGIC_SANDWICH and R in MAGIC_SANDWICH) or (U in MAGIC_SANDWICH and D in MAGIC_SANDWICH):
+            h.hp = math.ceil(h.hp / 2)
+            log.append('★魔導師夹击 → HP减半（现 %d）' % h.hp)
+            if h.hp <= 0:
+                return ['被魔導師夹击夹死（HP≤0）']
+        # 2) 魔術師邻接固定伤害
+        for c in (L, R, U, D):
+            dmg = MAGIC_ADJ_DMG.get(c)
+            if dmg:
+                h.hp -= dmg
+                log.append('★魔術師邻接 → -%d（现 %d）' % (dmg, h.hp))
+                if h.hp <= 0:
+                    return ['被魔術師魔法打死（HP≤0）']
+        return None
 
     # -- 动作：朝 (dx,dy) 走一步 -------------------------------------------
     def move(self, dx, dy):
@@ -570,6 +640,10 @@ class World:
                 log.append(f'踩过 type0 装饰 obj{o}'); o = 0   # ✅ type0=NORMAL 地板装饰，可踩（obj20 等）
         # 落格
         h.x, h.y = nx, ny
+        # ✅ 穿行魔法伤害：每步入新格判定（夹击半血 / 魔術師邻接-200/-100，圣盾免）
+        r = self.check_magic_passby(log)
+        if r:
+            return r
         if (f, nx, ny) in DIG_TRIG:                   # 📝 盗贼格是 eventMT 动态生成（静态表 obj=0），
             self.cleared.add((f, nx, ny))             #    踩到即交谈，凿开对应墙格
             tg = DIG_TRIG[(f, nx, ny)]
