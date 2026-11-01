@@ -1234,6 +1234,21 @@ def main():
     if not stair(w, 11, 11, '46F(11,11)->47F'): return 1
     print(chr(10) + '★★ 进 47F:', st(w.hero))
 
+    # ---------- 47F（§8.2 行326：飞15F打大乌贼拿镐 → 飞32F打骑士拿钥匙 → 飞回47F）----------
+    #   ⚠️ 忠实翻译行326；但 11F(8,11) 血瓶、40F(1,10) 血瓶已被本路线提前取走 → 只做 15F+32F 两站。
+    print(chr(10) + '--- 47F 段①：飞 15F 打大乌贼拿镐 ---')
+    if not fly(w, 15, '47F→15F（飞行之珠）'): return 1
+    print('  落 15F:', st(w.hero))
+    if not run_segs(w, 15, Q['47a_15F'], '15F大乌贼'): return 1
+    print(chr(10) + '★ 15F 大乌贼段结束（拿镐）:', st(w.hero))
+    print(chr(10) + '--- 47F 段②：飞 32F 打骑士拿钥匙 ---')
+    if not fly(w, 32, '15F→32F（飞行之珠）'): return 1
+    print('  落 32F:', st(w.hero))
+    if not run_segs(w, 32, Q['47b_32F'], '32F骑士'): return 1
+    print(chr(10) + '★ 32F 骑士段结束（拿钥匙）:', st(w.hero))
+    if not fly(w, 47, '32F→47F（飞行之珠）'): return 1
+    print(chr(10) + '★★ 回 47F（47F 段完成）:', st(w.hero))
+
     return 0
 
 
