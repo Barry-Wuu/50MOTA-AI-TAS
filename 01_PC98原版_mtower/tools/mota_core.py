@@ -283,6 +283,20 @@ _TRAP_GUARD_CELLS = set()          # 由剧本自己放置的格，不进"进层
 #    若照搬成进层覆盖，红门会凭空变成可通行装饰，红钥匙门槛被整个跳过。
 BOSS_DOOR_CELLS = {(20, 6, 9)}
 
+# ✅ 15F 大乌贼 = 单体多格 Boss（资料笔记 §十「9 格同数据；杀本体后九格一次全清 + 掉普通镐」）。
+#    9 格占 (5..7, 4..6)：obj50/51/52（y4 行）、obj60/61/62（y5 行）、obj70/71/72（y6 行）。
+#    本体 obj71 在 (6,6)，四维 1200/180/20/100；其余 8 格是「大ダコの一部」，四维 1200/180/20/50。
+#    引擎旧模型把这 9 格当 9 只独立怪（每格 -301）→ 错；真相是 **1 场战斗**（对本体 obj71）。
+#    杀本体后（@3099-3129）：3×3 九格一次清空 + 落穴 (6,3)(6,9) 消失 + (6,5) 生成普通镐 obj114。
+OCTO_F = 15
+OCTO_MAIN_OBJ = 71                                     # 本体 obj71（四维 1200/180/20/100）
+OCTO_MAIN = (15, 6, 6)                                  # 本体格 (6,6)
+OCTO_BODY = [(15, x, y) for x in (5, 6, 7) for y in (4, 5, 6)]   # 3×3 九格（含本体）
+OCTO_OBJS = {50, 51, 52, 60, 61, 62, 70, 71, 72}        # 九格的对象 id（含本体 71）
+OCTO_PITS = [(15, 6, 3), (15, 6, 9)]                    # 杀后消失的两道落穴
+OCTO_PICK = (15, 6, 5)                                  # 杀后 (6,5) 生成普通镐 obj114
+OCTO_TRIGGER = (15, 6, 8)                               # 📝 踩 (6,8) 且本体仍在 → (6,9) 变落穴（封出口）
+
 # ✅ 2F 奖励 NPC：静态初始是 obj174(+1000G)/obj152(ATK/DEF×1.03)，
 #    dyn_raw 里的 obj173/obj151 是「对话后」的替换（MTower.java @3751/@3761），
 #    不是进层即写入。若照搬成进层覆盖，1000G 与 +3% 将永远拿不到。
@@ -356,12 +370,13 @@ class World:
     altar_k: int = 0                  # 📝 本存档累计祭坛已使用次数（决定下一次代价）
     altar_policy: str = 'atk'         # 📝 祭坛菜单选择：hp / atk / dfn（A* 无法处理菜单，按策略预设）
     story42: bool = False             # ✅ 42F 剧情：骑士队长已逃（金騎士清场）
+    octo15: bool = False              # ✅ 15F 大乌贼（obj71 本体）已击败 → 3×3 九格清空 + (6,5) 生成镐
 
     @classmethod
     def new(cls, event_mode='on_entry', hero=None, trap_mode='apply'):
         w = cls(hero=hero or Hero.initial(), cells=base_cells(), over={}, ter_over={}, cleared=set(),
                 applied_events=set(), event_mode=event_mode, trap_mode=trap_mode, caveats=set(),
-                bought=set(), boss10=False, boss20=False)
+                bought=set(), boss10=False, boss20=False, octo15=False)
         w.apply_floor_events(w.hero.f)
         return w
 
@@ -543,30 +558,52 @@ class World:
             elif o == 115:                                # ⚠️ 隐形块（GO 0F 字形等）按可走处理
                 log.append('隐形块 obj115 视为可走(caveat)'); self.caveats.add('obj115 可通行未指令流确认'); o = 0
             elif ty == 'MONSTER':
-                r = self.battle(o)
-                if r is None:
-                    return [f'打不动 obj{o} {oname(o)[:10]}']
-                loss, gold = r
-                if o in MAGIC_HALF_ATK:
-                    h.hp = math.ceil(h.hp / 2); log.append(f'{oname(o)[:6]} 半血(⚠️未证)'); self.caveats.add('MAGIC_HALF_ATK 未指令流确认')
-                if h.hp - loss <= 0:
-                    return [f'打不过 obj{o}（需掉血 {loss}，剩 {h.hp}）']
-                h.hp -= loss; h.gold += gold; self.cleared.add((f, nx, ny))
-                log.append(f'击杀 obj{o} {oname(o)[:8]} 掉血{loss} +金{gold}')
-                if f == 2 and o == 15 and self.at(2, 6, 2) == 0 and self.at(2, 8, 2) == 0:
-                    # ✅ @3764：两只門番Ｂ清空 → 播 6 号开门动画，6 个 obj19 栅栏格一并清零
-                    for gx, gy in ((5, 5), (9, 5), (5, 8), (9, 8), (5, 11), (9, 11)):
-                        self.cleared.add((2, gx, gy))
-                    log.append('★2F 两只門番Ｂ已清 → 6 扇监狱栅栏门 obj19 打开')
-                if f == 49:
-                    self.after_49(log)
-                if f == 10 and o == 16:
-                    self.boss10 = True
-                    log.append('★击败10F BOSS(スケルトンＡ) → 10F(6,11) 将生上行梯')
-                if f == 20 and o == 59:
-                    self.boss20 = True
-                    log.append('★击败20F BOSS(バンパイア/吸血鬼) → 20F(6,1) 现出上行梯')
-                o = 0
+                if f == OCTO_F and o in OCTO_OBJS:
+                    # ✅ 大乌贼 = 单体多格 Boss（资料笔记 §十/6.5）：只对本体 obj71 打一场。
+                    #    9 格四维 1200/180/20，本体金 100、其余「一部」金 50。
+                    #    杀本体后 3×3 九格一次清空 + 落穴(6,3)(6,9)消失 + (6,5) 生成普通镐 obj114。
+                    r = self.battle(OCTO_MAIN_OBJ)
+                    if r is None:
+                        return ['打不动大乌贼（obj71 本体）']
+                    loss, gold = r
+                    if h.hp - loss <= 0:
+                        return [f'打不过大乌贼（需掉血 {loss}，剩 {h.hp}）']
+                    h.hp -= loss; h.gold += gold
+                    for c in OCTO_BODY:
+                        self.cleared.add(c)                 # 九格一次全清
+                    self.octo15 = True
+                    self.cleared.discard(OCTO_PICK)         # (6,5) 不放进 cleared，否则 at() 会先命中 cleared 返回 0
+                    self.set_at(*OCTO_PICK, 114)            # (6,5) 生成普通镐 obj114（覆盖拾取可见）
+                    for p in OCTO_PITS:
+                        self.cleared.add(p)                 # 两道落穴消失
+                        self.ter_over.pop(p, None)
+                    log.append(f'★击杀大乌贼（本体 obj71）掉血{loss} +金{gold} → 九格全清，(6,5) 生成镐 obj114')
+                    o = 0
+                else:
+                    r = self.battle(o)
+                    if r is None:
+                        return [f'打不动 obj{o} {oname(o)[:10]}']
+                    loss, gold = r
+                    if o in MAGIC_HALF_ATK:
+                        h.hp = math.ceil(h.hp / 2); log.append(f'{oname(o)[:6]} 半血(⚠️未证)'); self.caveats.add('MAGIC_HALF_ATK 未指令流确认')
+                    if h.hp - loss <= 0:
+                        return [f'打不过 obj{o}（需掉血 {loss}，剩 {h.hp}）']
+                    h.hp -= loss; h.gold += gold; self.cleared.add((f, nx, ny))
+                    log.append(f'击杀 obj{o} {oname(o)[:8]} 掉血{loss} +金{gold}')
+                    if f == 2 and o == 15 and self.at(2, 6, 2) == 0 and self.at(2, 8, 2) == 0:
+                        # ✅ @3764：两只門番Ｂ清空 → 播 6 号开门动画，6 个 obj19 栅栏格一并清零
+                        for gx, gy in ((5, 5), (9, 5), (5, 8), (9, 8), (5, 11), (9, 11)):
+                            self.cleared.add((2, gx, gy))
+                        log.append('★2F 两只門番Ｂ已清 → 6 扇监狱栅栏门 obj19 打开')
+                    if f == 49:
+                        self.after_49(log)
+                    if f == 10 and o == 16:
+                        self.boss10 = True
+                        log.append('★击败10F BOSS(スケルトンＡ) → 10F(6,11) 将生上行梯')
+                    if f == 20 and o == 59:
+                        self.boss20 = True
+                        log.append('★击败20F BOSS(バンパイア/吸血鬼) → 20F(6,1) 现出上行梯')
+                    o = 0
             elif ty == 'DOOR':
                 col = DOOR_OF.get(o)
                 if col is None:
@@ -694,6 +731,12 @@ class World:
                 self.ter_over.pop((30, 6, 4), None)
                 self.ter_over.pop((30, 6, 7), None)
                 log.append('30F 六只史莱姆清空 → 落穴消失，(6,1) 现上行梯')
+        # ✅ 15F 大乌贼陷阱（资料笔记 §event @3127）：踩 (6,8) 且本体 obj71 仍在 →
+        #    (6,9) 变落穴 obj20 封住出口，逼你打完乌贼才能上 16F。
+        #    杀本体后由 OCTO 分支把 (6,9) 一并清空，出口复通。
+        if h.f == 15 and (nx, ny) == (6, 8) and not self.octo15:
+            self.ter_over[(15, 6, 9)] = 3
+            log.append('15F 踩(6,8) → (6,9) 变落穴，封住出口（须先打完大乌贼）')
         if h.f == 3 and (nx, ny) == TRAP_3F['trigger'] and not self.trap_done:
             h.x, h.y = nx, ny
             return self.do_trap3F(log)
