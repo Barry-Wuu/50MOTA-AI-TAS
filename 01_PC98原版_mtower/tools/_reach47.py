@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """47F 清场：从(10,11)到上梯(1,1)必经怪与战损。"""
 import json, math, heapq
-d = json.load(open('../magic_tower1_map_50f.json', encoding='utf-8'))
+d = json.load(open('magic_tower1_map_50f.json', encoding='utf-8'))
 f = d['47']
 terr = f['terrain']
 def is_wall(y, x): return terr[y][x] == 3
