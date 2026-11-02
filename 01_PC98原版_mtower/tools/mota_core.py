@@ -164,15 +164,25 @@ ALTAR_GAIN = {'hp': 200, 'atk': 10, 'dfn': 10}    # 兜底档位常量（saidan 
 #    间接证据：按 D14 复算 5F回/8F 的 8 处战损全部逐点吻合（G-4 / R-12 / 蝙蝠-48 /
 #    スケルトンC-84 / 僧侶-72），而按 D10 全部偏大。
 #    ⚠️ 4F 的 atk/hp 档位仍未验证（本路线只用加防），32F/46F 沿用既有研究结论。
-# ⚠️ 2026-10-31 修正：一度误改为「按楼层缩放 {4:2/4, 12:4/8, ...}」，那是
-#    **中文 v1.1「商店」加点**的规则（数值随区域缩放），不是 PC-98。
-#    攻略 §0 版本对照表 + §1.4 明文：PC-98 是 4 座祭坛、每次献祭**固定 +200HP/+10ATK/+10DEF**，
-#    价格 20/40/80/140/220/320…（全存档累计）。CSV 事件日志亦可证（均记作 atk+10）。
-ALTAR_GAIN_BY_FLOOR = {}      # 空 = 全塔统一用 ALTAR_GAIN（+10/+10/+200）
+# ✅ 2026-11-02 定论修正（用户质疑成立）：PC-98 祭坛收益**随楼层区域缩放**，非固定 +10。
+#   真值来源：`08_Java_MTower08a/decompiled/MTower.java` saidan() 属性写回 @3915-3923——
+#     HP 增益 = (k+1)×100（k=全存档已祭次数，mapObject[66][119]）
+#     ATK 增益 = mapY×2+2；DEF 增益 = mapY×4+4（mapY=楼层区 = (floor-1)//10）
+#   即 4F +2攻/+4防、12F +4攻/+8防、32F +8攻/+16防、46F +10攻/+20防。
+#   ⚠️ 79c9434「恢复固定+10」是错误回退（误把 saidan 绘制显示常量当属性写回 + 引擎CSV循环论证）；
+#     旧「固定+200HP/+10ATK/+10DEF」作废。与 `09_TAS推演/plan_11_20.py` @30-32 原口径一致。
+ALTAR_GAIN_BY_FLOOR = {
+    4:  {'atk': 2,  'dfn': 4},
+    12: {'atk': 4,  'dfn': 8},
+    32: {'atk': 8,  'dfn': 16},
+    46: {'atk': 10, 'dfn': 20},
+}
 
 
-def altar_gain(f, pol):
-    """取该层祭坛的单项收益；未列出的项回落到 ALTAR_GAIN。"""
+def altar_gain(f, pol, k=0):
+    """取该层祭坛的单项收益。ATK/DEF 随楼层区缩放；HP 随累计已祭次数 k 递增（(k+1)×100）。"""
+    if pol == 'hp':
+        return (k + 1) * 100
     g = dict(ALTAR_GAIN)
     g.update(ALTAR_GAIN_BY_FLOOR.get(f, {}))
     return g[pol]
@@ -661,7 +671,7 @@ class World:
                         return ['祭坛金币不足（需%d，有%d）' % (c, h.gold)]
                     h.gold -= c
                     pol = self.altar_policy if self.altar_policy in ALTAR_GAIN else 'atk'
-                    gain = altar_gain(f, pol)
+                    gain = altar_gain(f, pol, self.altar_k)
                     if pol == 'hp':
                         h.hp += gain
                     elif pol == 'atk':

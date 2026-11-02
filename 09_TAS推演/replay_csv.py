@@ -27,14 +27,14 @@ def replay(fn, maxrows=None, quiet=False):
     for i, r in enumerate(rows):
         tf, tx, ty = int(r['floor']), int(r['x']), int(r['y'])
         ev = (r['event'] or '').strip()
-        # ✅ 祭坛菜单无法从动作方向推断：从事件文本识别本次献祭的 policy
-        #    （'祭坛献金20G → dfn+10' / 'atk+10' / 'hp+200'）
+        # ✅ 祭坛菜单无法从动作方向推断：从事件文本识别本次献祭的 policy（前缀匹配，增益随层缩放）
+        #    （'祭坛献金20G → dfn+4' / 'atk+8' / 'hp+100' 等）
         if '祭坛献金' in ev:
-            if 'dfn+10' in ev:
+            if 'dfn+' in ev:
                 w.altar_policy = 'dfn'
-            elif 'atk+10' in ev:
+            elif 'atk+' in ev:
                 w.altar_policy = 'atk'
-            elif 'hp+200' in ev:
+            elif 'hp+' in ev:
                 w.altar_policy = 'hp'
         nxt = None
         if i + 1 < len(rows):
