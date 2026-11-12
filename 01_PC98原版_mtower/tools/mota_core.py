@@ -468,6 +468,8 @@ class World:
     zeno49_dead: bool = False         # ✅ 49F(6,3) ゼノ已击败 → 战后演出已摆出道具
     f50_talk: int = 0                 # ✅ 50F(6,7) 对话页计数：0→12，计数 2 时 Zeno2 变身
     won50: bool = False               # ✅ 50F(6,5) 真魔王已击败 = 通关
+    center_warp_charges: int = 0      # ✅ 中心飞行器 obj106（空間転移の秘宝）剩余次数：拾取=3，每次 -1；0=不可用。
+                                      #    依据 Java @1203-1206 mapObject[67][120] 计数（拾取=1，用后+1，>=4 归零=3 次）。
 
     @classmethod
     def new(cls, event_mode='on_entry', hero=None, trap_mode='apply'):
@@ -545,18 +547,28 @@ class World:
         return log
 
     # -- 动作：同层飞行器（昇華の翼 obj107） ---------------------------------
-    def wing_up(self):
-        """昇華の翼 obj107（同层飞行器）：站在本层任意处，瞬移到本层通往上层的
-        楼梯 STAIRS[f][0] 旁的踏出格（原版「昇華の翼 = 上跳一层 → 送到上行梯口」）。
-        落点取上行梯 4 邻格中第一个层内可走且非怪物格。
+    def wing_up(self, force_layer=False):
+        """昇華の翼 obj107（向上飞行器，**一次性消耗**）。
+        - force_layer=True 或无上行梯 → 向上飞一层 f+1（落点 FLY_LAND[f+1]）：用于 43F→44F 幻之阶。
+        - 否则 → 同层瞬移到本层上行梯口旁（省路）：用于 42F 之类「同层飞行到楼梯口」。
+        依据：秘宝表 107「上跳一层」；用户定：昇華の翼一次性，且写死用于进 44F（43F force_layer）。
         """
         h = self.hero
         if 107 not in h.items:
             return ['昇華の翼：尚未持有 obj107，无法传送']
         up = STAIRS.get(h.f)
         up_cell = up[0] if up else None
-        if up_cell is None:
-            return ['昇華の翼：本层 %dF 无上行梯，无法传送' % h.f]
+        # ① 强制上移一层（或无上行梯）→ f+1
+        if force_layer or up_cell is None:
+            if h.f + 1 in FLY_LAND:
+                h.items.discard(107)                      # 一次性消耗
+                old = h.f
+                h.f = h.f + 1; h.x, h.y = FLY_LAND[h.f]
+                self.apply_floor_events(h.f)
+                return ['昇華の翼（一次性）：%dF→%dF 向上飞一层（落点 %s）'
+                        % (old, h.f, FLY_LAND[h.f])]
+            return ['昇華の翼：%dF 上方无可达楼层' % h.f]
+        # ② 同层瞬移到上行梯口旁
         sx, sy = up_cell
         for d in ((0, -1), (0, 1), (-1, 0), (1, 0)):
             ax, ay = sx + d[0], sy + d[1]
@@ -567,10 +579,9 @@ class World:
             o = self.at(h.f, ax, ay)
             if o and TYPE.get(oatr(o, 3), '?') == 'MONSTER':
                 continue                                  # 怪格不停留
+            h.items.discard(107)                          # 一次性消耗
             h.x, h.y = ax, ay
-            # ✅ 昇華の翼 / 降臨の翼是**永久秘宝**（秘宝表：107「39F，上跳一层」、108「41F，下跳一层」），
-            #    不是消耗品。原实现 discard(107) 会让 42F「同层飞行到楼梯口」无法执行（V72 直接卡死）。
-            return ['昇華の翼：同层瞬移到 %dF(%d,%d)（上行梯旁）' % (h.f, ax, ay)]
+            return ['昇華の翼（一次性）：同层瞬移到 %dF(%d,%d)（上行梯旁，已消耗）' % (h.f, ax, ay)]
         return ['昇華の翼：上行梯 %dF(%d,%d) 无可走邻格' % (h.f, sx, sy)]
 
     # -- 查询 --------------------------------------------------------------
@@ -998,6 +1009,9 @@ class World:
         if dfn: h.dfn += dfn
         if TYPE.get(oatr(o, 3)) == 'ITEM':
             h.items.add(o)
+        if o == 106:
+            self.center_warp_charges = 3              # ✅ 中心飞行器：拾取即 3 次（Java @5544 拾取=1，@1203-1206 起算）
+            log.append('★拾取中心飞行器 obj106（空間転移の秘宝）：可用 3 次中心对称瞬移')
         log.append(f'拾取 obj{o} {oname(o)[:14]} (HP+{hp} ATK+{atk} DEF+{dfn})')
 
     def use_pick(self):
@@ -1076,8 +1090,28 @@ class World:
             return True, ['超级镐 obj112 已使用：本层无真墙']
         return True, ['★使用超级镐 obj112：破整层 %d 格真墙' % len(broken)]
 
+    def use_magic_key(self):
+        """魔法钥匙 obj111（46F(3,8)）：一次性，**打开本层所有门**（黄/蓝/红），不耗钥匙。
+        依据：texts line3554「可打开一层楼所有的门」、line4160「使用了魔法钥匙！本层所有的门都打开了！」。
+        """
+        h = self.hero
+        if 111 not in h.items:
+            return False, ['没有魔法钥匙 obj111']
+        f = h.f
+        opened = []
+        for y in range(1, 12):
+            for x in range(1, 12):
+                o = self.at(f, x, y)
+                if o in (2, 4, 27):                  # 黄门 obj2 / 蓝门 obj4 / 红门 obj27
+                    self.cleared.add((f, x, y))
+                    opened.append((x, y, o))
+        h.items.discard(111)
+        if not opened:
+            return True, ['魔法钥匙 obj111 已使用：本层无门可开']
+        return True, ['★使用魔法钥匙 obj111：%dF 打开全部 %d 扇门 %s' % (f, len(opened), opened)]
+
     def wing_down(self):
-        """降臨の翼 obj108（向下飞行器）：站在本层任意处，瞬移到本层下行梯口旁。
+        """降臨の翼 obj108（向下飞行器，**一次性消耗**）：站在本层任意处，瞬移到本层下行梯口旁。
         若本层无下行梯（如 1F），则视为「向下飞行一层」→ 降落至下一层（特殊：1F→0F）。
         依据：资料笔记「降臨の翼＝向下飞行器；0F 要等 41F 拿降臨の翼才能下到」。
         """
@@ -1098,19 +1132,70 @@ class World:
                 o = self.at(f, ax, ay)
                 if o and TYPE.get(oatr(o, 3)) == 'MONSTER':
                     continue
+                h.items.discard(108)                  # 一次性消耗
                 h.x, h.y = ax, ay
-                return ['降臨の翼：同层瞬移到 %dF(%d,%d)（下行梯旁）' % (f, ax, ay)]
+                return ['降臨の翼（一次性）：同层瞬移到 %dF(%d,%d)（下行梯旁，已消耗）' % (f, ax, ay)]
             return ['降臨の翼：下行梯 %dF(%d,%d) 无可走邻格' % (f, sx, sy)]
         # ✅ 本层无下行梯 → 向下飞行一层（特殊：1F→0F）
         if f == 1:
+            h.items.discard(108)                      # 一次性消耗
             h.f = 0; h.x, h.y = 1, 2      # 0F(1,1)=上行梯，邻格 (1,2) 可走
             self.apply_floor_events(0)
-            return ['降臨の翼：1F 无下行梯 → 向下飞行至 0F（落点 (1,2)）']
+            return ['降臨の翼（一次性）：1F 无下行梯 → 向下飞行至 0F（落点 (1,2)，已消耗）']
         if f - 1 in FLY_LAND:
+            h.items.discard(108)                      # 一次性消耗
             h.f = f - 1; h.x, h.y = FLY_LAND[f - 1]
             self.apply_floor_events(f - 1)
-            return ['降臨の翼：向下飞行至 %dF（落点 %s）' % (f - 1, FLY_LAND[f - 1])]
+            return ['降臨の翼（一次性）：向下飞行至 %dF（落点 %s，已消耗）' % (f - 1, FLY_LAND[f - 1])]
         return ['降臨の翼：%dF 下方无可达楼层' % f]
+
+    # -- 动作：中心飞行器（空間転移の秘宝 obj106） -----------------------------
+    def wing_center(self):
+        """中心飞行器 obj106（空間転移の秘宝 / The Warp Staff）：可用 3 次，
+        瞬移到本层「中心对称点」 (x,y) → (12-x, 12-y)（以 (6,6) 为中心 180° 旋转）。
+        依据：texts line4052「你得到中心飞行器，可用 3 次到达中心对称的对应点」；
+              Java MTower.java @1191-1202 `n4 = 12 - charaX/5 + mapX*13`、`charaX = (12 - charaX/5)*5`。
+        失败条件（@1193）：目标格 mapObject!=0（有物体）或 map!=1（非地板）→「目标格有障碍物，无法中心飞行」。
+        计数（@1203-1206）：拾取即 3 次，每次使用 -1，用完不可再飞。
+        """
+        h = self.hero
+        if 106 not in h.items:
+            return ['中心飞行器：尚未持有 obj106，无法传送']
+        if self.center_warp_charges <= 0:
+            return ['中心飞行器：已用完（共 3 次）']
+        tx, ty = 12 - h.x, 12 - h.y
+        if not (1 <= tx <= 11 and 1 <= ty <= 11):
+            return ['中心飞行器：目标格 (%d,%d) 越界，无法中心飞行' % (tx, ty)]
+        if self.terrain_at(h.f, tx, ty) == 1:              # mota_core: terrain 1 = 墙
+            return ['中心飞行器：目标格 %dF(%d,%d) 是墙，无法中心飞行' % (h.f, tx, ty)]
+        o = self.at(h.f, tx, ty)
+        if o:                                              # 门/怪/道具/暗墙 等任何物体都算障碍
+            return ['中心飞行器：目标格 %dF(%d,%d) 有障碍物 obj%d，无法中心飞行' % (h.f, tx, ty, o)]
+        self.center_warp_charges -= 1
+        fx, fy = h.x, h.y
+        h.x, h.y = tx, ty
+        return ['中心飞行器：%dF (%d,%d)→(%d,%d)（剩 %d 次）'
+                % (h.f, fx, fy, tx, ty, self.center_warp_charges)]
+
+    def check_39_doors(self):
+        """39F 九门事件（Java @2517-2519 原版逻辑）：开 (4,2)12点 + (6,4)3点 两扇黄门，
+        其余 7 门（(2,2)(6,2)(2,4)(4,4)(2,6)(4,6)(6,6)）仍是黄门 obj2
+        → **(4,4) 生成「中心飞行器 obj106」（Warp Staff / 空間転移の秘宝）**。
+        ⚠️ Java 复刻版 @2519 误写 107（昇華の翼）；原版渲染图 (4,4)=斜放长柄杖(Warp Staff)=obj106
+           （用户实证 + floor_39.png 放大图）。昇華の翼 obj107 实际在 45F(2,10)。
+        """
+        if self.hero.f != 39:
+            return []
+        if self.at(39, 4, 4) == 106:
+            return ['39F 九门事件已完成（(4,4) 已是中心飞行器）']
+        if self.at(39, 4, 2) != 0 or self.at(39, 6, 4) != 0:
+            return []                                  # 12点/3点尚未开
+        keep = [(2, 2), (6, 2), (2, 4), (4, 4), (2, 6), (4, 6), (6, 6)]
+        if any(self.at(39, x, y) != 2 for x, y in keep):
+            return []                                  # 其余 7 门必须保持黄门
+        self.over[(39, 4, 4)] = 106
+        self.cleared.discard((39, 4, 4))
+        return ['★39F 九门事件（12点+3点开、其余7门关）→ (4,4) 生成中心飞行器 obj106（Warp Staff）']
 
     def do_trap3F(self, log):
         h, t = self.hero, TRAP_3F
