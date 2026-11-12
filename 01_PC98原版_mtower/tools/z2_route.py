@@ -3637,6 +3637,18 @@ def main():
     ], 'V80'): return 1
     print('   V80-1 完成: %s' % st(h))
 
+    # ---------- V80-1b: 39F 买蓝钥 obj166（3 把 2000G）备 41F 第 2 扇蓝门 ----------
+    # 41F 暗墙需 2 把蓝钥（左(5,6)+右(7,6)），V80-1 只 1 把。6F obj18 已被 V1-V9 处理、43F(11,11) 不可达。
+    # 39F(9,2) obj166 = 紫钥店 3 蓝钥 2000G（mota_core SHOP_GRANT[166]=[('b',3)]），落点(11,2)沿 y2 直达。
+    print()
+    print('--- V80-1b 39F 买蓝钥 obj166 (3把2000G) ---')
+    if not goto(w, 2, 1, 'V80-1b 到 47F(2,1) 楼梯旁'): return 1
+    if not fly(w, 39, 'V80-1b 47F→39F'): return 1
+    if not run(w, [(9, 2, '★买蓝钥 obj166 (3把2000G)')], 'V80-1b'): return 1
+    if not goto(w, 11, 2, 'V80-1b 回 39F(11,2) 楼梯旁'): return 1
+    if not fly(w, 47, 'V80-1b 39F→47F'): return 1
+    print('  %-26s %s' % ('V80-1b 买蓝钥毕', st(h)))
+
     if os.environ.get('MOTA_STOP_AFTER_V801'):
         print('   V80-1 结束位置确认: %s' % st(h))
         pf = os.environ.get('MOTA_PROBE_FLOOR')
