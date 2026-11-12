@@ -138,10 +138,22 @@ MAGIC_HALF_ATK = {58, 96}       # ⚠️ 旧模型（战斗前半血）——已
 # ✅ 穿行魔法伤害（Java MTower.ichicheck2 L832-931 实证 + PC-98 42F(1,4) 消息互证）：
 #   · 魔導師(58)「夹击」：当左右两格或上下两格**都是**魔導師 → 英雄 HP 减半（你血越多扣越多）
 #   · 魔術師Ａ(99) 邻接 → -200；魔術師Ｂ(100) 邻接 → -100
-#   · 圣盾 obj38 在身 → 全部魔法攻击无效（Java mapObject[73][121]==0 才生效）
+#   · 神盾 obj39（44F 幻の階）在身 → 全部魔法攻击无效
 MAGIC_SANDWICH = {58}                   # 夹击→半血
 MAGIC_ADJ_DMG  = {99: 200, 100: 100}    # 邻接→固定伤害
-SACRED_SHIELD  = 38                     # 聖盾
+# ✅ 2026-11-12 修正：魔法免疫属 **44F 神盾 obj39**，不是 43F 聖盾 obj38。
+#   证据链（三方一致）：
+#   ① 日文原文 MTower.java strMessage[1][75]：
+#      「神盾は、魔法使いしたちの魔法攻撃を防ぐ力があるらしい。……しかし、この盾は幻の階に隠されているそうだ。」
+#      （"The sacred shield can defend you against magic attacks... hidden on a floor that doesn't exist."）
+#      「幻の階」= 44F（同段 strMessage[1][74] 明说 44 階は幻の階，普通楼梯上不去，只能 WARP）。
+#   ② 物品名与属性：obj38 = 聖盾 +50DEF（43F 9,4）；obj39 = 神盾 +100DEF（44F 6,6）。
+#   ③ 中文攻略（apkzu / 3DM / 9game / 百度知道 四源一致）：
+#      「43F:圣盾(+50防御)；44F:神圣盾(+100防御,**忽视魔法攻击**)」。
+#   ⚠️ Java 版未实现该免疫（mapObject[73][121] 全文件仅 11 处读取、0 处置位，
+#      只在 init 清零），故引擎按 PC-98 原版语义与文档描述实现，比 08a Java 版更完整。
+SACRED_SHIELD  = 39                     # 神盾（44F 幻の階）：魔法攻击全免疫
+HOLY_SHIELD    = 38                     # 聖盾（43F）：纯 +50DEF，无魔法效果
 # 📝 盗贼凿墙事件（dynamic.csv 实证：触发格 obj88 MESSAGE「…大ダコが道をふさいでいて…抜け穴が…」，
 #    目标格 directCheck 墙→地板；35F(5,10)→35F 暗道同机制）。键=被挖开的墙格，值=盗贼触发格
 DIG_WALLS = {(15, 8, 1): (15, 9, 1),
@@ -1023,6 +1035,8 @@ class World:
         if dfn: h.dfn += dfn
         if TYPE.get(oatr(o, 3)) == 'ITEM':
             h.items.add(o)
+        if o == SACRED_SHIELD:
+            h.items.add(SACRED_SHIELD)                # ✅ 神盾 obj39 是 STATUS 类，免疫判据查 h.items，必须显式登记
         if o == 106:
             self.center_warp_charges = 3              # ✅ 中心飞行器：拾取即 3 次（Java @5544 拾取=1，@1203-1206 起算）
             log.append('★拾取中心飞行器 obj106（空間転移の秘宝）：可用 3 次中心对称瞬移')
