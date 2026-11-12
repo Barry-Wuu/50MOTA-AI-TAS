@@ -514,6 +514,9 @@ def main():
 
     print('\n★★ 第一区完成，进 11F:', st(w.hero))
 
+    if os.environ.get('MOTA_STOP_11F') == '1':
+        return 0
+
     print('\n--- 11F 第一趟（右下蓝药 + 左下 5 黄钥）---')
     if not run_segs(w, 11, E['11a'], '11F'): return 1
     if not stair(w, 11, 11, '11F(11,11)->12F'): return 1

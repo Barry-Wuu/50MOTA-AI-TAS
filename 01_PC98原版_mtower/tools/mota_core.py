@@ -127,7 +127,7 @@ SHOP_GRANT = {                                      # obj -> (资源, 数量) �
     164: [('y', 3)],
     166: [('b', 3)],
     168: [('hp', 2000)],
-    170: [('item', 170)],
+    170: [('item', 112)],                               # ✅ obj170 商店卖超级镐 obj112（非 obj170 自身）
 }
 for _o in SHOP:
     SHOP_PRICE[_o] = oatr(_o, 13)
@@ -210,6 +210,51 @@ MSG_EFFECT = {
 LUCKY_GOLD = 113                                      # 📝 幸运金币：击杀 GOLD×2
 SEAL_TARGET = 57                                      # ✅ 封印后 objectAttribute[57][10/11/12] 改写 800/500/100
 
+# ---------------------------------------------------------------------------
+# ✅ 50F 真·通关链（08 Java 实证；用户实机版本一致）
+#   ① 26F(6,7) 假公主剧情（mapObject[67][126] 一次性旗）→ 挖开 24F 中央竖井
+#      Java@2820-2825: map[26][45]=1; map[27][44]=3; map[27][46]=3; map[28..30][45]=1
+#      坐标换算：row=band*13+y、col=slot*13+x → 24F(6,0)=1 / (5,1)(7,1)=3 / (6,2)(6,3)(6,4)=1
+#   ② 24F(6,0) 踩上即 endFlag=true（Java@2934）→ ending()@14072 滚屏 24F→49F，
+#      末帧把勇者放到 50F(6,7)（charaX=30/charaY=35 + mapX=9/mapY=4 ⇒ 全局 col123,row59），
+#      并把 24F 竖井**全部还原**（一次性通道），置 mapObject[76][126]=1。
+#   ③ 50F(6,7) 且 50F(6,5)==obj88 小偷 且 [76][126]==1 → 12 页对话；
+#      计数到 2 时 Zeno2(graphics,123,57) 把小偷变身成 obj57（魔導師ゼノ）落在 50F(6,5)。
+#   ④ 50F 中央 3×3 被墙包死，勇者是传送进 (6,7) 的；走到 (6,5) 开打。
+SECRET24_DIG = {                                      # 26F 触发后：24F 竖井挖开
+    (24, 6, 0): 1, (24, 6, 2): 1, (24, 6, 3): 1, (24, 6, 4): 1,
+    (24, 5, 1): 3, (24, 7, 1): 3,
+}
+SECRET24_RESTORE = {                                  # ending() 末尾：24F 还原
+    (24, 6, 0): 31, (24, 6, 2): 3, (24, 6, 3): 3, (24, 6, 4): 3,
+    (24, 5, 1): 1, (24, 7, 1): 1,
+}
+TRIG_26F = (26, 6, 7)                                 # 假公主剧情触发格（红门后第一格）
+TRIG_24F_END = (24, 6, 0)                             # endFlag 格
+F50_LAND = (50, 6, 7)                                 # ending() 落点
+ZENO2_CELL = (50, 6, 5)                               # 小偷/真魔王格
+
+# ✅ 49F 魔王战的「战后演出写入」不是进层即写入：
+#    Java@1581 触发条件是「(6,3) ゼノ已死」，然后才把 3 蓝药/3 红晶/3 蓝晶/红钥匙/屠龙匕摆出来。
+#    dyn_raw 把这些常量写入混在一起，若照搬进层覆盖会白送 +3000HP/+15ATK/+15DEF，且 (5,2)/(7,2)
+#    的钥匙/屠龙匕会被同格 obj58 警卫覆盖丢失。故这里全部排除，改由 after_49 在击败ゼノ后写入。
+F49_CUTSCENE_CELLS = {
+    (49, 5, 5), (49, 6, 5), (49, 7, 5),               # obj78 青い回復薬 +1000HP ×3
+    (49, 2, 4), (49, 3, 4), (49, 4, 4),               # obj82 赤のクリスタル +5ATK ×3
+    (49, 8, 4), (49, 9, 4), (49, 10, 4),              # obj85 青のクリスタル +5DEF ×3
+    (49, 5, 2), (49, 7, 2),                           # obj28 红钥匙 / obj109 屠龙匕
+}
+F49_GUARD_CELLS = [(5, 2), (6, 2), (7, 2), (7, 3), (7, 4), (6, 4), (5, 4), (5, 3)]
+# ✅ 49F 封印的真正判据（Java@1745 逐格比对，非「8 只全灭」）：
+#    (5,2)(7,2)(5,4)(7,4) 四斜角仍是 obj58，而 (6,2)(5,3)(7,3)(6,4) 四正方向已清空，
+#    且 (6,3) 仍是 obj57 ゼノ ⇒ 才把 objectAttribute[57] 改写 800/500/100。
+#    攻略「先打上下左右 4 个魔法警卫（骰子 5）封印」正对应这 4 个正方向格。
+F49_SEAL_EDGES = [(6, 2), (5, 3), (7, 3), (6, 4)]
+F49_SEAL_CORNERS = [(5, 2), (7, 2), (5, 4), (7, 4)]
+ZENO49_CELL = (49, 6, 3)
+F50_THIEF_CELL = (50, 6, 5)
+
+
 
 @dataclasses.dataclass
 class Hero:
@@ -256,12 +301,10 @@ for _f in BAND_SLOT:
                 WARP[(_f, _x, _y)] = _decode_global(_col, _row)
 
 
-# 仅保留"无楼梯 tile、靠事件触发"的特殊过渡：49F 击败假魔王后入 50F。
-UP_PATCH = {
-    49: ((6, 3), 50, (6, 5)),       # 49F 无上楼梯格；(6,3) 是 eventMT 放 obj57 假魔王的格
-                                    #    `bipush 110; bipush 55; Zeno(...)`；50F 无楼梯格，
-                                    #    真魔王落在 (6,5)：`bipush 123; bipush 57; Zeno2(...)`
-}
+# ✅ 2026-11-11 修正：50F **没有楼梯入口**，也不从 49F 进。
+#    真·入口是 26F(6,7) 假公主剧情挖开 24F 竖井 → 24F(6,0) 触发 ending() → 传送到 50F(6,7)。
+#    （08 Java: eventMT@2809 / @2934 / ending()@14072；用户实机版本一致：24F 秘道、25F 大法师、26F 假公主）
+UP_PATCH = {}
 
 
 def warp_to(f, x, y):
@@ -291,7 +334,32 @@ _TRAP_GUARD_CELLS = set()          # 由剧本自己放置的格，不进"进层
 #    必须持红钥匙 obj28 才能开启 —— 这是「见 BOSS 的基本门槛」。
 #    dyn_raw 里那条 (6,9,20) 记的是「门已开之后」的状态，不是进层即写入；
 #    若照搬成进层覆盖，红门会凭空变成可通行装饰，红钥匙门槛被整个跳过。
-BOSS_DOOR_CELLS = {(20, 6, 9)}
+#    ✅ 同理 40F 决战区红门 (40,6,8)：静态底图就是红门 obj27（probe_keys12 实测
+#    obj_raw 视图 F40(6,8)=o27），而 dyn_raw 在 (6,8) 记的是 obj20「门已开」状态，
+#    照搬进层覆盖会让红门变成可通行装饰 —— 红钥匙门槛（V68「过红门决战」）被跳过。
+#    （2026-11-06 修复：新增 (40,6,8)，与 20F 同因同解。）
+BOSS_DOOR_CELLS = {(20, 6, 9), (40, 6, 8)}
+
+# ✅ 落穴（obj20）守卫清规则（资料笔记 @3780-3845「某两只怪清空 → 该格 obj20 归零」）：
+#    键=(层,落穴x,落穴y)，值=[(守卫1x,守卫1y),(守卫2x,守卫2y)]。
+#    守卫全部击杀/清除后，落穴格 obj20 从地图上消失（变可通行地板）。
+#    注意：15F/30F 落穴由 OCTO/slime30 机制单独处理，不在此表。
+PIT_GUARD_CLEAR = {
+    (8, 10, 4):   [(9, 5), (11, 5)],
+    (11, 2, 4):   [(1, 5), (3, 5)],
+    (17, 2, 4):   [(1, 5), (3, 5)],
+    (17, 2, 7):   [(1, 8), (3, 8)],
+    (17, 10, 4):  [(9, 5), (11, 5)],
+    (17, 10, 7):  [(9, 8), (11, 8)],
+    (32, 2, 9):   [(1, 10), (3, 10)],
+    (44, 6, 8):   [(5, 9), (7, 9)],
+    (45, 7, 10):  [(8, 9), (8, 11)],
+}
+# 反向索引：守卫格 → 它守护的落穴列表
+GUARD_TO_PITS = {}
+for _pit, _guards in PIT_GUARD_CLEAR.items():
+    for _gx, _gy in _guards:
+        GUARD_TO_PITS.setdefault((_pit[0], _gx, _gy), []).append(_pit)
 
 # ✅ 15F 大乌贼 = 单体多格 Boss（资料笔记 §十「9 格同数据；杀本体后九格一次全清 + 掉普通镐」）。
 #    9 格占 (5..7, 4..6)：obj50/51/52（y4 行）、obj60/61/62（y5 行）、obj70/71/72（y6 行）。
@@ -313,6 +381,14 @@ OCTO_TRIGGER = (15, 6, 8)                               # 📝 踩 (6,8) 且本�
 #    cell_now 字段同样证实：cell_now=obj174/obj152，draw_obj=173/151。
 KEEP_STATIC_NPC_CELLS = {(2, 11, 4), (2, 11, 7)}
 
+# ✅ 34F 钥匙生成事件（MTower.java @2594 实证）：变量旗 mapObject[67][125]==0 且
+#    8 个黄门后怪物格 (5,4)(7,4)(9,4)(11,4)(5,8)(7,8)(9,8)(11,8) 全部清空 →
+#    置旗 + 落 (2,6)红钥匙 obj28、(1,5)(3,5)(1,7)(3,7)黄钥匙 obj1。
+#    这 5 格静态全为空，dyn_raw 的写入是「条件触发」而非进层即写入；
+#    照搬进层覆盖会让早段（V49）提前拿到本属 V66 的 1红+4黄。
+KEY34_CELLS = {(34, 2, 6), (34, 1, 5), (34, 3, 5), (34, 1, 7), (34, 3, 7)}
+KEY34_MONS = [(34, x, y) for x in (5, 7, 9, 11) for y in (4, 8)]
+
 # ✅ 14F(1,3) 红钥匙（见 BOSS 的第二把钥匙，8F 那把已用于 10F 红门）
 #    Java MTower.java:3801-3808 实证：该格原版地形值是 **3（暗墙）**，并非实墙。
 #    进入 14F 且周围三格(mapObject[14][40/42]、[15][41])清空后执行：
@@ -321,7 +397,8 @@ KEEP_STATIC_NPC_CELLS = {(2, 11, 4), (2, 11, 7)}
 #    displayDoor/displayCharacter 表明这是一次「暗墙裂开、露出红钥匙」的演出。
 #    故本引擎按 **暗墙** 处理：撞塌后可踩入，露出 obj28 正常拾取（见 move 内 DARKWALL_CELLS 分支）。
 #    原引擎把 terrain=1 当死墙直接 blocked，导致红钥匙永远拿不到、20F 红门开不了。
-DARKWALL_CELLS = {(14, 1, 3)}
+DARKWALL_CELLS = {(14, 1, 3),
+                  (41, 5, 6), (41, 6, 6), (41, 7, 6)}  # ✅ 41F 事件墙：事件触发后变暗墙，可撞塌穿过
 
 # ✅ 数据修正（2026-10-31）：PC98 源地图 magic_tower1_map_50f.json 的 1F 底排
 #   (1,4,11) 与 (1,8,11) 被写成地形墙（tile 3），导致左下「飞行之珠 obj26」房间
@@ -377,16 +454,26 @@ class World:
     boss10: bool = False             # 10F BOSS（obj16 スケルトンＡ）已击败 → (6,11) 生上行梯
     boss20: bool = False             # 20F BOSS（obj59 バンパイア/吸血鬼）已击败 → (20,6,1) 现出上行梯
     slime30: bool = False            # 30F 六只史莱姆已清 → (30,6,4)(6,7) 落穴消失、(30,6,1) 现上行梯
+    boss40: bool = False             # 40F BOSS（obj90 金騎士，(6,6)）已击败 → (40,6,1) 现出上行梯（ter[7]→to:90）
     altar_k: int = 0                  # 📝 本存档累计祭坛已使用次数（决定下一次代价）
     altar_policy: str = 'atk'         # 📝 祭坛菜单选择：hp / atk / dfn（A* 无法处理菜单，按策略预设）
     story42: bool = False             # ✅ 42F 剧情：骑士队长已逃（金騎士清场）
+    story32: bool = False             # ✅ 32F 剧情：金騎士先手攻击（-300HP）→ 清场 + 2F 生成盗贼
     octo15: bool = False              # ✅ 15F 大乌贼（obj71 本体）已击败 → 3×3 九格清空 + (6,5) 生成镐
+    event41_stage: int = 0            # ✅ 41F 暗墙事件阶段：0=未触发, 1=(2,2)杀+(10,2)撞墙刷怪, 2=事件完成(降臨の翼生成)
+    pending_items: Dict = None        # ✅ 事件写在怪物脚下的道具：怪物被击杀后露出（10F 水晶/蓝药/黄钥）
+    story26: bool = False             # ✅ 26F(6,7) 假公主剧情已触发 → 24F 竖井已挖开（一次性）
+    story24_end: bool = False         # ✅ 24F(6,0) ending() 已执行 → 已传送到 50F(6,7)、24F 已还原
+    seal49: bool = False              # ✅ 49F 十字封印成立（四正方向警卫全灭）→ obj57 改写 800/500/100
+    zeno49_dead: bool = False         # ✅ 49F(6,3) ゼノ已击败 → 战后演出已摆出道具
+    f50_talk: int = 0                 # ✅ 50F(6,7) 对话页计数：0→12，计数 2 时 Zeno2 变身
+    won50: bool = False               # ✅ 50F(6,5) 真魔王已击败 = 通关
 
     @classmethod
     def new(cls, event_mode='on_entry', hero=None, trap_mode='apply'):
         w = cls(hero=hero or Hero.initial(), cells=base_cells(), over={}, ter_over={}, cleared=set(),
                 applied_events=set(), event_mode=event_mode, trap_mode=trap_mode, caveats=set(),
-                bought=set(), boss10=False, boss20=False, octo15=False)
+                bought=set(), boss10=False, boss20=False, octo15=False, event41_stage=0, pending_items={})
         w.apply_floor_events(w.hero.f)
         return w
 
@@ -402,11 +489,28 @@ class World:
                 continue                                  # ✅ 红门保持 obj27，须红钥匙开启（见 BOSS 的门槛）
             if (f, x, y) in KEEP_STATIC_NPC_CELLS:
                 continue                                  # ✅ 2F 奖励 NPC 保持静态 obj174/152（对话后才替换）
+            if (f, x, y) in KEY34_CELLS:
+                continue                                  # ✅ 34F 钥匙：8 门后怪物全灭才生成（@2594），非进层即写入
+            if f == 49 and (f, x, y) in F49_CUTSCENE_CELLS and o != 58:
+                continue                                  # ✅ 49F 战后演出才摆出（Java@1638-1740），进层不得白送
+                                                          #    注意：同一格可能同时有警卫(58)与道具，只跳道具
+            if f == 49 and (x, y) == (6, 3):
+                continue                                  # ✅ 49F 中心是ゼノ obj57，不是 obj69 评分 NPC
+            if f == 39 and (x, y) == (4, 4):
+                continue                                  # ✅ 39F 昇華の翼：由 9门事件才生成，非进层即写入
             base = self.cells.get((f, x, y), 0)
             if base and TYPE.get(oatr(base, 3)) == 'MONSTER':
-                continue                                  # ✅ 该格静态是怪/BOSS，事件写入不得覆盖（否则 BOSS 消失、怪免打）
+                # ✅ 该格静态是怪/BOSS，事件写入不得覆盖（否则 BOSS 消失、怪免打）。
+                #    但事件确实在该格放道具（10F 水晶/蓝药/黄钥写在怪物脚下）：记下待怪物死后露出。
+                if o in KEY_OF or TYPE.get(oatr(o, 3)) in ('STATUS', 'ITEM'):
+                    self.pending_items[(f, x, y)] = o
+                continue
             if o:
                 self.set_at(f, x, y, o)
+        if f == 49:
+            # ✅ 进入 49F 触发ゼノ登场（Java@1779-1794：踩 (6,5) 播 Zeno(110,55)）+ 8 只 obj58 围成十字
+            self.set_at(*ZENO49_CELL, SEAL_TARGET)
+            self.cleared.discard(ZENO49_CELL)
         if f == 42:
             # ✅ 42F 剧情：金騎士（骑士队长）威胁→受伤逃走（strNumber 27/28），
             #    不实际战斗。与 3F 同型菱形：中央金騎士 (6,8) + 四角 4 只魔導師伏兵
@@ -464,6 +568,8 @@ class World:
             if o and TYPE.get(oatr(o, 3), '?') == 'MONSTER':
                 continue                                  # 怪格不停留
             h.x, h.y = ax, ay
+            # ✅ 昇華の翼 / 降臨の翼是**永久秘宝**（秘宝表：107「39F，上跳一层」、108「41F，下跳一层」），
+            #    不是消耗品。原实现 discard(107) 会让 42F「同层飞行到楼梯口」无法执行（V72 直接卡死）。
             return ['昇華の翼：同层瞬移到 %dF(%d,%d)（上行梯旁）' % (h.f, ax, ay)]
         return ['昇華の翼：上行梯 %dF(%d,%d) 无可走邻格' % (h.f, sx, sy)]
 
@@ -557,6 +663,14 @@ class World:
         ty = TYPE.get(oatr(o, 3), '?') if o else '空'
         if o:
             if o == 89:                                   # 📝 暗墙：撞了就塌
+                if f == 41 and (nx, ny) == (10, 2) and (41, 2, 2) in self.cleared \
+                        and self.event41_stage == 0:
+                    # ✅ Java @13751-13753: (2,2)已杀 + 撞(10,2) → 设旗标 + 刷魔術師Ａ埋伏
+                    self.event41_stage = 1
+                    self.over[(41, 10, 2)] = 99       # 生成 obj99 魔術師Ａ
+                    self.cleared.discard((41, 10, 2))  # 确保怪物可见（不被cleared覆盖）
+                    log.append('★41F 撞塌暗墙(10,2) → 魔術師Ａ埋伏出现!')
+                    return log                         # 不移动（怪挡路）
                 self.cleared.add((f, nx, ny)); log.append('撞塌暗墙 obj89'); o = 0; ty = '空'
                 if (f, nx, ny) in ((19, 6, 3), (19, 6, 4)):   # 📝 19F 十字暗墙：撞开获得十字架 obj103
                     h.items.add(103); log.append('获得十字架 obj103（对吸血鬼等伤害翻倍）')
@@ -594,30 +708,81 @@ class World:
                     if r is None:
                         return [f'打不动 obj{o} {oname(o)[:10]}']
                     loss, gold = r
-                    if o in MAGIC_HALF_ATK:
-                        h.hp = math.ceil(h.hp / 2); log.append(f'{oname(o)[:6]} 半血(⚠️未证)'); self.caveats.add('MAGIC_HALF_ATK 未指令流确认')
+                    # ✅ 2026-11-11 移除旧的「攻击 obj58/96 前半血」：Java 里没有这条，
+                    #    真正的半血只发生在 ichicheck2@833（左右/上下夹击魔導師）——已由 check_magic_passby 处理。
                     if h.hp - loss <= 0:
                         return [f'打不过 obj{o}（需掉血 {loss}，剩 {h.hp}）']
                     h.hp -= loss; h.gold += gold; self.cleared.add((f, nx, ny))
                     log.append(f'击杀 obj{o} {oname(o)[:8]} 掉血{loss} +金{gold}')
+                    self._reveal_pending(f, nx, ny, log)
                     if f == 2 and o == 15 and self.at(2, 6, 2) == 0 and self.at(2, 8, 2) == 0:
                         # ✅ @3764：两只門番Ｂ清空 → 播 6 号开门动画，6 个 obj19 栅栏格一并清零
                         for gx, gy in ((5, 5), (9, 5), (5, 8), (9, 8), (5, 11), (9, 11)):
                             self.cleared.add((2, gx, gy))
                         log.append('★2F 两只門番Ｂ已清 → 6 扇监狱栅栏门 obj19 打开')
+                    if f == 38 and o == 15 and self.at(38, 1, 10) == 0 and self.at(38, 3, 10) == 0 \
+                            and (38, 2, 9) not in self.ter_over:
+                        # ✅ MTower.java @2524 实证：mapObject[49][92]==0 && [49][94]==0 && map[48][93]==3
+                        #    → mapObject[48][93]=89, map[48][93]=1 —— 两只門番Ｂ(1,10)(3,10)全死后，
+                        #    (2,9) 暗墙「现形」为 obj89（撞塌即通 texts[141]），地形 tile3→tile1(MA[1][3]=0 地板)
+                        self.ter_over[(38, 2, 9)] = 1
+                        self.set_at(38, 2, 9, 89)
+                        log.append('★38F 两只門番Ｂ已清 → (2,9) 暗墙现形 obj89（一撞即塌）')
+                    if f == 34 and (34, nx, ny) in KEY34_MONS and all(c in self.cleared for c in KEY34_MONS):
+                        # ✅ MTower.java @2594 实证：8 只门后怪物格全空 + 变量旗为 0 → 落 1红+4黄钥匙。
+                        #    本检查只发生在击杀这 8 格之一时，全灭瞬间即第 8 次击杀 → 恰好触发一次。
+                        for kx, ky, ko in ((2, 6, 28), (1, 5, 1), (3, 5, 1), (1, 7, 1), (3, 7, 1)):
+                            self.set_at(34, kx, ky, ko)
+                        log.append('★34F 8 道黄门后怪物全灭 → (2,6)红钥匙 + 4 黄钥匙生成')
                     if f == 49:
-                        self.after_49(log)
+                        self.after_49(o, nx, ny, log)
+                    if f == 50 and o == SEAL_TARGET and (nx, ny) == F50_THIEF_CELL[1:]:
+                        self.won50 = True
+                        log.append('★击败真魔王 obj57（50F(6,5)）→ 通关！')
                     if f == 10 and o == 16:
                         self.boss10 = True
                         log.append('★击败10F BOSS(スケルトンＡ) → 10F(6,11) 将生上行梯')
                     if f == 20 and o == 59:
                         self.boss20 = True
                         log.append('★击败20F BOSS(バンパイア/吸血鬼) → 20F(6,1) 现出上行梯')
+                    if f == 40 and o == 90:
+                        # ✅ dyn_raw.json obj[43]: (6,6)→obj90；ter[7]: (6,1)→to:90。
+                        #    资料笔记:888 obj90=金騎士 120/150/50/100，同 10F/20F/30F 同构。
+                        self.boss40 = True
+                        log.append('★击败40F BOSS(金騎士 obj90) → 40F(6,1) 将现出上行梯')
+                    # ✅ 守卫清落穴：击杀后检查是否触发了落穴消失（@3780-3845）
+                    for pit in GUARD_TO_PITS.get((f, nx, ny), []):
+                        guards = PIT_GUARD_CLEAR[pit]
+                        if all((f, gx, gy) in self.cleared for gx, gy in guards) \
+                                and pit not in self.cleared:
+                            self.cleared.add(pit)
+                            log.append(f'★守卫全清 → 落穴 {pit[0]}F({pit[1]},{pit[2]}) 消失')
+                    # ✅ 41F 暗墙事件（Java @1901-1930）：杀(10,2)埋伏魔術師Ａ → 三条件满足 → 触发
+                    if f == 41 and (nx, ny) == (10, 2) and self.event41_stage == 1 \
+                            and (41, 2, 2) in self.cleared:
+                        self.event41_stage = 2
+                        for wx, wy in ((5, 6), (6, 6), (7, 6)):
+                            self.ter_over[(41, wx, wy)] = 3      # tile 3 → MA[3][3]=1 → 暗墙
+                            self.over[(41, wx, wy)] = 0          # 清蓝门/物件（不加 cleared，否则暗墙不可撞塌）
+                        for fx, fy in ((5, 7), (7, 7)):
+                            self.ter_over[(41, fx, fy)] = 0      # 变地板
+                        self.set_at(41, 6, 5, 108)               # 生成降臨の翼
+                        log.append('★41F 事件完成 → (5,6)(6,6)(7,6) 变暗墙；(5,7)(7,7) 变地板；(6,5) 生成降臨の翼')
                     o = 0
             elif ty == 'DOOR':
                 col = DOOR_OF.get(o)
                 if col is None:
-                    self.cleared.add((f, nx, ny)); log.append(f'未知门 obj{o} 视为已开(⚠️)'); self.caveats.add('DOOR 颜色未确认')
+                    # obj89 暗墙（隐形墙）：撞一次塌，可通行
+                    if f == 41 and (nx, ny) == (10, 2) and (41, 2, 2) in self.cleared \
+                            and self.event41_stage == 0:
+                        # ✅ Java @13751-13753: (2,2)已杀 + 撞(10,2) → 设旗标 + 刷魔術師Ａ埋伏
+                        self.event41_stage = 1
+                        self.over[(41, 10, 2)] = 99       # 生成 obj99 魔術師Ａ
+                        self.cleared.discard((41, 10, 2))  # 确保怪物可见（不被cleared覆盖）
+                        log.append('★41F 撞塌暗墙(10,2) → 魔術師Ａ埋伏出现!')
+                        return log                         # 不移动（怪挡路）
+                    self.cleared.add((f, nx, ny))
+                    log.append(f'撞塌暗墙 obj{o}'); o = 0
                 elif h.keys[col] <= 0:
                     return [f'无{ {"y":"黄","b":"蓝","r":"红"}[col] }钥匙，门 obj{o} 开不了']
                 else:
@@ -684,7 +849,14 @@ class World:
                 else:
                     return [f'不可通行 obj{o}（{ty}）']
             elif ty == 'NORMAL':
-                log.append(f'踩过 type0 装饰 obj{o}'); o = 0   # ✅ type0=NORMAL 地板装饰，可踩（obj20 等）
+                if o == 20 and (f, nx, ny) in PIT_GUARD_CLEAR:
+                    # ✅ 落穴 obj20：守卫未清则挡路（资料笔记 @3780-3845）
+                    guards = PIT_GUARD_CLEAR[(f, nx, ny)]
+                    if not all((f, gx, gy) in self.cleared for gx, gy in guards):
+                        return [f'落穴 obj20 @ {f}F({nx},{ny}) 挡路（守卫未清）']
+                    self.cleared.add((f, nx, ny))
+                    log.append(f'落穴 obj20 @ {f}F({nx},{ny}) 守卫已清 → 消失')
+                o = 0   # 其余 type0=NORMAL 地板装饰可踩
         # 落格
         h.x, h.y = nx, ny
         # ✅ 穿行魔法伤害：每步入新格判定（夹击半血 / 魔術師邻接-200/-100，圣盾免）
@@ -725,6 +897,49 @@ class World:
             h.f, h.x, h.y = (31, 6, 2)
             log.append('楼梯 → 31F（六只史莱姆清空后上行梯）')
             self.apply_floor_events(31)
+        elif f == 40 and self.boss40 and (nx, ny) == (6, 1):
+            # ✅ 40F 同构：杀金騎士 obj90(6,6) 后，(6,1) 现出上行梯（dyn_raw ter[7]→to:90）
+            #    → 落 41F(6,2)（41F 静态下梯 (6,1) warp=(40,5,1)，上行梯应落 41F(6,2) 邻格）。
+            h.f, h.x, h.y = (41, 6, 2)
+            log.append('楼梯 → 41F（40F BOSS 金騎士死后上行梯）')
+            self.apply_floor_events(41)
+        # ✅ 26F(6,7) 假公主剧情（Java@2809-2825，一次性）→ 挖开 24F 中央竖井
+        #    该格本身是红门 obj27：先开门（消耗红钥匙），再踩上去才触发。
+        if h.f == 26 and (nx, ny) == (6, 7) and not self.story26:
+            self.story26 = True
+            for (tf, tx, ty), tile in SECRET24_DIG.items():
+                self.ter_over[(tf, tx, ty)] = tile
+            log.append('★26F(6,7) 假公主剧情 → 24F 中央竖井挖开：(6,0) 通道现形')
+        # ✅ 24F(6,0) 站上即 endFlag（Java@2934-2936）→ ending()@14072：
+        #    滚屏 24F→49F 后把勇者放到 50F(6,7)，并把 24F 挖墙全部还原（一次性通道）。
+        if h.f == 24 and (nx, ny) == (6, 0) and self.story26 and not self.story24_end:
+            self.story24_end = True
+            for (tf, tx, ty), tile in SECRET24_RESTORE.items():
+                self.ter_over[(tf, tx, ty)] = tile
+            h.f, h.x, h.y = F50_LAND
+            self.apply_floor_events(50)
+            log.append('★24F(6,0) 触发 ending() → 滚屏 24F→49F → 勇者被送到 50F(6,7)（24F 秘道已还原）')
+        # ✅ 50F(6,7)：小偷 12 页对话；计数 2 时 Zeno2(123,57) 把小偷变成 obj57（Java@1518-1521）
+        if h.f == 50 and (h.x, h.y) == (6, 7) and self.f50_talk == 0 \
+                and self.at(*F50_THIEF_CELL) == 88:
+            self.f50_talk = 12
+            self.set_at(*F50_THIEF_CELL, SEAL_TARGET)
+            log.append('★50F 小偷对话 12 页 → Zeno2 变身：50F(6,5) 出现 obj57 魔導師ゼノ'
+                       '（四维 %d/%d/%d）'
+                       % (oatr(SEAL_TARGET, 10), oatr(SEAL_TARGET, 11), oatr(SEAL_TARGET, 12)))
+        # ✅ 32F 金騎士伏兵事件（@2666-2759 实证）：英雄 warp 到 32F(6,10) 后触发
+        #    5 状态机：金騎士从 (11,1) 走到 (6,9) → 先手战斗（-300HP）→ 撤退 → 清场 + 2F 生成盗贼
+        #    战斗算式：金騎士 150ATK vs DEF90 = 60/hit × 5 hits = 300（先手=怪物先攻）
+        #    必须在 warp 之后检查，因为从 31F 上楼时 h.f 初始为 31，warp 后才变成 32
+        if h.f == 32 and (h.x, h.y) == (6, 10) and not self.story32:
+            h.hp -= 300
+            if h.hp <= 0:
+                return ['32F 金騎士先手攻击致死（-300HP，剩 %d）' % h.hp]
+            self.cleared.add((32, 6, 9))
+            self.cleared.add((32, 11, 1))
+            self.set_at(2, 11, 11, 88)  # spawn 盗贼 obj88 at 2F(11,11)
+            self.story32 = True
+            log.append('★32F 金騎士先手攻击 → -300HP（现 %d）→ 清场 + 2F(11,11) 生成盗贼' % h.hp)
         # 📝 30F BOSS 层（六只史莱姆）：踩 (6,6) 触发 → (6,4)(6,7) 变落穴（ter_over=墙，封环）；
         #    六只全清后落穴消失、slime30=True，(6,1) 才现上行梯（见上方 elif f == 30 分支）。
         #    依据：资料笔记 §event「30F 踩(6,6)(环内) → (6,4)(6,7) 变落穴，把 6 只史莱姆和你一起封在环里」+
@@ -747,6 +962,14 @@ class World:
         if h.f == 15 and (nx, ny) == (6, 8) and not self.octo15:
             self.ter_over[(15, 6, 9)] = 3
             log.append('15F 踩(6,8) → (6,9) 变落穴，封住出口（须先打完大乌贼）')
+        # ✅ 41F 暗墙事件（Java @1901-1930 实证）：
+        #    阶段0→1: 杀(2,2)魔術師Ａ + 撞(10,2)obj89暗墙 → 刷(10,2)魔術師Ａ埋伏 + 设旗标
+        #    阶段1→2: 杀(10,2)埋伏魔術師Ａ → 三条件全满足 → 生成暗墙+降臨の翼
+        #    暗墙 (5,6)(6,6)(7,6) 用 tile 3（MA[3][3]=1=wall），在 DARKWALL_CELLS 中可撞塌。
+        #    降臨の翼＝向下飞行器，1F 无下行梯时用它下到 0F 拿幸运金币。
+        #    ⚠️ 顺序关键：必须先杀(2,2)再撞(10,2)，否则暗墙只塌不刷怪，事件永久错过！
+        if h.f == 41 and self.event41_stage == 2 and not (41, 6, 5) in self.cleared:
+            pass  # 事件已完成，(6,5) 的 obj108 由正常拾取处理
         if h.f == 3 and (nx, ny) == TRAP_3F['trigger'] and not self.trap_done:
             h.x, h.y = nx, ny
             return self.do_trap3F(log)
@@ -755,6 +978,17 @@ class World:
         if h.f == 3 and self.trap_mode == 'avoid' and (nx, ny) == TRAP_3F['trigger']:
             return ['避开3F中央(反事实)']
         return log
+
+    def _reveal_pending(self, f, x, y, log):
+        """事件写在怪物脚下的道具：击杀后露出并立即取得（对应原版 itemFlag 拾取演出）。"""
+        o = self.pending_items.pop((f, x, y), None)
+        if not o:
+            return
+        if o in KEY_OF:
+            self.hero.keys[KEY_OF[o]] += 1
+            log.append(f'击破后露出 {oname(o)[:10]}')
+        elif TYPE.get(oatr(o, 3)) in ('STATUS', 'ITEM'):
+            self.pick(o, log)
 
     def pick(self, o, log):
         h = self.hero
@@ -765,6 +999,118 @@ class World:
         if TYPE.get(oatr(o, 3)) == 'ITEM':
             h.items.add(o)
         log.append(f'拾取 obj{o} {oname(o)[:14]} (HP+{hp} ATK+{atk} DEF+{dfn})')
+
+    def use_pick(self):
+        """普通镐 obj114（itemFlag==5）：一次性，破角色上下左右四邻的 map==3 真墙 → 地板。
+
+        依据 魔塔1_资料笔记.md「镐走 itemFlag==5：清四邻 map==3（真墙）→ 地板，一次性」（@1087-1126）。
+        ⚠️ 引擎此前只把镐当道具收进 items，没有「使用」这一步；48F 圣剑库的 (10,10) 真墙
+           只能靠它凿开（不可达圣剑），故在此补齐。纯增量方法：不调用则一切行为不变。
+        """
+        h = self.hero
+        if 114 not in h.items:
+            return False, ['没有普通镐 obj114，无法破墙']
+        broken = []
+        for dx, dy in ((0, -1), (1, 0), (0, 1), (-1, 0)):
+            nx, ny = h.x + dx, h.y + dy
+            if not (1 <= nx <= 11 and 1 <= ny <= 11):
+                continue
+            if self.terrain_at(h.f, nx, ny) != 1:
+                continue
+            if (h.f, nx, ny) in DARKWALL_CELLS:
+                continue
+            self.ter_over[(h.f, nx, ny)] = 1        # MA[1][3]==0 → 地板
+            self.over.pop((h.f, nx, ny), None)
+            broken.append((nx, ny))
+        h.items.discard(114)
+        if not broken:
+            return True, ['镐 obj114 已使用（一次性）：四邻无真墙，白费']
+        return True, ['★使用镐 obj114（一次性）：破开四邻真墙 %s' % broken]
+
+    def use_bomb(self):
+        """破壊の玉 obj105（资料笔记 §itemFlag: 清整层怪物）。
+        使用后当前层全部怪物标记为 cleared（零战斗清除），并触发守卫清落穴事件。
+        一次性消耗。
+        """
+        h = self.hero
+        if 105 not in h.items:
+            return False, ['没有破壊の玉 obj105']
+        f = h.f
+        cleared_mons = []
+        for y in range(1, 12):
+            for x in range(1, 12):
+                o = self.at(f, x, y)
+                if o and TYPE.get(oatr(o, 3)) == 'MONSTER':
+                    self.cleared.add((f, x, y))
+                    cleared_mons.append((x, y, o))
+                    # 触发守卫清落穴
+                    for pit in GUARD_TO_PITS.get((f, x, y), []):
+                        guards = PIT_GUARD_CLEAR[pit]
+                        if all((f, gx, gy) in self.cleared for gx, gy in guards) \
+                                and pit not in self.cleared:
+                            self.cleared.add(pit)
+        h.items.discard(105)
+        if not cleared_mons:
+            return True, ['破壊の玉 obj105 已使用：本层无怪物']
+        return True, ['★使用破壊の玉 obj105：清整层 %d 只怪物 %s' % (len(cleared_mons), cleared_mons)]
+
+    def use_super_pick(self):
+        """超级镐 obj112（itemFlag==13，资料笔记 §itemFlag: 破整层 12×12 墙）。
+        使用后当前层全部真墙（map==3 / terrain==1）变地板，一次性消耗。
+        """
+        h = self.hero
+        if 112 not in h.items:
+            return False, ['没有超级镐 obj112']
+        f = h.f
+        broken = []
+        for y in range(1, 12):
+            for x in range(1, 12):
+                if self.terrain_at(f, x, y) == 1:
+                    if (f, x, y) in DARKWALL_CELLS:
+                        continue
+                    self.ter_over[(f, x, y)] = 1
+                    self.over.pop((f, x, y), None)
+                    broken.append((x, y))
+        h.items.discard(112)
+        if not broken:
+            return True, ['超级镐 obj112 已使用：本层无真墙']
+        return True, ['★使用超级镐 obj112：破整层 %d 格真墙' % len(broken)]
+
+    def wing_down(self):
+        """降臨の翼 obj108（向下飞行器）：站在本层任意处，瞬移到本层下行梯口旁。
+        若本层无下行梯（如 1F），则视为「向下飞行一层」→ 降落至下一层（特殊：1F→0F）。
+        依据：资料笔记「降臨の翼＝向下飞行器；0F 要等 41F 拿降臨の翼才能下到」。
+        """
+        h = self.hero
+        if 108 not in h.items:
+            return ['降臨の翼：尚未持有 obj108，无法传送']
+        f = h.f
+        s = STAIRS.get(f)
+        dn = s[1] if s else None          # 下行梯
+        if dn is not None:
+            sx, sy = dn
+            for d in ((0, -1), (0, 1), (-1, 0), (1, 0)):
+                ax, ay = sx + d[0], sy + d[1]
+                if not (1 <= ax <= 11 and 1 <= ay <= 11):
+                    continue
+                if self.terrain_at(f, ax, ay) == 1:
+                    continue
+                o = self.at(f, ax, ay)
+                if o and TYPE.get(oatr(o, 3)) == 'MONSTER':
+                    continue
+                h.x, h.y = ax, ay
+                return ['降臨の翼：同层瞬移到 %dF(%d,%d)（下行梯旁）' % (f, ax, ay)]
+            return ['降臨の翼：下行梯 %dF(%d,%d) 无可走邻格' % (f, sx, sy)]
+        # ✅ 本层无下行梯 → 向下飞行一层（特殊：1F→0F）
+        if f == 1:
+            h.f = 0; h.x, h.y = 1, 2      # 0F(1,1)=上行梯，邻格 (1,2) 可走
+            self.apply_floor_events(0)
+            return ['降臨の翼：1F 无下行梯 → 向下飞行至 0F（落点 (1,2)）']
+        if f - 1 in FLY_LAND:
+            h.f = f - 1; h.x, h.y = FLY_LAND[f - 1]
+            self.apply_floor_events(f - 1)
+            return ['降臨の翼：向下飞行至 %dF（落点 %s）' % (f - 1, FLY_LAND[f - 1])]
+        return ['降臨の翼：%dF 下方无可达楼层' % f]
 
     def do_trap3F(self, log):
         h, t = self.hero, TRAP_3F
@@ -787,13 +1133,27 @@ class World:
                    f'→ 四角撤走、3F(5,9) 复原、2F(2,7) 被挖通')
         return log
 
-    def after_49(self, log):
-        guards = [(x, y) for x, y, o in FLOOR_WRITES.get(49, []) if o == 58]
-        left = [g for g in guards if self.at(49, g[0], g[1]) == 58]
-        if not left and not self.at(49, 6, 3):
-            self.set_at(49, 6, 3, SEAL_TARGET)
-            globals()['OA'][SEAL_TARGET][10:13] = [800, 500, 100]       # ✅ 封印改写
-            log.append('★49F 封印完成：四周围杀尽 → (6,3) 出现 obj57，其四维改写为 800/500/100')
+    def after_49(self, o, nx, ny, log):
+        # ① 十字封印（Java@1745 逐格判据）：四正方向 obj58 全灭 + 四斜角仍在 + (6,3) ゼノ仍在
+        if not self.seal49 \
+                and all(self.at(49, x, y) == 0 for x, y in F49_SEAL_EDGES) \
+                and all(self.at(49, x, y) == 58 for x, y in F49_SEAL_CORNERS) \
+                and self.at(49, 6, 3) == SEAL_TARGET:
+            self.seal49 = True
+            globals()['OA'][SEAL_TARGET][10:13] = [800, 500, 100]       # ✅ 封印改写（全局）
+            log.append('★49F 十字封印成立（上下左右 4 只魔法警卫已灭）→ obj57 四维改写 800/500/100')
+        # ② 击败 (6,3) ゼノ → 战后演出摆出道具（Java@1638-1740）
+        if not self.zeno49_dead and (nx, ny) == (6, 3) and o == SEAL_TARGET:
+            self.zeno49_dead = True
+            for fx, fy, fo in ((5, 5, 78), (6, 5, 78), (7, 5, 78),
+                               (2, 4, 82), (3, 4, 82), (4, 4, 82),
+                               (8, 4, 85), (9, 4, 85), (10, 4, 85),
+                               (5, 2, 28), (7, 2, 109)):
+                self.set_at(49, fx, fy, fo)
+                self.cleared.discard((49, fx, fy))
+            self.set_at(49, 6, 3, 69)                                   # 评分 NPC 立在原格
+            self.cleared.discard((49, 6, 3))
+            log.append('★49F ゼノ击败 → 战后演出：3 蓝药 + 3 红晶 + 3 蓝晶 + 红钥匙 + 屠龙匕，(6,3) 立评分 NPC')
 
 # ---------------------------------------------------------------------------
 # 规划：Dijkstra，代价 = (累计掉血, 步数)；状态含已拾取格子的掩码（防"重复捡"作弊），
@@ -908,8 +1268,14 @@ def _clone(self):
     w.ter_over = dict(self.ter_over)
     w.event_mode = self.event_mode; w.trap_mode = self.trap_mode; w.caveats = set(self.caveats)
     w.bought = set(self.bought); w.boss10 = self.boss10; w.boss20 = self.boss20
-    w.slime30 = self.slime30
+    w.slime30 = self.slime30; w.boss40 = self.boss40
     w.altar_k = self.altar_k; w.altar_policy = self.altar_policy
+    w.pending_items = dict(self.pending_items)
+    w.story42 = self.story42; w.story32 = self.story32; w.octo15 = self.octo15
+    w.event41_stage = self.event41_stage
+    w.story26 = self.story26; w.story24_end = self.story24_end
+    w.seal49 = self.seal49; w.zeno49_dead = self.zeno49_dead
+    w.f50_talk = self.f50_talk; w.won50 = self.won50
     return w
 
 
