@@ -322,7 +322,21 @@ def warp_to(f, x, y):
 FLOOR_WRITES = collections.defaultdict(list)          # 层 -> [(x,y,obj)] 静态之外的常量写入
 for e in DYNEV.get('obj', []):
     if e['floor'].isdigit():
-        FLOOR_WRITES[int(e['floor'])].append((e['x'], e['y'], e['obj']))
+        fl = int(e['floor'])
+        obj = e['obj']
+        # ✅ 41F(6,5,108) 降臨の翼：dyn_raw 标 method=eventMT，Java @1930 实证
+        #    只在暗墙事件完成（杀(2,2)+撞(10,2)+杀魔術師A）后才生成。
+        #    不能静态写入——否则不触发事件也能直接拿。
+        if fl == 41 and obj == 108:
+            continue
+        # ✅ 39F(4,4,107) 昇華の翼：dyn_raw 标 method=eventMT，Java @2517-2519 实证
+        #    九门事件（开12点+3点两门）后才生成。
+        #    但 mota_core 已有 check_39_doors() 动态生成 obj106（中心飞行器，原版正确），
+        #    此 107 是 Java 复刻的错误（原版应为 106）。
+        #    若静态写入会与 check_39_doors() 冲突，跳过。
+        if fl == 39 and obj == 107:
+            continue
+        FLOOR_WRITES[fl].append((e['x'], e['y'], obj))
 TERR_WRITES = collections.defaultdict(list)
 for e in DYNEV.get('ter', []):
     if e['floor'].isdigit():
