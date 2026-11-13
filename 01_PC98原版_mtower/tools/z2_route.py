@@ -3852,7 +3852,35 @@ def main():
                     t = _m.ceil(hp0 / per)
                     if max(atk - D, 0) * (t - 1) == 0:
                         targets.append((x, y, o))
-            for (x, y, o) in targets:
+            # ✅ 2026-11-14 优化：目标顺序改为「最近邻贪心」——每次从当前位置用
+            #   Dijkstra（与 goto 同权重：怪100/门25/空1）算到所有剩余怪的距离，
+            #   选最近的先杀。替代原 (y,x) 扫描序（15F 曾因此两次 x6 竖列往返，
+            #   116 步 → 串成一条链约 51 步，省 ~65 步）。
+            #   钥匙已临时清零 → 寻路 100% 绕门，距离估计与实际执行一致。
+            import heapq as _hq
+            def _dists(sx, sy):
+                dist = {(sx, sy): 0}
+                pq = [(0, sx, sy)]
+                while pq:
+                    d, cx, cy = _hq.heappop(pq)
+                    if d > dist.get((cx, cy), 1e9):
+                        continue
+                    for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                        n = (cx + dx, cy + dy)
+                        ok, wc = run_segs._cost(w, fl, n[0], n[1])
+                        if not ok:
+                            continue
+                        nd = d + wc
+                        if nd < dist.get(n, 1e9):
+                            dist[n] = nd
+                            _hq.heappush(pq, (nd, n[0], n[1]))
+                return dist
+            while targets:
+                ds = _dists(h.x, h.y)
+                _dsl = [ds.get((x, y), 1e9) for (x, y, _o) in targets]
+                best = _dsl.index(min(_dsl))
+                x, y, o = targets.pop(best)
+
                 # 复核仍在（可能被顺路打掉）
                 if w.at(fl, x, y) != o:
                     continue
