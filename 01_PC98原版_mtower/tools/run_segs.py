@@ -112,8 +112,8 @@ def _cost(w, f, nx, ny):
         return (col is not None and w.hero.keys[col] > 0), 25
     if ty == 'SELL':                 # 商店：钱够即可谈（谈完该格 cleared，下一步才能走上去）
         return (w.hero.gold >= M.SHOP_PRICE.get(o, 0)), 3
-    if ty == 'SAIDAN':               # 祭坛：只有 ALTAR_CELLS 里的本体可踩（献祭后英雄站在祭坛上）
-        return (f, nx, ny) in M.ALTAR_CELLS, 5
+    if ty == 'SAIDAN':               # 祭坛本体不可走格（Java 面朝触发，face_altar 处理）
+        return False, 0
     if ty == 'MONSTER':
         r = w.battle(o)
         return (r is not None and r[0] < w.hero.hp), 100
@@ -121,7 +121,9 @@ def _cost(w, f, nx, ny):
 
 
 def _step(w, d):
-    """走一步。开门/购物/对话后英雄不移动 → 补走一步。返回 (ok, log)"""
+    """走一步。开门/购物后英雄不移动 → 补走一步。返回 (ok, log)
+    ✅ 2026-11-13：祭坛不再走格触发（Java directCheck 面朝触发，face_altar 处理），
+    补步逻辑只覆盖开门/商店。"""
     broke = ('blocked', '打不动', '打不过', '无', '不可通行', '买不起', '祭坛金币不足')
     b = (w.hero.f, w.hero.x, w.hero.y)
     before = _snap(w.hero)
@@ -129,8 +131,9 @@ def _step(w, d):
     if lg and any(t in lg[0] for t in broke):
         return False, lg
     # ⚠️ 必须连楼层一起比：3F(11,10)→4F(11,10) 坐标相同但已换层
-    if (w.hero.f, w.hero.x, w.hero.y) == b and lg:
-        # 交互未位移（开门 obj2/4/27、商店 SELL、祭坛 SAIDAN）→ 补一步真正走进去
+    if (w.hero.f, w.hero.x, w.hero.y) == b and lg \
+            and not any('祭坛' in t for t in lg):
+        # 交互未位移（开门 obj2/4/27、商店 SELL）→ 补一步真正走进去
         lg2 = w.move(*d)
         if lg2 and any(t in lg2[0] for t in broke):
             return False, lg2
@@ -305,7 +308,13 @@ def main():
 
     print('\n--- 4F 第二次（回）---')
     w.altar_policy = 'dfn'          # 攻略：4F 祭坛加防（D10→D14）
-    if not run_segs(w, 4, S['4b'], '4F回'): return 1
+    # ✅ 2026-11-13 祭坛面朝触发：4b1 走到祭坛邻格 (6,2) → 原地 face_altar(6,1)
+    #    献防 DEF+4 → 14 → 4b2 原路回下梯（Java directCheck：人物不移动，零位移）
+    if not run_segs(w, 4, S['4b1'], '4F回'): return 1
+    lg = w.face_altar(6, 1)
+    print('  4F祭坛(面朝):', ';'.join(lg))
+    if any(('不足' in t or '错误' in t or '必须' in t) for t in lg): return 1
+    if not run_segs(w, 4, S['4b2'], '4F回'): return 1
     if not stair(w, 1, 11, '4F(1,11)->5F'): return 1
 
     print('\n--- 5F 第二次（回）---')

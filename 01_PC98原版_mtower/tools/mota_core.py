@@ -675,6 +675,32 @@ class World:
         return None
 
     # -- 动作：朝 (dx,dy) 走一步 -------------------------------------------
+    def face_altar(self, ax, ay):
+        """✅ 2026-11-13 Java 真值修正：面朝祭坛献祭（人物不移动，可原地连献）。
+        Java MTower.java：directCheck(面前格) 判 obj type==7 → yesno 菜单（L5804）；
+        连续确认 = 连续献祭，零位移。返回日志列表；失败返回含 '祭坛' 的错误。"""
+        h = self.hero
+        f, x, y = h.f, h.x, h.y
+        if (f, ax, ay) not in ALTAR_CELLS:
+            return [f'祭坛坐标错误：({f},{ax},{ay}) 不在 ALTAR_CELLS']
+        if abs(ax - x) + abs(ay - y) != 1:
+            return [f'祭坛：必须站在祭坛邻格面朝它（当前 ({x},{y}) → ({ax},{ay})）']
+        c = altar_cost(self.altar_k)
+        if h.gold < c:
+            return ['祭坛金币不足（需%d，有%d）' % (c, h.gold)]
+        h.gold -= c
+        pol = self.altar_policy if self.altar_policy in ALTAR_GAIN else 'atk'
+        gain = altar_gain(f, pol, self.altar_k)
+        if pol == 'hp':
+            h.hp += gain
+        elif pol == 'atk':
+            h.atk += gain
+        else:
+            h.dfn += gain
+        self.altar_k += 1
+        return ['祭坛献金%dG → %s+%d（第%d次，下次%dG）'
+                % (c, pol, gain, self.altar_k, altar_cost(self.altar_k))]
+
     def move(self, dx, dy):
         h = self.hero
         f, x, y = h.f, h.x, h.y
@@ -879,24 +905,13 @@ class World:
                 log.append(f'评分 NPC obj{o}（交谈通过）'); self.cleared.add((f, nx, ny)); o = 0
             elif ty == 'SAIDAN':
                 # 📝 祭坛：4 项菜单在 A* 里无法表达，按 altar_policy 预设选择；代价随累计次数递增
-                if (f, nx, ny) in ALTAR_CELLS:      # 可反复献祭，只受金币与递增代价限制
-                    c = altar_cost(self.altar_k)
-                    if h.gold < c:
-                        return ['祭坛金币不足（需%d，有%d）' % (c, h.gold)]
-                    h.gold -= c
-                    pol = self.altar_policy if self.altar_policy in ALTAR_GAIN else 'atk'
-                    gain = altar_gain(f, pol, self.altar_k)
-                    if pol == 'hp':
-                        h.hp += gain
-                    elif pol == 'atk':
-                        h.atk += gain
-                    else:
-                        h.dfn += gain
-                    self.altar_k += 1
-                    log.append('祭坛献金%dG → %s+%d（第%d次，下次%dG）'
-                               % (c, pol, gain, self.altar_k, altar_cost(self.altar_k)))
-                else:
-                    return [f'不可通行 obj{o}（{ty}）']
+                # ✅ 2026-11-13 修正（Java 真值 MTower.java L6404-6431 + L5804）：
+                #    directCheck(面前格) 判 obj type==7 → 弹 yesno 菜单，人物**不移动**。
+                #    连续献祭 = 面朝祭坛反复确认，零位移。旧「踩上祭坛格」建模作废。
+                #    现语义：面向祭坛（邻格）时调用 face_altar() 触发；走向祭坛格=blocked。
+                if (f, nx, ny) in ALTAR_CELLS:
+                    return ['blocked:祭坛本体不可踩（Java directCheck 面朝触发）']
+                return [f'不可通行 obj{o}（{ty}）']
             elif ty == 'NORMAL':
                 if o == 20 and (f, nx, ny) in PIT_GUARD_CLEAR:
                     # ✅ 落穴 obj20：守卫未清则挡路（资料笔记 @3780-3845）

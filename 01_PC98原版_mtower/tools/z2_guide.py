@@ -305,7 +305,11 @@ def main():
 
     print('\n--- 4F 第二次（回）---')
     w.altar_policy = 'dfn'          # 攻略：4F 祭坛加防（D10→D14）
-    if not run_segs(w, 4, S['4b'], '4F回'): return 1
+    if not run_segs(w, 4, S['4b1'], '4F回'): return 1
+    lg = w.face_altar(6, 1)         # 祭坛面朝触发（Java directCheck）
+    print('  4F祭坛(面朝):', ';'.join(lg))
+    if any(('不足' in t or '错误' in t or '必须' in t) for t in lg): return 1
+    if not run_segs(w, 4, S['4b2'], '4F回'): return 1
     if not stair(w, 1, 11, '4F(1,11)->5F'): return 1
 
     print('\n--- 5F 第二次（回）---')

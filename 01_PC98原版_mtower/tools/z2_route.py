@@ -224,7 +224,10 @@ def goto_stair_adj(w, label=''):
 
 
 def altar_uses(w, ax, ay, n, policy, label=''):
-    """祭坛献祭 n 次（策略 atk/dfn）。每次走进即献一次，需退出再进。"""
+    """祭坛献祭 n 次（策略 atk/dfn）。
+    ✅ 2026-11-13 Java 真值修正：面朝祭坛触发（MTower.java L6404 directCheck 面前格、
+    L5804 type==7 弹菜单），人物**不移动** → 走到邻格后原地连献，每次 0 步。
+    旧「走进祭坛格再退一步」建模作废（每次多 2 步）。"""
     w.altar_policy = policy
     # 祭坛本体邻格：优先找真正空地(obj==0)邻格，再退而求其次找可站立邻格
     h = w.hero
@@ -248,10 +251,15 @@ def altar_uses(w, ax, ay, n, policy, label=''):
     if not goto(w, nbr[0], nbr[1], '%s 祭坛邻格' % label):
         return False
     for i in range(n):
-        if not goto(w, ax, ay, '%s 祭坛#%d' % (label, i + 1)):
+        lg = w.face_altar(ax, ay)
+        txt = ';'.join(lg)
+        if '不足' in txt or '错误' in txt or '必须' in txt:
+            print('  !! %s 祭坛#%d: %s' % (label, i + 1, txt))
             return False
-        if not goto(w, nbr[0], nbr[1], '%s 退' % label):
-            return False
+        _trace(w, None, (0, 0), lg, 'altar') if '_trace' in globals() else None
+        REC.append((h.f, h.x, h.y, h.hp, h.atk, h.dfn, h.gold,
+                    h.keys['y'], h.keys['b'], h.keys['r'], txt[:80], '0,0')) if 'REC' in globals() else None
+        print('  %s 祭坛#%d(面朝): %s' % (label, i + 1, txt))
     return True
 
 

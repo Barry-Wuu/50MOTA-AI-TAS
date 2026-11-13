@@ -1,0 +1,14 @@
+﻿python : Traceback (most recent call last):
+At line:15 char:2974
++ ... wer\tools'; python 'c:\Users\wudiq\.trae-cn\work\6ae33f66aec6ef343cfc ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "c:\Users\wudiq\.trae-cn\work\6ae33f66aec6ef343cfcd90e\probe_keys.py", line 39, in <module>
+    rc = Z.main()
+  File "D:\B++\WorkBuddy\mota_tas_tmp2\repo\01_PC98原版_mtower\tools\z2_route.py", line 306, in main
+    if run_segs.main() != 0:
+  File "D:\B++\WorkBuddy\mota_tas_tmp2\repo\01_PC98原版_mtower\tools\run_segs.py", line 267, in main
+    w = M.World.new()
+AttributeError: 'function' object has no attribute 'new'
