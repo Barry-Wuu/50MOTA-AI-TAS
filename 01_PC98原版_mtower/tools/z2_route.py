@@ -4160,26 +4160,86 @@ def main():
         print('  !! V92 神剣未取到'); return 1
     print('   V92 完成（神剣 ATK+100，零战损；雪之结晶仍在包内可复用）: %s' % st(h))
 
-    if os.environ.get('MOTA_STOP_AFTER_V802'):
-        print('   V85 结束位置确认: %s' % st(h))
+    # MOTA_STOP_AFTER_V92=1：跑到 V92 终点即停（配合 MOTA_PROBE_FLOOR=24,25,26 转储活层）
+    if os.environ.get('MOTA_STOP_AFTER_V92'):
+        print('   V92 终点: %s' % st(h))
         pf = os.environ.get('MOTA_PROBE_FLOOR')
         if pf:
             for _pf in pf.split(','):
                 _dump_floor(w, int(_pf))
-        return 0
-        print('   V83 结束位置确认: %s' % st(h))
-        pf = os.environ.get('MOTA_PROBE_FLOOR')
-        if pf:
-            for _pf in pf.split(','):
-                _dump_floor(w, int(_pf))
+        if os.environ.get('MOTA_AUDIT_LOOT'):
+            _audit_remaining_loot(w)
+        pk = os.environ.get('MOTA_PICKLE_OUT')
+        if pk:
+            import pickle as _pk
+            with open(pk, 'wb') as _f:
+                _pk.dump(w, _f)
+            print('   世界状态已存 → %s' % pk)
         return 0
     return 0
 
-    pf = os.environ.get('MOTA_PROBE_FLOOR')
-    if pf:
-        for _pf in pf.split(','):
-            _dump_floor(w, int(_pf))
-    return 0
+
+def _audit_remaining_loot(w):
+    """扫全图未拾取属性来源（ATK/DEF/HP 道具 + 可再祭坛），反推大法师缺口。"""
+    h = w.hero
+    from collections import defaultdict
+    remain = defaultdict(lambda: [0, 0, 0, []])  # floor -> [hp,atk,dfn, cells]
+    for f in range(1, 51):
+        if f == 0:
+            continue
+        for y in range(1, 12):
+            for x in range(1, 12):
+                o = w.at(f, x, y)
+                if not o:
+                    continue
+                if (f, x, y) in w.cleared:
+                    continue
+                hp, atk, dfn = M.oatr(o, 10), M.oatr(o, 11), M.oatr(o, 12)
+                if hp or atk or dfn:
+                    remain[f][0] += hp; remain[f][1] += atk; remain[f][2] += dfn
+                    remain[f][3].append((x, y, o, hp, atk, dfn))
+    print('\n=== 未拾取属性来源审计（V92 后）===')
+    print('当前: %s  altar_k=%d  gold=%d' % (st(h), w.altar_k, h.gold))
+    tot = [0, 0, 0]
+    for f in sorted(remain):
+        r = remain[f]
+        tot[0] += r[0]; tot[1] += r[1]; tot[2] += r[2]
+        print('  %2dF  HP+%4d ATK+%3d DEF+%3d  格:%s' % (
+            f, r[0], r[1], r[2],
+            ['(%d,%d)o%d+%d/%+d/%+d' % (x, y, o, hp, atk, dfn) for (x, y, o, hp, atk, dfn) in r[3]]))
+    print('  合计未拾取: HP+%d ATK+%d DEF+%d' % (tot[0], tot[1], tot[2]))
+    # 四祭坛剩余可加（按当前 altar_k 向上推 30 次，列出累计与花费）
+    print('\n=== 祭坛增益档位（每楼层固定，不随 k 缩放；仅 HP 随 k 缩放）===')
+    print('  4F +2攻/+4防 | 12F +4攻/+8防 | 32F +8攻/+16防 | 46F +10攻/+20防')
+    print('  代价随全局已祭 k 递增: 20/40/80/140/220/320/440/580/740/920/1120/1340/1580...')
+    # 大法师战损试算
+    print('\n=== 大魔導師 obj96 (HP4500 ATK560 DEF310) 战损试算 ===')
+    def loss_ma(A, D):
+        per = A - 310
+        if per <= 0:
+            return None
+        t = -(-4500 // per)
+        return (560 - D) * (t - 1)
+    for A in (348, 450, 500, 560, 600, 700, 800, 1000):
+        for D in (337, 450, 500, 560, 600):
+            L = loss_ma(A, D)
+            if L is not None:
+                print('    A%-4d D%-4d 战损=%s%s' % (A, D, L, ' (0伤!)' if L == 0 else ''))
+        print()
+    print('=== 50F 真魔王 obj57(封印后 800/500/100) 战损试算 ===')
+    def loss_50(A, D):
+        per = A - 100
+        if per <= 0:
+            return None
+        t = -(-8000 // per)
+        return (500 - D) * (t - 1)
+    for A in (348, 500, 560, 600, 700, 800, 1000):
+        for D in (337, 500, 560, 600):
+            L = loss_50(A, D)
+            if L is not None:
+                print('    A%-4d D%-4d 战损=%s%s' % (A, D, L, ' (0伤!)' if L == 0 else ''))
+        print()
+
 
 
 if __name__ == '__main__':

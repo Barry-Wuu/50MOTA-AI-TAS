@@ -214,6 +214,8 @@ MSG_EFFECT = {
     152: ('pct3', None),      # 「攻撃力と防御力を３％だけあげてやろう」
     153: ('item', 24),        # 授けるのは 勇者のオーブ（obj24：鑑定器）
     174: ('gold', 1000),      # 「１０００ＧＯＬＤもらった!」
+    154: ('item', 104),       # ✅ 「褒美におぬしに”エリクサー”をやろう」→ 圣水 obj104 入包
+                              #    （16F(11,11)，MTower.java @3090-3092；越晚用收益越大）
     87:  ('none', None),      # 盗贼脱走：同事件把 2F(2,7) 的墙挖通（已在 TRAP 里做）
     88:  ('none', None), 151: ('none', None), 173: ('none', None), 175: ('none', None),
     44:  ('none', None),      # 勇者「人形だっ！」
@@ -348,6 +350,12 @@ for e in DYNEV.get('obj', []):
         #    若静态写入会与 check_39_doors() 冲突，跳过。
         if fl == 39 and obj == 107:
             continue
+        # ✅ 16F(11,11) 圣水 NPC：dyn_raw 记的是「谈话后」的 obj151（話は終わりじゃ），
+        #    首访真值应是 obj154（エリクサーをくれる盗賊）。MTower.java @3090-3092 实证：
+        #    初始 obj154 → 对话后置 mapObject[75][119]=1（圣水 obj104 入包）+ 该格改 obj151。
+        #    故把 dyn_raw 的 151 改写回 154，让首访就能拿到圣水。
+        if fl == 16 and e['x'] == 11 and e['y'] == 11 and obj == 151:
+            obj = 154
         FLOOR_WRITES[fl].append((e['x'], e['y'], obj))
 TERR_WRITES = collections.defaultdict(list)
 for e in DYNEV.get('ter', []):
@@ -1167,6 +1175,27 @@ class World:
             return True, ['雪之结晶 obj110：四邻无熔岩（道具不消耗）']
         return True, ['★使用雪之结晶 obj110：清除四邻熔岩 %s（道具不消耗，可反复用）'
                       % cleared_cells]
+
+    def use_elixir(self):
+        """圣水 obj104（エリクサー，由 16F 右下角 obj154 盗贼赠送）：HP += ATK×10 + DEF×5，
+        一次性消耗。
+
+        依据 MTower.java @1067-1086（itemFlag==4，槽位 mapObject[75][119]=obj104）：
+            mapObject[66][118] += mapObject[67][118] * 10 + mapObject[68][118] * 5
+        其中 66=HP、67=ATK、68=DEF —— 由状态栏 y=122/154/185 绘制顺序（@13408-13413）
+        + 战斗估算 @6602/6612（67≤怪防→打不动、怪攻−68→每回合伤害）+ 祝福魔法 @3759-3760
+        （67*=1.03、68*=1.03）三处互证。
+        ⚠️ 文案「按攻击与防御总和加生命」是中文版意译，真实权重是 ATK×10 + DEF×5（ATK 双倍）。
+        「越晚用越好」—— ATK/DEF 越高收益越大，路线应留到加点后再喝。
+        """
+        h = self.hero
+        if 104 not in h.items:
+            return False, ['没有圣水 obj104（须先在 16F 右下 (11,11) 与 obj154 盗贼对话）']
+        gain = h.atk * 10 + h.dfn * 5
+        h.hp += gain
+        h.items.discard(104)
+        return True, ['★饮用圣水 obj104：HP += ATK%d×10 + DEF%d×5 = +%d（现 HP=%d，已消耗）'
+                      % (h.atk, h.dfn, gain, h.hp)]
 
     def wing_down(self):
         """降臨の翼 obj108（向下飞行器，**一次性消耗**）：站在本层任意处，瞬移到本层下行梯口旁。

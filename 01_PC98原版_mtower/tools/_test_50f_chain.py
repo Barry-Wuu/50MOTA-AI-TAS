@@ -36,7 +36,7 @@ def main():
     h = w.hero
     h.hp, h.atk, h.dfn, h.gold = 20000, 400, 450, 5000
     h.keys['y'], h.keys['b'], h.keys['r'] = 10, 3, 8
-    h.items.add(M.SACRED_SHIELD)          # 聖盾：免魔法夹击，隔离测试封印逻辑
+    h.items.add(M.SACRED_SHIELD)          # 神盾(44F obj39)：免魔法夹击，隔离测试封印逻辑
 
     print('=== 49F 十字封印 ===')
     put(w, 49, 1, 11)
