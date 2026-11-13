@@ -110,12 +110,10 @@ TYPECH = {'MONSTER': 'm', 'DOOR': 'd', 'STATUS': 'i', 'ITEM': 'i',
 floors = {}
 base = M.base_cells()
 
-# ✅ 2026-11-13 修正：terrain 用最终 World 的动态口径（terrain_at），而不是静态 M.terrain()。
-#   静态版不反映运行时开墙（OPEN_WALLS 数据修正、DIG_WALLS 凿墙、DARKWALL 撞塌暗墙、
-#   obj89 撞塌、37F 镐破墙、24F 秘道、38F 撞墙等），导致前端数据里这些格仍是墙、
-#   引擎却可走 → 勇者渲染时"走进墙里"（第一步 (1,4,11) 即此 bug）。
-#   用 run_segs.LAST_W（z2_route.main 全程执行后的最终 World）的 terrain_at 生成，
-#   数据 terrain 与引擎实际地形完全一致。
+# terrain 用最终 World 的动态口径（terrain_at），反映运行时真实开墙：
+#   DIG_WALLS 凿墙、DARKWALL 撞塌暗墙、obj89 撞塌、37F 镐破墙、24F 秘道、38F 撞墙等。
+#   ⚠️ 2026-11-13 v11：删除了"走过的格一律标记为地板"的反推逻辑（原 138-149 行）。
+#   该逻辑会把路线本身的错误合法化（如 OPEN_WALLS 穿墙），只应保留引擎真实动态变更。
 _w = run_segs.LAST_W
 def _dyn_terrain(f, x, y):
     return _w.terrain_at(f, x, y)
@@ -135,18 +133,9 @@ for (ff, x, y), o in base.items():
     t = M.TYPE.get(M.oatr(o, 3))
     floors[k]['objs']['%d,%d' % (x, y)] = [o, M.oname(o)[:24], TYPECH.get(t, 'o')]
 
-# ✅ 2026-11-13 修正：凡路线**成功走过**的格子（st=='ok'），数据 terrain 必须标为可走。
-#   原因：临时开墙机制（24F 秘道 SECRET24_DIG 挖开后又还原、DIG_WALLS 凿墙、
-#   DARKWALL 撞塌、41F 事件墙、38F 撞墙 obj89）在最终 World.terrain_at 里可能仍是墙
-#   （一次性通道已还原），但路线经过时引擎实际可走。若数据 terrain 仍记墙，
-#   前端渲染时勇者会"走进墙里"。此处以路线为准——凡成功到达的格子一律地板。
-for s in steps:
-    if s.get('st') != 'ok':
-        continue
-    fd = floors[str(s['f'])]
-    x, y = s['x'], s['y']
-    if 0 <= y < 13 and 0 <= x < 13:
-        fd['terrain'][y][x] = 0
+# ⚠️ 2026-11-13 v11：删除"走过格一律标地板"的反推逻辑。
+#   原逻辑把路线成功经过的格子 terrain 强制设 0，会合法化路线里的穿墙错误
+#   （如已撤销的 OPEN_WALLS）。terrain 现在完全由 _dyn_terrain（引擎真值）决定。
 
 for s in steps:
     fd = floors[str(s['f'])]

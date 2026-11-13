@@ -44,21 +44,13 @@ def rc(f, x, y):
     return b * 13 + y, s * 13 + x
 
 
-# ✅ 数据修正（2026-10-31）：PC98 源地图 magic_tower1_map_50f.json 的 1F 底排
-#   (1,4,11) 与 (1,8,11) 被写成地形墙（tile 3），导致左下「飞行之珠 obj26」房间
-#   从底排与主区完全隔断、无法到达。飞行之珠是四区（31-40F）跨层调度的核心道具，
-#   原版魔塔 1F 底排为连续走廊，此处把这两个缺口补回可通行地板（obj=0）。
-#   验证：打开后从起点 (6,11) 经 (5,11)(4,11)(3,11) 0 门直达 orb；不影响 1F→2F 主路线。
-#   ⚠️ 2026-11-13 修正：OPEN_WALLS 必须同时生效于静态 terrain()（而不只是
-#   World.terrain_at）。此前 build_full50 用 M.terrain() 生成前端数据，导致
-#   (1,4,11) 在数据里仍是墙、引擎里是地板——两套口径不一致，前端渲染把勇者
-#   第一步画进墙里。下沉到这里后全局统一。
-OPEN_WALLS = {(1, 4, 11), (1, 8, 11)}
+# ⚠️ 2026-11-13 撤销 OPEN_WALLS：源数据 1F(4,11)(8,11) tile3 就是墙（截图逐格采样
+#   确认棕砖墙色、secret_walls=[]），当年"飞行之珠不可达"判断是错的——
+#   实际左下房经黄门 (2,8) 连中区，飞行之珠由 1c 第三次合法取得。
+#   底排被两段墙截成三个房间正是原版设计。 terrain() 恢复纯真值。
 
 
 def terrain(f, x, y):
-    if (f, x, y) in OPEN_WALLS:
-        return 0
     r, c = rc(f, x, y)
     return MA[MAPT[r][c]][3] if 0 <= r < 78 and 0 <= c < 130 and MAPT[r][c] < len(MA) else 1
 
@@ -640,8 +632,6 @@ class World:
         self.over[(f, x, y)] = o
 
     def terrain_at(self, f, x, y):
-        if (f, x, y) in OPEN_WALLS:
-            return 0
         t = self.ter_over.get((f, x, y))
         if t is not None:
             return MA[t][3] if t < len(MA) else 1
