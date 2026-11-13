@@ -682,11 +682,14 @@ class World:
         nx, ny = x + dx, y + dy
         log = []
         if self.terrain_at(f, nx, ny) == 1:
-            if (f, nx, ny) in DARKWALL_CELLS and (f, nx, ny) not in self.cleared:
-                # 📝 暗墙(原版地形值 3)：撞塌后露出底下红钥匙 obj28，可踩入拾取
-                #    注意：此处只放行+记日志，**不**先加 cleared —— 否则 at() 命中 cleared 返回 0，
-                #    会跳过下方 KEY_OF 分支的红钥匙拾取。cleared 由拾取分支统一处理。
-                log.append('撞塌暗墙(14,1,3) → 露出红钥匙')
+            if (f, nx, ny) in DARKWALL_CELLS:
+                # 📝 暗墙(原版地形值 3)：撞塌后露出底下物体，可踩入拾取。
+                #    ✅ 2026-11-13 修复：DARKWALL 无论是否 cleared 都放行。
+                #    旧逻辑写成 `in DARKWALL and not in cleared`，导致「已撞塌」时落进 elif
+                #    → 因 terrain 仍为 1 而判 blocked，撞塌过的地形暗墙反而不可再通行
+                #    （41F 中央十字 (5,6)(7,6) 被 V71 撞过后 V93 复现 blocked:墙）。
+                if (f, nx, ny) not in self.cleared:
+                    log.append('撞塌暗墙(14,1,3) → 露出红钥匙')
             elif DIG_WALLS.get((f, nx, ny)) not in self.cleared:
                 return ['blocked:墙']               # 未触发=普通墙；触发后直接放行（log 由落格时带出）
         o = self.at(f, nx, ny)

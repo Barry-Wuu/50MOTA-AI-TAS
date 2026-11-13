@@ -66,6 +66,8 @@ def _cost(w, f, nx, ny):
     o = w.at(f, nx, ny)
     if not o:
         return True, 1
+    if o in M.ALTAR_SIDE:                       # 祭坛左右侧格 obj21/23：不可踩（move() 同样拦截）
+        return False, 0
     ty = M.TYPE.get(M.oatr(o, 3))
     if o == 89:
         return True, 3
@@ -201,6 +203,24 @@ def fly(w, target_f, label=''):
         return False
     print('  %-22s %s' % (label, st(w.hero)))
     return True
+
+
+def goto_stair_adj(w, label=''):
+    """把英雄移到本层楼梯邻格（飞行之珠/升降须站梯旁）。"""
+    h = w.hero
+    s = M.STAIRS.get(h.f)
+    if not s:
+        return False
+    for (sx, sy) in [c for c in s if c]:
+        for d in ((0, 1), (0, -1), (1, 0), (-1, 0)):
+            ax, ay = sx + d[0], sy + d[1]
+            if not (1 <= ax <= 11 and 1 <= ay <= 11):
+                continue
+            if not _cost(w, h.f, ax, ay)[0]:
+                continue
+            if goto(w, ax, ay, '%s 到梯旁(%d,%d)' % (label, ax, ay)):
+                return True
+    return False
 
 
 def altar_uses(w, ax, ay, n, policy, label=''):
@@ -4194,6 +4214,54 @@ def main():
                 _pk.dump(w, _f)
             print('   世界状态已存 → %s' % pk)
         return 0
+
+    # ---------- V93: 41F-48F 漏捡清扫（补 ATK+30 / DEF+30 / HP+12600）----------
+    #   V72-V90 清 42-49F 时只打怪/开门、漏下了这批 STATUS 道具：赤/青晶(+5攻/防) + 红蓝回复药。
+    #   按「先打扫全塔 → 冲祭坛 → 祝福 → 圣水」原则，打大法师前先把这些加法增益全收了。
+    CLEAN = {
+        41: [(1, 1, 'HP250'), (1, 11, 'HP1000'), (3, 9, 'HP250'), (4, 11, 'ATK+5'),
+             (8, 11, 'DEF+5'), (9, 9, 'HP250'), (11, 1, 'HP250'), (11, 11, 'HP1000')],
+        42: [(3, 11, 'DEF+5')],
+        43: [(4, 9, 'HP1000'), (4, 10, 'HP1000'), (4, 11, 'HP1000'), (6, 6, 'HP1000'), (11, 7, 'HP250')],
+        45: [(1, 3, 'ATK+5'), (1, 5, 'DEF+5'), (2, 3, 'ATK+5'), (2, 5, 'DEF+5'), (11, 11, 'HP1000')],
+        46: [(1, 2, 'HP250'), (1, 3, 'ATK+5'), (7, 6, 'HP250')],
+        47: [(4, 10, 'HP250'), (6, 10, 'ATK+5'), (11, 2, 'DEF+5')],
+        48: [(2, 1, 'HP1000'), (3, 8, 'ATK+5'), (3, 11, 'DEF+5'), (5, 8, 'HP250'),
+             (5, 11, 'HP1000'), (7, 1, 'HP250'), (8, 1, 'HP250'), (9, 1, 'HP250')],
+    }
+    print()
+    print('--- V93 41F-48F 漏捡清扫（补 ATK+30 / DEF+30 / HP+12600）---')
+    # ⚠️ 41F 跳过：其迷宫黄门太多（去 (1,1) 花1把、去 (1,11) 再花2把），
+    #    而 41F 那批只值 ATK+5/DEF+5/HP+3000，不值这么多黄钥（后续还要留给门）。
+    for _f in (42, 43, 45, 46, 47, 48):
+        if not goto_stair_adj(w, 'V93'):
+            print('  !! V93 %dF 找不到可站的楼梯邻格' % h.f); return 1
+        if not fly(w, _f, 'V93 飞 %dF' % _f): return 1
+        for (x, y, lab) in CLEAN[_f]:
+            if not goto(w, x, y, 'V93 %dF(%d,%d) %s' % (_f, x, y, lab)):
+                print('  !! V93 %dF(%d,%d) %s 不可达 → 跳过' % (_f, x, y, lab))
+    print('   V93 完成（清扫后）: %s' % st(h))
+
+    # ---------- V94: 46F 祭坛冲攻（大法师备战）→ 25F 大法师 obj96 → 5 红钥 ----------
+    #   「打扫全塔 → 冲祭坛 → …」：清扫后把金币倒进 46F 祭坛（+10攻/次）抬 ATK，
+    #   把大法师从 72 回合压到 40 回合（战损 11218→6162 < HP10699）。
+    #   25F 红门 (6,10) 必经（BFS 实测），先花掉现有 1 红钥；大法师掉落 5 红钥。
+    print()
+    print('--- V94 46F 祭坛冲攻 → 25F 大法师 obj96 → 5 红钥 ---')
+    if not goto_stair_adj(w, 'V94'):
+        print('  !! V94 %dF 无梯旁可站' % h.f); return 1
+    if not fly(w, 46, 'V94 飞 46F'): return 1
+    if not altar_uses(w, 6, 1, 5, 'atk', 'V94'): return 1
+    if not goto_stair_adj(w, 'V94'):
+        print('  !! V94 46F 无梯旁可站' % h.f); return 1
+    if not fly(w, 25, 'V94 飞 25F'): return 1
+    if not goto(w, 6, 10, 'V94 25F (6,10) 落穴通过（dyn_raw 记 obj20，非红门）'): return 1
+    if not goto(w, 6, 6, 'V94 大法师 obj96（HP4500/ATK560/DEF310）'): return 1
+    # 击杀后 5 把红钥摆在 row8 (4,8)~(8,8)，(6,8) 路过已拾，补齐其余 4 把
+    for (kx, ky) in ((6, 8), (5, 8), (4, 8), (7, 8), (8, 8)):
+        if not goto(w, kx, ky, 'V94 红钥(%d,%d)' % (kx, ky)):
+            print('  !! V94 红钥(%d,%d) 不可达' % (kx, ky))
+    print('   V94 完成（大法师击破，红钥到手）: %s' % st(h))
     return 0
 
 
