@@ -2579,7 +2579,7 @@ def main():
         (8, 6, ''), (8, 7, ''), (8, 8, ''),
         (9, 8, '监狱栅栏(已开)'),
         (10, 8, ''), (10, 7, ''),
-        (11, 7, '老头 obj152 +3%攻防'),
+        (11, 7, '老头 obj152 +3%攻防'),   # ⚠️ 承重：+4 ATK 让 40F 三只剣士 2回合→1回合（0伤）
     ], 'V51'): return 1
     # 右区小偷(11,11)：回 (10,7)→(10,8)→(9,8)→(8,8)→x8 下至 (8,11)→栅栏(9,11)→(10,11)→(11,11)
     if not run(w, [
@@ -3147,6 +3147,19 @@ def main():
     ], 'V67'): return 1
     if not fly(w, 40, 'V67 34F->40F（飞行之珠，等价攻略「上40F」）'): return 1
     print('=== 到达 40F（V67 完成）:', st(h))
+    if os.environ.get('MOTA_AUDIT_GEMS'):
+        print('=== V67 后：1-40F 未拾取的属性宝石（ATK/DEF）===')
+        for _f in range(1, 41):
+            for _x in range(1, 12):
+                for _y in range(1, 12):
+                    _o = w.at(_f, _x, _y)
+                    if not _o:
+                        continue
+                    _a = M.OA[_o]
+                    if M.TYPE.get(M.oatr(_o, 3)) == 'STATUS' and (_a[11] > 0 or _a[12] > 0):
+                        print('  %dF(%2d,%2d) obj%-4d %-14s ATK+%s DEF+%s'
+                              % (_f, _x, _y, _o, M.oname(_o)[:14], _a[11], _a[12]))
+        return 0
     pf = os.environ.get('MOTA_PROBE_FLOOR')
     if pf:
         for _pf in pf.split(','):
