@@ -14,6 +14,7 @@ sys.path.insert(0, TOOLS)
 os.chdir(TOOLS)
 import mota_core as M
 import z2_route as Z
+import run_segs
 
 DIRV = {(1, 0): '→', (-1, 0): '←', (0, 1): '↓', (0, -1): '↑', (0, 0): '·'}
 
@@ -89,6 +90,17 @@ for _nm in ('wing_up', 'wing_down'):
         return f
     setattr(M.World, _nm, _mk(_o))
 
+# ✅ 2026-11-13 修正：先录真实起点步（Hero.initial() 的 1F(6,11)，初始状态）。
+#   此前 z2_route.main() 的第一个 record 是"第一个移动后"的位置（1F(5,11)），
+#   起点 (6,11) 从未被录成 step0 → 前端把 (5,11) 当起点渲染，勇者开场即错位一格。
+h0 = M.Hero.initial()
+a0 = snap(h0)
+steps.append(dict(i=1, s='A', f=h0.f, x=h0.x, y=h0.y,
+                  d='·', e='', l='',
+                  hp=a0['hp'], a=a0['atk'], df=a0['dfn'], g=a0['gold'],
+                  ky=a0['ky'], kb=a0['kb'], kr=a0['kr'],
+                  dh=0, da=0, dd=0, dg=0, st='ok'))
+
 rc = Z.main()
 print('=== main rc=%s  steps=%d ===' % (rc, len(steps)))
 
@@ -97,11 +109,22 @@ TYPECH = {'MONSTER': 'm', 'DOOR': 'd', 'STATUS': 'i', 'ITEM': 'i',
           'MESSAGE': 'n', 'SCORE': 's', 'SAIDAN': 'a', 'SELL': 's'}
 floors = {}
 base = M.base_cells()
+
+# ✅ 2026-11-13 修正：terrain 用最终 World 的动态口径（terrain_at），而不是静态 M.terrain()。
+#   静态版不反映运行时开墙（OPEN_WALLS 数据修正、DIG_WALLS 凿墙、DARKWALL 撞塌暗墙、
+#   obj89 撞塌、37F 镐破墙、24F 秘道、38F 撞墙等），导致前端数据里这些格仍是墙、
+#   引擎却可走 → 勇者渲染时"走进墙里"（第一步 (1,4,11) 即此 bug）。
+#   用 run_segs.LAST_W（z2_route.main 全程执行后的最终 World）的 terrain_at 生成，
+#   数据 terrain 与引擎实际地形完全一致。
+_w = run_segs.LAST_W
+def _dyn_terrain(f, x, y):
+    return _w.terrain_at(f, x, y)
+
 for f in fids:
     floors[str(f)] = dict(
         steps=0, loss=0, kills=0, doors=0, pickups=0, visits=0,
         entry=None, exit=None,
-        terrain=[[M.terrain(f, x, y) for x in range(13)] for y in range(13)],
+        terrain=[[_dyn_terrain(f, x, y) for x in range(13)] for y in range(13)],
         objs={}, path=[], minhp=None, mincell=None,
         monsters={}, doorcol={}, picklist={}, special=[],
         reached=False, exec_steps=0)
@@ -111,6 +134,19 @@ for (ff, x, y), o in base.items():
         continue
     t = M.TYPE.get(M.oatr(o, 3))
     floors[k]['objs']['%d,%d' % (x, y)] = [o, M.oname(o)[:24], TYPECH.get(t, 'o')]
+
+# ✅ 2026-11-13 修正：凡路线**成功走过**的格子（st=='ok'），数据 terrain 必须标为可走。
+#   原因：临时开墙机制（24F 秘道 SECRET24_DIG 挖开后又还原、DIG_WALLS 凿墙、
+#   DARKWALL 撞塌、41F 事件墙、38F 撞墙 obj89）在最终 World.terrain_at 里可能仍是墙
+#   （一次性通道已还原），但路线经过时引擎实际可走。若数据 terrain 仍记墙，
+#   前端渲染时勇者会"走进墙里"。此处以路线为准——凡成功到达的格子一律地板。
+for s in steps:
+    if s.get('st') != 'ok':
+        continue
+    fd = floors[str(s['f'])]
+    x, y = s['x'], s['y']
+    if 0 <= y < 13 and 0 <= x < 13:
+        fd['terrain'][y][x] = 0
 
 for s in steps:
     fd = floors[str(s['f'])]
