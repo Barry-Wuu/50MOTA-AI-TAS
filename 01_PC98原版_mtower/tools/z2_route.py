@@ -4231,6 +4231,9 @@ def main():
     }
     print()
     print('--- V93 41F-48F 漏捡清扫（补 ATK+30 / DEF+30 / HP+12600）---')
+    # ⚠️ 圣水 obj104（16F(11,11) 老人 obj154）需要 1 把黄钥（16F 迷宫无免费路），
+    #    而这把黄钥恰好是 46F 祭坛区的门槛 —— 二者抢同一把。大法师必须打，故本段暂不收圣水；
+    #    若要圣水，可在 12F(11,1) 商店花 1000G 买 1 黄钥（见文末说明）。
     # ⚠️ 41F 跳过：其迷宫黄门太多（去 (1,1) 花1把、去 (1,11) 再花2把），
     #    而 41F 那批只值 ATK+5/DEF+5/HP+3000，不值这么多黄钥（后续还要留给门）。
     for _f in (42, 43, 45, 46, 47, 48):
@@ -4262,6 +4265,55 @@ def main():
         if not goto(w, kx, ky, 'V94 红钥(%d,%d)' % (kx, ky)):
             print('  !! V94 红钥(%d,%d) 不可达' % (kx, ky))
     print('   V94 完成（大法师击破，红钥到手）: %s' % st(h))
+
+    # ---------- V95: 26F 假公主（x6 竖列 4 红门 → (6,7) 触发 story26 → 挖开 24F 竖井）----------
+    #   红钥 6 把充裕（4 门 + 24F 1 门 = 5 ≤ 6），直接开满 4 道，不折腾雪之结晶绕 (6,8)。
+    #   (6,7) 既是第 4 道红门，又是剧情触发格：开门后踩上去即触发。
+    print()
+    print('--- V95 26F 假公主（4 红门 → (6,7) 触发 → 24F 竖井）---')
+    if not goto_stair_adj(w, 'V95'):
+        print('  !! V95 %dF 无梯旁可站' % h.f); return 1
+    if not fly(w, 26, 'V95 飞 26F'): return 1
+    for (dx, dy, lab) in ((6, 10, '红门(6,10)'), (6, 9, '红门(6,9)'),
+                          (6, 8, '红门(6,8)'), (6, 7, '红门(6,7)+假公主触发')):
+        if not goto(w, dx, dy, 'V95 %s' % lab): return 1
+    if not getattr(w, 'story26', False):
+        print('  !! V95 假公主剧情未触发'); return 1
+    print('   V95 完成（26F 假公主，24F 竖井已挖开）: %s' % st(h))
+
+    # ---------- V96: 24F 竖井 → (6,0) 触发 ending → 50F ----------
+    #   24F 红门 (6,8) 必经（BFS 实测）→ -1 红。竖井 (6,0) 在 y=0（越出 1-11 导航范围），
+    #   先 goto (6,1) 再手动上一步踩 (6,0)，由 move() 内的 TRIG_24F_END 触发 ending → 传 50F(6,7)。
+    print()
+    print('--- V96 24F 竖井 → (6,0) ending → 50F ---')
+    if not goto_stair_adj(w, 'V96'):
+        print('  !! V96 %dF 无梯旁可站' % h.f); return 1
+    if not fly(w, 24, 'V96 飞 24F'): return 1
+    if not goto(w, 6, 8, 'V96 24F 红门(6,8) -1红'): return 1
+    if not goto(w, 6, 1, 'V96 24F(6,1) 竖井口'): return 1
+    ok, lg = _step(w, (0, -1))
+    if not ok:
+        print('  !! V96 踏入 (6,0) 失败: %s' % lg); return 1
+    for _m in lg:
+        print('     · ' + _m)
+    if not getattr(w, 'story24_end', False):
+        print('  !! V96 ending 未触发'); return 1
+    print('   V96 完成（ending → 50F）: %s' % st(h))
+
+    # ---------- V97: 50F 真魔王 obj57（封印后 800/500/100）+ 圣水最最后 ----------
+    print()
+    print('--- V97 50F 真魔王 obj57 + 圣水（最最后）---')
+    if not goto(w, 6, 5, 'V97 50F(6,5) 真魔王 obj57（封印后 800/500/100）'): return 1
+    if not getattr(w, 'won50', False):
+        print('  !! V97 真魔王未击败'); return 1
+    print('   ★★★ 通关（真魔王击破）★★★ %s' % st(h))
+    # 圣水最最后：ATK×10 + DEF×5，等属性见顶再喝（HP 最大化）
+    ok, lg2 = w.use_elixir()
+    for _m in lg2:
+        print('  ' + _m)
+    if not ok:
+        print('  !! V97 圣水未用（obj104 可能未持有）')
+    print('   V97 完成（通关 + 圣水）: %s' % st(h))
     return 0
 
 
