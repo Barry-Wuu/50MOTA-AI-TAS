@@ -711,11 +711,13 @@ class World:
                 self.cleared.add((f, nx, ny)); log.append('撞塌暗墙 obj89'); o = 0; ty = '空'
                 if (f, nx, ny) in ((19, 6, 3), (19, 6, 4)):   # 📝 19F 十字暗墙：撞开获得十字架 obj103
                     h.items.add(103); log.append('获得十字架 obj103（对吸血鬼等伤害翻倍）')
-            elif o == 79:                                # ⚠️ 熔岩：非战斗危险格，每步 -200 HP
-                if h.hp <= 200:                          #    （MAP_NOTES §4 实证：13F 80 格 / 26F 18 格）
-                    return ['熔岩烫死（HP%d ≤ 200，进不去了）' % h.hp]
-                h.hp -= 200
-                self.cleared.add((f, nx, ny)); log.append('踩熔岩 obj79 掉血200'); o = 0; ty = '空'
+            elif o == 79:                                # ✅ 熔岩：**不可通行**（不是掉血地砖）
+                # 📝 依据：MTower.java @785 `directCheck` —— obj79 的 c3=0/c4=0 → 判 bl=false，
+                #    撞上只弹 texts[183]「溶岩が流れている」，角色不动。
+                #    （13F 80 格 / 26F 18 格，MAP_NOTES §4）
+                # ⚠️ 旧实现误写成「可踩 −200HP/步」，会让 13F 神剣 obj34 不用雪之结晶就能拿 —— 与原版不符。
+                #    清除唯一途径 = 雪之结晶 obj110（itemFlag==11，清四邻各 1 格，道具不消耗）。
+                return ['blocked:熔岩 obj79（溶岩が流れている，不可通行；须雪之结晶 obj110 清除四邻）']
             elif o == 115:                                # ⚠️ 隐形块（GO 0F 字形等）按可走处理
                 log.append('隐形块 obj115 视为可走(caveat)'); self.caveats.add('obj115 可通行未指令流确认'); o = 0
             elif ty == 'MONSTER':
@@ -1137,6 +1139,34 @@ class World:
         if not opened:
             return True, ['魔法钥匙 obj111 已使用：本层无门可开']
         return True, ['★使用魔法钥匙 obj111：%dF 打开全部 %d 扇门 %s' % (f, len(opened), opened)]
+
+    def use_snow_crystal(self):
+        """雪之结晶 obj110（itemFlag==11）：把角色**上下左右四邻**的熔岩 obj79 清成地板。
+
+        依据 魔塔1_推演进度.md §一 / gen_notes.py『雪之结晶 obj110』：
+          `MTower.java` @1322-1372 —— 弹确认框 → 对四邻逐格判 `=='O'` → 有则播
+          displayDoor(...,9~12) 动画并把该格改成地板；持有旗标 `mapObject[71][120]` 不清零
+          → **可无限次重复使用，不消耗**。
+        ⚠️ 熔岩 obj79 本身是不可通行的（directCheck bl=false），故清除是拿到 13F 神剣 obj34
+           的唯一途径：必须站在熔岩边缘一格格往里啃。
+        """
+        h = self.hero
+        if 110 not in h.items:
+            return False, ['没有雪之结晶 obj110，无法清除熔岩']
+        f = h.f
+        cleared_cells = []
+        for dx, dy in ((0, -1), (1, 0), (0, 1), (-1, 0)):
+            nx, ny = h.x + dx, h.y + dy
+            if not (1 <= nx <= 11 and 1 <= ny <= 11):
+                continue
+            if self.at(f, nx, ny) != 79:
+                continue
+            self.cleared.add((f, nx, ny))       # at() 命中 cleared 返回 0 → 变地板
+            cleared_cells.append((nx, ny))
+        if not cleared_cells:
+            return True, ['雪之结晶 obj110：四邻无熔岩（道具不消耗）']
+        return True, ['★使用雪之结晶 obj110：清除四邻熔岩 %s（道具不消耗，可反复用）'
+                      % cleared_cells]
 
     def wing_down(self):
         """降臨の翼 obj108（向下飞行器，**一次性消耗**）：站在本层任意处，瞬移到本层下行梯口旁。
