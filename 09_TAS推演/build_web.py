@@ -11,7 +11,11 @@ DED = r'D:/B++/WorkBuddy/mota_tas_tmp2/repo/09_TAS推演/'
 FLOORS_DIR = r'D:/B++/WorkBuddy/mota_tas_tmp2/repo/01_PC98原版_mtower/floors/'
 SHEET = r'D:/B++/WorkBuddy/mota_tas_tmp2/repo/mota_art/MTower.gif'
 
-data = json.load(io.open(DED + 'merged_route.json', encoding='utf-8'))
+import sys as _sys
+DATA_F = _sys.argv[1] if len(_sys.argv) > 1 else 'merged_route_full.json'
+OUT_HTML = _sys.argv[2] if len(_sys.argv) > 2 else '1F到50F_全塔通关.html'
+MAXF = int(_sys.argv[3]) if len(_sys.argv) > 3 else 50
+data = json.load(io.open(DED + DATA_F, encoding='utf-8'))
 
 # 底图里烙死的原勇者：1F(6,11) 与 MTower.gif 正面帧逐像素完全一致（diff 0.00）。
 # 路线第 1 步时勇者已在 (6,10)，所以该格从第一步起就应还原成地面（步序 -1 = 永远覆盖）。
@@ -27,9 +31,10 @@ def data_uri(img, **kw):
 
 
 imgs = {}
-for f in range(1, 32):
+for f in sorted(int(k) for k in data['floors']):
     p = FLOORS_DIR + 'floor_%02d.png' % f
-    imgs[str(f)] = data_uri(Image.open(p).convert('RGBA'), lossless=True)
+    if os.path.exists(p):
+        imgs[str(f)] = data_uri(Image.open(p).convert('RGBA'), lossless=True)
 
 
 # ---- 每层的"地板贴图"：从该层纯地板格（地形0且无物件）里取最接近中位样板的一格 ----
@@ -52,7 +57,14 @@ def floor_tile(f):
     return Image.fromarray(tiles[best].astype(np.uint8))
 
 
-tiles = {str(f): data_uri(floor_tile(f), lossless=True) for f in range(1, 32)}
+tiles = {}
+for f in sorted(int(k) for k in data['floors']):
+    if not os.path.exists(FLOORS_DIR + 'floor_%02d.png' % f):
+        continue
+    try:
+        tiles[str(f)] = data_uri(floor_tile(f), lossless=True)
+    except Exception:
+        pass
 tile_js = json.dumps(tiles, ensure_ascii=False, separators=(',', ':'))
 
 sheet = Image.open(SHEET).convert('RGBA')
@@ -73,7 +85,7 @@ HTML = r'''<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>魔塔1 · 1F→31F 推演逐格校验（segs_route 人工翻译 · 剩余怪伤害）</title>
+<title>魔塔1 · 1F→50F 全塔通关逐格校验（z2_route · 剩余怪伤害）</title>
 <style>
 :root{
   --bg:#0d1017; --panel:#161a24; --panel2:#1c2130; --line:#293040;
@@ -111,7 +123,7 @@ main{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 404px;
   border:2px solid #3a3f52;border-radius:6px;background:#000 center/100% 100% no-repeat;
   image-rendering:pixelated;box-shadow:0 4px 18px rgba(0,0,0,.5)}
 #psvg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
-#consumeLayer,#patchLayer{position:absolute;inset:0;pointer-events:none;z-index:1}
+#consumeLayer,#patchLayer,#dynLayer{position:absolute;inset:0;pointer-events:none;z-index:1}
 .cons{position:absolute;width:7.6923%;height:7.6923%;transform:translate(-50%,-50%);
   background-image:var(--tile);background-size:100% 100%;background-repeat:no-repeat;
   image-rendering:pixelated}
@@ -123,6 +135,16 @@ main{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 404px;
   display:flex;align-items:flex-end;justify-content:center}
 .patch span{font-size:9px;color:#ffd9a8;background:rgba(30,18,6,.85);padding:0 3px;border-radius:3px;
   transform:translateY(6px);white-space:nowrap}
+/* 变动格：该步起新出现的物件（10F 战利品/落穴/楼梯、41F 魔術師Ａ+暗墙+降臨翼…） */
+.dynmk{position:absolute;width:7.6923%;height:7.6923%;transform:translate(-50%,-50%);
+  border:2px solid #4cc9f0;border-radius:4px;background:rgba(76,201,240,.13);
+  display:flex;align-items:center;justify-content:center;overflow:hidden}
+.dynmk span{font-size:8.5px;color:#c8f0ff;background:rgba(6,24,32,.88);padding:0 2px;border-radius:3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.dynmk.t{background:rgba(176,124,255,.14);border-color:#b07cff}
+.dynmk.t span{color:#e6d4ff}
+.dynmk.s{background:rgba(62,207,142,.16);border-color:#3ecf8e}
+.dynmk.s span{color:#b6f5d8}
 #marker{position:absolute;width:7.6923%;height:7.6923%;transform:translate(-50%,-50%);z-index:3;
   pointer-events:none}
 #heroImg{width:100%;height:100%;image-rendering:pixelated;
@@ -275,7 +297,7 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
 </head>
 <body>
 <header>
-  <h1>魔塔1 <em>1F→31F</em> 推演逐格校验 <span style="font-size:11px;color:#ff9f43;font-weight:400">· 已修正 2F 栅栏门 → 7F 暴毙</span></h1>
+  <h1>魔塔1 <em>1F→50F</em> 全塔通关逐格校验 <span style="font-size:11px;color:#ff9f43;font-weight:400">· 大法师 → 假公主 → 真魔王</span></h1>
   <div class="chips" id="chips"></div>
 </header>
 
@@ -287,6 +309,7 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
           <svg id="psvg" viewBox="0 0 520 520" preserveAspectRatio="none"></svg>
           <div id="consumeLayer"></div>
           <div id="patchLayer"></div>
+          <div id="dynLayer"></div>
           <div id="markLayer"></div>
           <div id="dmgLayer"></div>
           <div id="marker"><img id="heroImg" alt="勇者"><span id="dirbadge">·</span></div>
@@ -381,6 +404,7 @@ const markerEl = document.getElementById('marker');
 const mapbox = document.getElementById('mapbox');
 const consumeLayer = document.getElementById('consumeLayer');
 const patchLayer = document.getElementById('patchLayer');
+const dynLayer = document.getElementById('dynLayer');
 const dmgLayer = document.getElementById('dmgLayer');
 const tbody = document.getElementById('tbody');
 const slider = document.getElementById('slider');
@@ -473,6 +497,30 @@ function renderMap(){
   patchLayer.innerHTML = PATCHES.filter(function(p){return p.f===f;}).map(function(p){
     return '<div class="patch" style="left:'+pct(p.x)+';top:'+pct(p.y)+'"><span>'+esc(p.label)+'</span></div>';
   }).join('');
+
+  // 变动格：该步起「新出现/变化」的物件与地形（10F 战利品/落穴/楼梯、41F 魔術師Ａ+暗墙+降臨翼…）
+  const dynArr = (D.dyn||{})[String(f)] || [];
+  const OBJN = D.objnames || {};
+  const TLAB = {'0':'地面','1':'墙','2':'楼梯','3':'暗墙'};
+  const dynSeen = {};
+  let dynH = '';
+  dynArr.forEach(function(d){
+    if(d[2] > sel) return;                      // 尚未出现
+    const key = d[0]+','+d[1];
+    const v = d[3];
+    const stat = (fl.objs||{})[key];
+    if(typeof v !== 'string' && stat && String(stat[0]) === String(v)) return;  // 与静态一致，无变化
+    let lab, cls='dynmk';
+    if(v === 'STAIR'){ lab='上行梯'; cls+=' s'; }
+    else if(typeof v === 'string' && v.charAt(0)==='T'){
+      const tv=v.slice(1); lab=TLAB[tv]||('T'+tv); cls+=' t';
+    } else { lab=OBJN[String(v)]||('obj'+v); }
+    const dk = key+'|'+String(v);
+    if(dynSeen[dk]) return;
+    dynSeen[dk]=1;
+    dynH += '<div class="'+cls+'" style="left:'+pct(d[0])+';top:'+pct(d[1])+'" title="步'+d[2]+' 出现：'+esc(lab)+'"><span>'+esc(lab)+'</span></div>';
+  });
+  dynLayer.innerHTML = dynH;
 
   // 标记层：2F 栅栏门 / 门后不可得战利品 / 暴毙点
   const MK = (D.markers||{})[String(f)] || [];
@@ -644,7 +692,7 @@ function highlightRow(){
 /* ---------------- 楼层导航 ---------------- */
 function renderFloors(){
   let h='';
-  for(let f=1;f<=31;f++){
+  for(let f=0;f<=50;f++){
     const st=FL[f];
     if(!st) continue;
     const warn = ISSUES.some(function(it){return it.floor===f;});
@@ -719,9 +767,9 @@ function renderHeader(){
   });
 
   document.getElementById('verifyBox').innerHTML =
-    '<div><b>当前路线 = segs_route.py 人工翻译（1F→31F），mota_core 逐格实算</b>：共 <b>'+t.steps+'</b> 步，全部正常执行（0 违规 / 0 未执行），终点 31F(6,2) HP<b>'+f.hp+'</b> A<b>'+f.atk+'</b> D<b>'+f.dfn+'</b> G<b>'+f.gold+'</b> 钥 '+f.ky+'/'+f.kb+'/'+f.kr+'。</div>'+
-    '<div>2F 监狱栅栏门 obj19（六格 ✕）<b>未打开</b>：两只門番Ｂ (6,2)(8,2) HP100/ATK180/DEF110 仍在，本路线未打；门后 3 蓝药 + 3 黄钥匙 + 1000G + 3% 攻防 <b>未取</b>。</div>'+
-    '<div style="color:#ffd98a">⚠ 检查点：攻略 §7.1 要求「过 35F 必须救 2F 小偷」（2F(11,11) 标记），本路线 1F→31F 尚未做该前置链（属 4 区 34F 之后步骤，需在 35F 前补上）。</div>'+
+    '<div><b>路线 = z2_route.py 程序化推演（1F→50F 全塔通关），mota_core 逐格实算</b>：共 <b>'+t.steps+'</b> 步，终点 50F(6,5) HP<b>'+f.hp+'</b> A<b>'+f.atk+'</b> D<b>'+f.dfn+'</b> G<b>'+f.gold+'</b> 钥 '+f.ky+'/'+f.kb+'/'+f.kr+'（真魔王已击破）。</div>'+
+    '<div>关键节点：V94 大法师(A423/D402, 战损6162) → V95 26F假公主(4红门) → V96 24F竖井 ending → V97 真魔王(封印后800/500/100, 战损196)。</div>'+
+    '<div style="color:#ffd98a">⚠ 变动格：<b style="color:#8fe3ff">蓝框</b>=该步起新出现的物件（10F 战利品/落穴/盗贼、41F 魔術師Ａ+降臨翼…）；<b style="color:#d7b0ff">紫框</b>=地形变化（41F 三个暗墙、29/30F 暗道）。</div>'+
     '<div>剩余怪伤害 = 当前步攻防下与该怪战斗的总 HP 损失；0=绿色，越高越偏红，打不动（攻≤防）显示红色 ∞。数字标在怪物格左下角。</div>';
 }
 
@@ -816,6 +864,6 @@ html = (HTML.replace('__DATA__', js)
             .replace('__STAIR__', stair_js)
             .replace('__HERO_JSON__', hero_js)
             .replace('__TOTAL__', str(data['total']['steps'])))
-out = DED + '1F到31F_推演全过程.html'
+out = DED + OUT_HTML
 io.open(out, 'w', encoding='utf-8').write(html)
 print('wrote', out, len(html), 'bytes')
