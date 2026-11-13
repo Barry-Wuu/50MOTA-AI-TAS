@@ -351,7 +351,7 @@ for e in DYNEV.get('obj', []):
         if fl == 39 and obj == 107:
             continue
         # ✅ 16F(11,11) 圣水 NPC：dyn_raw 记的是「谈话后」的 obj151（話は終わりじゃ），
-        #    首访真值应是 obj154（エリクサーをくれる盗賊）。MTower.java @3090-3092 实证：
+        #    首访真值应是 obj154（エリクサーをくれる老人，立绘 55/56；真·盗贼 obj87/88 是 51/52）。MTower.java @3090-3092 实证：
         #    初始 obj154 → 对话后置 mapObject[75][119]=1（圣水 obj104 入包）+ 该格改 obj151。
         #    故把 dyn_raw 的 151 改写回 154，让首访就能拿到圣水。
         if fl == 16 and e['x'] == 11 and e['y'] == 11 and obj == 151:
@@ -1177,7 +1177,7 @@ class World:
                       % cleared_cells]
 
     def use_elixir(self):
-        """圣水 obj104（エリクサー，由 16F 右下角 obj154 盗贼赠送）：HP += ATK×10 + DEF×5，
+        """圣水 obj104（エリクサー，由 16F 右下角 obj154 老人赠送）：HP += ATK×10 + DEF×5，
         一次性消耗。
 
         依据 MTower.java @1067-1086（itemFlag==4，槽位 mapObject[75][119]=obj104）：
@@ -1190,7 +1190,7 @@ class World:
         """
         h = self.hero
         if 104 not in h.items:
-            return False, ['没有圣水 obj104（须先在 16F 右下 (11,11) 与 obj154 盗贼对话）']
+            return False, ['没有圣水 obj104（须先在 16F 右下 (11,11) 与 obj154 老人对话）']
         gain = h.atk * 10 + h.dfn * 5
         h.hp += gain
         h.items.discard(104)
