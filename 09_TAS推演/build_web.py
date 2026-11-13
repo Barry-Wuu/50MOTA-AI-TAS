@@ -263,9 +263,18 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
 /* ---------- 标记层：栅栏门 / 不可得 / 暴毙 ---------- */
 #markLayer{position:absolute;inset:0;pointer-events:none;z-index:2}
 #dmgLayer{position:absolute;inset:0;pointer-events:none;z-index:4}
-#dmgLayer .dmg{position:absolute;font-size:calc(var(--mapsize)/40);line-height:1;
-  font-family:Consolas,Menlo,monospace;font-weight:700;transform:translate(-1px,-2px);
-  text-shadow:0 0 3px #000,0 1px 2px #000,0 0 5px rgba(0,0,0,.7);white-space:nowrap}
+/* 扣血角标：对齐主流 HTML5 魔塔（mota-js 样板）的伤害文字生成方式——
+   canvas 侧是 `strokeText()`（黑描边）再 `fillText()`（彩色填充），无衬线粗体、**字号固定**
+   （不按位数缩放；格子 40px、14px 字号下 5 位数 ≈39px，正好压满一格）。
+   DOM 里用 -webkit-text-stroke + paint-order 等价实现：描边先画、填充后盖（= fill 在上），
+   描边宽用 em 跟随字号缩放，不再依赖模糊 text-shadow。 */
+#dmgLayer .dmg{position:absolute;line-height:1;white-space:nowrap;
+  font-family:Arial,"Helvetica Neue","Microsoft YaHei","PingFang SC",sans-serif;
+  font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.2px;
+  font-size:calc(var(--mapsize)/37);
+  -webkit-text-stroke:.085em #000;paint-order:stroke fill;
+  text-shadow:0 1px 1px rgba(0,0,0,.45);
+  transform:translate(-1px,-100%);padding:0 1px}
 .mk{position:absolute;width:7.6923%;height:7.6923%;transform:translate(-50%,-50%);
   display:flex;align-items:center;justify-content:center;font-weight:700}
 .mk.gate{background:rgba(255,93,93,.22);border:2px solid #ff5d5d;border-radius:4px}
@@ -427,11 +436,11 @@ function pct(v){ return ((v*CELL+CELL/2)/MAPW*100).toFixed(4)+'%'; }
 function cx(x){ return x*CELL+CELL/2; }
 function cy(y){ return y*CELL+CELL/2; }
 /* 剩余怪物伤害：m=[hp,atk,def,name]，heroA/heroD 为当前步英雄攻防。
-   返回 {txt,color}：打不过=红∞；loss0=绿；越高越偏红（线性 hue 120→0，封顶 300）。 */
+   返回 {txt,color}：打不过=红???；loss0=绿；越高越偏红（线性 hue 120→0，封顶 300）。 */
 function dmgInfo(m, heroA, heroD){
   const hp=m[0], atk=m[1], def=m[2];
   const per = heroA - def;
-  if(per <= 0) return {txt:'∞', color:'#ff4040', cant:true};
+  if(per <= 0) return {txt:'???', color:'#ff5b5b', cant:true};
   const turns = Math.ceil(hp/per);
   const loss = Math.max(atk - heroD, 0) * (turns - 1);
   const t = Math.min(loss/300, 1);
@@ -456,8 +465,11 @@ function renderDmg(f, heroA, heroD){
     const x = +xy[0], y = +xy[1];
     const left = (x*CELL/MAPW*100).toFixed(3)+'%';
     const top  = ((y+1)*CELL/MAPW*100).toFixed(3)+'%';
+    // 字号固定（与主流 H5 魔塔一致：canvas 侧就是一个固定的 `bold 12px`，
+    // 不按位数缩放；格子 40px、14px 字号下 5 位数 ≈39px，刚好压满一格）。
+    // ???（打不动）同字号，只换成红色。
     h += '<span class="dmg" style="left:'+left+';top:'+top+';color:'+info.color+'">'
-         + (info.txt==='∞'?'∞':info.txt) + '</span>';
+         + info.txt + '</span>';
   }
   dmgLayer.innerHTML = h;
 }
@@ -770,7 +782,7 @@ function renderHeader(){
     '<div><b>路线 = z2_route.py 程序化推演（1F→50F 全塔通关），mota_core 逐格实算</b>：共 <b>'+t.steps+'</b> 步，终点 50F(6,5) HP<b>'+f.hp+'</b> A<b>'+f.atk+'</b> D<b>'+f.dfn+'</b> G<b>'+f.gold+'</b> 钥 '+f.ky+'/'+f.kb+'/'+f.kr+'（真魔王已击破）。</div>'+
     '<div>关键节点：V94 大法师(A423/D402, 战损6162) → V95 26F假公主(4红门) → V96 24F竖井 ending → V97 真魔王(封印后800/500/100, 战损196)。</div>'+
     '<div style="color:#ffd98a">⚠ 变动格：<b style="color:#8fe3ff">蓝框</b>=该步起新出现的物件（10F 战利品/落穴/盗贼、41F 魔術師Ａ+降臨翼…）；<b style="color:#d7b0ff">紫框</b>=地形变化（41F 三个暗墙、29/30F 暗道）。</div>'+
-    '<div>剩余怪伤害 = 当前步攻防下与该怪战斗的总 HP 损失；0=绿色，越高越偏红，打不动（攻≤防）显示红色 ∞。数字标在怪物格左下角。</div>';
+    '<div>剩余怪伤害 = 当前步攻防下与该怪战斗的总 HP 损失；0=绿色，越高越偏红，打不动（攻≤防）显示红色 ???。数字标在怪物格左下角。</div>';
 }
 
 /* ---------------- 选择与导航 ---------------- */
