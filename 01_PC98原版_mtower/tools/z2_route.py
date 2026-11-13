@@ -3978,6 +3978,11 @@ def main():
     print('--- V87 43F 用昇華の翼上 44F → 破壊の玉清双門番A → 神圣盾 obj39 ---')
     if not stair(w, 1, 1, 'V87 45F(11,1)→46F 中转'): return 1
     if not fly(w, 43, 'V87 珠飞→43F（落点(1,2)）'): return 1
+    # ✅ 先收 43F 聖盾 obj38(9,4) +50DEF，再上 44F 拿神盾 obj39：
+    #    原版聖盾/神盾共写显示槽 mapObject[70][119]（MTower.java @5495/5497），后拿覆盖先拿；
+    #    网传「先拿神盾后拿聖盾会抵消魔免」即源于此。故严格「聖盾先、神盾后」。
+    #    路径：(1,2)→row2 全地板东行→(9,2)→(9,3)→(9,4)，全程不碰怪（(9,4) 四邻皆地板）。
+    if not goto(w, 9, 4, 'V87 43F 聖盾 obj38(9,4) DEF+50（先于神盾，避魔免被覆盖）'): return 1
     lg = w.wing_up(force_layer=True)                  # 43F→44F 幻之阶强制上飞
     if not lg or '昇華の翼' not in lg[0]:
         print('  !! V87 昇華の翼失败:', lg)
