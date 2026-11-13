@@ -15,6 +15,12 @@ import sys as _sys
 DATA_F = _sys.argv[1] if len(_sys.argv) > 1 else 'merged_route_full.json'
 OUT_HTML = _sys.argv[2] if len(_sys.argv) > 2 else '1F到50F_全塔通关.html'
 MAXF = int(_sys.argv[3]) if len(_sys.argv) > 3 else 50
+# 第 4 个参数 = 外链输出目录（Toy 等平台的入口 index.html 有 1MB 硬上限，
+# 单文件内嵌版 3MB 会被 307000 拒；给目录则把图/data 拆成 assets/ + data.js）
+SPLIT_DIR = _sys.argv[4] if len(_sys.argv) > 4 else None
+ASSET_DIR = os.path.join(SPLIT_DIR, 'assets') if SPLIT_DIR else None
+if SPLIT_DIR:
+    os.makedirs(ASSET_DIR, exist_ok=True)
 data = json.load(io.open(DED + DATA_F, encoding='utf-8'))
 
 # 底图里烙死的原勇者：1F(6,11) 与 MTower.gif 正面帧逐像素完全一致（diff 0.00）。
@@ -30,11 +36,19 @@ def data_uri(img, **kw):
     return 'data:image/webp;base64,' + base64.b64encode(b.getvalue()).decode()
 
 
+def emit(img, name):
+    """内嵌模式 → data URI；外链模式 → 写 assets/<name>.webp 并返回相对路径。"""
+    if SPLIT_DIR:
+        img.save(os.path.join(ASSET_DIR, name + '.webp'), 'WEBP', lossless=True, method=6)
+        return './assets/' + name + '.webp'
+    return data_uri(img, lossless=True)
+
+
 imgs = {}
 for f in sorted(int(k) for k in data['floors']):
     p = FLOORS_DIR + 'floor_%02d.png' % f
     if os.path.exists(p):
-        imgs[str(f)] = data_uri(Image.open(p).convert('RGBA'), lossless=True)
+        imgs[str(f)] = emit(Image.open(p).convert('RGBA'), 'f%02d' % f)
 
 
 # ---- 每层的"地板贴图"：从该层纯地板格（地形0且无物件）里取最接近中位样板的一格 ----
@@ -62,7 +76,7 @@ for f in sorted(int(k) for k in data['floors']):
     if not os.path.exists(FLOORS_DIR + 'floor_%02d.png' % f):
         continue
     try:
-        tiles[str(f)] = data_uri(floor_tile(f), lossless=True)
+        tiles[str(f)] = emit(floor_tile(f), 't%02d' % f)
     except Exception:
         pass
 tile_js = json.dumps(tiles, ensure_ascii=False, separators=(',', ':'))
@@ -70,12 +84,12 @@ tile_js = json.dumps(tiles, ensure_ascii=False, separators=(',', ':'))
 sheet = Image.open(SHEET).convert('RGBA')
 # 顶行 40×40 勇者帧（c0 黑底、c1 空，角色从 c2 起）：c2 背面=上，c4 正面=下，c6 朝左，c8 朝右
 HERO_COL = {'↑': 2, '↓': 4, '←': 6, '→': 8}
-hero_js = json.dumps({k: data_uri(sheet.crop((c * 40, 0, c * 40 + 40, 40)), lossless=True)
-                      for k, c in HERO_COL.items()}, ensure_ascii=False)
+hero_js = json.dumps({k: emit(sheet.crop((c * 40, 0, c * 40 + 40, 40)), 'hero%d' % i)
+                      for i, (k, c) in enumerate(HERO_COL.items())}, ensure_ascii=False)
 
 # 楼梯贴图（与 11F(11,11) 静态上梯格逐像素一致，diff 0.00）：上行 (280,160)、下行 (320,160)
 STAIR_XY = {'u': (280, 160), 'd': (320, 160)}
-stair_js = json.dumps({k: data_uri(sheet.crop((x, y, x + 40, y + 40)), lossless=True)
+stair_js = json.dumps({k: emit(sheet.crop((x, y, x + 40, y + 40)), 'stair_' + k)
                        for k, (x, y) in STAIR_XY.items()}, ensure_ascii=False)
 
 img_js = json.dumps(imgs, ensure_ascii=False, separators=(',', ':'))
@@ -388,7 +402,7 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
   </aside>
 </main>
 
-<script>
+__DATASCRIPT__<script>
 const D = __DATA__;
 const IMG = __IMG__;
 const TILE = __TILE__;
@@ -620,13 +634,15 @@ function renderState(){
   h += '<div class="posline">位置：<b>'+s.f+'F('+s.x+','+s.y+')</b>　方向 <b>'+(s.d||'·')+'</b>'+
        ((p[0]!==s.f||p[1]!==s.x||p[2]!==s.y) ? '　<span style="color:var(--gold)">引擎落点 '+p[0]+'F('+p[1]+','+p[2]+')</span>' : '')+
        '</div>';
-  let src='';
+  // ⚠️ 变量名别叫 src：Toy 的预检脚本用 `src\s*=\s*['"]...` 正则找本地资源引用，
+  //    会把这个 JS 字符串当成 href 而误报 "referenced local resource not found"。
+  let srcline='';
   if(s.rs){
-    src = '来源：录制路线 CSV 第 '+s.rs+' 行 · 逐行重放与录制状态一致';
+    srcline = '来源：录制路线 CSV 第 '+s.rs+' 行 · 逐行重放与录制状态一致';
   }else{
-    src = '来源：segs_route.py 人工翻译 · mota_core 逐格实算';
+    srcline = '来源：segs_route.py 人工翻译 · mota_core 逐格实算';
   }
-  if(src) h += '<div class="logline">'+esc(src)+'</div>';
+  if(srcline) h += '<div class="logline">'+esc(srcline)+'</div>';
   h += '<div class="statgrid">'+
        '<div class="sbox"><i>HP 生命</i><span class="val">'+s.hp+'</span><span class="dl">'+dspan(s.dh)+'</span><div class="from">'+b.hp+' → '+s.hp+'</div></div>'+
        '<div class="sbox"><i>ATK 攻击</i><span class="val">'+s.a+'</span><span class="dl">'+dspan(s.da)+'</span><div class="from">'+b.a+' → '+s.a+'</div></div>'+
@@ -863,19 +879,47 @@ document.getElementById('legend').innerHTML =
 renderHeader();
 renderIssues();
 renderFloors();
-select(0);
+/* 深链：?step=N（1 起）定位到第 N 步；?floor=F 定位到该层首次出现的那一步。
+   部署到 Toy / 分享时可直接给出带参数的地址。 */
+let initStep = 0;
+try{
+  const q = new URLSearchParams(location.search);
+  const ss = q.get('step'), fs = q.get('floor');
+  if(ss !== null && ss !== ''){
+    const n = parseInt(ss, 10);
+    if(n >= 1 && n <= TOTAL) initStep = n - 1;
+  } else if(fs !== null && fs !== ''){
+    const f = parseInt(fs, 10);
+    for(let i = 0; i < ST.length; i++){ if(posOf(ST[i])[0] === f){ initStep = i; break; } }
+  }
+}catch(e){}
+select(initStep);
 })();
 </script>
 </body>
 </html>
 '''
 
-html = (HTML.replace('__DATA__', js)
-            .replace('__IMG__', img_js)
-            .replace('__TILE__', tile_js)
-            .replace('__STAIR__', stair_js)
-            .replace('__HERO_JSON__', hero_js)
+if SPLIT_DIR:
+    # 外链模式：data.js 装 D/IMG/TILE/STAIR/HERO，index.html 只剩模板+CSS+JS
+    _parts = ['window.__D=' + js, 'window.__IMG=' + img_js, 'window.__TILE=' + tile_js,
+              'window.__STAIR=' + stair_js, 'window.__HERO_JSON=' + hero_js]
+    io.open(os.path.join(SPLIT_DIR, 'data.js'), 'w', encoding='utf-8').write(
+        ';\n'.join(_parts) + ';\n')
+    bind = ('window.__D', 'window.__IMG', 'window.__TILE', 'window.__STAIR', 'window.__HERO_JSON')
+    dscript = '<script src="./data.js"></script>'
+    out = os.path.join(SPLIT_DIR, 'index.html')
+else:
+    bind = (js, img_js, tile_js, stair_js, hero_js)
+    dscript = ''
+    out = DED + OUT_HTML
+
+html = (HTML.replace('__DATASCRIPT__', dscript)
+            .replace('__DATA__', bind[0])
+            .replace('__IMG__', bind[1])
+            .replace('__TILE__', bind[2])
+            .replace('__STAIR__', bind[3])
+            .replace('__HERO_JSON__', bind[4])
             .replace('__TOTAL__', str(data['total']['steps'])))
-out = DED + OUT_HTML
 io.open(out, 'w', encoding='utf-8').write(html)
-print('wrote', out, len(html), 'bytes')
+print('wrote', out, os.path.getsize(out), 'bytes')

@@ -538,13 +538,15 @@ function renderState(){
   h += '<div class="posline">位置：<b>'+s.f+'F('+s.x+','+s.y+')</b>　方向 <b>'+(s.d||'·')+'</b>'+
        ((p[0]!==s.f||p[1]!==s.x||p[2]!==s.y) ? '　<span style="color:var(--gold)">引擎落点 '+p[0]+'F('+p[1]+','+p[2]+')</span>' : '')+
        '</div>';
-  let src='';
+  // ⚠️ 变量名别叫 src：Toy 的预检脚本用 `src\s*=\s*['"]...` 正则找本地资源引用，
+  //    会把这个 JS 字符串当成 href 而误报 "referenced local resource not found"。
+  let srcline='';
   if(s.rs){
-    src = '来源：录制路线 CSV 第 '+s.rs+' 行 · 逐行重放与录制状态一致';
+    srcline = '来源：录制路线 CSV 第 '+s.rs+' 行 · 逐行重放与录制状态一致';
   }else{
-    src = '来源：segs_route.py 人工翻译 · mota_core 逐格实算';
+    srcline = '来源：segs_route.py 人工翻译 · mota_core 逐格实算';
   }
-  if(src) h += '<div class="logline">'+esc(src)+'</div>';
+  if(srcline) h += '<div class="logline">'+esc(srcline)+'</div>';
   h += '<div class="statgrid">'+
        '<div class="sbox"><i>HP 生命</i><span class="val">'+s.hp+'</span><span class="dl">'+dspan(s.dh)+'</span><div class="from">'+b.hp+' → '+s.hp+'</div></div>'+
        '<div class="sbox"><i>ATK 攻击</i><span class="val">'+s.a+'</span><span class="dl">'+dspan(s.da)+'</span><div class="from">'+b.a+' → '+s.a+'</div></div>'+
@@ -781,7 +783,21 @@ document.getElementById('legend').innerHTML =
 renderHeader();
 renderIssues();
 renderFloors();
-select(0);
+/* 深链：?step=N（1 起）定位到第 N 步；?floor=F 定位到该层首次出现的那一步。
+   部署到 Toy / 分享时可直接给出带参数的地址。 */
+let initStep = 0;
+try{
+  const q = new URLSearchParams(location.search);
+  const ss = q.get('step'), fs = q.get('floor');
+  if(ss !== null && ss !== ''){
+    const n = parseInt(ss, 10);
+    if(n >= 1 && n <= TOTAL) initStep = n - 1;
+  } else if(fs !== null && fs !== ''){
+    const f = parseInt(fs, 10);
+    for(let i = 0; i < ST.length; i++){ if(posOf(ST[i])[0] === f){ initStep = i; break; } }
+  }
+}catch(e){}
+select(initStep);
 })();
 </script>
 </body>
