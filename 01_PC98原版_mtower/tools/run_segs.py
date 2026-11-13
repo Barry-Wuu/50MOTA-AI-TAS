@@ -471,7 +471,6 @@ def main():
 
     H = segs_route.SEGS_HEAL
     F = segs_route.SEGS_FINAL
-    E = segs_route.SEGS_11
 
     print('\n=== BOSS 前补血路线（攻略 §4.2）===')
     print('\n--- 10F→9F 右下 ---')
@@ -528,7 +527,7 @@ def main():
 
 # ⚠️ 2026-11-13：原 11F→47F 旧版路线（16F 绕行/17F 宝库等）整体移除。
 #   成品链 = z2_route.py（V1~V2x 忠实重译），只复用本文件的 1F→11F 重放（MOTA_STOP_11F 截断）。
-#   旧版在 run_segs_bak.py 保留备查。
+#   旧版 run_segs_bak.py 已随死代码清理删除（2026-11-13）。
 
 
 

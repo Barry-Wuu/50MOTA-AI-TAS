@@ -466,7 +466,6 @@ def main():
 
     H = segs_route.SEGS_HEAL
     F = segs_route.SEGS_FINAL
-    E = segs_route.SEGS_11
 
     print('\n=== BOSS 前补血路线（攻略 §4.2）===')
     print('\n--- 10F→9F 右下 ---')
