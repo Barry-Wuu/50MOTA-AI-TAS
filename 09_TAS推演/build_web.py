@@ -103,6 +103,30 @@ data = json.load(io.open(DED + DATA_F, encoding='utf-8'))
 # 路线第 1 步时勇者已在 (6,10)，所以该格从第一步起就应还原成地面（步序 -1 = 永远覆盖）。
 data.setdefault('cons', {}).setdefault('1', []).insert(0, [6, 11, -1, 'f'])
 
+# ---- 地图 NPC 标记：从路线 steps 的「具名 NPC 事件」坐标提取，供地图格上悬停 tooltip ----
+# 路线日志里 NPC 以中文名（含异名）出现，映射到日文原名；同一格多个角色合并到一个标记。
+_DISP_TO_JP = {}
+for _jp, _names in ROUTE_NAMES.items():
+    for _n in _names:
+        _DISP_TO_JP.setdefault(_n, _jp)
+_NM_RE = re.compile('(' + '|'.join(re.escape(_n) for _n in sorted(_DISP_TO_JP, key=len, reverse=True)) + ')')
+NPC_MARKS = {}
+try:
+    _steps = data.get('steps', [])
+    _cells = {}
+    for _s in _steps:
+        _txt = ' '.join(str(_s.get(_k) or '') for _k in ('e', 'l', 'note', 'mm'))
+        _f = _s.get('f'); _x = _s.get('x'); _y = _s.get('y')
+        if _f is None or _x is None or _y is None:
+            continue
+        for _m in _NM_RE.finditer(_txt):
+            _cells.setdefault((_f, _x, _y), set()).add(_DISP_TO_JP[_m.group(1)])
+    for (_f, _x, _y), _set in _cells.items():
+        NPC_MARKS.setdefault(_f, []).append({'x': _x, 'y': _y, 'n': sorted(_set)})
+except Exception:
+    pass
+NPC_MARKS_JSON = json.dumps(NPC_MARKS, ensure_ascii=False)
+
 js = json.dumps(data, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
 
 
@@ -405,6 +429,12 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
   border-bottom:1px solid var(--line);padding-bottom:4px;white-space:nowrap}
 .npctip .npcf{color:var(--gold);font-size:11px;margin:6px 0 2px;font-weight:600}
 .npctip .npcl{color:var(--txt);white-space:pre-wrap;word-break:break-word}
+/* 地图 NPC 标记：默认透明不干扰底图，悬停显示虚线框 + 触发对话面板 */
+#npcMarkLayer{position:absolute;inset:0;pointer-events:none;z-index:2}
+.npcmark{position:absolute;width:7.6923%;height:7.6923%;transform:translate(-50%,-50%);
+  border-radius:5px;cursor:help;pointer-events:auto}
+.npcmark:hover{outline:2px solid var(--accent);outline-offset:-2px;
+  background:rgba(124,201,240,.20);box-shadow:0 0 10px rgba(124,201,240,.5)}
 
 #psvg .full{fill:none;stroke:#2f3a4f;stroke-width:1.1;stroke-dasharray:3 3}
 #psvg .vis{fill:none;stroke:#4cc9f0;stroke-width:2;stroke-linejoin:round;
@@ -454,6 +484,7 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
           <div id="patchLayer"></div>
           <div id="dynLayer"></div>
           <div id="markLayer"></div>
+          <div id="npcMarkLayer"></div>
           <div id="dmgLayer"></div>
           <div id="marker"><img id="heroImg" alt="勇者"><span id="dirbadge">·</span></div>
         </div>
@@ -559,6 +590,7 @@ function esc(t){ return String(t==null?'':t).replace(/[&<>"']/g, function(c){
    显示该角色在 magic_tower1_texts.md 中的全部台词（按楼层分组）。
    仅当「角色名「」紧跟时走对话排版：角色名：<换行>台词，多句各成行。 */
 const NPC_DLG = __NPC_DLG__;
+const NPC_MARKS = __NPC_MARKS__;
 const NPC_RE = /__NPC_RE__/g;
 function fmtEv(t){
   if(!t) return '';
@@ -682,6 +714,12 @@ function renderMap(){
   const MK = (D.markers||{})[String(f)] || [];
   document.getElementById('markLayer').innerHTML = MK.map(function(m){
     return '<div class="mk '+m.t+'" style="left:'+pct(m.x)+';top:'+pct(m.y)+'" title="'+esc(m.label)+'"></div>';
+  }).join('');
+
+  // NPC 标记层：该层所有具名 NPC 所在格（默认透明，悬停触发 #npctip 对话面板）
+  const NM = (NPC_MARKS[String(f)] || []);
+  document.getElementById('npcMarkLayer').innerHTML = NM.map(function(m){
+    return '<div class="npcmark" data-npc="'+esc(m.n.join('|'))+'" style="left:'+pct(m.x)+';top:'+pct(m.y)+'"></div>';
   }).join('');
 
   // 路径
@@ -1018,16 +1056,22 @@ document.getElementById('legend').innerHTML =
 /* ---------------- 对话悬浮面板 ---------------- */
 const npctip = document.getElementById('npctip');
 function showNpcTip(el){
-  const key = el.getAttribute('data-npc');
-  const d = NPC_DLG[key];
-  if(!d){ npctip.style.display='none'; return; }
-  let html = '<div class="npch">'+esc(d.jp)+' ⇒ '+esc(d.zh)+'</div>';
-  const byf = {};
-  d.lines.forEach(function(l){ (byf[l.f] = byf[l.f] || []).push(l.zh); });
-  Object.keys(byf).map(Number).sort(function(a,b){return a-b;}).forEach(function(f){
-    html += '<div class="npcf">'+f+'F</div>';
-    byf[f].forEach(function(z){ html += '<div class="npcl">'+esc(z)+'</div>'; });
+  const raw = el.getAttribute('data-npc');
+  if(!raw){ npctip.style.display='none'; return; }
+  const keys = raw.split('|');
+  let html = '';
+  keys.forEach(function(key){
+    const d = NPC_DLG[key];
+    if(!d) return;
+    html += '<div class="npch">'+esc(d.jp)+' ⇒ '+esc(d.zh)+'</div>';
+    const byf = {};
+    d.lines.forEach(function(l){ (byf[l.f] = byf[l.f] || []).push(l.zh); });
+    Object.keys(byf).map(Number).sort(function(a,b){return a-b;}).forEach(function(f){
+      html += '<div class="npcf">'+f+'F</div>';
+      byf[f].forEach(function(z){ html += '<div class="npcl">'+esc(z)+'</div>'; });
+    });
   });
+  if(!html){ npctip.style.display='none'; return; }
   npctip.innerHTML = html;
   npctip.style.display = 'block';
   const r = el.getBoundingClientRect();
@@ -1046,11 +1090,11 @@ function showNpcTip(el){
   }
 }
 document.addEventListener('mouseover', function(e){
-  const el = e.target.closest ? e.target.closest('.npc') : null;
+  const el = e.target.closest ? e.target.closest('[data-npc]') : null;
   if(el) showNpcTip(el);
 });
 document.addEventListener('mouseout', function(e){
-  const el = e.target.closest ? e.target.closest('.npc') : null;
+  const el = e.target.closest ? e.target.closest('[data-npc]') : null;
   if(el) npctip.style.display = 'none';
 });
 
@@ -1104,6 +1148,7 @@ html = (HTML.replace('__DATASCRIPT__', dscript)
             .replace('__ITEMICON__', bind[5])
             .replace('__TOTAL__', str(data['total']['steps']))
             .replace('__NPC_DLG__', NPC_DLG_JSON)
+            .replace('__NPC_MARKS__', NPC_MARKS_JSON)
             .replace('__NPC_RE__', NPC_RE_SRC))
 io.open(out, 'w', encoding='utf-8').write(html)
 print('wrote', out, os.path.getsize(out), 'bytes')
