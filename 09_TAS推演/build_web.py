@@ -511,7 +511,6 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
   box-shadow:0 6px 24px rgba(0,0,0,.6);font-size:12px;line-height:1.55;color:var(--txt);pointer-events:none}
 .npctip .npch{font-weight:700;color:var(--accent);margin-bottom:5px;
   border-bottom:1px solid var(--line);padding-bottom:4px;white-space:nowrap}
-.npctip .npcf{color:var(--gold);font-size:11px;margin:6px 0 2px;font-weight:600}
 .npctip .npcl{color:var(--txt);white-space:pre-wrap;word-break:break-word}
 /* 地图 NPC 标记：默认透明不干扰底图，悬停显示虚线框 + 触发对话面板 */
 #npcMarkLayer{position:absolute;inset:0;pointer-events:none;z-index:2}
@@ -671,21 +670,22 @@ function esc(t){ return String(t==null?'':t).replace(/[&<>"']/g, function(c){
 }); }
 /* 对话 / 角色名：路线里凡出现具名台词角色（盗贼 / 骑士队长 / 吸血鬼 / 魔王 / 勇者…
    等），无论是否带「引号」，都包成 .npc 并带 data-npc 属性；悬停由下方自定义面板
-   显示该角色在 magic_tower1_texts.md 中的全部台词（按楼层分组）。
+   显示该角色在本层的台词（按 data-floor 过滤，只显示当前层，不跨层）。
    仅当「角色名「」紧跟时走对话排版：角色名：<换行>台词，多句各成行。 */
 const NPC_DLG = __NPC_DLG__;
 const NPC_MARKS = __NPC_MARKS__;
 const NPC_RE = /__NPC_RE__/g;
-function fmtEv(t){
+function fmtEv(t, floor){
   if(!t) return '';
   let s = esc(t);
   s = s.replace(NPC_RE, function(_, name, q){
     const d = NPC_DLG[name];
     if(!d) return name;
+    const fa = (floor!=null && floor!==undefined) ? ' data-floor="'+floor+'"' : '';
     if(q){  // 对话形式 角色名「台词」 → 角色名：<换行>台词
-      return '<span class="npc" data-npc="'+esc(name)+'">'+name+'：</span><br>';
+      return '<span class="npc" data-npc="'+esc(name)+'"'+fa+'>'+name+'：</span><br>';
     }
-    return '<span class="npc" data-npc="'+esc(name)+'">'+name+'</span>';
+    return '<span class="npc" data-npc="'+esc(name)+'"'+fa+'>'+name+'</span>';
   });
   s = s.replace(/」/g, '<br>');
   return s;
@@ -803,7 +803,7 @@ function renderMap(){
   // NPC 标记层：该层所有具名 NPC 所在格（默认透明，悬停触发 #npctip 对话面板）
   const NM = (NPC_MARKS[String(f)] || []);
   document.getElementById('npcMarkLayer').innerHTML = NM.map(function(m){
-    return '<div class="npcmark" data-npc="'+esc(m.n.join('|'))+'" style="left:'+pct(m.x)+';top:'+pct(m.y)+'"></div>';
+    return '<div class="npcmark" data-npc="'+esc(m.n.join('|'))+'" data-floor="'+f+'" style="left:'+pct(m.x)+';top:'+pct(m.y)+'"></div>';
   }).join('');
 
   // 路径
@@ -879,8 +879,8 @@ function renderState(){
        '<span class="pill '+s.st+'">'+(STLABEL[s.st]||s.st)+'</span>'+
        (s.rs?('<span class="pill">录制行 #'+s.rs+'</span>'):'')+
        '</div>';
-  h += '<div class="evline">'+fmtEv(ev)+'</div>';
-  if(s.l && s.l!==s.e) h += '<div class="logline">引擎日志：'+fmtEv(s.l)+'</div>';
+  h += '<div class="evline">'+fmtEv(ev, s.f)+'</div>';
+  if(s.l && s.l!==s.e) h += '<div class="logline">引擎日志：'+fmtEv(s.l, s.f)+'</div>';
   const p=posOf(s);
   h += '<div class="posline">位置：<b>'+s.f+'F('+s.x+','+s.y+')</b>　方向 <b>'+(s.d||'·')+'</b>'+
        ((p[0]!==s.f||p[1]!==s.x||p[2]!==s.y) ? '　<span style="color:var(--gold)">引擎落点 '+p[0]+'F('+p[1]+','+p[2]+')</span>' : '')+
@@ -958,7 +958,7 @@ function buildTable(f){
          '<td class="num">'+s.i+'</td>'+
          '<td>'+s.f+'F ('+s.x+','+s.y+')</td>'+
          '<td class="dir">'+(s.d||'·')+'</td>'+
-         '<td class="ev" title="'+esc(evText)+'">'+tag+fmtEv(evText)+'</td>'+
+         '<td class="ev" title="'+esc(evText)+'">'+tag+fmtEv(evText, s.f)+'</td>'+
          '<td>'+s.hp+'</td><td>'+s.a+'</td><td>'+s.df+'</td><td>'+s.g+'</td>'+
          '<td class="keys">'+s.ky+'/'+s.kb+'/'+s.kr+'</td>'+
          '<td>'+deltaText(s)+'</td>'+
@@ -1142,20 +1142,20 @@ const npctip = document.getElementById('npctip');
 function showNpcTip(el){
   const raw = el.getAttribute('data-npc');
   if(!raw){ npctip.style.display='none'; return; }
+  const flAttr = el.getAttribute('data-floor');
+  const floor = (flAttr!=null && flAttr!=='') ? parseInt(flAttr,10) : null;
   const keys = raw.split('|');
   let html = '';
   keys.forEach(function(key){
     const d = NPC_DLG[key];
     if(!d) return;
+    // 只显示本层台词（data-floor 提供时）；无 data-floor 则回退全部
+    const ls = (floor!=null) ? d.lines.filter(function(l){ return l.f===floor; }) : d.lines;
+    if(!ls.length) return;
     // 具名角色显示「日文 ⇒ 中文」；老人/商人等无日文异名的角色只显示中文名
     const head = (d.jp && d.jp !== d.zh) ? (esc(d.jp)+' ⇒ '+esc(d.zh)) : esc(d.zh);
     html += '<div class="npch">'+head+'</div>';
-    const byf = {};
-    d.lines.forEach(function(l){ (byf[l.f] = byf[l.f] || []).push(l.zh); });
-    Object.keys(byf).map(Number).sort(function(a,b){return a-b;}).forEach(function(f){
-      html += '<div class="npcf">'+f+'F</div>';
-      byf[f].forEach(function(z){ html += '<div class="npcl">'+esc(z)+'</div>'; });
-    });
+    ls.forEach(function(l){ html += '<div class="npcl">'+esc(l.zh)+'</div>'; });
   });
   if(!html){ npctip.style.display='none'; return; }
   npctip.innerHTML = html;
