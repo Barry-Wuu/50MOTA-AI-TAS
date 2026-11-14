@@ -74,7 +74,7 @@ def main():
 
     # ---- 图片 → base64（键名不变；同时做双色调）----
     inline_cnt = 0
-    for key in ('__IMG', '__TILE', '__STAIR', '__HERO_JSON'):
+    for key in ('__IMG', '__TILE', '__STAIR', '__HERO_JSON', '__ITEMICON'):
         m = re.search(r'window\.%s=(\{.*?\});\n' % key, js, re.S)
         if not m:
             raise SystemExit('data.js 里没找到 window.%s 赋值' % key)
