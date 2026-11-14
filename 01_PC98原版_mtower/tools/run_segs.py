@@ -105,6 +105,11 @@ def _cost(w, f, nx, ny):
         return True, 3
     if o == 115:                     # 隐形砖块（23F「Go 0F」字形 44 块）：撞即破，可通行
         return True, 3
+    if o == 20 and (f, nx, ny) in M.PIT_GUARD_CLEAR:
+        # ✅ 2026-11-14 落穴 obj20：守卫未清则实心挡路（原版 @3780-3845）。
+        _gd = M.PIT_GUARD_CLEAR[(f, nx, ny)]
+        if not all((f, gx, gy) in w.cleared for gx, gy in _gd):
+            return False, 0
     if o in M.KEY_OF or ty in ('STATUS', 'ITEM', 'NORMAL', 'SCORE', 'MESSAGE'):
         return True, 1
     if ty == 'DOOR':
