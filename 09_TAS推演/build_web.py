@@ -29,29 +29,50 @@ if TOOLS not in sys.path:
     sys.path.insert(0, TOOLS)
 import mota_core as M
 
-# ---- 对话角色映射（用于 Toy 悬停 tooltip）：从 magic_tower1_texts.csv 的
-# 「盗贼（脱出屋）对白」与「具名人物台词（…）」两组提取 中文名 → 日文原名。
-# Toy 日志里对话已是中文，故以中文名为匹配键；将来日志出现其它角色也自动生效。 ----
-NPC_TT = {}
+# ---- 对话角色映射（Toy 悬停 tooltip）：覆盖 CSV 中所有「具名台词 / 盗贼对白」角色，
+# 并对路线日志里实际出现的中文异名（魔王/假魔王/真魔王/骑士队长/吸血鬼/大法师/骷髅队长）
+# 做别名挂靠，使任何出现形式的角色名都能悬停显示「日文原名 ⇒ 中文译名」。 ----
+CANON = {}   # 日文原名 → 中文译名（CSV 权威）
 try:
     with io.open(CSV_PATH, encoding='utf-8-sig') as _f:
         for _r in csv.DictReader(_f):
             _g = _r.get('group', '')
             if _g != '盗贼（脱出屋）对白' and not _g.startswith('具名人物台词'):
                 continue
-            _jp = _r.get('text_jp', ''); _zh = _r.get('text_zh', '')
-            if '「' not in _jp or '「' not in _zh:
+            _jp = _r.get('text_jp', '')
+            if '「' not in _jp:
                 continue
             _jn = _jp.split('「')[0].strip()
-            _zn = _zh.split('「')[0].strip()
-            if _jn and _zn and _zn not in NPC_TT:
-                NPC_TT[_zn] = _jn
+            _zn = _r.get('text_zh', '').split('「')[0].strip() if '「' in _r.get('text_zh', '') else ''
+            if _jn and _jn not in CANON:
+                CANON[_jn] = _zn or _jn
 except Exception:
     pass
-# 名称按长度降序，避免短名被长名前缀误匹配
+# 路线日志里实际出现的中文名 / 异名 → 对应日文原名。
+# 必要别名：路线命名与 CSV 译名不同（如 魔王/假魔王/真魔王 都对应 obj57 = 魔導師ゼノ；
+# 骑士队长/吸血鬼/大法师/骷髅队长 是 CSV 译名，金騎士 是路线保留的日文名）。
+ROUTE_ALIAS = {
+    '盗贼': '盗賊',
+    '金騎士': '金騎士',          # 路线保留的日文名
+    '骑士队长': '金騎士',
+    '吸血鬼': 'バンパイア',
+    '魔王（假魔王）': '魔導師ゼノ',
+    '魔王': '魔導師ゼノ',
+    '假魔王': '魔導師ゼノ',
+    '真魔王': '魔導師ゼノ',
+    '勇者': '勇者',
+    '大法师': '大魔導師',
+    '骷髅队长': 'スケルトンＡ',
+}
+NPC_TT = {}    # 路线名 → [日文原名, 中文译名]
+for _rn, _jp in ROUTE_ALIAS.items():
+    NPC_TT[_rn] = [_jp, CANON.get(_jp, _jp)]
+for _jp, _zn in CANON.items():   # 日文原名自身也作为键（部分路线直接用日文名）
+    NPC_TT.setdefault(_jp, [_jp, _zn])
+# 名称按长度降序，避免短名被长名前缀误匹配（如 假魔王 早于 魔王）
 NPC_NAMES = sorted(NPC_TT.keys(), key=len, reverse=True)
 NPC_TT_JSON = json.dumps(NPC_TT, ensure_ascii=False)
-NPC_RE_SRC = '(' + '|'.join(re.escape(_n) for _n in NPC_NAMES) + ')「'
+NPC_RE_SRC = '(' + '|'.join(re.escape(_n) for _n in NPC_NAMES) + ')(「)?'
 
 import sys as _sys
 DATA_F = _sys.argv[1] if len(_sys.argv) > 1 else 'merged_route_full.json'
@@ -511,16 +532,22 @@ const EXEC = {ok:1,note:1,dead:1};
 function esc(t){ return String(t==null?'':t).replace(/[&<>"']/g, function(c){
   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
 }); }
-/* 对话：把「角色名「台词」」转成「角色名：<换行>台词」，多句各成行；
-   角色名包成 .npc 悬停 tooltip = csv 日文原名 ⇒ 中文译名。 */
+/* 对话 / 角色名：路线里凡出现具名台词角色（盗贼 / 骑士队长 / 吸血鬼 / 魔王 / 勇者…
+   等），无论是否带「引号」，都包成 .npc 悬停 tooltip = csv 日文原名 ⇒ 中文译名。
+   仅当「角色名「」紧跟时走对话排版：角色名：<换行>台词，多句各成行。 */
 const NPC_TT = __NPC_TT__;
 const NPC_RE = /__NPC_RE__/g;
 function fmtEv(t){
   if(!t) return '';
   let s = esc(t);
-  s = s.replace(NPC_RE, function(_, name){
-    const jp = NPC_TT[name] || name;
-    return '<span class="npc" title="'+esc(jp+' ⇒ '+name)+'">'+name+'：</span><br>';
+  s = s.replace(NPC_RE, function(_, name, q){
+    const info = NPC_TT[name] || null;
+    if(!info) return name;
+    const tip = info[0] + ' ⇒ ' + info[1];
+    if(q){  // 对话形式 角色名「台词」 → 角色名：<换行>台词
+      return '<span class="npc" title="'+esc(tip)+'">'+name+'：</span><br>';
+    }
+    return '<span class="npc" title="'+esc(tip)+'">'+name+'</span>';
   });
   s = s.replace(/」/g, '<br>');
   return s;
