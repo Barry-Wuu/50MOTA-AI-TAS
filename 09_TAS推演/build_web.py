@@ -9,7 +9,19 @@ from PIL import Image
 
 DED = r'D:/B++/WorkBuddy/mota_tas_tmp2/repo/09_TAS推演/'
 FLOORS_DIR = r'D:/B++/WorkBuddy/mota_tas_tmp2/repo/01_PC98原版_mtower/floors/'
+FLOORS_ALT = r'D:/B++/WorkBuddy/mota_tas_tmp2/repo/01_PC98原版_mtower/'   # 0F 底图在根目录
 SHEET = r'D:/B++/WorkBuddy/mota_tas_tmp2/repo/mota_art/MTower.gif'
+
+
+def floor_png(f):
+    """楼层底图路径：floors/floor_XX.png；0F 等缺失时回退到 01_PC98原版_mtower/floor_XX.png。"""
+    p = FLOORS_DIR + 'floor_%02d.png' % f
+    if os.path.exists(p):
+        return p
+    q = FLOORS_ALT + 'floor_%02d.png' % f
+    return q if os.path.exists(q) else p
+
+
 TOOLS = r'D:/B++/WorkBuddy/mota_tas_tmp2/repo/01_PC98原版_mtower/tools'
 if TOOLS not in sys.path:
     sys.path.insert(0, TOOLS)
@@ -50,7 +62,7 @@ def emit(img, name):
 
 imgs = {}
 for f in sorted(int(k) for k in data['floors']):
-    p = FLOORS_DIR + 'floor_%02d.png' % f
+    p = floor_png(f)
     if os.path.exists(p):
         imgs[str(f)] = emit(Image.open(p).convert('RGBA'), 'f%02d' % f)
 
@@ -66,7 +78,7 @@ def floor_tile(f):
              if ter[y][x] == 0 and ('%d,%d' % (x, y)) not in objs]
     if not cands:
         cands = [(x, y) for y in range(13) for x in range(13) if ter[y][x] == 0]
-    im = Image.open(FLOORS_DIR + 'floor_%02d.png' % f).convert('RGB')
+    im = Image.open(floor_png(f)).convert('RGB')
     a = np.asarray(im).astype(np.int16)
     tiles = np.stack([a[y * 40:y * 40 + 40, x * 40:x * 40 + 40] for x, y in cands])
     med = np.median(tiles, axis=0)
@@ -77,7 +89,7 @@ def floor_tile(f):
 
 tiles = {}
 for f in sorted(int(k) for k in data['floors']):
-    if not os.path.exists(FLOORS_DIR + 'floor_%02d.png' % f):
+    if not os.path.exists(floor_png(f)):
         continue
     try:
         tiles[str(f)] = emit(floor_tile(f), 't%02d' % f)
@@ -138,6 +150,8 @@ header h1 em{color:var(--accent);font-style:normal}
 .chip b{color:var(--txt);font-weight:600}
 .chip.ok{border-color:#1f6b4f;color:#9fe8c8}
 .chip.warn{border-color:#7a5a1c;color:#ffd98a}
+a.chip{color:var(--dim);text-decoration:none;cursor:pointer}
+a.chip:hover{border-color:var(--accent);color:var(--accent)}
 main{flex:1;min-height:0;display:grid;grid-template-columns:404px minmax(0,1fr);gap:12px;padding:12px;overflow:hidden}
 .leftcol{display:flex;flex-direction:column;gap:12px;min-height:0;overflow:hidden}
 .rightcol{display:flex;flex-direction:column;gap:12px;min-height:0;overflow:auto;padding-right:2px}
@@ -233,9 +247,6 @@ td.ev .tag.b{background:#3a2020;color:#ffb0b0}
 td.note{color:var(--gold);font-size:11px;max-width:200px;overflow:hidden;text-overflow:ellipsis}
 td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
 .dpos{color:var(--green)} .dneg{color:var(--red)} .d0{color:#55617a}
-.seg{display:inline-block;width:16px;height:16px;line-height:16px;text-align:center;border-radius:4px;
-  font-size:10px;font-weight:700;color:#fff}
-.seg.A{background:#2a6f97}.seg.B{background:#6a4c93}.seg.C{background:#8a5a2b}
 
 /* ---------- 右侧 ---------- */
 .rightcol .card{padding:0}
@@ -341,7 +352,7 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
 </head>
 <body>
 <header>
-  <h1>魔塔1 <em>1F→50F</em> 全塔通关逐格校验 <span style="font-size:11px;color:#ff9f43;font-weight:400">· 大法师 → 假公主 → 真魔王</span></h1>
+  <h1>魔塔1 <em>1F→50F</em> 全塔通关逐格校验</h1>
   <div class="chips" id="chips"></div>
 </header>
 
@@ -412,7 +423,7 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
         <table>
           <thead>
             <tr>
-              <th>步</th><th>段</th><th>楼层 (x,y)</th><th>方向</th><th>事件 / 日志</th>
+              <th>步</th><th>楼层 (x,y)</th><th>方向</th><th>事件 / 日志</th>
               <th>HP</th><th>ATK</th><th>DEF</th><th>G</th><th>钥匙</th><th>Δ</th>
             </tr>
           </thead>
@@ -465,7 +476,6 @@ const stepno = document.getElementById('stepno');
 let sel = 0, tableFloor = -1, keyOnly = false, lastKeyOnly = false, playTimer = null, showCons = false;
 
 const DIRV = {'↑':[0,-1],'↓':[0,1],'←':[-1,0],'→':[1,0],'·':[0,0],'':[0,0]};
-const SEGCLS = {A:'A',B:'B',C:'C'};
 const STLABEL = {ok:'正常',note:'标注行',blocked:'无法执行',skip:'未执行',
   invalid:'违规未执行',dead:'暴毙',unreachable:'未执行'};
 const EXEC = {ok:1,note:1,dead:1};
@@ -653,7 +663,6 @@ function renderState(){
   let h='';
   h += '<div class="stephead">'+
        '<span class="no">#'+s.i+'</span>'+
-       '<span class="seg '+SEGCLS[s.s]+'">'+s.s+'</span>'+
        '<span class="pill '+s.st+'">'+(STLABEL[s.st]||s.st)+'</span>'+
        (s.rs?('<span class="pill">录制行 #'+s.rs+'</span>'):'')+
        '</div>';
@@ -701,7 +710,7 @@ function renderState(){
     h += '<div class="okbox">✓ 本步状态由 mota_core 实算，与路线无冲突</div>';
   }
   document.getElementById('stateBody').innerHTML = h;
-  document.getElementById('stateSub').textContent = '步 '+s.i+' / '+TOTAL;
+  document.getElementById('stateSub').textContent = '第'+s.i+'/'+TOTAL+'步';
 }
 
 /* ---------------- 步骤表 ---------------- */
@@ -734,7 +743,6 @@ function buildTable(f){
       : '';
     h += '<tr class="'+cls.trim()+'" data-i="'+i+'">'+
          '<td class="num">'+s.i+'</td>'+
-         '<td><span class="seg '+SEGCLS[s.s]+'">'+s.s+'</span></td>'+
          '<td>'+s.f+'F ('+s.x+','+s.y+')</td>'+
          '<td class="dir">'+(s.d||'·')+'</td>'+
          '<td class="ev" title="'+esc(evText)+'">'+tag+esc(evText)+'</td>'+
@@ -823,11 +831,11 @@ function renderHeader(){
   const chips=[
     '<span class="chip">总步数 <b>'+t.steps+'</b></span>',
     '<span class="chip ok">引擎实际执行 <b>'+nExec+'</b> 步</span>',
-    '<span class="chip">违规未执行 <b>'+nInv+'</b> 步</span>',
-    '<span class="chip">未执行 <b>'+nUn+'</b> 步</span>',
-    '<span class="chip">执行段战损 <b>'+t.loss+'</b> · 击杀 <b>'+t.kills+'</b> · 开门 <b>'+t.doors+'</b> · 拾取 <b>'+t.pickups+'</b></span>',
+    '<span class="chip">累计战损 <b>'+t.loss+'</b> · 击杀 <b>'+t.kills+'</b> · 开门 <b>'+t.doors+'</b> · 拾取 <b>'+t.pickups+'</b></span>',
     (dd? '<span class="chip" style="border-color:#7a2020;color:#ffb0b0">暴毙点 <b>'+dd.floor+'F('+dd.x+','+dd.y+')</b> HP'+dd.hp+' / 需'+dd.need+'</span>' : ''),
-    '<span class="chip hl" id="minhpChip">最低 HP <b>'+m[0]+'</b> @ '+m[1]+'F('+m[2]+','+m[3]+')</span>'
+    '<span class="chip hl" id="minhpChip">最低 HP <b>'+m[0]+'</b> @ '+m[1]+'F('+m[2]+','+m[3]+')</span>',
+    '<a class="chip repo" href="https://gitcode.com/Barry_Wu_/50MOTA-AI-TAS" target="_blank" rel="noopener">Gitcode仓库</a>',
+    '<a class="chip repo" href="https://github.com/Barry-Wuu/50MOTA-AI-TAS" target="_blank" rel="noopener">Github仓库</a>'
   ];
   document.getElementById('chips').innerHTML=chips.join('');
   document.getElementById('minhpChip').addEventListener('click', function(){

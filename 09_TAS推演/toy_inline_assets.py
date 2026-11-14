@@ -20,6 +20,7 @@ import io
 import json
 import os
 import re
+import shutil
 import sys
 
 import numpy as np
@@ -95,11 +96,20 @@ def main():
     io.open(os.path.join(dst, 'data.js'), 'w', encoding='utf-8').write(js)
     if css is not None:
         io.open(os.path.join(dst, 'style.css'), 'w', encoding='utf-8').write(css)
+
+    # steps1..N.js 原样拷过去（index.html 以 <script src> 引它们）
+    copied_steps = []
+    for fn in sorted(os.listdir(src)):
+        if re.fullmatch(r'steps\d+\.js', fn):
+            shutil.copyfile(os.path.join(src, fn), os.path.join(dst, fn))
+            copied_steps.append(fn)
+
     print('内嵌 %d 张图（%s）→ index.html %d KB, data.js %d KB, style.css %d KB' % (
         inline_cnt, '保留原色' if keep_color else '冷色双色调',
         os.path.getsize(os.path.join(dst, 'index.html')) // 1024,
         os.path.getsize(os.path.join(dst, 'data.js')) // 1024,
         os.path.getsize(os.path.join(dst, 'style.css')) // 1024 if css else 0))
+    print('steps 文件: %s' % (', '.join(copied_steps) or '无'))
 
 
 if __name__ == '__main__':

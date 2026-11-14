@@ -19,6 +19,8 @@ header h1 em{color:var(--accent);font-style:normal}
 .chip b{color:var(--txt);font-weight:600}
 .chip.ok{border-color:#1f6b4f;color:#9fe8c8}
 .chip.warn{border-color:#7a5a1c;color:#ffd98a}
+a.chip{color:var(--dim);text-decoration:none;cursor:pointer}
+a.chip:hover{border-color:var(--accent);color:var(--accent)}
 main{flex:1;min-height:0;display:grid;grid-template-columns:404px minmax(0,1fr);gap:12px;padding:12px;overflow:hidden}
 .leftcol{display:flex;flex-direction:column;gap:12px;min-height:0;overflow:hidden}
 .rightcol{display:flex;flex-direction:column;gap:12px;min-height:0;overflow:auto;padding-right:2px}
@@ -111,9 +113,6 @@ td.ev .tag.b{background:#3a2020;color:#ffb0b0}
 td.note{color:var(--gold);font-size:11px;max-width:200px;overflow:hidden;text-overflow:ellipsis}
 td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
 .dpos{color:var(--green)} .dneg{color:var(--red)} .d0{color:#55617a}
-.seg{display:inline-block;width:16px;height:16px;line-height:16px;text-align:center;border-radius:4px;
-  font-size:10px;font-weight:700;color:#fff}
-.seg.A{background:#2a6f97}.seg.B{background:#6a4c93}.seg.C{background:#8a5a2b}
 
 .rightcol .card{padding:0}
 .statebody{padding:10px 12px;display:flex;flex-direction:column;gap:9px}

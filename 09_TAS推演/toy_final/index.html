@@ -8,7 +8,7 @@
 </head>
 <body>
 <header>
-  <h1>魔塔1 <em>1F→50F</em> 全塔通关逐格校验 <span style="font-size:11px;color:#ff9f43;font-weight:400">· 大法师 → 假公主 → 真魔王</span></h1>
+  <h1>魔塔1 <em>1F→50F</em> 全塔通关逐格校验</h1>
   <div class="chips" id="chips"></div>
 </header>
 
@@ -61,9 +61,9 @@
         <button class="btn" id="btnPrevEv" title="上一个事件">↑ 上一事件</button>
         <button class="btn" id="btnNextEv" title="下一个事件">↓ 下一事件</button>
         <button class="btn" id="btnPlay" title="自动播放">▶ 播放</button>
-        <input id="slider" type="range" min="1" max="8158" value="1">
-        <span class="ctrllabel" id="stepLabel">1 / 8158</span>
-        <input id="stepno" type="number" min="1" max="8158" value="1">
+        <input id="slider" type="range" min="1" max="7526" value="1">
+        <span class="ctrllabel" id="stepLabel">1 / 7526</span>
+        <input id="stepno" type="number" min="1" max="7526" value="1">
         <button class="btn" id="btnGo">跳转</button>
       </div>
     </div>
@@ -79,7 +79,7 @@
         <table>
           <thead>
             <tr>
-              <th>步</th><th>段</th><th>楼层 (x,y)</th><th>方向</th><th>事件 / 日志</th>
+              <th>步</th><th>楼层 (x,y)</th><th>方向</th><th>事件 / 日志</th>
               <th>HP</th><th>ATK</th><th>DEF</th><th>G</th><th>钥匙</th><th>Δ</th>
             </tr>
           </thead>
@@ -132,7 +132,6 @@ const stepno = document.getElementById('stepno');
 let sel = 0, tableFloor = -1, keyOnly = false, lastKeyOnly = false, playTimer = null, showCons = false;
 
 const DIRV = {'↑':[0,-1],'↓':[0,1],'←':[-1,0],'→':[1,0],'·':[0,0],'':[0,0]};
-const SEGCLS = {A:'A',B:'B',C:'C'};
 const STLABEL = {ok:'正常',note:'标注行',blocked:'无法执行',skip:'未执行',
   invalid:'违规未执行',dead:'失败',unreachable:'未执行'};
 const EXEC = {ok:1,note:1,dead:1};
@@ -320,7 +319,6 @@ function renderState(){
   let h='';
   h += '<div class="stephead">'+
        '<span class="no">#'+s.i+'</span>'+
-       '<span class="seg '+SEGCLS[s.s]+'">'+s.s+'</span>'+
        '<span class="pill '+s.st+'">'+(STLABEL[s.st]||s.st)+'</span>'+
        (s.rs?('<span class="pill">录制行 #'+s.rs+'</span>'):'')+
        '</div>';
@@ -368,7 +366,7 @@ function renderState(){
     h += '<div class="okbox">✓ 本步状态由 mota_core 实算，与路线无冲突</div>';
   }
   document.getElementById('stateBody').innerHTML = h;
-  document.getElementById('stateSub').textContent = '步 '+s.i+' / '+TOTAL;
+  document.getElementById('stateSub').textContent = '第'+s.i+'/'+TOTAL+'步';
 }
 
 /* ---------------- 步骤表 ---------------- */
@@ -401,7 +399,6 @@ function buildTable(f){
       : '';
     h += '<tr class="'+cls.trim()+'" data-i="'+i+'">'+
          '<td class="num">'+s.i+'</td>'+
-         '<td><span class="seg '+SEGCLS[s.s]+'">'+s.s+'</span></td>'+
          '<td>'+s.f+'F ('+s.x+','+s.y+')</td>'+
          '<td class="dir">'+(s.d||'·')+'</td>'+
          '<td class="ev" title="'+esc(evText)+'">'+tag+esc(evText)+'</td>'+
@@ -490,11 +487,11 @@ function renderHeader(){
   const chips=[
     '<span class="chip">总步数 <b>'+t.steps+'</b></span>',
     '<span class="chip ok">引擎实际执行 <b>'+nExec+'</b> 步</span>',
-    '<span class="chip">违规未执行 <b>'+nInv+'</b> 步</span>',
-    '<span class="chip">未执行 <b>'+nUn+'</b> 步</span>',
-    '<span class="chip">执行段战损 <b>'+t.loss+'</b> · 击败 <b>'+t.kills+'</b> · 开门 <b>'+t.doors+'</b> · 拾取 <b>'+t.pickups+'</b></span>',
+    '<span class="chip">累计战损 <b>'+t.loss+'</b> · 击败 <b>'+t.kills+'</b> · 开门 <b>'+t.doors+'</b> · 拾取 <b>'+t.pickups+'</b></span>',
     (dd? '<span class="chip" style="border-color:#7a2020;color:#ffb0b0">失败点 <b>'+dd.floor+'F('+dd.x+','+dd.y+')</b> HP'+dd.hp+' / 需'+dd.need+'</span>' : ''),
-    '<span class="chip hl" id="minhpChip">最低 HP <b>'+m[0]+'</b> @ '+m[1]+'F('+m[2]+','+m[3]+')</span>'
+    '<span class="chip hl" id="minhpChip">最低 HP <b>'+m[0]+'</b> @ '+m[1]+'F('+m[2]+','+m[3]+')</span>',
+    '<a class="chip repo" href="https://gitcode.com/Barry_Wu_/50MOTA-AI-TAS" target="_blank" rel="noopener">Gitcode仓库</a>',
+    '<a class="chip repo" href="https://github.com/Barry-Wuu/50MOTA-AI-TAS" target="_blank" rel="noopener">Github仓库</a>'
   ];
   document.getElementById('chips').innerHTML=chips.join('');
   document.getElementById('minhpChip').addEventListener('click', function(){

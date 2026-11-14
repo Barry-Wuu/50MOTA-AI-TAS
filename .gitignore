@@ -10,3 +10,8 @@ __pycache__/
 09_TAS推演/run.log
 09_TAS推演/__pycache__/
 *.pkl
+
+# 推演临时日志与中间产物
+09_TAS推演/_run_*.log
+09_TAS推演/merged_route_full.pre_*.json
+*.bak_x9
