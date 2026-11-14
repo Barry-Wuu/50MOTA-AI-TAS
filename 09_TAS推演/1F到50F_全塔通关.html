@@ -570,7 +570,7 @@ function renderState(){
       var n = (o===106) ? (s.cw||0) : 1;
       if(n<1) return '';
       var u = ITEM[o]||'';
-      var nm = OBJN[o]||('道具#'+o);
+      var nm = (D.objnames||{})[o]||('道具#'+o);
       return Array(n).fill('<img src="'+u+'" class="itemicon" title="'+esc(nm)+'">').join('');
     }).join('') + '</div>';
   }
