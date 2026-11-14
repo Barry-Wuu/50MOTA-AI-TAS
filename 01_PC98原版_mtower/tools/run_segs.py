@@ -147,6 +147,33 @@ def _step(w, d):
     return True, lg
 
 
+def _dist_to(w, tx, ty):
+    """到 (tx,ty) 的 Dijkstra 距离（与 goto 同权重；不可达返回 None）。只读，不改状态。"""
+    import heapq
+    h = w.hero
+    start = (h.x, h.y)
+    if start == (tx, ty):
+        return 0
+    dist = {start: 0}
+    pq = [(0, start)]
+    while pq:
+        dcur, c = heapq.heappop(pq)
+        if c == (tx, ty):
+            return dcur
+        if dcur > dist.get(c, 1e9):
+            continue
+        for dd in DIRS:
+            n = (c[0] + dd[0], c[1] + dd[1])
+            ok, wc = _cost(w, h.f, *n)
+            if not ok:
+                continue
+            nd = dcur + wc
+            if nd < dist.get(n, 1e9):
+                dist[n] = nd
+                heapq.heappush(pq, (nd, n))
+    return None
+
+
 def goto(w, tx, ty, label=''):
     """带权最短路（怪物 100 / 门 25 / 空 1），逐步执行。
        权重只影响"选哪条路"，不影响可达性判断；唯一通路上的怪/门照样会打/开。"""
@@ -203,27 +230,42 @@ def goto(w, tx, ty, label=''):
 
 
 def stair(w, sx, sy, label=''):
-    """走到楼梯邻格再踏上。"""
+    """走到**最近**的楼梯邻格再踏上。
+    ⚠️ 2026-11-14：原实现按 (0,1)(0,-1)(1,0)(-1,0) 固定顺序取第一个可站邻格，
+       25F 上梯 (1,11) 会先取 (1,10)，导致从落点 (2,11) 绕外圈 38 步；
+       现改为按 Dijkstra 距离取最近邻格（与 goto 同一套 _cost 权重）。"""
     h = w.hero
+    cands = []
     for d in ((0, 1), (0, -1), (1, 0), (-1, 0)):
         ax, ay = sx + d[0], sy + d[1]
         if not (1 <= ax <= 11 and 1 <= ay <= 11):
             continue
         if not _passable(w, h.f, ax, ay):
             continue
-        if not goto(w, ax, ay):
+        cands.append((ax, ay))
+    best = None
+    for (ax, ay) in cands:
+        d = _dist_to(w, ax, ay)
+        if d is None:
             continue
-        ok, lg = _step(w, (sx - w.hero.x, sy - w.hero.y))
-        if not ok:
-            print('  !! 上楼梯失败: %s' % lg)
-            return False
-        REC.append((w.hero.f, w.hero.x, w.hero.y, w.hero.hp, w.hero.atk, w.hero.dfn,
-                    w.hero.gold, w.hero.keys['y'], w.hero.keys['b'], w.hero.keys['r'],
-                    ';'.join(lg)[:80] if lg else '', 'stair'))
-        print('  %-22s %s' % (label, st(w.hero)))
-        return True
-    print('  !! 楼梯 %dF(%d,%d) 无可达入口' % (h.f, sx, sy))
-    return False
+        if best is None or d < best[0]:
+            best = (d, ax, ay)
+    if best is None:
+        print('  !! 楼梯 %dF(%d,%d) 无可达入口' % (h.f, sx, sy))
+        return False
+    ax, ay = best[1], best[2]
+    if not goto(w, ax, ay):
+        print('  !! 楼梯 %dF(%d,%d) 无可达入口' % (h.f, sx, sy))
+        return False
+    ok, lg = _step(w, (sx - w.hero.x, sy - w.hero.y))
+    if not ok:
+        print('  !! 上楼梯失败: %s' % lg)
+        return False
+    REC.append((w.hero.f, w.hero.x, w.hero.y, w.hero.hp, w.hero.atk, w.hero.dfn,
+                w.hero.gold, w.hero.keys['y'], w.hero.keys['b'], w.hero.keys['r'],
+                ';'.join(lg)[:80] if lg else '', 'stair'))
+    print('  %-22s %s' % (label, st(w.hero)))
+    return True
 
 
 def fly(w, target_f, label=''):
