@@ -1,0 +1,26 @@
+name: sync-from-gitcode
+on:
+  schedule:
+    - cron: "15 */2 * * *"
+  workflow_dispatch:
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: 首次初始化分支
+        run: git symbolic-ref HEAD refs/heads/main || git checkout -b main || true
+      - name: 从 gitcode 拉取并镜像同步
+        env:
+          GITCODE_TOKEN: ${{ secrets.GITCODE_TOKEN }}
+        run: |
+          git config user.name "sync-bot"
+          git config user.email "sync@users.noreply.github.com"
+          git remote add gitcode "https://oauth2:${GITCODE_TOKEN}@gitcode.com/Barry_Wu_/50MOTA-AI-TAS.git" 2>/dev/null || git remote set-url gitcode "https://oauth2:${GITCODE_TOKEN}@gitcode.com/Barry_Wu_/50MOTA-AI-TAS.git"
+          git fetch gitcode main --force
+          git reset --hard gitcode/main
+          git push origin main --force
