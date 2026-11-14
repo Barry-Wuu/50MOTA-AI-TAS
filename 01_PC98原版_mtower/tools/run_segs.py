@@ -286,6 +286,17 @@ def fly(w, target_f, label=''):
     return True
 
 
+def fly_to(w, target_f, label=''):
+    """走到当前层上行梯旁（FLY_LAND[h.f] 邻接本层上行梯），再用飞行之珠传送到 target_f。
+    ✅ 2026-11-14：orb 前移后（Toy 1100 起持有），用本函数把空爬楼换成 1 次传送。
+    前提：本层上行梯旁格可达（FLY_LAND[h.f] 是上行踏出格，必邻接上行梯）。"""
+    h = w.hero
+    lx, ly = M.FLY_LAND.get(h.f)
+    if not goto(w, lx, ly, '%dF 走至上行梯旁' % h.f):
+        return False
+    return fly(w, target_f, label)
+
+
 def wing_up(w, label=''):
     """同层飞行器 obj107 昇華の翼：瞬移到本层上行梯旁踏出格（同层，不动层）。"""
     h = w.hero
@@ -455,32 +466,33 @@ def main():
     #    原 1637 时 A26/D30 -24/-66），HP97+50(血瓶1,3)-28-96+100=123，全程不掉负。
     #    '1c' 原位置（Toy~1590）同步移除。
     if not run_segs(w, 1, S['1c'], '1F拿orb'): return 1
-    if not stair(w, 1, 1, '1F(1,1)->2F'): return 1
-    if not stair(w, 1, 11, '2F(1,11)->3F'): return 1
-    if not stair(w, 11, 11, '3F(11,11)->4F'): return 1
+    # ✅ 2026-11-14 飞行之珠跳层：1F→4F（原 79 步空爬楼）换 1 次传送。2F/3F 已首访收集。
+    if not fly_to(w, 4, '飞行 1F→4F'): return 1
 
     print('\n- 4F 段4（回）')
     if not run_segs(w, 4, S['4d'], '4F回'): return 1
-    if not stair(w, 1, 11, '4F(1,11)->5F'): return 1
-    if not stair(w, 1, 1, '5F(1,1)->6F'): return 1
+    # ✅ 2026-11-14 飞行之珠跳层：4F→6F（原 49 步）。5F 已首访，其段5 在后续单独访。
+    if not fly_to(w, 6, '飞行 4F→6F'): return 1
 
     print('\n- 6F 段2（回）')
     if not run_segs(w, 6, S['6b'], '6F回'): return 1
-    if not stair(w, 1, 1, '6F(1,1)->5F'): return 1
-    if not stair(w, 1, 11, '5F(1,11)->4F'): return 1
-    if not stair(w, 11, 11, '4F(11,11)->3F'): return 1
+    # ✅ 2026-11-14 飞行之珠跳层：6F→3F（原 82 步）。5F/4F 已首访，其段在后续单独访。
+    if not fly_to(w, 3, '飞行 6F→3F'): return 1
 
     print('\n- 3F 段3（回）')
     if not run_segs(w, 3, S['3d'], '3F回'): return 1
-    if not stair(w, 11, 11, '3F(11,11)->4F'): return 1
+    # ✅ 2026-11-14 飞行之珠跳层：3F→4F（原 27 步）。
+    if not fly_to(w, 4, '飞行 3F→4F'): return 1
 
     print('\n- 4F 段5（回）')
     if not run_segs(w, 4, S['4e'], '4F回'): return 1
-    if not stair(w, 1, 11, '4F(1,11)->5F'): return 1
+    # ✅ 2026-11-14 飞行之珠跳层：4F→5F（原 35 步）。
+    if not fly_to(w, 5, '飞行 4F→5F'): return 1
 
     print('\n- 5F 段3（回）')
     if not run_segs(w, 5, S['5c'], '5F回'): return 1
-    if not stair(w, 1, 11, '5F(1,11)->4F'): return 1
+    # ✅ 2026-11-14 飞行之珠跳层：5F→4F（原 33 步）。
+    if not fly_to(w, 4, '飞行 5F→4F'): return 1
 
     print('\n到 4F（第6次）:', st(w.hero))
 
@@ -492,40 +504,25 @@ def main():
     # ⚠️ 攻略未列：本路线黄钥匙账持续偏紧（9F/1F 都需要连续两把黄门）。
     #    6F(8,4) 卖蓝钥匙 50G；拿到后开 7F 蓝门(5,5)，(6,1) 卖 5 黄钥匙 50G。零 HP 代价。
     #    代价：金币 -100，蓝钥匙被 7F(5,5) 用掉 → 11F 银盾前须另找（8F(7,10) 蓝钥匙仍在）
-    if not stair(w, 1, 11, '4F(1,11)->5F'): return 1
-    if not stair(w, 1, 1, '5F(1,1)->6F'): return 1
+    if not fly_to(w, 6, '飞行 4F→6F（补蓝钥）'): return 1
     if not run_segs(w, 6, [(11, 2, '黄门(11,2)'), (11, 3, ''), (11, 4, 'バット -8'),
                            (10, 4, ''), (9, 4, ''),
                            (9, 3, ''), (8, 3, '赤薬 +50'), (8, 4, '商店：蓝钥匙 50G')], '6F买蓝钥'): return 1
-    if not stair(w, 11, 11, '6F(11,11)->7F'): return 1
+    if not fly_to(w, 7, '飞行 6F→7F（买黄钥）'): return 1
     if not run_segs(w, 7, [(5, 6, 'y6 走廊'), (5, 5, '蓝门(5,5)'), (5, 4, ''),
                            (5, 3, 'Ｒスライム -1'), (5, 2, ''), (6, 2, ''),
                            (6, 1, '商店：5 黄钥匙 50G')], '7F买黄钥'): return 1
 
-    print('\n--- 下 1F（7F→6F→5F→4F→3F→2F→1F）---')
-    if not stair(w, 11, 11, '7F(11,11)->6F'): return 1
-    if not stair(w, 1, 1, '6F(1,1)->5F'): return 1
-    if not stair(w, 1, 11, '5F(1,11)->4F'): return 1
-    if not stair(w, 11, 11, '4F(11,11)->3F'): return 1
-    if not stair(w, 1, 11, '3F(1,11)->2F'): return 1
-    if not stair(w, 1, 1, '2F(1,1)->1F'): return 1
-
-    print('\n到 1F（第3次）:', st(w.hero))
-
-    print('\n- 1F 段3（回）：1c（含 orb）已前移到段2末，本处直接上 2F')
-    if not stair(w, 1, 1, '1F(1,1)->2F'): return 1
-    if not stair(w, 1, 11, '2F(1,11)->3F'): return 1
-    if not stair(w, 11, 11, '3F(11,11)->4F'): return 1
-    if not stair(w, 1, 11, '4F(1,11)->5F'): return 1
-    if not stair(w, 1, 1, '5F(1,1)->6F'): return 1
-    if not stair(w, 11, 11, '6F(11,11)->7F'): return 1
-
-    print('\n到 7F（第4次）:', st(w.hero))
+    # ✅ 2026-11-14：原 7F→1F→7F 往返（Toy 1571-1773，203 步）因 1c（orb）前移而成为空跑：
+    #    下 1F 只为做 '1c'（现已前移到 Toy 1100），1F 段3 已空。直接留在 7F 进 7F 段3。
+    #    首访检查：1F 在此处无未收集首访项（orb/西区已在 Toy 1100 收集，青薬(10,11) 留待
+    #    Toy 2342 fly(1) 补血段），下 1F 只会空耗 203 步 → 移除。
+    print('\n到 7F（第4次，跳过 7F→1F→7F 空跑）:', st(w.hero))
 
     print('\n- 7F 段3（回）')
     if not run_segs(w, 7, S['7c'], '7F回'): return 1
-    if not stair(w, 1, 1, '7F(1,1)->8F'): return 1
-    if not stair(w, 6, 1, '8F(6,1)->9F'): return 1
+    # ✅ 2026-11-14 飞行之珠跳层：7F→9F（原 58 步）。8F 已首访。
+    if not fly_to(w, 9, '飞行 7F→9F'): return 1
 
     print('\n到 9F（第3次）:', st(w.hero))
 
@@ -544,51 +541,38 @@ def main():
     F = segs_route.SEGS_FINAL
 
     print('\n=== BOSS 前补血路线（攻略 §4.2）===')
-    print('\n--- 10F→9F 右下 ---')
-    if not stair(w, 1, 11, '10F(1,11)->9F'): return 1
+    print('\n--- 10F→9F 右下（飞行之珠跳层）---')
+    if not fly_to(w, 9, '飞行 10F→9F'): return 1
     if not run_segs(w, 9, H['9d'], '9F补血'): return 1
 
-    print('\n--- 9F→4F 右上 ---')
-    if not stair(w, 6, 1, '9F(6,1)->8F'): return 1
-    if not stair(w, 1, 1, '8F(1,1)->7F'): return 1
-    if not stair(w, 11, 11, '7F(11,11)->6F'): return 1
-    if not stair(w, 1, 1, '6F(1,1)->5F'): return 1
-    if not stair(w, 1, 11, '5F(1,11)->4F'): return 1
+    print('\n--- 9F→4F 右上（飞行之珠跳层）---')
+    if not fly_to(w, 4, '飞行 9F→4F'): return 1
     if not run_segs(w, 4, H['4f'], '4F补血'): return 1
 
-    print('\n--- 4F→7F 右数第3列（7F补血提前到 8F 門番Ｃ 之前）---')
+    print('\n--- 4F→7F 右数第3列（7F补血提前到 8F 門番Ｃ 之前，飞行之珠跳层）---')
     # ✅ 2026-11-14 修复 orb 前移 -20 HP 赤字：把 7F补血（青薬+200）提前到 8F补血
     #    （2 只門番Ｃ -306）之前，使进 8F 时 HP≥306 满足。地理上 7F 在 4F→8F 途中，
-    #    步数净 0，仅调整补血顺序。
-    if not stair(w, 1, 11, '4F(1,11)->5F'): return 1
-    if not stair(w, 1, 1, '5F(1,1)->6F'): return 1
-    if not stair(w, 11, 11, '6F(11,11)->7F'): return 1
+    #    飞行跳层（4F→7F）与楼梯步数相当，仅调整补血顺序。
+    if not fly_to(w, 7, '飞行 4F→7F'): return 1
     if not run_segs(w, 7, H['7d'], '7F补血'): return 1
 
-    print('\n--- 7F→8F 右中（門番Ｃ 口袋）---')
-    if not stair(w, 1, 1, '7F(1,1)->8F'): return 1
+    print('\n--- 7F→8F 右中（門番Ｃ 口袋，飞行之珠跳层）---')
+    if not fly_to(w, 8, '飞行 7F→8F'): return 1
     if not run_segs(w, 8, H['8c'], '8F补血'): return 1
 
-    print('\n--- 8F→7F→1F 右下（7F补血已提前完成，本处直接穿行下 1F）---')
-    if not stair(w, 1, 1, '8F(1,1)->7F'): return 1
-    if not stair(w, 11, 11, '7F(11,11)->6F'): return 1
-    if not stair(w, 1, 1, '6F(1,1)->5F'): return 1
-    if not stair(w, 1, 11, '5F(1,11)->4F'): return 1
-    if not stair(w, 11, 11, '4F(11,11)->3F'): return 1
-    if not stair(w, 1, 11, '3F(1,11)->2F'): return 1
-    if not stair(w, 1, 1, '2F(1,1)->1F'): return 1
+    print('\n--- 8F→1F 右下（飞行之珠跳层 + 1F 补血）---')
+    # ✅ 2026-11-14 用飞行之珠把 8F→1F 空爬楼（原 149 步）换成 1 次传送。
+    #    首访检查：7F-2F 已首访收集完毕，本段纯穿行，飞越安全。
+    if not goto(w, 1, 2, '8F 走至下行梯旁'): return 1   # (1,2) 邻接 8F(1,1) 下行梯
+    if not fly(w, 1, '飞行 8F→1F（下 1F 补血）'): return 1
     if not run_segs(w, 1, H['1d'], '1F补血'): return 1
 
-    print('\n--- 上 10F ---')
-    if not stair(w, 1, 1, '1F(1,1)->2F'): return 1
-    if not stair(w, 1, 11, '2F(1,11)->3F'): return 1
-    if not stair(w, 11, 11, '3F(11,11)->4F'): return 1
-    if not stair(w, 1, 11, '4F(1,11)->5F'): return 1
-    if not stair(w, 1, 1, '5F(1,1)->6F'): return 1
-    if not stair(w, 11, 11, '6F(11,11)->7F'): return 1
-    if not stair(w, 1, 1, '7F(1,1)->8F'): return 1
-    if not stair(w, 6, 1, '8F(6,1)->9F'): return 1
-    if not stair(w, 1, 11, '9F(1,11)->10F'): return 1
+    print('\n--- 上 10F（飞行之珠跳层）---')
+    # ✅ 2026-11-14 用飞行之珠（Toy 1100 已到手）把 1F→10F 空爬楼（原 194 步）换成 1 次传送。
+    #    首访检查：2F-9F 已在 1 区首访全部收集，本段纯穿行（无拾取/击杀/开门），飞越安全。
+    #    起点：1F 补血后 (10,11)，走 y1 走廊至上行梯旁 (2,1)（FLY_LAND[1] 邻接 1F(1,1) 梯）。
+    if not goto(w, 2, 1, '1F 走至上行梯旁'): return 1
+    if not fly(w, 10, '飞行 1F→10F（上 10F 决战）'): return 1
 
     print('\n=== 10F 决战 ===')
     if not run_segs(w, 10, F['10b'], '10F决战'): return 1
