@@ -4,12 +4,16 @@
 - 勇者标记：mota_art/MTower.gif 顶行勇者帧（col3,row0）
 输出：1F到31F_推演全过程.html
 """
-import io, os, json, base64
+import io, os, sys, json, base64
 from PIL import Image
 
 DED = r'D:/B++/WorkBuddy/mota_tas_tmp2/repo/09_TAS推演/'
 FLOORS_DIR = r'D:/B++/WorkBuddy/mota_tas_tmp2/repo/01_PC98原版_mtower/floors/'
 SHEET = r'D:/B++/WorkBuddy/mota_tas_tmp2/repo/mota_art/MTower.gif'
+TOOLS = r'D:/B++/WorkBuddy/mota_tas_tmp2/repo/01_PC98原版_mtower/tools'
+if TOOLS not in sys.path:
+    sys.path.insert(0, TOOLS)
+import mota_core as M
 
 import sys as _sys
 DATA_F = _sys.argv[1] if len(_sys.argv) > 1 else 'merged_route_full.json'
@@ -91,6 +95,19 @@ hero_js = json.dumps({k: emit(sheet.crop((c * 40, 0, c * 40 + 40, 40)), 'hero%d'
 STAIR_XY = {'u': (280, 160), 'd': (320, 160)}
 stair_js = json.dumps({k: emit(sheet.crop((x, y, x + 40, y + 40)), 'stair_' + k)
                        for k, (x, y) in STAIR_XY.items()}, ensure_ascii=False)
+
+# ---- 道具图标：从贴图集按 Java 权威坐标裁剪（col=OA[obj][6]//40, row=OA[obj][7]//40，40px/格）----
+# 权威来源：08_Java_MTower08a/decompiled/MTower.java CropImageFilter(objectAttribute[n3][6],[7],40,40)
+# 与 mota_core.OA 读取一致，且已逐格掩码复核 diff=0（2026-11 定稿）。
+ITEM_OBJS = [25, 26, 39, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114]
+_item = {}
+for _o in ITEM_OBJS:
+    try:
+        _c, _r = M.OA[_o][6] // 40, M.OA[_o][7] // 40
+        _item[str(_o)] = emit(sheet.crop((_c * 40, _r * 40, _c * 40 + 40, _r * 40 + 40)), 'item%03d' % _o)
+    except Exception:
+        _item[str(_o)] = ''
+item_js = json.dumps(_item, ensure_ascii=False, separators=(',', ':'))
 
 img_js = json.dumps(imgs, ensure_ascii=False, separators=(',', ':'))
 
@@ -247,6 +264,10 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
 .keyrow .kk{flex:1;text-align:center;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:5px}
 .keyrow .kk i{font-style:normal;font-size:10.5px;color:var(--dim);display:block}
 .keyrow .kk b{font-size:15px}
+.itemrow{display:flex;flex-wrap:wrap;gap:5px;align-items:center;
+  background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 8px}
+.itemrow .ihead{font-size:10.5px;color:var(--dim);margin-right:2px}
+.itemicon{width:30px;height:30px;image-rendering:pixelated;display:block}
 .warnbox{background:#2a2110;border:1px solid #7a5a1c;border-radius:8px;padding:7px 9px;font-size:11.5px;color:#ffd98a}
 .warnbox b{color:#ffe6a8}
 .okbox{background:#0e2a20;border:1px solid #1f6b4f;border-radius:8px;padding:7px 9px;font-size:11.5px;color:#9fe8c8}
@@ -362,6 +383,11 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
       </div>
     </div>
 
+    <div class="card">
+      <div class="cardhead"><h2>本步状态（引擎实算）</h2><span class="sp"></span><span class="sub" id="stateSub"></span></div>
+      <div class="statebody" id="stateBody"></div>
+    </div>
+
     <div class="card stepcard">
       <div class="cardhead">
         <h2 id="tblTitle">本层步骤</h2>
@@ -385,11 +411,6 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
 
   <aside class="rightcol">
     <div class="card">
-      <div class="cardhead"><h2>本步状态（引擎实算）</h2><span class="sp"></span><span class="sub" id="stateSub"></span></div>
-      <div class="statebody" id="stateBody"></div>
-    </div>
-
-    <div class="card">
       <div class="cardhead"><h2>校验结论 / 问题清单</h2><span class="sp"></span><span class="sub" id="issueSub"></span></div>
       <div class="verify" id="verifyBox"></div>
       <div id="issueList"></div>
@@ -409,6 +430,7 @@ const TILE = __TILE__;
 const STAIR = __STAIR__;
 const CONS = D.cons || {};
 const HERO = __HERO_JSON__;
+const ITEM = __ITEMICON__;
 (function(){
 'use strict';
 const ST = D.steps, FL = D.floors, ISSUES = D.issues || [];
@@ -654,6 +676,17 @@ function renderState(){
        '<div class="kk"><i>蓝钥匙</i><b>'+s.kb+'</b><div class="from">'+b.kb+' → '+s.kb+'</div></div>'+
        '<div class="kk"><i>红钥匙</i><b>'+s.kr+'</b><div class="from">'+b.kr+' → '+s.kr+'</div></div>'+
        '</div>';
+  // 已获得道具：每道具一个图标，拿到才显示、用完即隐。
+  // obj106 中心飞行器：显示剩余次数 s.cw 个（刚吃 3 个，用一次减一，减到 0 消失）。
+  if(s.it && s.it.length){
+    h += '<div class="itemrow"><span class="ihead">道具</span>'+ s.it.map(function(o){
+      var n = (o===106) ? (s.cw||0) : 1;
+      if(n<1) return '';
+      var u = ITEM[o]||'';
+      var nm = OBJN[o]||('道具#'+o);
+      return Array(n).fill('<img src="'+u+'" class="itemicon" title="'+esc(nm)+'">').join('');
+    }).join('') + '</div>';
+  }
   if(s.mm && s.mm.length){
     h += '<div class="warnbox"><b>⚠ 坐标/落点差异</b><br>'+s.mm.map(esc).join('<br>')+'</div>';
   }
@@ -901,16 +934,18 @@ select(initStep);
 '''
 
 if SPLIT_DIR:
-    # 外链模式：data.js 装 D/IMG/TILE/STAIR/HERO，index.html 只剩模板+CSS+JS
+    # 外链模式：data.js 装 D/IMG/TILE/STAIR/HERO/ITEMICON，index.html 只剩模板+CSS+JS
     _parts = ['window.__D=' + js, 'window.__IMG=' + img_js, 'window.__TILE=' + tile_js,
-              'window.__STAIR=' + stair_js, 'window.__HERO_JSON=' + hero_js]
+              'window.__STAIR=' + stair_js, 'window.__HERO_JSON=' + hero_js,
+              'window.__ITEMICON=' + item_js]
     io.open(os.path.join(SPLIT_DIR, 'data.js'), 'w', encoding='utf-8').write(
         ';\n'.join(_parts) + ';\n')
-    bind = ('window.__D', 'window.__IMG', 'window.__TILE', 'window.__STAIR', 'window.__HERO_JSON')
+    bind = ('window.__D', 'window.__IMG', 'window.__TILE', 'window.__STAIR',
+            'window.__HERO_JSON', 'window.__ITEMICON')
     dscript = '<script src="./data.js"></script>'
     out = os.path.join(SPLIT_DIR, 'index.html')
 else:
-    bind = (js, img_js, tile_js, stair_js, hero_js)
+    bind = (js, img_js, tile_js, stair_js, hero_js, item_js)
     dscript = ''
     out = DED + OUT_HTML
 
@@ -920,6 +955,7 @@ html = (HTML.replace('__DATASCRIPT__', dscript)
             .replace('__TILE__', bind[2])
             .replace('__STAIR__', bind[3])
             .replace('__HERO_JSON__', bind[4])
+            .replace('__ITEMICON__', bind[5])
             .replace('__TOTAL__', str(data['total']['steps'])))
 io.open(out, 'w', encoding='utf-8').write(html)
 print('wrote', out, os.path.getsize(out), 'bytes')

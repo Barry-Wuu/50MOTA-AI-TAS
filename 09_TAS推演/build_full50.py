@@ -19,10 +19,11 @@ import run_segs
 DIRV = {(1, 0): '→', (-1, 0): '←', (0, 1): '↓', (0, -1): '↑', (0, 0): '·'}
 
 
-def snap(h):
+def snap(h, w=None):
     return dict(hp=h.hp, atk=h.atk, dfn=h.dfn, gold=h.gold,
                 ky=h.keys.get('y', 0), kb=h.keys.get('b', 0), kr=h.keys.get('r', 0),
-                items=sorted(h.items))
+                items=sorted(h.items),
+                cw=(w.center_warp_charges if w is not None else 0))
 
 
 steps = []
@@ -42,7 +43,7 @@ def _tile(f, x, y):
 def record(w, d, lg):
     global prev, cleared_prev, over_prev, ter_prev
     h = w.hero
-    a = snap(h)
+    a = snap(h, w)
     idx = len(steps) + 1
     log = ' ｜ '.join(x for x in (lg or []) if x)
     steps.append(dict(i=idx, s='A', f=h.f, x=h.x, y=h.y,
@@ -50,6 +51,7 @@ def record(w, d, lg):
                       e='', l=log,
                       hp=a['hp'], a=a['atk'], df=a['dfn'], g=a['gold'],
                       ky=a['ky'], kb=a['kb'], kr=a['kr'],
+                      it=a['items'], cw=a['cw'],
                       dh=a['hp'] - prev['hp'], da=a['atk'] - prev['atk'],
                       dd=a['dfn'] - prev['dfn'], dg=a['gold'] - prev['gold'], st='ok'))
     for (cf, cx, cy) in sorted(w.cleared - cleared_prev):
@@ -94,11 +96,12 @@ for _nm in ('wing_up', 'wing_down'):
 #   此前 z2_route.main() 的第一个 record 是"第一个移动后"的位置（1F(5,11)），
 #   起点 (6,11) 从未被录成 step0 → 前端把 (5,11) 当起点渲染，勇者开场即错位一格。
 h0 = M.Hero.initial()
-a0 = snap(h0)
+a0 = snap(h0, None)
 steps.append(dict(i=1, s='A', f=h0.f, x=h0.x, y=h0.y,
                   d='·', e='', l='',
                   hp=a0['hp'], a=a0['atk'], df=a0['dfn'], g=a0['gold'],
                   ky=a0['ky'], kb=a0['kb'], kr=a0['kr'],
+                  it=a0['items'], cw=a0['cw'],
                   dh=0, da=0, dd=0, dg=0, st='ok'))
 
 rc = Z.main()
