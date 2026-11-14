@@ -205,12 +205,43 @@ def fly(w, target_f, label=''):
     return True
 
 
+def _dist_to(w, tx, ty):
+    """到 (tx,ty) 的 Dijkstra 距离（与 goto 同权重；不可达返回 None）。只读，不改状态。"""
+    import heapq
+    h = w.hero
+    start = (h.x, h.y)
+    if start == (tx, ty):
+        return 0
+    dist = {start: 0}
+    pq = [(0, start)]
+    while pq:
+        dcur, c = heapq.heappop(pq)
+        if c == (tx, ty):
+            return dcur
+        if dcur > dist.get(c, 1e9):
+            continue
+        for dd in DIRS:
+            n = (c[0] + dd[0], c[1] + dd[1])
+            ok, wc = _cost(w, h.f, *n)
+            if not ok:
+                continue
+            nd = dcur + wc
+            if nd < dist.get(n, 1e9):
+                dist[n] = nd
+                heapq.heappush(pq, (nd, n))
+    return None
+
+
 def goto_stair_adj(w, label=''):
-    """把英雄移到本层楼梯邻格（飞行之珠/升降须站梯旁）。"""
+    """把英雄移到**最近**的楼梯邻格（飞行之珠/升降须站梯旁）。
+    ⚠️ 2026-11-14：原实现按 STAIRS 顺序取「第一个可站邻格」——如 43F 的 STAIRS=((1,11),(1,1))
+       恒取 (1,10)，哪怕另一侧梯旁 (1,2) 近 8 步也照走不误（43F 两处各白走 8 步）。
+       现改为按 Dijkstra 距离取最近的梯旁格（代价与 goto 同一套 _cost 权重）。"""
     h = w.hero
     s = M.STAIRS.get(h.f)
     if not s:
         return False
+    cands = []
     for (sx, sy) in [c for c in s if c]:
         for d in ((0, 1), (0, -1), (1, 0), (-1, 0)):
             ax, ay = sx + d[0], sy + d[1]
@@ -218,9 +249,17 @@ def goto_stair_adj(w, label=''):
                 continue
             if not _cost(w, h.f, ax, ay)[0]:
                 continue
-            if goto(w, ax, ay, '%s 到梯旁(%d,%d)' % (label, ax, ay)):
-                return True
-    return False
+            cands.append((ax, ay))
+    best = None
+    for (ax, ay) in cands:
+        d = _dist_to(w, ax, ay)
+        if d is None:
+            continue
+        if best is None or d < best[0]:
+            best = (d, ax, ay)
+    if best is None:
+        return False
+    return goto(w, best[1], best[2], '%s 到梯旁(%d,%d)' % (label, best[1], best[2]))
 
 
 def altar_uses(w, ax, ay, n, policy, label=''):
