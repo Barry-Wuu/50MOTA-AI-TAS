@@ -435,6 +435,8 @@ const ITEM = __ITEMICON__;
 'use strict';
 const ST = D.steps, FL = D.floors, ISSUES = D.issues || [];
 const TOTAL = ST.length;
+// 到每一步为止已访问的最大楼层（MAXF[i] = max(ST[0..i].f)）
+const MAXF = (function(){var a=new Array(ST.length);var m=0;for(var i=0;i<ST.length;i++){var v=ST[i].f||1;if(v>m)m=v;a[i]=m;}return a;})();
 const byFloor = {}, firstOf = {};
 ST.forEach(function(s,i){
   (byFloor[s.f] = byFloor[s.f] || []).push(i);
@@ -630,7 +632,7 @@ function renderMap(){
     '<div class="stat"><i>本层步数</i><b>'+st.steps+'</b></div>'+
     '<div class="stat"><i>战损</i><b>'+st.loss+'</b></div>'+
     '<div class="stat"><i>击杀</i><b>'+st.kills+'</b></div>'+
-    '<div class="stat"><i>开门 / 拾取</i><b>'+st.doors+' / '+st.pickups+'</b></div>'+
+    '<div class="stat"><i>最大已访问楼层</i><b>'+MAXF[sel]+'</b></div>'+
     '<div class="stat"><i>首次进入</i><b style="font-size:11px;font-weight:400">'+entry+'</b></div>'+
     '<div class="stat"><i>最后离开</i><b style="font-size:11px;font-weight:400">'+exit+'</b></div>';
 }
