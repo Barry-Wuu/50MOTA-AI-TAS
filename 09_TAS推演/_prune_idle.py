@@ -16,8 +16,9 @@ N = len(s)
 # Build index map: old_i -> new_i
 # Steps to remove (by their .i field, 1-based as shown in UI):
 REMOVE = set()
-# 27F: remove steps with i in [3882, 3901]  (20 steps)
-for i in range(3882, 3902):
+# 27F: remove steps with i in [3797, 3816]  (20 steps: (6,10)→(6,1)→back to (6,11))
+#   Keep 3796 (6,11) and 3817 (7,11) as bridge — adjacent
+for i in range(3797, 3817):
     REMOVE.add(i)
 # 1F: remove steps with i in [1030, 1077]  (48 steps, keep 1029 at (5,6) as bridge)
 for i in range(1030, 1078):
@@ -52,9 +53,9 @@ d1 = abs(s1029["x"] - s1078["x"]) + abs(s1029["y"] - s1078["y"])
 print(f"1F bridge: step 1029 ({s1029['x']},{s1029['y']}) -> step 1078 ({s1078['x']},{s1078['y']}) dist={d1}")
 assert d1 == 1, f"1F bridge not adjacent! dist={d1}"
 
-# 27F: step 3881 (6,11) -> step 3902 (7,11)  — adjacent? yes (diff 1 in x)
-s3881 = next(x for x in s if x["i"] == 3881)
-s3902 = next(x for x in s if x["i"] == 3902)
+# 27F: step 3796 (6,11) -> step 3817 (7,11)  — adjacent? yes (diff 1 in x)
+s3881 = next(x for x in s if x["i"] == 3796)
+s3902 = next(x for x in s if x["i"] == 3817)
 d2 = abs(s3881["x"] - s3902["x"]) + abs(s3881["y"] - s3902["y"])
 print(f"27F bridge: step 3881 ({s3881['x']},{s3881['y']}) -> step 3902 ({s3902['x']},{s3902['y']}) dist={d2}")
 assert d2 == 1, f"27F bridge not adjacent! dist={d2}"
