@@ -193,14 +193,20 @@ def main():
               + ';' + tail[1:] + merge)
     io.open(p, 'w', encoding='utf-8').write(new_js)
 
-    # ---- index.html：外链 data.js 换内联 ----
+    # ---- index.html：外链 data.js 换内联（--external-data 时保留外链）----
     hp = os.path.join(dst, 'index.html')
     h = io.open(hp, encoding='utf-8').read()
     tags = ''.join('<script src="./%s"></script>' % fn for fn, _ in names)
-    h = h.replace('<script src="./data.js"></script>',
-                  tags + '<script>\n' + new_js + '</script>', 1)
+    if '--external-data' in sys.argv:
+        # 原色图 base64 使 data.js 达 3MB，内联会超 1MB 入口上限 → 保留外链
+        h = h.replace('<script src="./data.js"></script>',
+                      tags + '<script src="./data.js"></script>', 1)
+    else:
+        h = h.replace('<script src="./data.js"></script>',
+                      tags + '<script>\n' + new_js + '</script>', 1)
     io.open(hp, 'w', encoding='utf-8').write(h)
-    os.remove(p)
+    if '--external-data' not in sys.argv:
+        os.remove(p)
 
     left = len(CJK.findall(json.dumps(D9, ensure_ascii=False)))
     print('数据: 精确%d+前缀%d+obj表%d；数据段CJK %d 字；steps 残留假名 %d'
