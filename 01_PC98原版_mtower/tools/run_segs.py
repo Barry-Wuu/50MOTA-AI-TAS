@@ -421,6 +421,21 @@ def main():
     print('\n- 8F 段2（回）')
     if not run_segs(w, 8, S['8b'], '8F回'): return 1
     if not stair(w, 1, 1, '8F(1,1)->7F'): return 1
+
+    print('\n- 7F x9 列上方支路【提前】（原 7c 段前移）')
+    # ✅ 2026-11-14 提前清理 7F x9 列上方支路，把 2 把黄钥 + 血瓶+50 提前 ~880 步，
+    #    使 Toy 1019（1F）能凑够 3 把黄钥提前拿飛行のオーブ（obj26）。
+    #    代价：骷髅C(9,5) 在 A23/D27 打掉 -30（原 7c 段 A26/D30 时 -24，多 6 HP）；
+    #    血瓶(9,3)+50 立即回补，净 +20 HP。原 7c 段同步缩短为仅下方支路（净 0 步）。
+    if not run_segs(w, 7, [
+        (9, 6, 'x9 竖列'),
+        (9, 5, 'スケルトンＣ -30'),
+        (9, 4, ''),
+        (9, 3, '赤薬 +50'),
+        (9, 2, '黄钥'),
+        (9, 1, '黄钥'),
+        (9, 6, '回 x9'),
+    ], '7F上方支路'): return 1
     if not stair(w, 11, 11, '7F(11,11)->6F'): return 1
     if not stair(w, 1, 1, '6F(1,1)->5F'): return 1
     if not stair(w, 1, 11, '5F(1,11)->4F'): return 1
@@ -430,6 +445,16 @@ def main():
 
     print('\n- 1F 段2（回）')
     if not run_segs(w, 1, S['1b'], '1F回'): return 1
+
+    print('\n- 1F 拿飛行のオーブ【提前】（原 1c 段前移）')
+    # ✅ 2026-11-14 把 1F 西区（含 obj26 飛行のオーブ）从第 3 次 1F 访（'1c'，Toy~1637）
+    #    前移到第 2 次访末尾（'1b' 后，Toy~1053，英雄 A24/D28、HP97、黄钥 3）。
+    #    目的：orb 提前 ~600 步到手，供 1019 之后的空爬楼换 fly() 跳层（省步主体）。
+    #    首访检查：1F 西区(x1-4)在 '1' 首访/'1b' 二访均未触及（'1' 注释明示"飞行之珠留到 1c"），
+    #    此处在西区首访，血瓶/骷髅/orb/钥匙全部在位。代价：骷髅C/B 在 A24/D28 打（-28/-96，
+    #    原 1637 时 A26/D30 -24/-66），HP97+50(血瓶1,3)-28-96+100=123，全程不掉负。
+    #    '1c' 原位置（Toy~1590）同步移除。
+    if not run_segs(w, 1, S['1c'], '1F拿orb'): return 1
     if not stair(w, 1, 1, '1F(1,1)->2F'): return 1
     if not stair(w, 1, 11, '2F(1,11)->3F'): return 1
     if not stair(w, 11, 11, '3F(11,11)->4F'): return 1
@@ -487,8 +512,7 @@ def main():
 
     print('\n到 1F（第3次）:', st(w.hero))
 
-    print('\n- 1F 段3（回）')
-    if not run_segs(w, 1, S['1c'], '1F回'): return 1
+    print('\n- 1F 段3（回）：1c（含 orb）已前移到段2末，本处直接上 2F')
     if not stair(w, 1, 1, '1F(1,1)->2F'): return 1
     if not stair(w, 1, 11, '2F(1,11)->3F'): return 1
     if not stair(w, 11, 11, '3F(11,11)->4F'): return 1
@@ -532,18 +556,21 @@ def main():
     if not stair(w, 1, 11, '5F(1,11)->4F'): return 1
     if not run_segs(w, 4, H['4f'], '4F补血'): return 1
 
-    print('\n--- 4F→8F 右中 ---')
+    print('\n--- 4F→7F 右数第3列（7F补血提前到 8F 門番Ｃ 之前）---')
+    # ✅ 2026-11-14 修复 orb 前移 -20 HP 赤字：把 7F补血（青薬+200）提前到 8F补血
+    #    （2 只門番Ｃ -306）之前，使进 8F 时 HP≥306 满足。地理上 7F 在 4F→8F 途中，
+    #    步数净 0，仅调整补血顺序。
     if not stair(w, 1, 11, '4F(1,11)->5F'): return 1
     if not stair(w, 1, 1, '5F(1,1)->6F'): return 1
     if not stair(w, 11, 11, '6F(11,11)->7F'): return 1
+    if not run_segs(w, 7, H['7d'], '7F补血'): return 1
+
+    print('\n--- 7F→8F 右中（門番Ｃ 口袋）---')
     if not stair(w, 1, 1, '7F(1,1)->8F'): return 1
     if not run_segs(w, 8, H['8c'], '8F补血'): return 1
 
-    print('\n--- 8F→7F 右数第3列 ---')
+    print('\n--- 8F→7F→1F 右下（7F补血已提前完成，本处直接穿行下 1F）---')
     if not stair(w, 1, 1, '8F(1,1)->7F'): return 1
-    if not run_segs(w, 7, H['7d'], '7F补血'): return 1
-
-    print('\n--- 7F→1F 右下 ---')
     if not stair(w, 11, 11, '7F(11,11)->6F'): return 1
     if not stair(w, 1, 1, '6F(1,1)->5F'): return 1
     if not stair(w, 1, 11, '5F(1,11)->4F'): return 1
