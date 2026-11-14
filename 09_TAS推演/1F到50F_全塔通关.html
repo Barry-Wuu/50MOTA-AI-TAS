@@ -25,7 +25,7 @@ header h1 em{color:var(--accent);font-style:normal}
 .chip b{color:var(--txt);font-weight:600}
 .chip.ok{border-color:#1f6b4f;color:#9fe8c8}
 .chip.warn{border-color:#7a5a1c;color:#ffd98a}
-main{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 404px;gap:12px;padding:12px;overflow:hidden}
+main{flex:1;min-height:0;display:grid;grid-template-columns:404px minmax(0,1fr);gap:12px;padding:12px;overflow:hidden}
 .leftcol{display:flex;flex-direction:column;gap:12px;min-height:0;overflow:hidden}
 .rightcol{display:flex;flex-direction:column;gap:12px;min-height:0;overflow:auto;padding-right:2px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:10px}
@@ -233,6 +233,24 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
 </header>
 
 <main>
+  <aside class="rightcol">
+    <div class="card">
+      <div class="cardhead"><h2>本步状态（引擎实算）</h2><span class="sp"></span><span class="sub" id="stateSub"></span></div>
+      <div class="statebody" id="stateBody"></div>
+    </div>
+
+    <div class="card">
+      <div class="cardhead"><h2>校验结论 / 问题清单</h2><span class="sp"></span><span class="sub" id="issueSub"></span></div>
+      <div class="verify" id="verifyBox"></div>
+      <div id="issueList"></div>
+    </div>
+
+    <div class="card">
+      <div class="cardhead"><h2>楼层导航</h2><span class="sp"></span><span class="sub">点击跳到该层第一步</span></div>
+      <div class="floorchips" id="floorchips"></div>
+    </div>
+  </aside>
+
   <section class="leftcol">
     <div class="card mapcard">
       <div class="maprow">
@@ -270,11 +288,6 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
       </div>
     </div>
 
-    <div class="card">
-      <div class="cardhead"><h2>本步状态（引擎实算）</h2><span class="sp"></span><span class="sub" id="stateSub"></span></div>
-      <div class="statebody" id="stateBody"></div>
-    </div>
-
     <div class="card stepcard">
       <div class="cardhead">
         <h2 id="tblTitle">本层步骤</h2>
@@ -295,19 +308,6 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
       </div>
     </div>
   </section>
-
-  <aside class="rightcol">
-    <div class="card">
-      <div class="cardhead"><h2>校验结论 / 问题清单</h2><span class="sp"></span><span class="sub" id="issueSub"></span></div>
-      <div class="verify" id="verifyBox"></div>
-      <div id="issueList"></div>
-    </div>
-
-    <div class="card">
-      <div class="cardhead"><h2>楼层导航</h2><span class="sp"></span><span class="sub">点击跳到该层第一步</span></div>
-      <div class="floorchips" id="floorchips"></div>
-    </div>
-  </aside>
 </main>
 
 <script>
