@@ -29,49 +29,62 @@ if TOOLS not in sys.path:
     sys.path.insert(0, TOOLS)
 import mota_core as M
 
-# ---- 对话角色映射（Toy 悬停 tooltip）：覆盖 CSV 中所有「具名台词 / 盗贼对白」角色，
-# 并对路线日志里实际出现的中文异名（魔王/假魔王/真魔王/骑士队长/吸血鬼/大法师/骷髅队长）
-# 做别名挂靠，使任何出现形式的角色名都能悬停显示「日文原名 ⇒ 中文译名」。 ----
-CANON = {}   # 日文原名 → 中文译名（CSV 权威）
+# ---- 对话台词（Toy 悬停 tooltip）：直接解析 01_PC98原版_mtower/magic_tower1_texts.md
+# （按楼层整理好的权威对话源），抽取每一位「有台词的人」的台词正文，按楼层分组。
+# 路线日志里这些角色以中文名（含异名）出现，映射到 md 的日文说话者，悬停即显示其全部台词。 ----
+CANON_ZH = {'盗賊': '盗贼', '魔導師ゼノ': '魔王 Zeno', '勇者': '勇者', 'バンパイア': '吸血鬼',
+            '大魔導師': '大法师', '金騎士': '骑士队长', 'スケルトンＡ': '骷髅队长'}
+ROUTE_NAMES = {
+    '盗賊':      ['盗賊', '盗贼'],
+    '魔導師ゼノ':['魔導師ゼノ', '魔王 Zeno', '魔王（假魔王）', '魔王', '假魔王', '真魔王'],
+    '勇者':      ['勇者'],
+    'バンパイア':['バンパイア', '吸血鬼'],
+    '大魔導師':  ['大魔導師', '大法师'],
+    '金騎士':    ['金騎士', '骑士队长'],
+    'スケルトンＡ':['スケルトンＡ', '骷髅队长'],
+}
+MD_PATH = os.path.join(HERE, '..', '01_PC98原版_mtower', 'magic_tower1_texts.md')
+_by_jp = {}
 try:
-    with io.open(CSV_PATH, encoding='utf-8-sig') as _f:
-        for _r in csv.DictReader(_f):
-            _g = _r.get('group', '')
-            if _g != '盗贼（脱出屋）对白' and not _g.startswith('具名人物台词'):
-                continue
-            _jp = _r.get('text_jp', '')
-            if '「' not in _jp:
-                continue
-            _jn = _jp.split('「')[0].strip()
-            _zn = _r.get('text_zh', '').split('「')[0].strip() if '「' in _r.get('text_zh', '') else ''
-            if _jn and _jn not in CANON:
-                CANON[_jn] = _zn or _jn
+    _md_lines = io.open(MD_PATH, encoding='utf-8').read().split('\n')
+    _floor = None; _cur = None; _entries = []
+    _JP_RE = re.compile(r'([^「\n]{1,14})「([^」]*)」')
+    for _ln in _md_lines:
+        _m = re.match(r'^###\s*(\d+)F', _ln)
+        if _m:
+            _floor = int(_m.group(1)); _cur = None; continue
+        _m = re.match(r'^\*\*\[(\d+)\]\*\*', _ln)
+        if _m:
+            _cur = {'floor': _floor, 'jp': [], 'zh': None}; _entries.append(_cur); continue
+        if _cur is None:
+            continue
+        if _ln.startswith('>'):
+            _cur['jp'].append(_ln[1:].strip())
+        elif _ln.startswith('译文：') or _ln.startswith('译文:'):
+            _cur['zh'] = _ln.split('：', 1)[-1].split(':', 1)[-1].strip()
+    for _e in _entries:
+        if not _e['zh']:
+            continue
+        _jp = ''.join(_e['jp'])
+        _mj = _JP_RE.search(_jp)
+        if not _mj or _mj.group(1).strip() not in CANON_ZH:
+            continue
+        _sp = _mj.group(1).strip()
+        _mz = _JP_RE.search(_e['zh'])
+        _dz = _mz.group(2).strip() if _mz else _e['zh']
+        _by_jp.setdefault(_sp, []).append((_e['floor'], _dz))
 except Exception:
     pass
-# 路线日志里实际出现的中文名 / 异名 → 对应日文原名。
-# 必要别名：路线命名与 CSV 译名不同（如 魔王/假魔王/真魔王 都对应 obj57 = 魔導師ゼノ；
-# 骑士队长/吸血鬼/大法师/骷髅队长 是 CSV 译名，金騎士 是路线保留的日文名）。
-ROUTE_ALIAS = {
-    '盗贼': '盗賊',
-    '金騎士': '金騎士',          # 路线保留的日文名
-    '骑士队长': '金騎士',
-    '吸血鬼': 'バンパイア',
-    '魔王（假魔王）': '魔導師ゼノ',
-    '魔王': '魔導師ゼノ',
-    '假魔王': '魔導師ゼノ',
-    '真魔王': '魔導師ゼノ',
-    '勇者': '勇者',
-    '大法师': '大魔導師',
-    '骷髅队长': 'スケルトンＡ',
-}
-NPC_TT = {}    # 路线名 → [日文原名, 中文译名]
-for _rn, _jp in ROUTE_ALIAS.items():
-    NPC_TT[_rn] = [_jp, CANON.get(_jp, _jp)]
-for _jp, _zn in CANON.items():   # 日文原名自身也作为键（部分路线直接用日文名）
-    NPC_TT.setdefault(_jp, [_jp, _zn])
+NPC_DLG = {}
+for _jp, _names in ROUTE_NAMES.items():
+    _rec = {'jp': _jp, 'zh': CANON_ZH[_jp],
+            'lines': [{'f': f, 'zh': z} for f, z in sorted(_by_jp.get(_jp, []))]}
+    for _n in _names + [_jp, CANON_ZH[_jp]]:
+        if _n not in NPC_DLG:
+            NPC_DLG[_n] = _rec
+NPC_DLG_JSON = json.dumps(NPC_DLG, ensure_ascii=False)
 # 名称按长度降序，避免短名被长名前缀误匹配（如 假魔王 早于 魔王）
-NPC_NAMES = sorted(NPC_TT.keys(), key=len, reverse=True)
-NPC_TT_JSON = json.dumps(NPC_TT, ensure_ascii=False)
+NPC_NAMES = sorted(NPC_DLG.keys(), key=len, reverse=True)
 NPC_RE_SRC = '(' + '|'.join(re.escape(_n) for _n in NPC_NAMES) + ')(「)?'
 
 import sys as _sys
@@ -384,6 +397,14 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
 .hl:hover{color:var(--accent);border-color:var(--accent)}
 .npc{cursor:help;border-bottom:1px dotted #7e8aa3;color:#c9d2e2}
 .npc:hover{color:var(--accent);border-color:var(--accent)}
+/* 对话悬浮面板：显示该角色在 magic_tower1_texts.md 中的全部台词（按楼层分组） */
+.npctip{position:absolute;display:none;z-index:9999;max-width:380px;
+  background:#0f1420;border:1px solid var(--accent);border-radius:8px;padding:8px 10px;
+  box-shadow:0 6px 24px rgba(0,0,0,.6);font-size:12px;line-height:1.55;color:var(--txt);pointer-events:none}
+.npctip .npch{font-weight:700;color:var(--accent);margin-bottom:5px;
+  border-bottom:1px solid var(--line);padding-bottom:4px;white-space:nowrap}
+.npctip .npcf{color:var(--gold);font-size:11px;margin:6px 0 2px;font-weight:600}
+.npctip .npcl{color:var(--txt);white-space:pre-wrap;word-break:break-word}
 
 #psvg .full{fill:none;stroke:#2f3a4f;stroke-width:1.1;stroke-dasharray:3 3}
 #psvg .vis{fill:none;stroke:#4cc9f0;stroke-width:2;stroke-linejoin:round;
@@ -483,6 +504,7 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
   </section>
 </main>
 
+<div id="npctip" class="npctip"></div>
 __DATASCRIPT__<script>
 const D = __DATA__;
 const IMG = __IMG__;
@@ -533,21 +555,21 @@ function esc(t){ return String(t==null?'':t).replace(/[&<>"']/g, function(c){
   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
 }); }
 /* 对话 / 角色名：路线里凡出现具名台词角色（盗贼 / 骑士队长 / 吸血鬼 / 魔王 / 勇者…
-   等），无论是否带「引号」，都包成 .npc 悬停 tooltip = csv 日文原名 ⇒ 中文译名。
+   等），无论是否带「引号」，都包成 .npc 并带 data-npc 属性；悬停由下方自定义面板
+   显示该角色在 magic_tower1_texts.md 中的全部台词（按楼层分组）。
    仅当「角色名「」紧跟时走对话排版：角色名：<换行>台词，多句各成行。 */
-const NPC_TT = __NPC_TT__;
+const NPC_DLG = __NPC_DLG__;
 const NPC_RE = /__NPC_RE__/g;
 function fmtEv(t){
   if(!t) return '';
   let s = esc(t);
   s = s.replace(NPC_RE, function(_, name, q){
-    const info = NPC_TT[name] || null;
-    if(!info) return name;
-    const tip = info[0] + ' ⇒ ' + info[1];
+    const d = NPC_DLG[name];
+    if(!d) return name;
     if(q){  // 对话形式 角色名「台词」 → 角色名：<换行>台词
-      return '<span class="npc" title="'+esc(tip)+'">'+name+'：</span><br>';
+      return '<span class="npc" data-npc="'+esc(name)+'">'+name+'：</span><br>';
     }
-    return '<span class="npc" title="'+esc(tip)+'">'+name+'</span>';
+    return '<span class="npc" data-npc="'+esc(name)+'">'+name+'</span>';
   });
   s = s.replace(/」/g, '<br>');
   return s;
@@ -993,6 +1015,45 @@ document.getElementById('legend').innerHTML =
   '<span><i class="dot" style="background:#3ecf8e"></i>剩余怪伤害：0=绿 · 越大越红</span>'+
   '<span>底图 = 原版贴图</span>';
 
+/* ---------------- 对话悬浮面板 ---------------- */
+const npctip = document.getElementById('npctip');
+function showNpcTip(el){
+  const key = el.getAttribute('data-npc');
+  const d = NPC_DLG[key];
+  if(!d){ npctip.style.display='none'; return; }
+  let html = '<div class="npch">'+esc(d.jp)+' ⇒ '+esc(d.zh)+'</div>';
+  const byf = {};
+  d.lines.forEach(function(l){ (byf[l.f] = byf[l.f] || []).push(l.zh); });
+  Object.keys(byf).map(Number).sort(function(a,b){return a-b;}).forEach(function(f){
+    html += '<div class="npcf">'+f+'F</div>';
+    byf[f].forEach(function(z){ html += '<div class="npcl">'+esc(z)+'</div>'; });
+  });
+  npctip.innerHTML = html;
+  npctip.style.display = 'block';
+  const r = el.getBoundingClientRect();
+  let left = window.scrollX + r.left;
+  let top = window.scrollY + r.bottom + 6;
+  npctip.style.left = left + 'px';
+  npctip.style.top = top + 'px';
+  // 防右/下溢出视口
+  const tw = npctip.offsetWidth, th = npctip.offsetHeight;
+  const vw = document.documentElement.clientWidth, vh = document.documentElement.clientHeight;
+  if(left + tw > window.scrollX + vw - 8){
+    npctip.style.left = Math.max(8, window.scrollX + vw - tw - 8) + 'px';
+  }
+  if(top + th > window.scrollY + vh - 8){
+    npctip.style.top = (window.scrollY + r.top - th - 6) + 'px';
+  }
+}
+document.addEventListener('mouseover', function(e){
+  const el = e.target.closest ? e.target.closest('.npc') : null;
+  if(el) showNpcTip(el);
+});
+document.addEventListener('mouseout', function(e){
+  const el = e.target.closest ? e.target.closest('.npc') : null;
+  if(el) npctip.style.display = 'none';
+});
+
 /* ---------------- 初始化 ---------------- */
 renderHeader();
 renderIssues();
@@ -1042,7 +1103,7 @@ html = (HTML.replace('__DATASCRIPT__', dscript)
             .replace('__HERO_JSON__', bind[4])
             .replace('__ITEMICON__', bind[5])
             .replace('__TOTAL__', str(data['total']['steps']))
-            .replace('__NPC_TT__', NPC_TT_JSON)
+            .replace('__NPC_DLG__', NPC_DLG_JSON)
             .replace('__NPC_RE__', NPC_RE_SRC))
 io.open(out, 'w', encoding='utf-8').write(html)
 print('wrote', out, os.path.getsize(out), 'bytes')
