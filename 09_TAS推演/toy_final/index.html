@@ -80,7 +80,7 @@
           <thead>
             <tr>
               <th>步</th><th>段</th><th>楼层 (x,y)</th><th>方向</th><th>事件 / 日志</th>
-              <th>HP</th><th>ATK</th><th>DEF</th><th>G</th><th>钥匙</th><th>Δ</th><th>备注</th>
+              <th>HP</th><th>ATK</th><th>DEF</th><th>G</th><th>钥匙</th><th>Δ</th>
             </tr>
           </thead>
           <tbody id="tbody"></tbody>
@@ -121,6 +121,11 @@ const patchLayer = document.getElementById('patchLayer');
 const dynLayer = document.getElementById('dynLayer');
 const dmgLayer = document.getElementById('dmgLayer');
 const tbody = document.getElementById('tbody');
+// 步骤明细：点击某行自动跳转到该步（事件委托，2026-11-14）
+tbody.addEventListener('click', function(e){
+  const tr = e.target.closest ? e.target.closest('tr[data-i]') : null;
+  if(tr){ select(+tr.dataset.i); }
+});
 const slider = document.getElementById('slider');
 const stepno = document.getElementById('stepno');
 
@@ -386,6 +391,8 @@ function buildTable(f){
     else if(s.st==='invalid') note = '2F 栅栏门未开，原路线违规，未执行';
     else if(s.st==='dead') note = 'HP 不足，路线在此失败';
     else if(s.st==='unreachable') note = '前段已无法继续，未执行';
+    // 备注并入「事件 / 日志」列（2026-11-14）
+    const evText = note ? (ev ? ev+'　['+note+']' : note) : ev;
     const tag = s.st==='note'?'<span class="tag">标注</span>'
       : s.st==='blocked'?'<span class="tag b">失败</span>'
       : s.st==='invalid'?'<span class="tag" style="background:#4a2f12;color:#ffc078">违规</span>'
@@ -397,11 +404,10 @@ function buildTable(f){
          '<td><span class="seg '+SEGCLS[s.s]+'">'+s.s+'</span></td>'+
          '<td>'+s.f+'F ('+s.x+','+s.y+')</td>'+
          '<td class="dir">'+(s.d||'·')+'</td>'+
-         '<td class="ev" title="'+esc(ev)+'">'+tag+esc(ev)+'</td>'+
+         '<td class="ev" title="'+esc(evText)+'">'+tag+esc(evText)+'</td>'+
          '<td>'+s.hp+'</td><td>'+s.a+'</td><td>'+s.df+'</td><td>'+s.g+'</td>'+
          '<td class="keys">'+s.ky+'/'+s.kb+'/'+s.kr+'</td>'+
          '<td>'+deltaText(s)+'</td>'+
-         '<td class="note" title="'+esc(note)+'">'+esc(note)+'</td>'+
          '</tr>';
   }
   tbody.innerHTML=h;
