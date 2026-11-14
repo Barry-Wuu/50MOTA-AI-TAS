@@ -4,13 +4,15 @@
 - 勇者标记：mota_art/MTower.gif 顶行勇者帧（col3,row0）
 输出：1F到31F_推演全过程.html
 """
-import io, os, sys, json, base64
+import io, os, sys, json, base64, csv, re
 from PIL import Image
 
 DED = r'D:/B++/WorkBuddy/mota_tas_tmp2/repo/09_TAS推演/'
 FLOORS_DIR = r'D:/B++/WorkBuddy/mota_tas_tmp2/repo/01_PC98原版_mtower/floors/'
 FLOORS_ALT = r'D:/B++/WorkBuddy/mota_tas_tmp2/repo/01_PC98原版_mtower/'   # 0F 底图在根目录
 SHEET = r'D:/B++/WorkBuddy/mota_tas_tmp2/repo/mota_art/MTower.gif'
+HERE = os.path.dirname(os.path.abspath(__file__))
+CSV_PATH = os.path.join(HERE, '..', '01_PC98原版_mtower', 'magic_tower1_texts.csv')
 
 
 def floor_png(f):
@@ -26,6 +28,30 @@ TOOLS = r'D:/B++/WorkBuddy/mota_tas_tmp2/repo/01_PC98原版_mtower/tools'
 if TOOLS not in sys.path:
     sys.path.insert(0, TOOLS)
 import mota_core as M
+
+# ---- 对话角色映射（用于 Toy 悬停 tooltip）：从 magic_tower1_texts.csv 的
+# 「盗贼（脱出屋）对白」与「具名人物台词（…）」两组提取 中文名 → 日文原名。
+# Toy 日志里对话已是中文，故以中文名为匹配键；将来日志出现其它角色也自动生效。 ----
+NPC_TT = {}
+try:
+    with io.open(CSV_PATH, encoding='utf-8-sig') as _f:
+        for _r in csv.DictReader(_f):
+            _g = _r.get('group', '')
+            if _g != '盗贼（脱出屋）对白' and not _g.startswith('具名人物台词'):
+                continue
+            _jp = _r.get('text_jp', ''); _zh = _r.get('text_zh', '')
+            if '「' not in _jp or '「' not in _zh:
+                continue
+            _jn = _jp.split('「')[0].strip()
+            _zn = _zh.split('「')[0].strip()
+            if _jn and _zn and _zn not in NPC_TT:
+                NPC_TT[_zn] = _jn
+except Exception:
+    pass
+# 名称按长度降序，避免短名被长名前缀误匹配
+NPC_NAMES = sorted(NPC_TT.keys(), key=len, reverse=True)
+NPC_TT_JSON = json.dumps(NPC_TT, ensure_ascii=False)
+NPC_RE_SRC = '(' + '|'.join(re.escape(_n) for _n in NPC_NAMES) + ')「'
 
 import sys as _sys
 DATA_F = _sys.argv[1] if len(_sys.argv) > 1 else 'merged_route_full.json'
@@ -241,7 +267,7 @@ tbody tr.unrow td{color:#5f6b80;opacity:.72}
 tbody tr.noterow td{color:var(--dim)}
 td.num{color:var(--dim);text-align:right;font-variant-numeric:tabular-nums}
 td.dir{text-align:center;color:var(--accent);font-weight:700}
-td.ev{max-width:290px;overflow:hidden;text-overflow:ellipsis}
+td.ev{max-width:340px;white-space:normal;word-break:break-all}
 td.ev .tag{display:inline-block;font-size:10px;padding:0 4px;border-radius:3px;margin-right:4px;background:#233047;color:#9db4d8}
 td.ev .tag.b{background:#3a2020;color:#ffb0b0}
 td.note{color:var(--gold);font-size:11px;max-width:200px;overflow:hidden;text-overflow:ellipsis}
@@ -335,6 +361,8 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
 .verify b{color:var(--txt)}
 .hl{cursor:pointer;border-bottom:1px dashed #4a5568}
 .hl:hover{color:var(--accent);border-color:var(--accent)}
+.npc{cursor:help;border-bottom:1px dotted #7e8aa3;color:#c9d2e2}
+.npc:hover{color:var(--accent);border-color:var(--accent)}
 
 #psvg .full{fill:none;stroke:#2f3a4f;stroke-width:1.1;stroke-dasharray:3 3}
 #psvg .vis{fill:none;stroke:#4cc9f0;stroke-width:2;stroke-linejoin:round;
@@ -483,6 +511,20 @@ const EXEC = {ok:1,note:1,dead:1};
 function esc(t){ return String(t==null?'':t).replace(/[&<>"']/g, function(c){
   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
 }); }
+/* 对话：把「角色名「台词」」转成「角色名：<换行>台词」，多句各成行；
+   角色名包成 .npc 悬停 tooltip = csv 日文原名 ⇒ 中文译名。 */
+const NPC_TT = __NPC_TT__;
+const NPC_RE = /__NPC_RE__/g;
+function fmtEv(t){
+  if(!t) return '';
+  let s = esc(t);
+  s = s.replace(NPC_RE, function(_, name){
+    const jp = NPC_TT[name] || name;
+    return '<span class="npc" title="'+esc(jp+' ⇒ '+name)+'">'+name+'：</span><br>';
+  });
+  s = s.replace(/」/g, '<br>');
+  return s;
+}
 function posOf(s){ return s.p ? s.p : [s.f,s.x,s.y]; }
 function actualFloor(){ return posOf(ST[sel])[0]; }
 function pct(v){ return ((v*CELL+CELL/2)/MAPW*100).toFixed(4)+'%'; }
@@ -666,8 +708,8 @@ function renderState(){
        '<span class="pill '+s.st+'">'+(STLABEL[s.st]||s.st)+'</span>'+
        (s.rs?('<span class="pill">录制行 #'+s.rs+'</span>'):'')+
        '</div>';
-  h += '<div class="evline">'+esc(ev)+'</div>';
-  if(s.l && s.l!==s.e) h += '<div class="logline">引擎日志：'+esc(s.l)+'</div>';
+  h += '<div class="evline">'+fmtEv(ev)+'</div>';
+  if(s.l && s.l!==s.e) h += '<div class="logline">引擎日志：'+fmtEv(s.l)+'</div>';
   const p=posOf(s);
   h += '<div class="posline">位置：<b>'+s.f+'F('+s.x+','+s.y+')</b>　方向 <b>'+(s.d||'·')+'</b>'+
        ((p[0]!==s.f||p[1]!==s.x||p[2]!==s.y) ? '　<span style="color:var(--gold)">引擎落点 '+p[0]+'F('+p[1]+','+p[2]+')</span>' : '')+
@@ -745,7 +787,7 @@ function buildTable(f){
          '<td class="num">'+s.i+'</td>'+
          '<td>'+s.f+'F ('+s.x+','+s.y+')</td>'+
          '<td class="dir">'+(s.d||'·')+'</td>'+
-         '<td class="ev" title="'+esc(evText)+'">'+tag+esc(evText)+'</td>'+
+         '<td class="ev" title="'+esc(evText)+'">'+tag+fmtEv(evText)+'</td>'+
          '<td>'+s.hp+'</td><td>'+s.a+'</td><td>'+s.df+'</td><td>'+s.g+'</td>'+
          '<td class="keys">'+s.ky+'/'+s.kb+'/'+s.kr+'</td>'+
          '<td>'+deltaText(s)+'</td>'+
@@ -972,6 +1014,8 @@ html = (HTML.replace('__DATASCRIPT__', dscript)
             .replace('__STAIR__', bind[3])
             .replace('__HERO_JSON__', bind[4])
             .replace('__ITEMICON__', bind[5])
-            .replace('__TOTAL__', str(data['total']['steps'])))
+            .replace('__TOTAL__', str(data['total']['steps']))
+            .replace('__NPC_TT__', NPC_TT_JSON)
+            .replace('__NPC_RE__', NPC_RE_SRC))
 io.open(out, 'w', encoding='utf-8').write(html)
 print('wrote', out, os.path.getsize(out), 'bytes')

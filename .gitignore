@@ -15,3 +15,13 @@ __pycache__/
 09_TAS推演/_run_*.log
 09_TAS推演/merged_route_full.pre_*.json
 *.bak_x9
+
+# Toy 部署包（由 build_toy.py 从源码重建，体积大，不入库）
+09_TAS推演/toy_final/
+
+# Toy CLI 上传/发布临时产物
+_toybody.html
+_toyshell.html
+body.gz
+ts.gz
+*.online*
