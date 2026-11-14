@@ -29,9 +29,12 @@ if TOOLS not in sys.path:
     sys.path.insert(0, TOOLS)
 import mota_core as M
 
-# ---- 对话台词（Toy 悬停 tooltip）：直接解析 01_PC98原版_mtower/magic_tower1_texts.md
-# （按楼层整理好的权威对话源），抽取每一位「有台词的人」的台词正文，按楼层分组。
-# 路线日志里这些角色以中文名（含异名）出现，映射到 md 的日文说话者，悬停即显示其全部台词。 ----
+# ---- 对话台词（Toy 悬停 tooltip）：数据驱动，不再手写"有台词的人"名单。
+# 权威源（仓库既有文件）：
+#  - magic_tower1_texts.md        ：按楼层整理的具名对话正文（X「…」），供 盗賊/魔王 Zeno/勇者/骑士队长/吸血鬼/大法师/骷髅队长
+#  - magic_tower1_entities.csv    ：NPC/gate 实体权威格点坐标（含 老人/商人 等"无名「…」"NPC 与具名 盗賊/勇者）
+#  - magic_tower1_texts.csv       ：obj → 中文译文 / 分组，用于把实体台词译成中文、并归类 商人 / 老人
+# 角色分类：具名前缀 X「 → X；无名「…」按内容/分组归为 商人 / 老人。 ----
 CANON_ZH = {'盗賊': '盗贼', '魔導師ゼノ': '魔王 Zeno', '勇者': '勇者', 'バンパイア': '吸血鬼',
             '大魔導師': '大法师', '金騎士': '骑士队长', 'スケルトンＡ': '骷髅队长'}
 ROUTE_NAMES = {
@@ -43,7 +46,14 @@ ROUTE_NAMES = {
     '金騎士':    ['金騎士', '骑士队长'],
     'スケルトンＡ':['スケルトンＡ', '骷髅队长'],
 }
-MD_PATH = os.path.join(HERE, '..', '01_PC98原版_mtower', 'magic_tower1_texts.md')
+MD_PATH  = os.path.join(HERE, '..', '01_PC98原版_mtower', 'magic_tower1_texts.md')
+CSV_PATH = os.path.join(HERE, '..', '01_PC98原版_mtower', 'magic_tower1_texts.csv')
+ENT_PATH = os.path.join(HERE, '..', '01_PC98原版_mtower', 'magic_tower1_entities.csv')
+MCH_GRP  = '商人 · 祭坛 · 积分石 · 智慧之戒问答'
+# 商人判定：分组为 商人·祭坛，或台词含买卖/店铺/回血/超级镐 关键词（覆盖 obj161 等被误归"无名提示"者）
+_MERCHANT_KW = ('売る', '買う', '回復してあげる', 'マトック', '店')
+
+# 1) md 解析：具名说话者台词（按 JP 前缀）
 _by_jp = {}
 try:
     _md_lines = io.open(MD_PATH, encoding='utf-8').read().split('\n')
@@ -75,13 +85,55 @@ try:
         _by_jp.setdefault(_sp, []).append((_e['floor'], _dz))
 except Exception:
     pass
+
+# 2) csv：obj → (中文译文, 分组)，供实体台词翻译 + 商人/老人归类
+_OBJ_ZH = {}; _OBJ_GRP = {}
+try:
+    for _r in csv.DictReader(io.open(CSV_PATH, encoding='utf-8-sig')):
+        _m = re.search(r'obj(\d+)', _r.get('referenced_by', '') or '')
+        if _m:
+            _o = int(_m.group(1))
+            _OBJ_ZH.setdefault(_o, _r.get('text_zh', '') or '')
+            _OBJ_GRP.setdefault(_o, _r.get('group', '') or '')
+except Exception:
+    pass
+
+# 3) NPC_DLG：具名角色（md）+ 商人/老人（从实体台词按楼层归类）
 NPC_DLG = {}
 for _jp, _names in ROUTE_NAMES.items():
     _rec = {'jp': _jp, 'zh': CANON_ZH[_jp],
             'lines': [{'f': f, 'zh': z} for f, z in sorted(_by_jp.get(_jp, []))]}
     for _n in _names + [_jp, CANON_ZH[_jp]]:
-        if _n not in NPC_DLG:
-            NPC_DLG[_n] = _rec
+        NPC_DLG.setdefault(_n, _rec)
+# 商人 / 老人：遍历实体 NPC，按楼层聚合中文台词
+_merch = {}; _old = {}
+try:
+    for _r in csv.DictReader(io.open(ENT_PATH, encoding='utf-8-sig')):
+        if 'NPC' not in (_r.get('role') or ''):
+            continue
+        _f = _r.get('floor')
+        if _f in (None, 'catalog'):
+            continue
+        try:
+            _fi = int(_f)
+        except Exception:
+            continue
+        try:
+            _obj = int(_r['obj']) if _r.get('obj') else -1
+        except Exception:
+            _obj = -1
+        _zh = _OBJ_ZH.get(_obj, '')
+        if not _zh:
+            continue
+        _nj = _r.get('name_jp') or ''
+        _is_m = (_OBJ_GRP.get(_obj) == MCH_GRP) or any(k in _nj for k in _MERCHANT_KW)
+        (_merch if _is_m else _old).setdefault(_fi, []).append(_zh)
+except Exception:
+    pass
+NPC_DLG['商人'] = {'jp': '商人', 'zh': '商人',
+                  'lines': [{'f': f, 'zh': z} for f in sorted(_merch) for z in _merch[f]]}
+NPC_DLG['老人'] = {'jp': '老人', 'zh': '老人',
+                  'lines': [{'f': f, 'zh': z} for f in sorted(_old) for z in _old[f]]}
 NPC_DLG_JSON = json.dumps(NPC_DLG, ensure_ascii=False)
 # 名称按长度降序，避免短名被长名前缀误匹配（如 假魔王 早于 魔王）
 NPC_NAMES = sorted(NPC_DLG.keys(), key=len, reverse=True)
@@ -103,28 +155,60 @@ data = json.load(io.open(DED + DATA_F, encoding='utf-8'))
 # 路线第 1 步时勇者已在 (6,10)，所以该格从第一步起就应还原成地面（步序 -1 = 永远覆盖）。
 data.setdefault('cons', {}).setdefault('1', []).insert(0, [6, 11, -1, 'f'])
 
-# ---- 地图 NPC 标记：从路线 steps 的「具名 NPC 事件」坐标提取，供地图格上悬停 tooltip ----
-# 路线日志里 NPC 以中文名（含异名）出现，映射到日文原名；同一格多个角色合并到一个标记。
+# ---- 地图 NPC 标记：合并「路线 BOSS 标记」与「实体 NPC 标记（权威格点）」
+# 实体 NPC 覆盖 老人/商人/盗賊/勇者 等全部有台词角色（magic_tower1_entities.csv）；
+# 路线 BOSS 标记覆盖 吸血鬼/骑士队长/大法师/魔王 Zeno 等战斗对话 NPC（entities 不含的怪物 BOSS）；
+# 同一格多角色合并到一个标记。 ----
 _DISP_TO_JP = {}
 for _jp, _names in ROUTE_NAMES.items():
     for _n in _names:
         _DISP_TO_JP.setdefault(_n, _jp)
 _NM_RE = re.compile('(' + '|'.join(re.escape(_n) for _n in sorted(_DISP_TO_JP, key=len, reverse=True)) + ')')
-NPC_MARKS = {}
+_MARK_CELLS = {}
 try:
     _steps = data.get('steps', [])
-    _cells = {}
     for _s in _steps:
         _txt = ' '.join(str(_s.get(_k) or '') for _k in ('e', 'l', 'note', 'mm'))
         _f = _s.get('f'); _x = _s.get('x'); _y = _s.get('y')
         if _f is None or _x is None or _y is None:
             continue
         for _m in _NM_RE.finditer(_txt):
-            _cells.setdefault((_f, _x, _y), set()).add(_DISP_TO_JP[_m.group(1)])
-    for (_f, _x, _y), _set in _cells.items():
-        NPC_MARKS.setdefault(_f, []).append({'x': _x, 'y': _y, 'n': sorted(_set)})
+            _MARK_CELLS.setdefault((_f, _x, _y), set()).add(_DISP_TO_JP[_m.group(1)])
 except Exception:
     pass
+# 实体 NPC（authoritative）：覆盖 老人/商人/盗賊/勇者 等所有有台词角色
+try:
+    for _r in csv.DictReader(io.open(ENT_PATH, encoding='utf-8-sig')):
+        if 'NPC' not in (_r.get('role') or ''):
+            continue
+        _f = _r.get('floor')
+        if _f in (None, 'catalog'):
+            continue
+        try:
+            _fi = int(_f)
+        except Exception:
+            continue
+        try:
+            _x = int(_r['x']); _y = int(_r['y'])
+        except Exception:
+            continue
+        try:
+            _obj = int(_r['obj']) if _r.get('obj') else -1
+        except Exception:
+            _obj = -1
+        _nj = _r.get('name_jp') or ''
+        _mm = re.match(r'^([^「\n]{1,12})「', _nj)
+        if _mm and _mm.group(1).strip() in CANON_ZH:
+            _role = _mm.group(1).strip()          # 盗賊 / 勇者（具名实体）
+        else:
+            _is_m = (_OBJ_GRP.get(_obj) == MCH_GRP) or any(k in _nj for k in _MERCHANT_KW)
+            _role = '商人' if _is_m else '老人'
+        _MARK_CELLS.setdefault((_fi, _x, _y), set()).add(_role)
+except Exception:
+    pass
+NPC_MARKS = {}
+for (_f, _x, _y), _set in _MARK_CELLS.items():
+    NPC_MARKS.setdefault(_f, []).append({'x': _x, 'y': _y, 'n': sorted(_set)})
 NPC_MARKS_JSON = json.dumps(NPC_MARKS, ensure_ascii=False)
 
 js = json.dumps(data, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
@@ -1063,7 +1147,9 @@ function showNpcTip(el){
   keys.forEach(function(key){
     const d = NPC_DLG[key];
     if(!d) return;
-    html += '<div class="npch">'+esc(d.jp)+' ⇒ '+esc(d.zh)+'</div>';
+    // 具名角色显示「日文 ⇒ 中文」；老人/商人等无日文异名的角色只显示中文名
+    const head = (d.jp && d.jp !== d.zh) ? (esc(d.jp)+' ⇒ '+esc(d.zh)) : esc(d.zh);
+    html += '<div class="npch">'+head+'</div>';
     const byf = {};
     d.lines.forEach(function(l){ (byf[l.f] = byf[l.f] || []).push(l.zh); });
     Object.keys(byf).map(Number).sort(function(a,b){return a-b;}).forEach(function(f){

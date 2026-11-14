@@ -18,6 +18,7 @@ __pycache__/
 
 # Toy 部署包（由 build_toy.py 从源码重建，体积大，不入库）
 09_TAS推演/toy_final/
+09_TAS推演/_toy_tmp*/
 
 # Toy CLI 上传/发布临时产物
 _toybody.html
