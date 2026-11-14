@@ -195,6 +195,27 @@ for oid in range(len(M.OA)):
         a = M.OA[oid]
         monstats[str(oid)] = [a[10], a[11], a[12], M.oname(oid)[:24]]
 
+# 道具中文标准译名（萌娘百科/搜狗百科标准译法，覆盖日文原名）
+ITEM_CN = {
+    25: '记事本',      # 知恵のオーブ Orb of Wisdom
+    26: '楼层传送器',  # 飛翔のオーブ Orb of Fly
+    39: '神圣盾',      # 神　盾 Sacred Shield
+    103: '十字架',     # 十字架 Cross
+    104: '圣水',       # エリクサー Elixir
+    105: '破坏之玉',   # 破壊の玉 Bomb
+    106: '中心对称飞行器',  # 空間転移の秘宝 Central Symmetry Flight Device
+    107: '上楼器',     # 昇華の翼 Up-floorer
+    108: '下楼器',     # 降臨の翼 Down-floorer
+    109: '屠龙匕',     # ドラゴンスレーヤー Dragon Slayer
+    110: '冰冻魔法',   # 雪の結晶 Snow Crystal
+    111: '魔法钥匙',   # 魔法の鍵 Magic Key
+    112: '地震卷轴',   # スーパーマトック Super Magic Mattok (地震卷轴)
+    113: '幸运金币',   # 幸運の金貨 Lucky Gold Coin
+    114: '镐',         # マトック Magic Mattok
+}
+for k, v in ITEM_CN.items():
+    objnames[str(k)] = v
+
 total = dict(steps=len(steps),
              loss=sum(max(0, -s['dh']) for s in steps),
              kills=sum(1 for s in steps if '击杀' in s['l']),
