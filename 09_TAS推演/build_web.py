@@ -253,8 +253,20 @@ import numpy as np
 def floor_tile(f):
     fl = data['floors'][str(f)]
     ter, objs = fl['terrain'], fl['objs']
+    # ⚠️ 2026-11-15 修 bug：这里的 ter 是**运行时最终口径**（破墙/暗墙/秘道都已生效），
+    #   而底图 floor_XX.png 是**静态（未改动）**的。37F 被超级镐破掉 45 格墙后，
+    #   这 45 格 ter==0 会被当成"纯地板"候选，可它们在底图上仍是**咖啡色墙砖**
+    #   （PC-98 贴图：terrain=1 平均 RGB(139,88,56) 咖啡色，terrain=0 是深灰(108,99,101)），
+    #   取中位样板时命中墙砖 → 拿去覆盖破墙格，覆盖完**还是墙**。
+    #   ⇒ 剔除 dyn 里地形被改过的格，只从"底图上本来就是地板"的格里取样。
+    tchg = {(d[0], d[1]) for d in (data.get('dyn') or {}).get(str(f), [])
+            if isinstance(d[3], str) and d[3][:1] == 'T'}
     cands = [(x, y) for y in range(13) for x in range(13)
-             if ter[y][x] == 0 and ('%d,%d' % (x, y)) not in objs]
+             if ter[y][x] == 0 and ('%d,%d' % (x, y)) not in objs
+             and (x, y) not in tchg]
+    if not cands:
+        cands = [(x, y) for y in range(13) for x in range(13)
+                 if ter[y][x] == 0 and (x, y) not in tchg]
     if not cands:
         cands = [(x, y) for y in range(13) for x in range(13) if ter[y][x] == 0]
     im = Image.open(floor_png(f)).convert('RGB')
