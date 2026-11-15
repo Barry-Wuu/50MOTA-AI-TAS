@@ -18,6 +18,11 @@ import run_segs
 
 DIRV = {(1, 0): '→', (-1, 0): '←', (0, 1): '↓', (0, -1): '↑', (0, 0): '·'}
 
+# ✅ 2026-11-15：勇者朝向沿用。非移动步（fly / wing_* / 道具使用 / 商店 / 祭坛）
+#   本来传 d=None，旧代码一律记成 '·' —— 前端看就是"勇者不知道朝哪"。
+#   原版传送和用道具都不改朝向，所以这些步沿用上一个移动步的朝向。
+last_dir = ['↑']
+
 
 def snap(h, w=None):
     return dict(hp=h.hp, atk=h.atk, dfn=h.dfn, gold=h.gold,
@@ -46,8 +51,17 @@ def record(w, d, lg):
     a = snap(h, w)
     idx = len(steps) + 1
     log = ' ｜ '.join(x for x in (lg or []) if x)
+    if d is None:                       # 非移动步：沿用上一个朝向
+        _d = last_dir[0]
+    else:
+        _dv = DIRV.get(tuple(d))
+        if _dv and _dv != '·':
+            last_dir[0] = _dv
+            _d = _dv
+        else:
+            _d = last_dir[0]
     steps.append(dict(i=idx, s='A', f=h.f, x=h.x, y=h.y,
-                      d='·' if d is None else DIRV.get(tuple(d), '·'),
+                      d=_d,
                       e='', l=log,
                       hp=a['hp'], a=a['atk'], df=a['dfn'], g=a['gold'],
                       ky=a['ky'], kb=a['kb'], kr=a['kr'],
@@ -136,7 +150,7 @@ for _nm in ('use_super_pick', 'use_pick', 'use_bomb', 'use_snow_crystal', 'use_e
 h0 = M.Hero.initial()
 a0 = snap(h0, None)
 steps.append(dict(i=1, s='A', f=h0.f, x=h0.x, y=h0.y,
-                  d='·', e='', l='',
+                  d=last_dir[0], e='', l='',
                   hp=a0['hp'], a=a0['atk'], df=a0['dfn'], g=a0['gold'],
                   ky=a0['ky'], kb=a0['kb'], kr=a0['kr'],
                   it=a0['items'], cw=a0['cw'],
