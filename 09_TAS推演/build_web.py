@@ -1074,8 +1074,10 @@ function renderHeader(){
     '<span class="chip">累计战损 <b>'+t.loss+'</b> · 击杀 <b>'+t.kills+'</b> · 开门 <b>'+t.doors+'</b> · 拾取 <b>'+t.pickups+'</b></span>',
     (dd? '<span class="chip" style="border-color:#7a2020;color:#ffb0b0">暴毙点 <b>'+dd.floor+'F('+dd.x+','+dd.y+')</b> HP'+dd.hp+' / 需'+dd.need+'</span>' : ''),
     '<span class="chip hl" id="minhpChip">最低 HP <b>'+m[0]+'</b> @ '+m[1]+'F('+m[2]+','+m[3]+')</span>',
-    '<a class="chip repo" href="https://gitcode.com/Barry_Wu_/50MOTA-AI-TAS" target="_blank" rel="noopener">Gitcode仓库</a>',
-    '<a class="chip repo" href="https://github.com/Barry-Wuu/50MOTA-AI-TAS" target="_blank" rel="noopener">Github仓库</a>'
+    // ⚠️ 2026-11-15：Toy 包内不放站外跳转链接（B站 Toy 安全扫描会判风险，审核驳回）。
+    //   仓库出处改成纯文本展示，不带 href。
+    '<span class="chip repo" title="源码仓库：gitcode.com/Barry_Wu_/50MOTA-AI-TAS">Gitcode 仓库</span>',
+    '<span class="chip repo" title="镜像：github.com/Barry-Wuu/50MOTA-AI-TAS">Github 仓库</span>'
   ];
   document.getElementById('chips').innerHTML=chips.join('');
   document.getElementById('minhpChip').addEventListener('click', function(){

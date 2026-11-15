@@ -1810,7 +1810,6 @@ def main():
         (7, 10, ''),
         (7, 11, ''),                 # 上梯(6,11)旁
     ], 'V31'): return 1
-    if not run_segs.fly(w, 10, 'V31 14F→10F（飞行之珠）'): return 1
 
     print()
     print('=== 到达 10F（V31 完成）:', st(h))
@@ -1821,9 +1820,10 @@ def main():
     #   在 1 区 10F 决战（segs_route F['10b']）时已全部吃掉——
     #   HP 944 →(3,4)1144 →(2,4) 打スケルトンＢ -63、+200 →1281 →(1,4)1481，
     #   轨迹与攻略"吃掉 3 个血瓶"逐档吻合，本段 HP 增量已提前入账，故只剩"上 20F"。
-    # PC-98 坐标：落点(1,10) 就在 10F 上梯(1,11)旁 → 飞行之珠直落 20F(6,10)。
-    print('--- V32 10F（line238，3 血瓶已于 1 区 10F 决战吃掉 → 飞 20F）---')
-    if not run_segs.fly(w, 20, 'V32 10F→20F（飞行之珠）'): return 1
+    # ✅ 2026-11-15：10F 已无事可做 → **不再落 10F**，从 14F(7,11) 上梯旁直接飞 20F。
+    #   原先是 14F→10F 落一步 + 10F(1,10)→20F，Toy 里表现为无目的的空跳。
+    print('--- V32 10F（line238，3 血瓶已于 1 区 10F 决战吃掉 → 直接飞 20F）---')
+    if not run_segs.fly(w, 20, 'V31 14F→20F（飞行之珠，跳过空跑的 10F）'): return 1
 
     print()
     print('=== 到达 20F（V32 完成）:', st(h))
@@ -2119,10 +2119,10 @@ def main():
     if not goto(w, 1, 11, 'V45 14F 到蓝钥(1,11)'): return 1
     # 拿到蓝钥后回贴梯飞 32F：A* 寻路回 (6,10)（贴 14F 上梯 (6,11)）
     if not goto(w, 6, 10, 'V45 14F 回贴上梯(6,10)'): return 1
-    if not run_segs.fly(w, 32, 'V45 14F→32F（补蓝钥毕）'): return 1
 
     # ② 飞 20F 拿两个血瓶：32F(6,10) 贴下梯 → 20F 落点(6,10)
-    if not run_segs.fly(w, 20, 'V45 32F→20F（拿两血瓶）'): return 1
+    # ✅ 2026-11-15：32F 这一跳是纯过路（落地即再飞），直接从 14F(6,10) 飞 20F。
+    if not run_segs.fly(w, 20, 'V45 14F→20F（拿两血瓶，跳过空跑的 32F）'): return 1
     # 20F：落点(6,10)→(7,10)(7,9)? 走底廊向东 → 蓝门(10,6) 开 → (10,5)→(10,4)赤薬+50→(11,4)青薬+400
     #   →(11,5)黄钥 → 原路回 (6,10) 贴下梯(6,11) 飞 32F。
     # 底廊：y=11 行 (6,11)是下梯→(7,11)(8,11)(9,11)(10,11)(11,11)；(11,10)(11,9)?(11,9)是黄门；
@@ -3058,8 +3058,8 @@ def main():
         (9, 9, '拿血瓶(9,9) HP+200'),
         (10, 11, '回楼梯旁(10,11)'),                   # (9,11)→(10,11)，邻 (11,11) 下行梯
     ], 'V65'): return 1
-    if not fly(w, 7, 'V65 40F->7F（飞行之珠，等价攻略「下7F」）'): return 1
-    print('=== 到达 7F（V65 完成）:', st(h))
+    # ✅ 2026-11-15：原「40F→7F 落一步→18F」中间那趟 7F 是纯过路（7F 商人方案已废），
+    #   从 40F(10,11)（邻下行梯(11,11)）直接飞 18F。
     pf = os.environ.get('MOTA_PROBE_FLOOR')
     if pf:
         for _pf in pf.split(','):
@@ -3069,12 +3069,12 @@ def main():
     #   原攻略 V66（line298）「上中黄门打骷髅战士→商人 50G 买 5 黄钥匙→上 34F」已失效：
     #   7F 商人（obj41）早被本路线消耗，V65 末仅剩 黄2/蓝0/红0，不足以开 V67 的 8 黄门。
     #   替代：飞行之珠收集 18F(4钥) + 38F(3钥) + 5F 顺路(2钥) = 9 黄钥（8 给 V67 + 1 给 46F(3,1)）。
-    #   V65 末站 7F(11,10) 邻下行梯 → 飞 18F（FLY_LAND[18]=(6,2)）。
+    #   V65 末站 40F(10,11) 邻下行梯 → 飞 18F（FLY_LAND[18]=(6,2)）。
     #   伤害：18F 打 4 怪（obj47×2+obj45×2）全不伤 +12G；38F 打騎士(10,7) -123HP（D189:41×3）。
     #   终点预期：34F(2,1) HP4362 A150 D189 G2865 钥9/0/0。
     print()
     print('--- V66 黄钥补充（18F+38F 收集 + 5F 顺路 2 把，替代失效的 7F 商人方案）---')
-    if not fly(w, 18, 'V66 7F->18F（飞行之珠）'): return 1
+    if not fly(w, 18, 'V65 40F->18F（飞行之珠）'): return 1
     if os.environ.get('MOTA_PROBE18'):
         _dump_floor(w, 18)
     if os.environ.get('MOTA_PROBE_KEYS'):
@@ -3238,8 +3238,8 @@ def main():
         (5, 5, '到(5,5)'),
         (10, 11, '回楼梯旁(10,11)'),
     ], 'V68'): return 1
-    if not fly(w, 15, 'V68 40F->15F（飞行之珠，等价攻略「下15F」）'): return 1
-    print('=== 到达 15F（V68 完成）:', st(h))
+    # ✅ 2026-11-15：原「40F→15F 落一步→31F」中间那趟 15F 是纯过路（15F 商人也已废），
+    #   从 40F(10,11)（邻下行梯(11,11)）直接飞 31F。
     # 蓝钥审计（MOTA_PROBE_BLUE=1）：obj159 已于 V26 提前购入，V69 攻略「15F 买蓝钥」
     # 落空 → 列出全塔未拾取的静态蓝钥以规划替代来源。
     if os.environ.get('MOTA_PROBE_BLUE') == '1':
@@ -3260,11 +3260,11 @@ def main():
     #   MOTA_PROBE_BLUE=1 运行态审计：通往 39F 左区唯一入口 (2,8) 蓝门的路上无任何静态蓝钥可取。
     #   唯一可行来源 = 31F(1,11) obj162 商店（文案「鍵を４個と紫の鍵をセットにして１０００ＧＯＬＤ」，
     #   SHOP_GRANT[162]=[4黄,1蓝]，1000G）。存量核对：G3979≥1000 → 黄8→12（V70 开2扇）、蓝0→1（V70 开1扇）。
-    #   路径：15F(6,10) 邻下行梯(6,11) → 飞 31F(6,2) → 经 row6 横道 + col1 下行到商店（全程无怪）
+    #   路径：40F(10,11) 邻下行梯(11,11) → 飞 31F(6,2) → 经 row6 横道 + col1 下行到商店（全程无怪）
     #         → 回 col6 下到 (6,10)（邻上行梯(6,11)）→ 飞 39F(11,2)。
     print()
     print('--- V69 买钥匙（替代攻略「15F 买蓝钥」→ 31F obj162 商店 4黄+1蓝 1000G）---')
-    if not fly(w, 31, 'V69 15F->31F（飞行之珠）'): return 1
+    if not fly(w, 31, 'V68 40F->31F（飞行之珠）'): return 1
     if not goto(w, 1, 11, 'V69 31F(1,11)商店 购4黄+1蓝'): return 1
     if not goto(w, 6, 10, 'V69 到上行梯旁(6,10)'): return 1
     if not fly(w, 39, 'V69 31F->39F（攻略「上39F」）'): return 1
@@ -3558,8 +3558,8 @@ def main():
         (6, 3, '回(6,3)'),
         (6, 10, '到楼梯旁(6,10)'),
     ], 'V77 32F'): return 1
-    if not fly(w, 40, '32F->40F 飞行之珠'): return 1
-    if not fly(w, 47, '40F->47F 飞行之珠'): return 1
+    # ✅ 2026-11-15：40F 这一跳是纯过路（落地一步即再飞），直接从 32F(6,10) 飞 47F。
+    if not fly(w, 47, '32F->47F 飞行之珠（跳过空跑的 40F）'): return 1
     print('=== 到达 %dF（V77 完成）:' % h.f, st(h))
 
     # ---------- V78: line328 47F——中心飞行器绕退避巫师 → 上 48F 拿圣剑 ----------
@@ -3675,7 +3675,6 @@ def main():
     if not fly(w, 39, 'V81 47F→39F'): return 1
     if not run(w, [(9, 2, '★买蓝钥 obj166 (3把2000G)')], 'V81'): return 1
     if not goto(w, 11, 2, 'V81 回 39F(11,2) 楼梯旁'): return 1
-    if not fly(w, 47, 'V81 39F→47F'): return 1
     print('  %-26s %s' % ('V81 买蓝钥毕', st(h)))
 
     # ---------- V82: 38F 买黄钥 + 41F 暗墙拿降臨翼 + 0F 幸运金币 ----------
@@ -3690,14 +3689,14 @@ def main():
     print()
     print('--- V82 38F买黄钥 → 41F暗墙拿降臨翼 → 0F幸运金币 ---')
     # ② 38F(5,2) obj164 买 3 黄钥
-    if not fly(w, 38, 'V82 47F→38F 买黄钥'): return 1
+    # ✅ 2026-11-15：V81 结尾已在 39F(11,2)（上梯旁），不再先回 47F 中转，直接飞 38F。
+    if not fly(w, 38, 'V82 39F→38F 买黄钥'): return 1
     if not run(w, [
         (3, 1, '沿 y1 东行'), (4, 1, '到(4,1)'),
         (5, 2, '★买黄钥 obj164 (3把)'),
         (4, 1, '回(4,1)'), (3, 1, '回(3,1)'),
     ], 'V82'): return 1
     if not goto(w, 2, 1, 'V82 回 38F(2,1)'): return 1
-    if not fly(w, 47, 'V82 38F→47F'): return 1
     print('  %-26s %s' % ('V82 买黄钥毕', st(h)))
     # ③ 41F 暗墙事件（南入口）：42F 下行梯进 41F(6,10) → 杀(2,2) + 撞(10,2) + 杀刷出魔術師A
     # ✅ 事件后地形（Java MTower.java @1905-1930 / dyn_raw terrain 双方一致）：
@@ -3710,7 +3709,7 @@ def main():
     #      simplest 走法：外区退回 (6,11) 上行梯 → 42F → fly(41) 直接落 (6,2)。
     #    北入口代价：(6,4) 左右 (5,4)(7,4) 双魔導師 obj58 → HP 减半。
     #    HP 账：事件后 HP≈1073；41F 前方还有 2 个青药(+2000) + 4 个红药(+1000) 可先收。
-    if not fly(w, 42, 'V82 47F→42F（南入41F）'): return 1
+    if not fly(w, 42, 'V82 38F→42F（南入41F，跳过空跑的 47F）'): return 1
     if not stair(w, 6, 11, 'V82 42F(6,11)→41F(6,10)'): return 1
     if not need(w, y=5, b=2, label='41F 暗墙 5黄门+2蓝门'): return 1
     if not run(w, [
@@ -3809,7 +3808,7 @@ def main():
     if not run(w, [(6, 6, '★0F 幸运金币 obj113（金币×2）')], 'V82'): return 1
     print('  %-26s %s' % ('V82 拿幸运金币', st(h)))
     if not goto(w, 1, 2, 'V82 回0F(1,2)'): return 1
-    if not fly(w, 47, 'V82 0F→47F'): return 1
+    # ✅ 2026-11-15：不再先飞回 47F 中转——0F(1,2) 旁就是上行梯，V83 巡回直接从 0F 飞首站。
     print('  %-26s %s' % ('V82 0F完成', st(h)))
 
     if os.environ.get('MOTA_STOP_AFTER_V801'):
@@ -3828,57 +3827,64 @@ def main():
     #   实现：fly() 逐层 → 清扫 → **goto 回 FLY_LAND 落点（楼梯旁）再飞下一层**。）
     print('--- V83 全塔 0战损清场巡回（珠飞） ---')
 
+    def _zero_targets(w, fl):
+        """该层「0 战损可白刃」的怪清单（只读，不改任何状态）。"""
+        import math as _m
+        A, D = w.hero.atk, w.hero.dfn
+        out = []
+        for y in range(1, 12):
+            for x in range(1, 12):
+                o = w.at(fl, x, y)
+                if not o:
+                    continue
+                if M.TYPE.get(M.oatr(o, 3)) != 'MONSTER':
+                    continue
+                hp0, atk, dfn = M.oatr(o, 10), M.oatr(o, 11), M.oatr(o, 12)
+                per = A - dfn
+                if per <= 0:
+                    continue
+                t = _m.ceil(hp0 / per)
+                if max(atk - D, 0) * (t - 1) == 0:
+                    out.append((x, y, o))
+        return out
+
+    def _bfs_dist(w, fl, sx, sy):
+        """层内 Dijkstra（与 goto 同权重：怪100/门25/空1）。供清扫排序与可达性预检共用。"""
+        import heapq as _hq
+        dist = {(sx, sy): 0}
+        pq = [(0, sx, sy)]
+        while pq:
+            d, cx, cy = _hq.heappop(pq)
+            if d > dist.get((cx, cy), 1e9):
+                continue
+            for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                n = (cx + dx, cy + dy)
+                ok, wc = run_segs._cost(w, fl, n[0], n[1])
+                if not ok:
+                    continue
+                nd = d + wc
+                if nd < dist.get(n, 1e9):
+                    dist[n] = nd
+                    _hq.heappush(pq, (nd, n[0], n[1]))
+        return dist
+
     def _zero_sweep(w, fl):
         """单层 0 战损怪清扫：读全图 → 对战损 0 的怪 goto（寻路自动绕开有代价格）。
         goto 失败（被堵）就跳过该怪。
         ⚠️ 清扫期间临时清零钥匙 → _cost 的 DOOR 分支 keys[col]>0 不成立 →
         寻路 100% 绕门不开门（用户红线：0 损清扫不得耗钥，3F 曾因此白开 2 黄门）。"""
-        import math as _m
         h = w.hero
         real_keys = (h.keys['y'], h.keys['b'], h.keys['r'])
         h.keys['y'] = h.keys['b'] = h.keys['r'] = 0
         try:
-            A, D = h.atk, h.dfn
-            targets = []
-            for y in range(1, 12):
-                for x in range(1, 12):
-                    o = w.at(fl, x, y)
-                    if not o:
-                        continue
-                    if M.TYPE.get(M.oatr(o, 3)) != 'MONSTER':
-                        continue
-                    hp0, atk, dfn = M.oatr(o, 10), M.oatr(o, 11), M.oatr(o, 12)
-                    per = A - dfn
-                    if per <= 0:
-                        continue
-                    t = _m.ceil(hp0 / per)
-                    if max(atk - D, 0) * (t - 1) == 0:
-                        targets.append((x, y, o))
+            targets = _zero_targets(w, fl)
             # ✅ 2026-11-14 优化：目标顺序改为「最近邻贪心」——每次从当前位置用
             #   Dijkstra（与 goto 同权重：怪100/门25/空1）算到所有剩余怪的距离，
             #   选最近的先杀。替代原 (y,x) 扫描序（15F 曾因此两次 x6 竖列往返，
             #   116 步 → 串成一条链约 51 步，省 ~65 步）。
             #   钥匙已临时清零 → 寻路 100% 绕门，距离估计与实际执行一致。
-            import heapq as _hq
-            def _dists(sx, sy):
-                dist = {(sx, sy): 0}
-                pq = [(0, sx, sy)]
-                while pq:
-                    d, cx, cy = _hq.heappop(pq)
-                    if d > dist.get((cx, cy), 1e9):
-                        continue
-                    for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                        n = (cx + dx, cy + dy)
-                        ok, wc = run_segs._cost(w, fl, n[0], n[1])
-                        if not ok:
-                            continue
-                        nd = d + wc
-                        if nd < dist.get(n, 1e9):
-                            dist[n] = nd
-                            _hq.heappush(pq, (nd, n[0], n[1]))
-                return dist
             while targets:
-                ds = _dists(h.x, h.y)
+                ds = _bfs_dist(w, fl, h.x, h.y)
                 _dsl = [ds.get((x, y), 1e9) for (x, y, _o) in targets]
                 best = _dsl.index(min(_dsl))
                 x, y, o = targets.pop(best)
@@ -3901,6 +3907,25 @@ def main():
     _SWEEP_FLOORS = [1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18,
                      19, 20, 33, 34, 36, 38, 40]
     for _fl in _SWEEP_FLOORS:
+        # ✅ 2026-11-15：该层已无 0 战损目标 → 不飞这一趟。
+        #   原先是无条件飞过去、落点站一步再飞去下一层（每层白 1 步，
+        #   Toy 里就是「47F→1F→0F…」这种看不出目的的空跳）。
+        _tg = _zero_targets(w, _fl)
+        if not _tg:
+            continue
+        # ✅ 2026-11-15：目标全被门/墙堵住、一趟只落点 0 步也要白 1 步 → 飞之前先探可达性。
+        #   口径与清扫一致：临时清零钥匙（寻路 100% 绕门），从 FLY_LAND 做 Dijkstra。
+        _h = w.hero
+        _rk = (_h.keys['y'], _h.keys['b'], _h.keys['r'])
+        _h.keys['y'] = _h.keys['b'] = _h.keys['r'] = 0
+        try:
+            _lx, _ly = M.FLY_LAND[_fl]
+            _ds = _bfs_dist(w, _fl, _lx, _ly)
+        finally:
+            _h.keys['y'], _h.keys['b'], _h.keys['r'] = _rk
+        if not any(_ds.get((x, y), 1e9) < 1e9 for (x, y, _o) in _tg):
+            print('  .. V83 %dF 目标全不可达（无钥绕门），跳过不飞' % _fl)
+            continue
         # 珠飞要求站楼梯旁；FLY_LAND 落点即上行梯旁踏出格 → 落地后可直接再飞
         if not fly(w, _fl, 'V83 珠飞→%dF' % _fl):
             print('  !! V83 珠飞 %dF 失败，跳过该层' % _fl)
