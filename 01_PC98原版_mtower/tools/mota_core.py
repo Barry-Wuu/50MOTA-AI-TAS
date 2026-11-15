@@ -1108,32 +1108,54 @@ class World:
             return True, ['镐 obj114 已使用（一次性）：四邻无真墙，白费']
         return True, ['★使用镐 obj114（一次性）：破开四邻真墙 %s' % broken]
 
+    # 破坏之玉 obj105 打不动的 obj（MTower.java @1127-1181 的排除清单：
+    #   '9'/'J'/'`'/'2'/'3'/'4'/'<'/'='/'>'/'F'/'H' → 十进制 57/74/96/50/51/52/60/61/62/70/72）
+    BOMB_EXCLUDE = {57, 74, 96, 50, 51, 52, 60, 61, 62, 70, 72}
+
     def use_bomb(self):
-        """破壊の玉 obj105（资料笔记 §itemFlag: 清整层怪物）。
-        使用后当前层全部怪物标记为 cleared（零战斗清除），并触发守卫清落穴事件。
-        一次性消耗。
+        """破坏之玉 obj105 —— **只炸角色上下左右四邻的怪物**，不是整层。
+
+        ✅ 2026-11-15 用户纠正 + Java MTower.java @1127-1181（itemFlag==6）逐行实证：
+          · 只检查 `[n5-1][n4]`(上) `[n5][n4-1]`(左) `[n5][n4+1]`(右) `[n5+1][n4]`(下) 四格；
+          · 命中 TYPE==6(MONSTER) 且不在排除清单 → `charaZeno()` 直接消灭（零战斗、不放动画），
+            并把该怪的 objectAttribute[..][13]（gold）累加进 n2；
+          · 持有幸运金币 obj113（mapObject[74][120]==1）时倍率 n=2 → 金币 ×2；
+          · 最后 `mapObject[69][118] += n2`（加金币）、`mapObject[66][120] = 0`（消耗道具）。
+        原版道具文本亦为「你得到破坏之球，可炸死你周围的敌人」。
+        ⚠️ 旧实现是"清整层怪物"，与原文不符 —— 44F 段因此重排为「站 (6,9) 同时炸左右两只門番A」。
+        一次性消耗；落穴守卫清空事件照常触发。
         """
         h = self.hero
         if 105 not in h.items:
-            return False, ['没有破壊の玉 obj105']
+            return False, ['没有破坏之玉 obj105']
         f = h.f
+        mult = 2 if LUCKY_GOLD in h.items else 1
         cleared_mons = []
-        for y in range(1, 12):
-            for x in range(1, 12):
-                o = self.at(f, x, y)
-                if o and TYPE.get(oatr(o, 3)) == 'MONSTER':
-                    self.cleared.add((f, x, y))
-                    cleared_mons.append((x, y, o))
-                    # 触发守卫清落穴
-                    for pit in GUARD_TO_PITS.get((f, x, y), []):
-                        guards = PIT_GUARD_CLEAR[pit]
-                        if all((f, gx, gy) in self.cleared for gx, gy in guards) \
-                                and pit not in self.cleared:
-                            self.cleared.add(pit)
+        gold = 0
+        for (dx, dy) in ((0, -1), (-1, 0), (1, 0), (0, 1)):
+            x, y = h.x + dx, h.y + dy
+            if not (1 <= x <= 11 and 1 <= y <= 11):
+                continue
+            o = self.at(f, x, y)
+            if not o or TYPE.get(oatr(o, 3)) != 'MONSTER':
+                continue
+            if o in self.BOMB_EXCLUDE:
+                continue
+            self.cleared.add((f, x, y))
+            cleared_mons.append((x, y, o))
+            gold += oatr(o, 13) * mult
+            # 触发守卫清落穴
+            for pit in GUARD_TO_PITS.get((f, x, y), []):
+                guards = PIT_GUARD_CLEAR[pit]
+                if all((f, gx, gy) in self.cleared for gx, gy in guards) \
+                        and pit not in self.cleared:
+                    self.cleared.add(pit)
         h.items.discard(105)
+        h.gold += gold
         if not cleared_mons:
-            return True, ['破壊の玉 obj105 已使用：本层无怪物']
-        return True, ['★使用破壊の玉 obj105：清整层 %d 只怪物 %s' % (len(cleared_mons), cleared_mons)]
+            return True, ['破坏之玉 obj105 已使用：四邻无怪物']
+        return True, ['★使用破坏之玉 obj105：炸掉四邻 %d 只怪物 %s +%dG'
+                      % (len(cleared_mons), cleared_mons, gold)]
 
     def use_super_pick(self):
         """超级镐 obj112（itemFlag==13，资料笔记 §itemFlag: 破整层 12×12 墙）。
