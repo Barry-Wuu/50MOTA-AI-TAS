@@ -89,7 +89,10 @@ def fly_rec(self, tf):
     return lg
 M.World.fly = fly_rec
 
-for _nm in ('wing_up', 'wing_down'):
+# ✅ 2026-11-15：中心飞行器 obj106（wing_center）也单独录一步。
+#   此前三次使用（41F / 47F / 45F）完全不产生 step，位移被算进下一个移动步，
+#   前端只看到英雄凭空瞬移、步骤表里没有任何说明。
+for _nm in ('wing_up', 'wing_down', 'wing_center'):
     _o = getattr(M.World, _nm)
     def _mk(o):
         def f(self, *a, **k):
