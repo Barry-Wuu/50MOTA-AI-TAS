@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Toy 一键重建：build_web(拆分) → toy_pack_v10(拆steps+中译) → toy_inline_assets(原色内嵌)。
+"""Toy 一键重建：prune闭环 → build_web(拆分) → toy_pack_v10(拆steps+中译) → toy_inline_assets(原色内嵌)。
 
 用法：python build_toy.py [data_f] [out_dir]
   data_f  默认 merged_route_full.json
@@ -26,6 +26,9 @@ def run(cmd, tag):
     print(out[-3000:])
     if r.returncode != 0:
         raise SystemExit('%s 失败 rc=%s' % (tag, r.returncode))
+
+# 0) 自动剪除空闲闭环（必须在 build_web 之前，否则步数回涨）
+run(['_prune_loops.py', DATA_F], 'prune 空闲闭环')
 
 # 1) build_web.py 拆分模式
 run(['build_web.py', DATA_F, 'x.html', '50', TMP], 'build_web 拆分')

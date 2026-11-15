@@ -53,6 +53,17 @@ MCH_GRP  = '商人 · 祭坛 · 积分石 · 智慧之戒问答'
 # 商人判定：分组为 商人·祭坛，或台词含买卖/店铺/回血/超级镐 关键词（覆盖 obj161 等被误归"无名提示"者）
 _MERCHANT_KW = ('売る', '買う', '回復してあげる', 'マトック', '店')
 
+
+def _is_npc_entity(_r):
+    """实体是否是「有台词的 NPC」。
+    ✅ 2026-11-15：原来只认 role 含 NPC，漏掉 role=event 的台词 NPC——最典型是 28F(8,4) obj161
+       「鍵１個を１００ＧＯＬＤで買うよ」（回收钥匙的商人），导致 28F 全层没有悬停 tooltip。
+       补判据：role=event 但 name_jp 是「…」台词，同样算 NPC（道具/门的 event 台词不以「开头）。"""
+    _role = _r.get('role') or ''
+    if 'NPC' in _role:
+        return True
+    return _role.strip() == 'event' and (_r.get('name_jp') or '').startswith('「')
+
 # 1) md 解析：具名说话者台词（按 JP 前缀）
 _by_jp = {}
 try:
@@ -109,7 +120,7 @@ for _jp, _names in ROUTE_NAMES.items():
 _merch = {}; _old = {}
 try:
     for _r in csv.DictReader(io.open(ENT_PATH, encoding='utf-8-sig')):
-        if 'NPC' not in (_r.get('role') or ''):
+        if not _is_npc_entity(_r):
             continue
         _f = _r.get('floor')
         if _f in (None, 'catalog'):
@@ -179,7 +190,7 @@ except Exception:
 # 实体 NPC（authoritative）：覆盖 老人/商人/盗賊/勇者 等所有有台词角色
 try:
     for _r in csv.DictReader(io.open(ENT_PATH, encoding='utf-8-sig')):
-        if 'NPC' not in (_r.get('role') or ''):
+        if not _is_npc_entity(_r):
             continue
         _f = _r.get('floor')
         if _f in (None, 'catalog'):
@@ -758,6 +769,9 @@ function renderMap(){
 
   // 已消耗格（击杀/拾取/开门/撞暗墙/交谈NPC…）→ 还原成地面；楼梯格上的人走了则还原成楼梯
   const cons = CONS[String(f)] || [];
+  // 截至当前步已消耗的格（如盗贼交谈后消失、镐拾取后消失）→ 该格起按空地处理
+  const consumed = {};
+  cons.forEach(function(c){ if(c[2] <= sel) consumed[c[0]+','+c[1]]=1; });
   consumeLayer.style.setProperty('--tile', 'url("' + (TILE[String(f)] || '') + '")');
   consumeLayer.style.setProperty('--up', 'url("' + (STAIR.u || '') + '")');
   consumeLayer.style.setProperty('--down', 'url("' + (STAIR.d || '') + '")');
@@ -780,6 +794,8 @@ function renderMap(){
     if(d[2] > sel) return;                      // 尚未出现
     const key = d[0]+','+d[1];
     const v = d[3];
+    // 物件已被拾取/击杀/交谈（该格已还原成地面）→ 不再显示；地形变化 T* 保留
+    if(typeof v !== 'string' && consumed[key]) return;
     const stat = (fl.objs||{})[key];
     if(typeof v !== 'string' && stat && String(stat[0]) === String(v)) return;  // 与静态一致，无变化
     let lab, cls='dynmk';
@@ -801,7 +817,8 @@ function renderMap(){
   }).join('');
 
   // NPC 标记层：该层所有具名 NPC 所在格（默认透明，悬停触发 #npctip 对话面板）
-  const NM = (NPC_MARKS[String(f)] || []);
+  // 已交谈的 NPC 会从地图消失 → 该格起不再挂悬停标记，按空地处理
+  const NM = (NPC_MARKS[String(f)] || []).filter(function(m){ return !consumed[m.x+','+m.y]; });
   document.getElementById('npcMarkLayer').innerHTML = NM.map(function(m){
     return '<div class="npcmark" data-npc="'+esc(m.n.join('|'))+'" data-floor="'+f+'" style="left:'+pct(m.x)+';top:'+pct(m.y)+'"></div>';
   }).join('');

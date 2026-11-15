@@ -933,14 +933,20 @@ class World:
         r = self.check_magic_passby(log)
         if r:
             return r
-        if (f, nx, ny) in DIG_TRIG:                   # 📝 盗贼格是 eventMT 动态生成（静态表 obj=0），
-            self.cleared.add((f, nx, ny))             #    踩到即交谈，凿开对应墙格
+        if (f, nx, ny) in DIG_TRIG:
+            # 📝 盗贼踩到即交谈、凿开对应墙格；交谈后 NPC 从地图消失，故只触发一次，
+            #    之后再次经过该格按普通空地处理，不再重放台词/重复凿墙。
+            #    判定「是否已凿」不能只看触发格是否 cleared：29F 触发格本身是 obj88 MESSAGE，
+            #    会先被上面的 NPC 处理清掉，须改看目标墙状态。
             tg = DIG_TRIG[(f, nx, ny)]
-            log.append('盗賊「…大ダコの抜け穴がようやく…」→ 凿开暗道 %s' % (tg,))
-            if f == 29:                                # 29F：挖开 (6,3)，该格同现黄钥匙 obj1
-                self.ter_over[DIG29_WALL] = 1          # MA[1][3]==0 → 地板
-                self.over[DIG29_WALL] = 1
-                log.append('29F(6,3) 暗道打通，现黄钥匙 obj1')
+            already = (tg in self.ter_over) if f == 29 else ((f, nx, ny) in self.cleared)
+            if not already:
+                self.cleared.add((f, nx, ny))
+                log.append('盗賊「…大ダコの抜け穴がようやく…」→ 凿开暗道 %s' % (tg,))
+                if f == 29:                            # 29F：挖开 (6,3)，该格同现黄钥匙 obj1
+                    self.ter_over[DIG29_WALL] = 1      # MA[1][3]==0 → 地板
+                    self.over[DIG29_WALL] = 1
+                    log.append('29F(6,3) 暗道打通，现黄钥匙 obj1')
         if self.terrain_at(f, nx, ny) == 2:
             w = warp_to(f, nx, ny)
             if w:
