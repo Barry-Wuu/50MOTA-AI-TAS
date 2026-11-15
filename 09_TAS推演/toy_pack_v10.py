@@ -33,6 +33,24 @@ CHUNK = 2400
 PICK_ZH = {}   # obj id -> 拾取标准句（如 obj30→'你得到了铁剑，攻击力增加10点！'）
 NAME_ZH = {}   # obj id -> 短名（如 obj48→'兽人'、obj30→'铁剑'）
 
+# ---- 残留日文名 → 简体标准译名（CSV 未收录的整词兜底）----
+# 长词必须排在短词前面，否则「スケルトンＡ」会被「スケルトン」先吃掉。
+JP_WORDS = [
+    ('バンパイア', '吸血鬼'),
+    ('スケルトンＡ', '骷髅队长'),
+    ('スケルトンＢ', '骷髅'),
+    ('スケルトン', '骷髅'),
+    ('ゼノ', '假魔王'),
+    ('赤い回復薬', '红药'),
+    ('青い回復薬', '蓝药'),
+    ('赤のクリスタル', '红水晶'),
+    ('青のクリスタル', '蓝水晶'),
+]
+# 繁体字 / 日文新字体 → 简体（逐字，一对一）
+T2S_CHARS = str.maketrans(
+    '師術導騎賊門臨復薬壊鍵剣霊戦闘撃殺説読還這來龍線與為',
+    '师术导骑贼门临复药坏键剑灵战斗击杀说读还这来龙线与为')
+
 
 def load_obj_tables():
     rows = list(csv.DictReader(io.open(CSV_PATH, encoding='utf-8-sig')))
@@ -47,6 +65,17 @@ def load_obj_tables():
                 PICK_ZH.setdefault(oid, zh)
             elif g in ('怪物与 BOSS 名称', '装备与道具名称（菜单用的短名）'):
                 NAME_ZH.setdefault(oid, zh)
+    # ⚠️ CSV 只给了这些 obj 的「拾取标准句」，没有对应的短名条目 →
+    #   floors.*.objs 的文本字段（译自 tr()）会残留「赤い回復薬を手に入れ」这类日文。
+    #   前端其实不用这段文本（只读 objs[k][0] 和 [2]），但页面里出现日文即违规。
+    #   短名一律取自 PICK_ZH 句中的名词，setdefault 不覆盖 CSV 已有条目。
+    for _oid, _nm in {1: '黄钥匙', 3: '蓝钥匙', 28: '红钥匙', 39: '神圣盾',
+                      67: '红药', 68: '红药', 77: '蓝药', 81: '红水晶', 84: '蓝水晶',
+                      104: '圣水', 105: '破坏之玉', 106: '中心飞行器',
+                      107: '向上飞行器', 108: '向下飞行器', 109: '屠龙匕',
+                      110: '冰冻魔法', 111: '魔法钥匙', 112: '超级镐',
+                      113: '幸运金币', 114: '镐'}.items():
+        NAME_ZH.setdefault(_oid, _nm)
     return PICK_ZH, NAME_ZH
 
 
@@ -111,6 +140,25 @@ def translate_data(js, jp2zh):
             v[3] = tr(v[3])
 
     return D, hit, miss
+
+
+def zh_finalize(text):
+    """最终中文规范化：页面里不允许出现繁体字 / 日文汉字 / 假名（用户红线：
+    「还有任何非简体字就说明还有译名不对」）。
+
+    三步（顺序不可换）：
+      1. 整词替换日语名 —— 必须在繁体字替换**之前**，否则「魔導師ゼノ」先被拆成
+         「魔导师ゼノ」，FIXED 里的整串规则就匹配不上了；
+      2. 单字繁体/日文新字体 → 简体（師術導騎賊門臨復薬壊鍵剣霊戦闘撃殺説読還這來龍線與為）；
+      3. 兜底清掉剩余假名。
+    """
+    for jp, zh in JP_WORDS:
+        text = text.replace(jp, zh)
+    text = text.translate(T2S_CHARS)
+    left = KANA.findall(text)
+    if left:
+        text = KANA.sub('', text)
+    return text, left
 
 
 def translate_steps(js, D6, D9):
@@ -182,16 +230,8 @@ def translate_steps(js, D6, D9):
             cnt[0] += js.count(jp)
             js = js.replace(jp, zh)
 
-    # 兜底：清掉残留假名（含半角片假名），避免页面出现日文
-    left = KANA.findall(js)
-    if left:
-        js = KANA.sub('', js)
-    return js, cnt[0], left
-
-    # 兜底：清掉残留假名（含半角片假名），避免页面出现日文
-    left = KANA.findall(js)
-    if left:
-        js = KANA.sub('', js)
+    # 兜底：清掉残留假名 / 繁体字 / 日文新字体（页面必须全简体）
+    js, left = zh_finalize(js)
     return js, cnt[0], left
 
 
@@ -233,6 +273,8 @@ def main():
              % ','.join('window.__SP%d' % i for i in range(1, len(parts) + 1)))
     new_js = ('window.__D=' + json.dumps(D9, ensure_ascii=False, separators=(',', ':'))
               + ';' + tail[1:] + merge)
+    # 数据段也过一遍规范化（objnames / dyn 标签 / 楼层注释里可能有繁体或日文名）
+    new_js, _ = zh_finalize(new_js)
     io.open(p, 'w', encoding='utf-8').write(new_js)
 
     # ---- index.html：外链 data.js 换内联（--external-data 时保留外链）----
@@ -246,6 +288,10 @@ def main():
     else:
         h = h.replace('<script src="./data.js"></script>',
                       tags + '<script>\n' + new_js + '</script>', 1)
+    # index.html 也要过一遍：NPC_DLG 的键名（"盗賊"/"金騎士"/"バンパイア"…）、
+    # 图例注释（"41F 魔術師Ａ+降臨翼"）都是模板里手写的繁体/日文。
+    # 键名改简体是安全的 —— NPC_MARKS 那边的名字也来自同一套数据，会一起被替换。
+    h, _ = zh_finalize(h)
     io.open(hp, 'w', encoding='utf-8').write(h)
     if '--external-data' not in sys.argv:
         os.remove(p)

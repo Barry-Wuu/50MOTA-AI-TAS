@@ -795,7 +795,11 @@ function renderMap(){
   consumeLayer.style.setProperty('--up', 'url("' + (STAIR.u || '') + '")');
   consumeLayer.style.setProperty('--down', 'url("' + (STAIR.d || '') + '")');
   consumeLayer.innerHTML = cons.filter(function(c){ return c[2] <= sel; }).map(function(c){
-    return '<div class="cons k'+(c[3]||'f')+'" style="left:'+pct(c[0])+';top:'+pct(c[1])+'"></div>';
+    // ⚠️ 2026-11-15 修 bug：_tile() 返回 'ku'/'kd'/'f'，旧代码一律拼成 'k'+值 →
+    //   class 变成 "cons kku"，而 CSS 只有 `.cons.ku` / `.cons.kd`，永远匹配不上，
+    //   于是**所有楼梯格都被当普通地板画**（32F(11,1) 上行梯不显示就是这么来的）。
+    //   现在只在 ku/kd 时追加该类，其余走基础 .cons（即 --tile 地板）。
+    return '<div class="cons'+(c[3]==='ku'?' ku':(c[3]==='kd'?' kd':''))+'" style="left:'+pct(c[0])+';top:'+pct(c[1])+'"></div>';
   }).join('') + tfloor.map(function(p){
     return '<div class="cons" style="left:'+pct(p[0])+';top:'+pct(p[1])+'"></div>';
   }).join('');
