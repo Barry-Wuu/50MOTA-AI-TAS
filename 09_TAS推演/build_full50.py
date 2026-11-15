@@ -62,7 +62,14 @@ def record(w, d, lg):
             dyn[str(k[0])].append([k[1], k[2], idx, int(v) if isinstance(v, int) else str(v)])
     for k, v in w.ter_over.items():
         if ter_prev.get(k) != v:
-            dyn[str(k[0])].append([k[1], k[2], idx, 'T%d' % v])
+            # ⚠️ ter_over 存的是 **MA 索引**，不是地形类别：ter_over=1 → MA[1][3]=0 → 地板；
+            #   ter_over=3 → MA[3][3]=1 → 暗墙；ter_over=31（24F 复原）→ MA[31][3]=1 → 墙。
+            #   旧代码直接 'T%d' % v 把索引当地形类别发出，导致 37F 整层凿开的墙（v=1）
+            #   被前端标成「T1=墙」，画出来仍是墙 ← 用户 2026-11-15 指出的 bug。
+            #   现在统一发出地形类别 0/1/2，仅保留 v==3 的「暗墙」特例（前端有独立紫色标签）。
+            tc = M.MA[v][3] if 0 <= v < len(M.MA) else 1
+            code = 3 if v == 3 else tc
+            dyn[str(k[0])].append([k[1], k[2], idx, 'T%d' % code])
     over_prev = dict(w.over)
     ter_prev = dict(w.ter_over)
     prev = a
@@ -91,6 +98,34 @@ for _nm in ('wing_up', 'wing_down'):
             return lg
         return f
     setattr(M.World, _nm, _mk(_o))
+
+# ✅ 2026-11-15：道具使用也单独录一步。此前 use_super_pick()/use_bomb() 等直接调用、
+#   不产生 step，导致 37F「超级镐破整层 45 格真墙」这个关键动作被记到下一个移动步头上
+#   （日志里完全没有"使用超级镐"），前端也看不到它引发的整层地形变化。
+#   现统一包一层：调用后立刻 record 一个 d='·' 的原地步，日志即该方法返回的 lg。
+for _nm in ('use_super_pick', 'use_pick', 'use_bomb', 'use_snow_crystal', 'use_elixir'):
+    if not hasattr(M.World, _nm):
+        continue
+    _o = getattr(M.World, _nm)
+    def _mk2(o):
+        def f(self, *a, **k):
+            h = self.hero
+            before = (len(self.cleared), len(self.over), len(self.ter_over),
+                      h.hp, h.atk, h.dfn)
+            r = o(self, *a, **k)
+            # 失败（ok=False，如"没有圣水"）不记步，避免终点冒出一条失败日志步
+            if isinstance(r, tuple) and r and r[0] is False:
+                return r
+            after = (len(self.cleared), len(self.over), len(self.ter_over),
+                     h.hp, h.atk, h.dfn)
+            # 完全没改变任何状态（如雪之结晶"四邻无熔岩"）也不记步
+            if before == after:
+                return r
+            lg = r[1] if isinstance(r, tuple) and len(r) > 1 else None
+            record(self, None, lg if isinstance(lg, (list, tuple)) else None)
+            return r
+        return f
+    setattr(M.World, _nm, _mk2(_o))
 
 # ✅ 2026-11-13 修正：先录真实起点步（Hero.initial() 的 1F(6,11)，初始状态）。
 #   此前 z2_route.main() 的第一个 record 是"第一个移动后"的位置（1F(5,11)），

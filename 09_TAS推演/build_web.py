@@ -772,11 +772,20 @@ function renderMap(){
   // 截至当前步已消耗的格（如盗贼交谈后消失、镐拾取后消失）→ 该格起按空地处理
   const consumed = {};
   cons.forEach(function(c){ if(c[2] <= sel) consumed[c[0]+','+c[1]]=1; });
+  // ✅ 2026-11-15：值到 "T0"（地形变地面）的格也**直接贴本层地板贴图**，不再只挂紫框标记。
+  //   37F 超级镐破整层真墙 / 24F 秘道 / 29F 暗道 / 41F 揭示格都走这条路：
+  //   原图里那格是墙的像素，不覆盖就会一直显示成墙 ← 用户指出的 bug。
+  const tfloor = [];
+  ((D.dyn||{})[String(f)] || []).forEach(function(d){
+    if(d[2] <= sel && d[3] === 'T0') tfloor.push([d[0], d[1]]);
+  });
   consumeLayer.style.setProperty('--tile', 'url("' + (TILE[String(f)] || '') + '")');
   consumeLayer.style.setProperty('--up', 'url("' + (STAIR.u || '') + '")');
   consumeLayer.style.setProperty('--down', 'url("' + (STAIR.d || '') + '")');
   consumeLayer.innerHTML = cons.filter(function(c){ return c[2] <= sel; }).map(function(c){
     return '<div class="cons k'+(c[3]||'f')+'" style="left:'+pct(c[0])+';top:'+pct(c[1])+'"></div>';
+  }).join('') + tfloor.map(function(p){
+    return '<div class="cons" style="left:'+pct(p[0])+';top:'+pct(p[1])+'"></div>';
   }).join('');
 
   // 补丁格
@@ -792,6 +801,7 @@ function renderMap(){
   let dynH = '';
   dynArr.forEach(function(d){
     if(d[2] > sel) return;                      // 尚未出现
+    if(d[3] === 'T0') return;                   // 变地面：已由 consumeLayer 贴地板贴图，不再挂标记
     const key = d[0]+','+d[1];
     const v = d[3];
     // 物件已被拾取/击杀/交谈（该格已还原成地面）→ 不再显示；地形变化 T* 保留
@@ -1076,7 +1086,7 @@ function renderHeader(){
   document.getElementById('verifyBox').innerHTML =
     '<div><b>路线 = z2_route.py 程序化推演（1F→50F 全塔通关），mota_core 逐格实算</b>：共 <b>'+t.steps+'</b> 步，终点 50F(6,5) HP<b>'+f.hp+'</b> A<b>'+f.atk+'</b> D<b>'+f.dfn+'</b> G<b>'+f.gold+'</b> 钥 '+f.ky+'/'+f.kb+'/'+f.kr+'（真魔王已击破）。</div>'+
     '<div>关键节点：V94 大法师(A423/D402, 战损6162) → V95 26F假公主(4红门) → V96 24F竖井 ending → V97 真魔王(封印后800/500/100, 战损196)。</div>'+
-    '<div style="color:#ffd98a">⚠ 变动格：<b style="color:#8fe3ff">蓝框</b>=该步起新出现的物件（10F 战利品/落穴/盗贼、41F 魔術師Ａ+降臨翼…）；<b style="color:#d7b0ff">紫框</b>=地形变化（41F 三个暗墙、29/30F 暗道）。</div>'+
+    '<div style="color:#ffd98a">⚠ 变动格：<b style="color:#8fe3ff">蓝框</b>=该步起新出现的物件（10F 战利品/落穴/盗贼、41F 魔術師Ａ+降臨翼…）；<b style="color:#d7b0ff">紫框</b>=地形变化为墙/暗墙（41F 三个暗墙、24F 竖井复原）。<b>地形变地面</b>的格（37F 超级镐破整层墙、29/30F 暗道、24F 竖井）直接贴地板贴图，不再挂框。</div>'+
     '<div>剩余怪伤害 = 当前步攻防下与该怪战斗的总 HP 损失；0=绿色，越高越偏红，打不动（攻≤防）显示红色 ???。数字标在怪物格左下角。</div>';
 }
 
