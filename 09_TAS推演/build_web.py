@@ -388,7 +388,12 @@ main{flex:1;min-height:0;display:grid;grid-template-columns:404px minmax(0,1fr);
 #dirbadge{position:absolute;right:-3px;top:-3px;width:15px;height:15px;border-radius:50%;
   background:#0e2a3a;border:1px solid var(--accent);color:#bfeeff;font-size:10px;line-height:13px;
   text-align:center;font-weight:700}
-#mapside{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px}
+/* 楼层信息卡片（原 #mapside 内容，现移到右栏顶部） */
+.floorbody{padding:10px 12px;display:flex;flex-direction:column;gap:10px}
+/* 地图右侧的「本步状态」卡片 */
+#mapside{flex:1 1 340px;min-width:280px;display:flex;flex-direction:column;gap:10px}
+#mapside .statecard{display:flex;flex-direction:column;min-height:0}
+#mapside .statebody{overflow:auto}
 .floorname{font-size:20px;font-weight:700;letter-spacing:1px}
 .floorname span{font-size:12px;color:var(--dim);font-weight:400;margin-left:6px}
 .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
@@ -547,12 +552,57 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
   filter:drop-shadow(0 0 2px rgba(76,201,240,.9))}
 #psvg .visn{fill:none;stroke:#ffd98a;stroke-width:2;stroke-dasharray:4 3}
 
+/* ===== 平板/窄屏：单列纵向堆叠 ===== */
 @media (max-width:1080px){
-  body{overflow:auto}
-  main{grid-template-columns:1fr;overflow:visible}
-  .rightcol{overflow:visible}
-  .stepcard{min-height:300px}
+  /* 关键：body 原为 flex 列 + main flex:1，高度锁死在视口内 → 单列堆叠后内容超长
+     会被裁切并与相邻块重叠。窄屏改回普通文档流。 */
+  html,body{height:auto;min-height:100%}
+  body{display:block;overflow-y:auto;overflow-x:hidden}
+  main{grid-template-columns:1fr;overflow:visible;height:auto;min-height:0}
+  .rightcol{overflow:visible;order:2;height:auto}
+  .leftcol{overflow:visible;order:1;height:auto}
+  .stepcard{height:auto;min-height:300px}
+  /* 平板/横屏：表格限高纵向滚动，避免整页被 6000+ 步撑到 7000px */
+  .stepcard{display:flex;flex-direction:column}
+  .tablewrap{overflow:auto;max-height:70vh}
   :root{--mapsize:min(520px, 92vw)}
+  /* 地图与其右侧卡片在窄屏改为上下堆叠，避免侧栏被压成 0 宽 */
+  .maprow{flex-wrap:wrap;gap:12px}
+  #mapbox{width:100%;max-width:var(--mapsize);margin:0 auto}
+  #mapside{flex:1 1 100%;min-width:0;width:100%}
+  #mapside .statebody{overflow:visible}
+}
+
+/* ===== 手机：压缩留白、修横向溢出与表格塌陷 ===== */
+@media (max-width:720px){
+  html,body{max-width:100%;overflow-x:hidden}
+  header{flex-wrap:wrap;gap:8px;padding:8px 10px}
+  header h1{font-size:14px;white-space:normal;line-height:1.35}
+  .chips{gap:6px;flex:1 1 100%}
+  .chip{font-size:11px;padding:2px 8px}
+  main{padding:8px;gap:8px}
+  /* 关键：栅格子项默认 min-width:auto，会被内部 min-width:560px 的表格撑开 */
+  main>aside,main>section{min-width:0}
+  .rightcol,.leftcol{min-width:0;width:100%}
+  .mapcard{padding:8px}
+  .maprow{gap:8px}
+  :root{--mapsize:min(520px, calc(100vw - 40px))}
+  .controls{gap:6px;margin-top:8px}
+  .controls .btn{font-size:12px;padding:6px 9px;flex:0 0 auto}
+  #slider{flex:1 1 100%;min-width:0;order:10}
+  .controls #stepLabel{order:11}
+  .controls #stepno{order:12;width:72px;flex:0 0 auto}
+  .controls #btnGo{order:13}
+  /* 表格：横向滚动 + 限高，避免整页被撑到几千像素 */
+  .stepcard{display:flex;flex-direction:column}
+  .tablewrap{overflow:auto;-webkit-overflow-scrolling:touch;max-height:60vh}
+  .tablewrap table{min-width:560px}
+  .cardhead{flex-wrap:wrap;gap:6px;padding:8px 10px}
+  .cardhead h2{font-size:12.5px;white-space:nowrap}
+  .statebody,.floorbody{padding:8px 10px}
+  .stephead .no{font-size:17px}
+  .statgrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .keyrow{gap:6px}
 }
 </style>
 </head>
@@ -565,8 +615,16 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
 <main>
   <aside class="rightcol">
     <div class="card">
-      <div class="cardhead"><h2>本步状态（引擎实算）</h2><span class="sp"></span><span class="sub" id="stateSub"></span></div>
-      <div class="statebody" id="stateBody"></div>
+      <div class="cardhead"><h2>楼层信息</h2><span class="sp"></span><span class="sub">当前层与图例</span></div>
+      <div class="floorbody">
+        <div>
+          <div class="floorname" id="floorname">1F</div>
+          <div class="posline" id="posline"></div>
+        </div>
+        <div class="stats" id="floostats"></div>
+        <div class="legend" id="legend"></div>
+        <label class="toggle"><input type="checkbox" id="consToggle"> 给已消耗格描边（默认已还原成地面）</label>
+      </div>
     </div>
 
     <div class="card">
@@ -595,13 +653,10 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
           <div id="marker"><img id="heroImg" alt="勇者"><span id="dirbadge">·</span></div>
         </div>
         <div id="mapside">
-          <div>
-            <div class="floorname" id="floorname">1F</div>
-            <div class="posline" id="posline"></div>
+          <div class="card statecard">
+            <div class="cardhead"><h2>本步状态（引擎实算）</h2><span class="sp"></span><span class="sub" id="stateSub"></span></div>
+            <div class="statebody" id="stateBody"></div>
           </div>
-          <div class="stats" id="floostats"></div>
-          <div class="legend" id="legend"></div>
-          <label class="toggle"><input type="checkbox" id="consToggle"> 给已消耗格描边（默认已还原成地面）</label>
         </div>
       </div>
       <div class="controls">
