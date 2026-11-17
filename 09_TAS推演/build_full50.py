@@ -201,6 +201,29 @@ for (ff, x, y), o in base.items():
     t = M.TYPE.get(M.oatr(o, 3))
     floors[k]['objs']['%d,%d' % (x, y)] = [o, M.oname(o)[:24], TYPECH.get(t, 'o')]
 
+# ✅ 2026-11-17（用户指出：吸血鬼的伤害角标没显示）：
+#   前端 renderDmg() 只遍历 floors[f].objs 里 v[2]=='m' 的格；
+#   而 objs 上面只从静态 base_cells() 生成 —— **事件写入的怪全部缺失**，
+#   导致「剩余怪伤害」角标不显示（吸血鬼 obj59 是最典型的一处）。
+#   实测共 34 处：3F×4 / 20F×1 / 32F×2 / 40F×12 / 42F×5 / 48F×1 / 49F×8。
+#   这里把 FLOOR_WRITES 里的 MONSTER 并入 objs（纯展示层，不影响引擎推演）。
+_added = 0
+for _f, _arr in M.FLOOR_WRITES.items():
+    _k = str(_f)
+    if _k not in floors:
+        continue
+    for (_x, _y, _o) in _arr:
+        if not _o:
+            continue
+        if M.TYPE.get(M.oatr(_o, 3)) != 'MONSTER':
+            continue
+        _key = '%d,%d' % (_x, _y)
+        if _key in floors[_k]['objs']:
+            continue                                  # 静态已有，不覆盖
+        floors[_k]['objs'][_key] = [_o, M.oname(_o)[:24], 'm']
+        _added += 1
+print('=== floors.objs 补入事件写入怪物 %d 处（用于伤害角标）' % _added)
+
 # ⚠️ 2026-11-13 v11：删除"走过格一律标地板"的反推逻辑。
 #   原逻辑把路线成功经过的格子 terrain 强制设 0，会合法化路线里的穿墙错误
 #   （如已撤销的 OPEN_WALLS）。terrain 现在完全由 _dyn_terrain（引擎真值）决定。
