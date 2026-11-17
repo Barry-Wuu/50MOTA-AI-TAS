@@ -775,9 +775,16 @@ function cx(x){ return x*CELL+CELL/2; }
 function cy(y){ return y*CELL+CELL/2; }
 /* 剩余怪物伤害：m=[hp,atk,def,name]，heroA/heroD 为当前步英雄攻防。
    返回 {txt,color}：打不过=红???；loss0=绿；越高越偏红（线性 hue 120→0，封顶 300）。 */
-function dmgInfo(m, heroA, heroD){
+function dmgInfo(m, heroA, heroD, items, oid){
   const hp=m[0], atk=m[1], def=m[2];
-  const per = heroA - def;
+  // ✅ 2026-11-16（用户指出：怪左下角伤害未计倍率）：
+  //   与引擎 mota_core.battle() 保持一致 ——
+  //   十字架 obj103 对 obj48/49/59（ゾンビ/ゾンビナイト/バンパイア）攻击翻倍；
+  //   屠龙匕 obj109 对 obj74（ドラゴン）攻击翻倍。缺这两条会显著高估伤害。
+  const IT = items || [];
+  const mult = (((oid===48||oid===49||oid===59) && IT.indexOf(103)>=0) ||
+                (oid===74 && IT.indexOf(109)>=0)) ? 2 : 1;
+  const per = heroA * mult - def;
   if(per <= 0) return {txt:'???', color:'#ff5b5b', cant:true};
   const turns = Math.ceil(hp/per);
   const loss = Math.max(atk - heroD, 0) * (turns - 1);
@@ -785,7 +792,8 @@ function dmgInfo(m, heroA, heroD){
   const h = 120 - 120*t;
   return {txt:String(loss), color:'hsl('+h+',92%,56%)', cant:false, loss:loss};
 }
-function renderDmg(f, heroA, heroD){
+function renderDmg(f, heroA, heroD, items){
+  const ITEMS_NOW = items || [];
   const fl = FL[f];
   if(!fl){ dmgLayer.innerHTML=''; return; }
   const cons = CONS[String(f)] || [];
@@ -799,7 +807,7 @@ function renderDmg(f, heroA, heroD){
     const ms = MS[oid];
     if(!ms) continue;
     const xy = k.split(',');
-    const info = dmgInfo(ms, heroA, heroD);
+      const info = dmgInfo(ms, heroA, heroD, ITEMS_NOW, +oid);
     const x = +xy[0], y = +xy[1];
     const left = (x*CELL/MAPW*100).toFixed(3)+'%';
     const top  = ((y+1)*CELL/MAPW*100).toFixed(3)+'%';
@@ -868,6 +876,15 @@ function renderMap(){
   const dynArr = (D.dyn||{})[String(f)] || [];
   const OBJN = D.objnames || {};
   const TLAB = {'0':'地面','1':'墙','2':'楼梯','3':'暗墙'};
+  // ✅ 2026-11-16：同一格可能有先后多条 dyn（如 10F (4,4)：步1478 出现落穴 obj20 →
+  //   步1791 被 BOSS 战后拆除变地面 T0）。旧逻辑只看「该条自身是否为 T0」，
+  //   于是 obj20 那条仍然挂标记，画面在 BOSS 后仍显示落穴 ← 用户指出的地面渲染错误。
+  //   现预扫一遍：凡该格已有 ≤sel 的 T0，则跳过它的物件标记。
+  const dynCleared = {};   // key -> 已被清成地面
+  dynArr.forEach(function(d){
+    if(d[2] > sel) return;
+    if(d[3] === 'T0') dynCleared[d[0]+','+d[1]] = 1;
+  });
   const dynSeen = {};
   let dynH = '';
   dynArr.forEach(function(d){
@@ -875,6 +892,7 @@ function renderMap(){
     if(d[3] === 'T0') return;                   // 变地面：已由 consumeLayer 贴地板贴图，不再挂标记
     const key = d[0]+','+d[1];
     const v = d[3];
+    if(dynCleared[key]) return;                 // 该格后来已被清成地面 → 旧物件标记不再显示
     // 物件已被拾取/击杀/交谈（该格已还原成地面）→ 不再显示；地形变化 T* 保留
     if(typeof v !== 'string' && consumed[key]) return;
     const stat = (fl.objs||{})[key];
@@ -939,7 +957,7 @@ function renderMap(){
   document.getElementById('dirbadge').textContent = (cur.d && cur.d!=='·') ? cur.d : '·';
 
   // 剩余怪物伤害（当前层，按本步攻防算）
-  renderDmg(f, cur.a, cur.df);
+  renderDmg(f, cur.a, cur.df, cur.it);
 
   // 地图侧栏
   document.getElementById('floorname').innerHTML = f+'F <span>第 '+cur.i+' 步的实际位置</span>';

@@ -70,10 +70,23 @@ def record(w, d, lg):
                       dd=a['dfn'] - prev['dfn'], dg=a['gold'] - prev['gold'], st='ok'))
     for (cf, cx, cy) in sorted(w.cleared - cleared_prev):
         cons[str(cf)].append([cx, cy, idx, _tile(cf, cx, cy)])
+        # ✅ 2026-11-16（用户指出：撞塌暗墙后该格未显示为地面）：
+        #   obj89「壁がくずれた」这类隐形墙/暗墙踩上即塌，靠 cons 只贴地板层，
+        #   但 dyn 没有「地形变地面」记录 → 悬停无说明、且与「墙→地面」语义脱节。
+        #   这里对被撞塌的墙/暗墙格补发 T0（前端 consumeLayer 会贴本层地板贴图）。
+        if M.obj_raw(cf, cx, cy) == 89 or (cf, cx, cy) in M.DARKWALL_CELLS:
+            if not any(d[2] == idx and d[3] == 'T0' for d in dyn[str(cf)] if d[0] == cx and d[1] == cy):
+                dyn[str(cf)].append([cx, cy, idx, 'T0'])
     cleared_prev = set(w.cleared)
     for k, v in w.over.items():
-        if over_prev.get(k) != v and v and k not in w.cleared:
-            dyn[str(k[0])].append([k[1], k[2], idx, int(v) if isinstance(v, int) else str(v)])
+        # ✅ 2026-11-16：原条件里的 `and v` 把 over=0（格子被清成地面）整类事件丢掉了，
+        #   导致 10F BOSS 后 (4,4)(8,4)(6,7) 三个落穴被拆掉，前端却仍画成落穴（用户指出地面渲染错误）。
+        #   现在 over 由「有物件」变成 0 时也发一条 'T0'（地形=地面），前端 consumeLayer 会贴地板贴图。
+        if over_prev.get(k) != v and k not in w.cleared:
+            if v:
+                dyn[str(k[0])].append([k[1], k[2], idx, int(v) if isinstance(v, int) else str(v)])
+            elif over_prev.get(k):
+                dyn[str(k[0])].append([k[1], k[2], idx, 'T0'])
     for k, v in w.ter_over.items():
         if ter_prev.get(k) != v:
             # ⚠️ ter_over 存的是 **MA 索引**，不是地形类别：ter_over=1 → MA[1][3]=0 → 地板；
@@ -233,6 +246,38 @@ for s in steps:
         if pat in s['l']:
             dyn[str(f2)].append([x2, y2, s['i'], 'STAIR'])
             break
+
+# ✅ 2026-11-16（用户指出：打完魔龙后原魔龙格未正确显示地面与战利品）：
+#   35F 的 3 瓶青薬 obj77 (5,4)(6,4)(7,4) 与雪の結晶 obj110 (6,5) 由 apply_floor_events
+#   「进层即写」，dyn 记在首次进 35F 那一步（约 i=3955）；但按原作它们属**魔龙战后补给**
+#   （Java MTower.java@2535 条件 [45][58] 清空后才 @2560/2578 摆出）。
+#   路线里魔龙要到很晚才打（需 49F 屠龙匕），于是画面上战利品提前近 1900 步出现。
+#   这里把这几格的 dyn 步号改到「魔龙击杀步」，与 10F/20F 的战利品口径统一。
+_M35 = None
+for s in steps:
+    if s['f'] == 35 and 'obj74' in s['l'] and '击杀' in s['l']:
+        _M35 = s['i']
+        break
+if _M35 is not None:
+    _F35_POST = {(5, 4), (6, 4), (7, 4), (6, 5)}          # 3 瓶青薬 + 雪の結晶
+    for _d in dyn['35']:
+        if (_d[0], _d[1]) in _F35_POST and _d[2] < _M35:
+            _d[2] = _M35                                  # 推迟到魔龙阵亡那一步才出现
+    # 同一批格子的 cons（拾取记录）若早于 M35，也一并推到 M35 之后 ——
+    #   否则「药还没出现就被消耗」，画面该格会提前变空。
+    for _c in cons.get('35', []):
+        if (_c[0], _c[1]) in _F35_POST and _c[2] < _M35:
+            _c[2] = _M35 + 1
+    # ✅ 2026-11-16（用户指出：打完魔龙后原魔龙格未全部显示地面）：
+    #   35F 是九宫格巨型 Boss —— 8 个 NORMAL 装饰件 53/54/55/63/64/65/73/75 与魔龙同生共死。
+    #   Java MTower.java@2536-2550 在魔龙死后把 (5,6)(7,6)(5,5)(6,5)(7,5)(5,4)(6,4)(7,4) 全清，
+    #   但引擎只清了「被踩过」的格 → 其余装饰件一直挂在图上。
+    #   这里在魔龙阵亡步给九宫格剩余格补 cons（前端据此贴地板、不再画装饰件）。
+    _F35_BODY = [(5, 5), (6, 5), (7, 5), (5, 6), (6, 6), (7, 6), (5, 7), (7, 7)]
+    _done35 = {(c[0], c[1]) for c in cons.get('35', [])}
+    for (bx, by) in _F35_BODY:
+        if (bx, by) not in _done35:
+            cons['35'].append([bx, by, _M35, 'f'])
 
 monstats = {}
 objnames = {}

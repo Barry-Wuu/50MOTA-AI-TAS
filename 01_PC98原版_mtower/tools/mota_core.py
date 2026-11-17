@@ -265,6 +265,30 @@ F49_CUTSCENE_CELLS = {
     (49, 5, 2), (49, 7, 2),                           # obj28 红钥匙 / obj109 屠龙匕
 }
 F49_GUARD_CELLS = [(5, 2), (6, 2), (7, 2), (7, 3), (7, 4), (6, 4), (5, 4), (5, 3)]
+
+# ✅ 10F / 20F 的「BOSS 战后战利品」同 49F 结构 —— 与「上行梯出现」是同一条因果链的两端：
+#    10F：MTower.java@3307-3329 拆 (4,4)(8,4)(6,7) 三面墙 → map[11][123]=22（(6,11) 生上行梯）
+#         → strNumber=15 → 74][126]=15 触发事件块 @3226-3305 摆出 3 蓝药 + 3 红晶 + 3 蓝晶
+#         + 黄钥匙 + 评分 NPC。
+#    20F：MTower.java@3066 吸血鬼死后置 74][127]=1 → 进入 @2961 的块摆出 3 红晶 + 3 蓝晶
+#         + 3 蓝药 + 2 黄门 + 评分 NPC（前置条件 [19][123]==0 即 (6,6) 吸血鬼已死）。
+#    dyn_raw 把这些常量写入当「进层即有」，照搬会白送 10F +600HP/6宝石（早 20 步）、
+#    20F +4ATK/+4DEF/+600HP（早 5 步）。故这里排除，改由 after_10 / after_20 在 BOSS 死后写入。
+F10_CUTSCENE_CELLS = {
+    (10, 1, 4), (10, 2, 4), (10, 3, 4),               # obj12 青い回復薬 +200HP ×3
+    (10, 1, 3), (10, 2, 3), (10, 3, 3),               # obj13 赤のクリスタル +1ATK ×3
+    (10, 9, 3), (10, 10, 3), (10, 11, 3),             # obj14 青のクリスタル +1DEF ×3
+    (10, 9, 4), (10, 11, 4),                          # obj1 扉の鍵 ×2
+    (10, 6, 4),                                       # obj69 评分 NPC
+}
+F20_CUTSCENE_CELLS = {
+    (20, 4, 5), (20, 4, 6), (20, 4, 7),               # obj80 赤のクリスタル +2ATK ×3
+    (20, 8, 5), (20, 8, 6), (20, 8, 7),               # obj83 青のクリスタル +2DEF ×3
+    (20, 5, 8), (20, 6, 8), (20, 7, 8),               # obj76 青い回復薬 +200HP ×3
+    (20, 5, 5), (20, 6, 5), (20, 7, 5),               # obj1 扉の鍵 ×3
+    (20, 6, 4),                                       # obj69 评分 NPC
+}
+
 # ✅ 49F 封印的真正判据（Java@1745 逐格比对，非「8 只全灭」）：
 #    (5,2)(7,2)(5,4)(7,4) 四斜角仍是 obj58，而 (6,2)(5,3)(7,3)(6,4) 四正方向已清空，
 #    且 (6,3) 仍是 obj57 ゼノ ⇒ 才把 objectAttribute[57] 改写 800/500/100。
@@ -395,6 +419,17 @@ PIT_GUARD_CLEAR = {
     (44, 6, 8):   [(5, 9), (7, 9)],
     (45, 7, 10):  [(8, 9), (8, 11)],
 }
+
+# ✅ 2026-11-17（用户指出：33F 铁门被穿行）：33F 右中室「触发即封门」机关。
+#   依据 魔塔1_资料笔记.md「机关门」表：
+#     · 踩 (10,7) → (10,4)(10,8) 变铁门，封住右中室   @2630
+#     · 清掉 (9,5)(11,5) 死霊兵士 + (9,7)(11,7) 兵士 → (10,4)(10,8) 铁门消失  @2655
+#   ⚠️ 这两格是**动态生成**的（进层时不存在），所以不能放进静态 PIT_GUARD_CLEAR，
+#      否则会挡住第一次正常通行。改为 World.gate33 状态位控制。
+GATE33_TRIG = (33, 10, 7)
+GATE33_CELLS = ((33, 10, 4), (33, 10, 8))
+GATE33_GUARDS = ((33, 9, 5), (33, 11, 5), (33, 9, 7), (33, 11, 7))
+
 # 反向索引：守卫格 → 它守护的落穴列表
 GUARD_TO_PITS = {}
 for _pit, _guards in PIT_GUARD_CLEAR.items():
@@ -413,6 +448,17 @@ OCTO_BODY = [(15, x, y) for x in (5, 6, 7) for y in (4, 5, 6)]   # 3×3 九格�
 OCTO_OBJS = {50, 51, 52, 60, 61, 62, 70, 71, 72}        # 九格的对象 id（含本体 71）
 OCTO_PITS = [(15, 6, 3), (15, 6, 9)]                    # 杀后消失的两道落穴
 OCTO_PICK = (15, 6, 5)                                  # 杀后 (6,5) 生成普通镐 obj114
+
+# ✅ 2026-11-17（用户指出：35F 魔龙九宫格被穿行）：魔龙 3×3 躯体不可通行。
+#   依据 README.md / MAP_NOTES.md：「环绕它的八格（53/54/55/63/64/65/73/75）是躯体装饰格，
+#   kind 0 且四维全 0——**不可战斗也不能通过**，打魔龙只需打中央那一格。」
+#   真实占格 = (5..7, 5..7)，不含 y=4。
+#   ⚠️ (6,5) 在静态表里是 obj54（躯体），雪之结晶 obj110 是杀龙后 eventMT 覆盖写上去的；
+#      故 (6,5) 的通行权必须跟躯体一致：杀龙前不可走，杀龙后可走。
+DRAGON_F = 35
+DRAGON_OBJ = 74
+DRAGON_BODY = {(5, 5), (6, 5), (7, 5), (5, 6), (6, 6), (7, 6), (5, 7), (7, 7)}
+DRAGON_BODY_OBJS = {53, 54, 55, 63, 64, 65, 73, 75}
 OCTO_TRIGGER = (15, 6, 8)                               # 📝 踩 (6,8) 且本体仍在 → (6,9) 变落穴（封出口）
 
 # ✅ 2F 奖励 NPC：静态初始是 obj174(+1000G)/obj152(ATK/DEF×1.03)，
@@ -503,6 +549,9 @@ class World:
     zeno49_dead: bool = False         # ✅ 49F(6,3) ゼノ已击败 → 战后演出已摆出道具
     f50_talk: int = 0                 # ✅ 50F(6,7) 对话页计数：0→12，计数 2 时 Zeno2 变身
     won50: bool = False               # ✅ 50F(6,5) 真魔王已击败 = 通关
+    gate33: bool = False              # ✅ 33F (10,7) 已踩 → (10,4)(10,8) 生成铁门（封右中室）
+    gate33_open: bool = False         # ✅ 33F 四只守卫全清 → 铁门消失
+    dragon35_dead: bool = False       # ✅ 35F 魔龙 obj74 已击败 → 九宫格躯体解除通行限制
     center_warp_charges: int = 0      # ✅ 中心飞行器 obj106（空間転移の秘宝）剩余次数：拾取=3，每次 -1；0=不可用。
                                       #    依据 Java @1203-1206 mapObject[67][120] 计数（拾取=1，用后+1，>=4 归零=3 次）。
 
@@ -531,15 +580,33 @@ class World:
             if f == 49 and (f, x, y) in F49_CUTSCENE_CELLS and o != 58:
                 continue                                  # ✅ 49F 战后演出才摆出（Java@1638-1740），进层不得白送
                                                           #    注意：同一格可能同时有警卫(58)与道具，只跳道具
+            if f == 10 and (f, x, y) in F10_CUTSCENE_CELLS:
+                continue                                  # ✅ 10F 战利品与 (6,11) 上行梯同源（Java@3307-3329），
+                                                          #    BOSS 未死不得摆出 → 由 after_10 写入
+            if f == 20 and (f, x, y) in F20_CUTSCENE_CELLS:
+                continue                                  # ✅ 20F 同上（Java@3066 吸血鬼死后 → @2961 摆出），
+                                                          #    由 after_20 写入
             if f == 49 and (x, y) == (6, 3):
                 continue                                  # ✅ 49F 中心是ゼノ obj57，不是 obj69 评分 NPC
             if f == 39 and (x, y) == (4, 4):
                 continue                                  # ✅ 39F 昇華の翼：由 9门事件才生成，非进层即写入
             base = self.cells.get((f, x, y), 0)
             if base and TYPE.get(oatr(base, 3)) == 'MONSTER':
-                # ✅ 该格静态是怪/BOSS，事件写入不得覆盖（否则 BOSS 消失、怪免打）。
+                # ✅ 该格静态是怪/BOSS，事件写入一般不得覆盖（否则 BOSS 消失、怪免打）。
                 #    但事件确实在该格放道具（10F 水晶/蓝药/黄钥写在怪物脚下）：记下待怪物死后露出。
-                if o in KEY_OF or TYPE.get(oatr(o, 3)) in ('STATUS', 'ITEM'):
+                #   ✅ 2026-11-15（用户指出 BOSS 战利品顺序问题）：**例外——事件写入的是
+                #      NPC/评分(SCORE)/MESSAGE 时应当覆盖**。40F(6,2) 静态是 obj90 金騎士，
+                #      而 FLOOR_WRITES[40] 明确写 (6,2,69) 评分 NPC（"この階までのあなたの
+                #      生命力、防御力…"）。原规则把 NPC 挡掉，导致：
+                #        ① (6,2) 一直是金騎士，(6,6) 真 BOSS 打完后还要多跑一趟打它；
+                #        ② 4457 步又误报一次「★击败40F BOSS」。
+                #      与 49F 同构（ゼノ死后 (6,3) 立 obj69 评分 NPC），故此处放行 NPC 类覆盖。
+                _oty = TYPE.get(oatr(o, 3))
+                if _oty in ('SCORE', 'MESSAGE') or o in (69, 88, 139, 140, 141, 142,
+                                                         143, 145, 146, 147, 149, 152, 154, 174):
+                    self.set_at(f, x, y, o)
+                    continue
+                if o in KEY_OF or _oty in ('STATUS', 'ITEM'):
                     self.pending_items[(f, x, y)] = o
                 continue
             if o:
@@ -731,6 +798,18 @@ class World:
             # ✅ 2F 监狱栅栏门：两只門番Ｂ清空前不可通行（Java directCheck / np2kai 实测）；
             #    清空后由下方击杀分支把 6 格一并 cleared，届时 at() 返回 0，不再进这里。
             return ['blocked:2F 监狱栅栏门 obj19（须先击败 (6,2)(8,2) 两只門番Ｂ）']
+        if self.gate33 and not self.gate33_open and (f, nx, ny) in GATE33_CELLS:
+            # ✅ 2026-11-17（用户指出：33F 铁门被穿行）：铁门降下后不可通行，
+            #    须清掉 (9,5)(11,5)(9,7)(11,7) 四只守卫才开（资料笔记 @2655）。
+            return ['blocked:33F 铁门 (10,4)/(10,8)（须清掉右中室 4 只守卫）']
+        if f == DRAGON_F and (nx, ny) in DRAGON_BODY and (35, nx, ny) not in self.cleared:
+            # ✅ 2026-11-17（用户指出：35F 魔龙九宫格被穿行）：
+            #   躯体 8 格「不可战斗也不能通过」。杀魔龙时 cleared 会 add 中央 (6,7)，
+            #   但 8 个躯体格不会自动清 —— 所以用 dragon35_dead 状态位判定：
+            #   屠龙前一律拦；屠龙后放行（原作战后整块清空）。
+            if not self.dragon35_dead:
+                return ['blocked:35F 魔龙躯体 obj%d（九宫格不可通行，须先屠龙）'
+                        % self.at(f, nx, ny)]
         # ✅ 修正（此处原为死锁 bug）：20F 的「进入」与「离开」是两套独立机制，不能混为一谈。
         #    · 进入：(20,6,9) 是红门 obj27，必须持红钥匙 obj28 开启 —— 见 BOSS 的基本门槛。
         #      开门由下方 ty == 'DOOR' 分支统一处理（无红钥匙挡路、有则消耗 1 把），
@@ -822,15 +901,23 @@ class World:
                         log.append('★击败真魔王 obj57（50F(6,5)）→ 通关！')
                     if f == 10 and o == 16:
                         self.boss10 = True
-                        log.append('★击败10F BOSS(スケルトンＡ) → 10F(6,11) 将生上行梯')
+                        self.after_10(log)
                     if f == 20 and o == 59:
                         self.boss20 = True
-                        log.append('★击败20F BOSS(バンパイア/吸血鬼) → 20F(6,1) 现出上行梯')
+                        self.after_20(log)
                     if f == 40 and o == 90:
                         # ✅ dyn_raw.json obj[43]: (6,6)→obj90；ter[7]: (6,1)→to:90。
                         #    资料笔记:888 obj90=金騎士 120/150/50/100，同 10F/20F/30F 同构。
                         self.boss40 = True
                         log.append('★击败40F BOSS(金騎士 obj90) → 40F(6,1) 将现出上行梯')
+                    if f == DRAGON_F and o == DRAGON_OBJ:
+                        # ✅ 2026-11-17（用户指出：35F 魔龙九宫格被穿行）：
+                        #   屠龙 → 九宫格躯体整块清空（原作战后 8 格一起消失），
+                        #   并放行 (6,5) 的雪之结晶与 (5,4)(6,4)(7,4) 三瓶蓝药。
+                        self.dragon35_dead = True
+                        for (bx, by) in DRAGON_BODY:
+                            self.cleared.add((DRAGON_F, bx, by))
+                        log.append('★击败35F 魔龙 obj74 → 九宫格 8 格躯体清空，可进入中央取雪之结晶')
                     # ✅ 守卫清落穴：击杀后检查是否触发了落穴消失（@3780-3845）
                     for pit in GUARD_TO_PITS.get((f, nx, ny), []):
                         guards = PIT_GUARD_CLEAR[pit]
@@ -838,6 +925,12 @@ class World:
                                 and pit not in self.cleared:
                             self.cleared.add(pit)
                             log.append(f'★守卫全清 → 落穴 {pit[0]}F({pit[1]},{pit[2]}) 消失')
+                    # ✅ 2026-11-17（用户指出：33F 铁门被穿行）：
+                    #   清掉 (9,5)(11,5) 死霊兵士 + (9,7)(11,7) 兵士 → (10,4)(10,8) 铁门消失（@2655）
+                    if f == 33 and self.gate33 and not self.gate33_open \
+                            and all(c in self.cleared for c in GATE33_GUARDS):
+                        self.gate33_open = True
+                        log.append('★33F 右中室 4 只守卫全清 → (10,4)(10,8) 铁门升起')
                     # ✅ 41F 暗墙事件（Java @1901-1930）：杀(10,2)埋伏魔術師Ａ → 三条件满足 → 触发
                     if f == 41 and (nx, ny) == (10, 2) and self.event41_stage == 1 \
                             and (41, 2, 2) in self.cleared:
@@ -1003,6 +1096,13 @@ class World:
             log.append('★50F 小偷对话 12 页 → Zeno2 变身：50F(6,5) 出现 obj57 魔導師ゼノ'
                        '（四维 %d/%d/%d）'
                        % (oatr(SEAL_TARGET, 10), oatr(SEAL_TARGET, 11), oatr(SEAL_TARGET, 12)))
+        # ✅ 2026-11-17（用户指出：33F 铁门被穿行）：踩 (10,7) → (10,4)(10,8) 生成铁门，封住右中室。
+        #   依据 资料笔记「机关门」@2630。此门是动态生成，故用 gate33 状态位；
+        #   清掉 (9,5)(11,5) 死霊兵士 + (9,7)(11,7) 兵士 后消失（@2655），见下方击杀分支。
+        if h.f == 33 and (h.x, h.y) == (10, 7) and not self.gate33:
+            self.gate33 = True
+            log.append('★33F 踩(10,7) → (10,4)(10,8) 降下铁门，右中室被封'
+                       '（须清掉 4 只守卫才开）')
         # ✅ 32F 金騎士伏兵事件（@2666-2759 实证）：英雄 warp 到 32F(6,10) 后触发
         #    5 状态机：金騎士从 (11,1) 走到 (6,9) → 先手战斗（-300HP）→ 撤退 → 清场 + 2F 生成盗贼
         #    战斗算式：金騎士 150ATK vs DEF90 = 60/hit × 5 hits = 300（先手=怪物先攻）
@@ -1378,6 +1478,66 @@ class World:
             self.cleared.discard((49, 6, 3))
             log.append('★49F ゼノ击败 → 战后演出：3 蓝药 + 3 红晶 + 3 蓝晶 + 红钥匙 + 屠龙匕，(6,3) 立评分 NPC')
 
+    def after_10(self, log):
+        """10F BOSS(スケルトンＡ obj16) 击败 → 战后事件块摆出战利品 + (6,11) 生上行梯。
+        Java@3307-3329：拆 (4,4)(8,4)(6,7) 三面墙 → map[11][123]=22（上行梯）
+        → strNumber=15 → 74][126]=15 触发 @3226-3305 的常量写入。
+        故战利品与上行梯必须同时出现，进层不得白送。
+
+        ⚠️ (2,4)(10,4) 静态是怪物（スケルトンＢ），道具必须走 pending_items
+           「踩在怪脚下、击杀后露出」，不能直接铺在格上 —— 否则怪物被道具覆盖掉，
+           该打的怪免打（用户 2026-11-16 指出的血瓶数值问题引出此 bug）。
+        """
+        ground = ((1, 4, 12), (3, 4, 12),                     # 青い回復薬 +200HP（空格）
+                  (1, 3, 13), (3, 3, 13),                     # 赤のクリスタル +1ATK（空格）
+                  (9, 3, 14), (11, 3, 14),                    # 青のクリスタル +1DEF（空格）
+                  (9, 4, 1), (11, 4, 1))                      # 扉の鍵（空格）
+        for fx, fy, fo in ground:
+            self.set_at(10, fx, fy, fo)
+            self.cleared.discard((10, fx, fy))
+        under = ((2, 4, 12), (10, 4, 1),                      # 写在怪脚下：青薬 / 黄钥
+                 (2, 3, 13), (10, 3, 14))                     # 同左：赤晶 / 蓝晶
+        for fx, fy, fo in under:
+            # ⚠️ 若该格怪已在 BOSS 前被杀，pending 永远不会兑现 → 直接铺出（同 20F 修正）
+            if (10, fx, fy) in self.cleared:
+                self.set_at(10, fx, fy, fo)
+                self.cleared.discard((10, fx, fy))
+            else:
+                self.pending_items[(10, fx, fy)] = fo         # 击杀该格怪后由 _reveal_pending 露出
+        self.set_at(10, 6, 4, 69)                                # 评分 NPC
+        self.cleared.discard((10, 6, 4))
+        for wx, wy in ((4, 4), (8, 4), (6, 7)):                  # 三面墙拆掉（Java@3310-3319）
+            self.set_at(10, wx, wy, 0)
+        log.append('★击败10F BOSS(スケルトンＡ) → (6,11) 生上行梯 + 战后战利品：'
+                   '3蓝药 + 3红晶 + 3蓝晶 + 2黄钥，(6,4) 立评分 NPC')
+
+    def after_20(self, log):
+        """20F BOSS(バンパイア obj59) 击败 → 战后事件块摆出战利品 + (6,1) 上行梯。
+        Java@3066：74][127]=1（前置 [19][123]==0 即 (6,6) 吸血鬼已死）
+        → 进入 @2961 的块写入常量 + 拆 (6,5)(6,7) 黄门。
+
+        ⚠️ (5,5)(6,5)(7,5) 静态是怪物（大バット obj47），黄钥匙必须走 pending_items
+           「踩在怪脚下、击杀后露出」，不能直接铺在格上 —— 否则蝙蝠被钥匙覆盖免打。
+        """
+        ground = ((4, 5, 80), (4, 6, 80), (4, 7, 80),        # 赤のクリスタル +2ATK（空格）
+                  (8, 5, 83), (8, 6, 83), (8, 7, 83),        # 青のクリスタル +2DEF（空格）
+                  (5, 8, 76), (6, 8, 76), (7, 8, 76))        # 青い回復薬 +400HP（空格）
+        for fx, fy, fo in ground:
+            self.set_at(20, fx, fy, fo)
+            self.cleared.discard((20, fx, fy))
+        for kx, ky in ((5, 5), (6, 5), (7, 5)):              # 3 黄钥匙写在蝙蝠脚下（Java@3027-3039）
+            # ⚠️ 若该格蝙蝠已在 BOSS 前被杀（cleared/pending 都不会再触发），
+            #    必须直接铺出；否则 pending_items 永远不兑现（用户 2026-11-16 指出钥匙数不足）。
+            if (20, kx, ky) in self.cleared:
+                self.set_at(20, kx, ky, 1)
+                self.cleared.discard((20, kx, ky))
+            else:
+                self.pending_items[(20, kx, ky)] = 1
+        self.set_at(20, 6, 4, 69)                                # 评分 NPC（Java@2967: [17][123]=69）
+        self.cleared.discard((20, 6, 4))
+        log.append('★击败20F BOSS(バンパイア/吸血鬼) → (6,1) 现上行梯 + 战后战利品：'
+                   '3红晶 + 3蓝晶 + 3蓝药 + 3黄钥(蝙蝠脚下)，(6,4) 立评分 NPC')
+
 # ---------------------------------------------------------------------------
 # 规划：Dijkstra，代价 = (累计掉血, 步数)；状态含已拾取格子的掩码（防"重复捡"作弊），
 # 怪物/门不做掩码（重访会重复付费 ⇒ 只会偏保守，不会偏乐观）。
@@ -1499,6 +1659,9 @@ def _clone(self):
     w.story26 = self.story26; w.story24_end = self.story24_end
     w.seal49 = self.seal49; w.zeno49_dead = self.zeno49_dead
     w.f50_talk = self.f50_talk; w.won50 = self.won50
+    # ✅ 2026-11-17：新增的两个铁门/躯体状态位必须同步，否则 A* 状态会失真
+    w.gate33 = self.gate33; w.gate33_open = self.gate33_open
+    w.dragon35_dead = self.dragon35_dead
     return w
 
 
