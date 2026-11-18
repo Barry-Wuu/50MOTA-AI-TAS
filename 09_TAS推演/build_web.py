@@ -1087,7 +1087,13 @@ function highlightRow(){
   const row = tbody.querySelector('tr[data-i="'+sel+'"]');
   if(row){
     row.classList.add('sel');
-    row.scrollIntoView({block:'nearest'});
+    // ✅ 2026-11-18（用户）：手机版页面不要随步数前进而下滚。
+    //   窄屏(<=1080px)时 body 是页面级滚动容器，自动 scrollIntoView 会让整页在播放时一路下滑，
+    //   把地图/控制栏顶出视野。窄屏禁用自动滚动（表格仍可手动滑）；桌面端 main 是
+    //   overflow:hidden 的弹性布局、只 .tablewrap 内部滚动，保留原「当前行滚入视野」行为。
+    if(!window.matchMedia('(max-width:1080px)').matches){
+      row.scrollIntoView({block:'nearest'});
+    }
   }
 }
 
