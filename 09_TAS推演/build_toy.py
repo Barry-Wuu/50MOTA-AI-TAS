@@ -29,6 +29,8 @@ def run(cmd, tag):
 
 # 0) 自动剪除空闲闭环（必须在 build_web 之前，否则步数回涨）
 run(['_prune_loops.py', DATA_F], 'prune 空闲闭环')
+# 0b) 剪除「贴梯后多走空步才 fly/stair」的冗余（带 cons/dyn 引用保护）
+run(['_prune_stair_tail.py', DATA_F], 'prune 贴梯尾部冗余')
 
 # 1) build_web.py 拆分模式
 run(['build_web.py', DATA_F, 'x.html', '50', TMP], 'build_web 拆分')
