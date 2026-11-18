@@ -776,8 +776,10 @@ class World:
         else:
             h.dfn += gain
         self.altar_k += 1
+        # ✅ 2026-11-18：日志里的属性名与路线其余日志统一（原样输出 'dfn+4'，前端看着像内部字段）。
+        lbl = {'hp': 'HP', 'atk': 'ATK', 'dfn': 'DEF'}.get(pol, pol)
         return ['祭坛献金%dG → %s+%d（第%d次，下次%dG）'
-                % (c, pol, gain, self.altar_k, altar_cost(self.altar_k))]
+                % (c, lbl, gain, self.altar_k, altar_cost(self.altar_k))]
 
     def move(self, dx, dy):
         h = self.hero
