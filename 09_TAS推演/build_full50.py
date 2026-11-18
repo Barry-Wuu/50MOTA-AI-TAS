@@ -324,6 +324,28 @@ if _M35 is not None:
         if (bx, by) not in _done35:
             cons['35'].append([bx, by, _M35, 'f'])
 
+# ✅ 2026-11-18（用户：40F 评分 NPC 在 BOSS 阵亡前就出现）：
+#   obj69「この階までのあなたの…評価」评分 NPC 原作里都是 BOSS 死后才立于原位
+#   （10F(6,4) dyn 记在击破步 1637、20F(6,4) 在 2834、49F(6,3) 在 5579），
+#   但 40F(6,2) 因 mota_core 对 NPC 类事件写入开绿灯（原规则会把静态金騎士挡掉），
+#   进层就写进了 over，dyn 也记到了进层步 @3968 —— 画面上一进 40F 就有评分 NPC。
+#   这里统一口径：凡评分 NPC 的 dyn 早于本层「★击败」步，一律推迟到击破那一步。
+_boss_step = {}
+for _s in steps:
+    if '★击败' in (_s['l'] or ''):
+        _boss_step.setdefault(_s['f'], _s['i'])
+_fix69 = 0
+for _fk, _arr in dyn.items():
+    _bs = _boss_step.get(int(_fk))
+    if not _bs:
+        continue
+    for _d in _arr:
+        if _d[3] == 69 and _d[2] < _bs:
+            _d[2] = _bs
+            _fix69 += 1
+if _fix69:
+    print('=== 评分 NPC(obj69) 推迟到本层击破步 %d 处' % _fix69)
+
 monstats = {}
 objnames = {}
 for oid in range(len(M.OA)):

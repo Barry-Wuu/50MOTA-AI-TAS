@@ -288,6 +288,33 @@ for f in sorted(int(k) for k in data['floors']):
         pass
 tile_js = json.dumps(tiles, ensure_ascii=False, separators=(',', ':'))
 
+# ---- 「进层前不该看到」的格：底图是通关后截图，把 BOSS 战利品/评分 NPC 也烤进去了 ----
+# ✅ 2026-11-18（用户：10F/40F BOSS 还没打完就爆战利品，20F/49F 才对）：
+#   底图 floor_XX.png 是**通关后**的静态图 —— 10F 的 (1,4)(3,4) 药瓶、(9,4)(11,4) 黄钥、
+#   (6,4) 评分精灵，40F 的 (3,4)(4,4)(5,4) 蓝药、(2,2)~(4,2) 红晶、(7,4)~(9,4) 黄钥、
+#   (8,2)~(10,2) 蓝晶，画上去时 BOSS 已死，所以一进层就显示，早于 BOSS 阵亡。
+#   这些格在 BOSS 阵亡步之前用本层地板贴图盖住（BOSS 阵亡步之后才揭开，与 20F/49F 口径一致）。
+#   注：40F 这些格静态是 死霊兵士/剣，但底图里根本没画兵、只画了战利品，遮掉不会损失任何画面。
+BAKED = {
+    10: [(1, 4), (3, 4), (6, 4), (9, 4), (11, 4)],
+    40: [(3, 4), (4, 4), (5, 4), (2, 2), (3, 2), (4, 2),
+         (8, 2), (9, 2), (10, 2), (7, 4), (8, 4), (9, 4)],
+}
+_boss_step = {}
+for _s in data['steps']:
+    if '★击败' in (_s['l'] or ''):
+        _boss_step.setdefault(_s['f'], _s['i'])
+MASK = {}
+for _f, _cells in BAKED.items():
+    _until = _boss_step.get(_f)
+    if not _until:
+        continue
+    MASK[str(_f)] = [[x, y, _until] for (x, y) in _cells]
+if MASK:
+    data['mask'] = MASK
+    print('=== 底图烤入的战利品格已遮挡 %s' % {k: len(v) for k, v in MASK.items()})
+js = json.dumps(data, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
+
 sheet = Image.open(SHEET).convert('RGBA')
 # 顶行 40×40 勇者帧（c0 黑底、c1 空，角色从 c2 起）：c2 背面=上，c4 正面=下，c6 朝左，c8 朝右
 HERO_COL = {'↑': 2, '↓': 4, '←': 6, '→': 8}
@@ -862,6 +889,12 @@ function renderMap(){
     return '<div class="cons'+(c[3]==='ku'?' ku':(c[3]==='kd'?' kd':''))+'" style="left:'+pct(c[0])+';top:'+pct(c[1])+'"></div>';
   }).join('') + tfloor.map(function(p){
     return '<div class="cons" style="left:'+pct(p[0])+';top:'+pct(p[1])+'"></div>';
+  }).join('') + ((D.mask||{})[String(f)] || []).filter(function(m){
+    // ✅ 2026-11-18：底图把「BOSS 死后才出现的战利品/评分 NPC」也画进去了（10F/40F 等）。
+    //   这些格在其出现步之前用本层地板贴图盖住，避免一进层就"爆战利品"。
+    return m[2] > sel;
+  }).map(function(m){
+    return '<div class="cons" style="left:'+pct(m[0])+';top:'+pct(m[1])+'"></div>';
   }).join('');
 
   // 补丁格
