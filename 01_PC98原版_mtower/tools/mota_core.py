@@ -776,10 +776,10 @@ class World:
         else:
             h.dfn += gain
         self.altar_k += 1
-        # ✅ 2026-11-18：日志里的属性名与路线其余日志统一（原样输出 'dfn+4'，前端看着像内部字段）。
-        lbl = {'hp': 'HP', 'atk': 'ATK', 'dfn': 'DEF'}.get(pol, pol)
-        return ['祭坛献金%dG → %s+%d（第%d次，下次%dG）'
-                % (c, lbl, gain, self.altar_k, altar_cost(self.altar_k))]
+        # ✅ 2026-11-18：日志改成「花费N金币」口径（原来「献金20G」的 G 是内部金币字段），
+        #   属性名用中文，并去掉「（第N次，下次XG）」括号——次数/下次价属调试信息，摊在时间轴上太吵。
+        lbl = {'hp': '生命', 'atk': '攻击', 'dfn': '防御'}.get(pol, pol)
+        return ['祭坛：花费%d金币 → %s+%d' % (c, lbl, gain)]
 
     def move(self, dx, dy):
         h = self.hero
