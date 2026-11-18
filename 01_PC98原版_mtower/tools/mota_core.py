@@ -418,6 +418,17 @@ PIT_GUARD_CLEAR = {
     (32, 2, 9):   [(1, 10), (3, 10)],
     (44, 6, 8):   [(5, 9), (7, 9)],
     (45, 7, 10):  [(8, 9), (8, 11)],
+    # ✅ 2026-11-18（用户指出：49F 落穴被直接穿越）：原版 @3851/3857/3863 反算
+    #   45F(4,10) 守卫 黒騎士(5,9)(5,11)；49F(6,9) 守卫 魔術師Ａ(5,10)(7,10)；
+    #   49F(6,7) 守卫 黒騎士(5,8)(7,8)。这三条此前漏绑，引擎把 obj20 当普通地板放行。
+    (45, 4, 10):  [(5, 9), (5, 11)],
+    (49, 6, 9):   [(5, 10), (7, 10)],
+    (49, 6, 7):   [(5, 8), (7, 8)],
+    # ✅ 2026-11-18（用户指出：48F(8,8) 落穴漏绑）：原版 MTower.java @1802
+    #   48F(1,1) obj115 隐形砖被撞塌（FLOOR_WRITES 进层写 obj58 魔導師）→
+    #   @1795「(1,1)==空 && flag[68][126]==1 && (8,8)==20」→ 清 (8,8) 落穴。
+    #   守卫格 (1,1) 进层即 obj58（见 apply_floor_events），击杀后落穴消失。
+    (48, 8, 8):   [(1, 1)],
 }
 
 # ✅ 2026-11-17（用户指出：33F 铁门被穿行）：33F 右中室「触发即封门」机关。
@@ -779,6 +790,9 @@ class World:
         f, x, y = h.f, h.x, h.y
         nx, ny = x + dx, y + dy
         log = []
+        # 落格前快照：DIG_TRIG 判「是否已凿」必须看**进入前**的 cleared，
+        # 否则 obj88 会先被 MESSAGE 分支 cleared.add，导致首次凿墙日志被跳过。
+        was_cleared = (f, nx, ny) in self.cleared
         if self.terrain_at(f, nx, ny) == 1:
             if (f, nx, ny) in DARKWALL_CELLS:
                 # 📝 暗墙(原版地形值 3)：撞塌后露出底下物体，可踩入拾取。
@@ -917,6 +931,25 @@ class World:
                         self.dragon35_dead = True
                         for (bx, by) in DRAGON_BODY:
                             self.cleared.add((DRAGON_F, bx, by))
+                        # ✅ 2026-11-18（用户指出：雪之结晶 obj110 拿不到）：
+                        #   (6,5) 既是 DRAGON_BODY 一员又是雪之结晶落点。上面把
+                        #   8 格全加 cleared 会遮蔽 at() 的 obj110（cleared 优先级
+                        #   最高，见 at()：先 cleared → over → cells）。修法：
+                        #   ① 弹出可能残留的 pending_items（静态躯体 obj54 是怪时
+                        #      obj110 会挂在待露出队列）；
+                        #   ② (6,5) 从 cleared 摘除，at() 不再返回 0；
+                        #   ③ 显式写回 over=obj110，压住 cells 里的躯体。
+                        self.pending_items.pop((DRAGON_F, 6, 5), None)
+                        self.cleared.discard((DRAGON_F, 6, 5))
+                        self.set_at(DRAGON_F, 6, 5, 110)
+                        # ✅ 2026-11-18（用户指出：35F(6,3) 落穴漏绑）：原版 @2535
+                        #   杀魔龙（[45][58]=35F(6,6) 躯体格变空）后 → (6,3) 落穴消失
+                        #   + 摆 8 黄钥（obj77）@(2..5,4..5) 与 (7..9,4..5) 附近。此处
+                        #   只补落穴消失（战利品由 build 层按原版摆放，引擎不再重复）。
+                        if (DRAGON_F, 6, 3) not in self.cleared:
+                            self.cleared.add((DRAGON_F, 6, 3))
+                            self.ter_over.pop((DRAGON_F, 6, 3), None)
+                            log.append('★35F 魔龙已屠 → 落穴(6,3) 消失（原版 @2535）')
                         log.append('★击败35F 魔龙 obj74 → 九宫格 8 格躯体清空，可进入中央取雪之结晶')
                     # ✅ 守卫清落穴：击杀后检查是否触发了落穴消失（@3780-3845）
                     for pit in GUARD_TO_PITS.get((f, nx, ny), []):
@@ -1032,7 +1065,7 @@ class World:
             #    判定「是否已凿」不能只看触发格是否 cleared：29F 触发格本身是 obj88 MESSAGE，
             #    会先被上面的 NPC 处理清掉，须改看目标墙状态。
             tg = DIG_TRIG[(f, nx, ny)]
-            already = (tg in self.ter_over) if f == 29 else ((f, nx, ny) in self.cleared)
+            already = (tg in self.ter_over) if f == 29 else was_cleared
             if not already:
                 self.cleared.add((f, nx, ny))
                 log.append('盗賊「…大ダコの抜け穴がようやく…」→ 凿开暗道 %s' % (tg,))

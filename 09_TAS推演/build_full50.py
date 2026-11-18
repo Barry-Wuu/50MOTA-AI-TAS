@@ -224,6 +224,15 @@ for _f, _arr in M.FLOOR_WRITES.items():
         _added += 1
 print('=== floors.objs 补入事件写入怪物 %d 处（用于伤害角标）' % _added)
 
+# ✅ 2026-11-18（用户指出：49F/50F 魔王伤害角标缺失）：
+#   ゼノ obj57 是剧情事件动态 set_at（49F(6,3) 由 apply_floor_events 写入；
+#   50F(6,5) 由小偷对话 12 页 Zeno2 变身写入），不在 base_cells 也不在 FLOOR_WRITES，
+#   故上面两轮补入都漏掉。显式补 m，让 renderDmg 画剩余伤害（四维封印后 800/500/100）。
+for _fk, _fx, _fy in (('49', 6, 3), ('50', 6, 5)):
+    if _fk in floors:
+        floors[_fk]['objs']['%d,%d' % (_fx, _fy)] = [57, M.oname(57)[:24], 'm']
+print('=== 补入 49F/50F 魔王 obj57 伤害角标 2 处')
+
 # ⚠️ 2026-11-13 v11：删除"走过格一律标地板"的反推逻辑。
 #   原逻辑把路线成功经过的格子 terrain 强制设 0，会合法化路线里的穿墙错误
 #   （如已撤销的 OPEN_WALLS）。terrain 现在完全由 _dyn_terrain（引擎真值）决定。

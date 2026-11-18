@@ -383,11 +383,8 @@ main{flex:1;min-height:0;display:grid;grid-template-columns:404px minmax(0,1fr);
 .dynmk.s span{color:#b6f5d8}
 #marker{position:absolute;width:7.6923%;height:7.6923%;transform:translate(-50%,-50%);z-index:3;
   pointer-events:none}
-#heroImg{width:100%;height:100%;image-rendering:pixelated;
-  filter:drop-shadow(0 0 5px rgba(76,201,240,.95)) drop-shadow(0 0 12px rgba(76,201,240,.5))}
-#dirbadge{position:absolute;right:-3px;top:-3px;width:15px;height:15px;border-radius:50%;
-  background:#0e2a3a;border:1px solid var(--accent);color:#bfeeff;font-size:10px;line-height:13px;
-  text-align:center;font-weight:700}
+#heroImg{width:100%;height:100%;image-rendering:pixelated}
+/* ✅ 2026-11-18（用户要求）：去掉勇者身上的蓝色发光与右上角朝向角标箭头 */
 /* 楼层信息卡片（原 #mapside 内容，现移到右栏顶部） */
 .floorbody{padding:10px 12px;display:flex;flex-direction:column;gap:10px}
 /* 地图右侧的「本步状态」卡片 */
@@ -650,7 +647,7 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
           <div id="markLayer"></div>
           <div id="npcMarkLayer"></div>
           <div id="dmgLayer"></div>
-          <div id="marker"><img id="heroImg" alt="勇者"><span id="dirbadge">·</span></div>
+          <div id="marker"><img id="heroImg" alt="勇者"></div>
         </div>
         <div id="mapside">
           <div class="card statecard">
@@ -954,7 +951,6 @@ function renderMap(){
   markerEl.style.left = pct(p[1]);
   markerEl.style.top  = pct(p[2]);
   document.getElementById('heroImg').src = HERO[cur.d] || HERO['↓'];
-  document.getElementById('dirbadge').textContent = (cur.d && cur.d!=='·') ? cur.d : '·';
 
   // 剩余怪物伤害（当前层，按本步攻防算）
   renderDmg(f, cur.a, cur.df, cur.it);
@@ -988,7 +984,8 @@ function renderState(){
   const b = prev
     ? {hp:prev.hp, a:prev.a, df:prev.df, g:prev.g, ky:prev.ky, kb:prev.kb, kr:prev.kr}
     : {hp:s.hp-s.dh, a:s.a-s.da, df:s.df-s.dd, g:s.g-s.dg, ky:0, kb:0, kr:0};
-  const ev = s.e || s.l || '（纯移动）';
+  const DIRTXT = {'←':'⬅️向左移动','→':'➡️向右移动','↑':'⬆️向上移动','↓':'⬇️向下移动'};
+  const ev = s.e || s.l || (DIRTXT[s.d] || '（纯移动）');
   let h='';
   h += '<div class="stephead">'+
        '<span class="no">#'+s.i+'</span>'+
@@ -996,7 +993,6 @@ function renderState(){
        (s.rs?('<span class="pill">录制行 #'+s.rs+'</span>'):'')+
        '</div>';
   h += '<div class="evline">'+fmtEv(ev, s.f)+'</div>';
-  if(s.l && s.l!==s.e) h += '<div class="logline">引擎日志：'+fmtEv(s.l, s.f)+'</div>';
   const p=posOf(s);
   h += '<div class="posline">位置：<b>'+s.f+'F('+s.x+','+s.y+')</b>　方向 <b>'+(s.d||'·')+'</b>'+
        ((p[0]!==s.f||p[1]!==s.x||p[2]!==s.y) ? '　<span style="color:var(--gold)">引擎落点 '+p[0]+'F('+p[1]+','+p[2]+')</span>' : '')+
