@@ -129,6 +129,19 @@ for _nm in ('wing_up', 'wing_down', 'wing_center'):
         return f
     setattr(M.World, _nm, _mk(_o))
 
+# ✅ 2026-11-18（用户：祭坛献祭缺步缺日志）：face_altar 是零位移触发（Java directCheck 面朝祭坛），
+#   旧代码不录步 → 4F 献祭的 -18G / DEF 10→14 被算到紧接着的移动步头上，时间轴上根本看不到这次献祭。
+#   这里补录一个原地步（d=None 沿用上一朝向），日志即 face_altar 返回的「祭坛献金…」。
+_ofa = M.World.face_altar
+def face_altar_rec(self, ax, ay):
+    lg = _ofa(self, ax, ay)
+    txt = ';'.join(lg or [])
+    if txt and ('不足' in txt or '错误' in txt or '必须' in txt):
+        return lg                     # 失败不记步（与 use_* 口径一致）
+    record(self, None, lg)
+    return lg
+M.World.face_altar = face_altar_rec
+
 # ✅ 2026-11-15：道具使用也单独录一步。此前 use_super_pick()/use_bomb() 等直接调用、
 #   不产生 step，导致 37F「超级镐破整层 45 格真墙」这个关键动作被记到下一个移动步头上
 #   （日志里完全没有"使用超级镐"），前端也看不到它引发的整层地形变化。
