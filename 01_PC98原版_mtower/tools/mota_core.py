@@ -556,6 +556,7 @@ class World:
     pending_items: Dict = None        # ✅ 事件写在怪物脚下的道具：怪物被击杀后露出（10F 水晶/蓝药/黄钥）
     story26: bool = False             # ✅ 26F(6,7) 假公主剧情已触发 → 24F 竖井已挖开（一次性）
     cut10_done: bool = False          # 10F(6,5) 围杀过场已触发
+    cut40_done: bool = False          # 40F(6,7) 触发 20 段围杀剧本（66/126）
     story24_end: bool = False         # ✅ 24F(6,0) ending() 已执行 → 已传送到 50F(6,7)、24F 已还原
     seal49: bool = False              # ✅ 49F 十字封印成立（四正方向警卫全灭）→ obj57 改写 800/500/100
     zeno49_dead: bool = False         # ✅ 49F(6,3) ゼノ已击败 → 战后演出已摆出道具
@@ -571,7 +572,7 @@ class World:
     def new(cls, event_mode='on_entry', hero=None, trap_mode='apply'):
         w = cls(hero=hero or Hero.initial(), cells=base_cells(), over={}, ter_over={}, cleared=set(),
                 applied_events=set(), event_mode=event_mode, trap_mode=trap_mode, caveats=set(),
-                bought=set(), boss10=False, boss20=False, octo15=False, event41_stage=0, pending_items={}, cut10_done=False)
+                bought=set(), boss10=False, boss20=False, octo15=False, event41_stage=0, pending_items={}, cut10_done=False, cut40_done=False)
         w.apply_floor_events(w.hero.f)
         return w
 
@@ -623,6 +624,10 @@ class World:
                 continue
             if o:
                 self.set_at(f, x, y, o)
+        # ✅ 2026-11-18：金騎士 是 66/126 剧本第 18 段才登场的，进层不该站在 (6,6)
+        if f == 40 and not self.cut40_done:
+            self.set_at(40, 6, 6, 0)
+            self.cleared.discard((40, 6, 6))
         if f == 49:
             # ✅ 进入 49F 触发ゼノ登场（Java@1779-1794：踩 (6,5) 播 Zeno(110,55)）+ 8 只 obj58 围成十字
             self.set_at(*ZENO49_CELL, SEAL_TARGET)
@@ -1187,11 +1192,28 @@ class World:
             return self.do_trap3F(log)
         # 剧本收尾后的通路：盗贼挖开的 2F(2,7) 由 ter_over 生效，这里只把「四角撤走」标清楚
         
+        # ✅ 2026-11-18：40F 踩 (6,7) 触发 66/126 围杀剧本（金騎士 这才登场）
+        if h.f == 40 and (nx, ny) == (6, 7) and not self.cut40_done:
+            h.x, h.y = nx, ny
+            return self.do_cut40()
         if h.f == 3 and self.trap_mode == 'avoid' and (nx, ny) == TRAP_3F['trigger']:
             return ['避开3F中央(反事实)']
         return log
 
     # -- 10F 围杀过场 ------------------------------------------------------
+    # -- 40F 围杀剧本（MTower.java 66/126 计数器 1→20）----------------------
+    def do_cut40(self):
+        """踩 (6,7) 触发：源作里 6 波兵士沿 x6 竖廊逼到 (6,6) 各出手一次，第 18 段
+        金騎士 才在 (6,6) 现身；第 19 段它上移到 (6,2) 变评分 NPC 并铺 9 件战利品。
+        本引擎此前把金騎士 当静态怪、进层就站在 (6,6)。这里还原「何时出现」。
+        ⚠️ 兵士站位不搬（搬完 6 只叠在 (6,6)，会把 (3,4)~(9,4) 三个战利品格掏空），
+        脚本攻击(attackFlag)也不额外扣血 —— 该层 BOSS 战本来就是 0 伤害。"""
+        self.set_at(40, 6, 6, 90)
+        self.cleared.discard((40, 6, 6))
+        self.cut40_done = True
+        return ['剧情：兵士分 6 波沿 x6 竖廊逼近 (6,6)（每波出手一次）',
+                '剧情：第18段 金騎士 在 (6,6) 现身（此前不在场）']
+
     def do_cut10(self):
         """MTower.java@3604 触发 / @3350-3602 演出：BOSS 连退两格到 (6,1)，
         内圈 6C+2B 依次围到 (6,5) 四周八格，(6,3)(6,7)(4,4)(8,4) 变落穴。

@@ -310,6 +310,12 @@ for _f, _cells in BAKED.items():
     if not _until:
         continue
     MASK[str(_f)] = [[x, y, _until] for (x, y) in _cells]
+# ✅ 2026-11-18：40F 金騎士 是剧本第 18 段才登场的，底图里却画着 → 按它的 dyn 登场步遮挡
+for _d in (data.get('dyn') or {}).get('40', []):
+    if isinstance(_d[3], int) and _d[3] == 90 and (_d[0], _d[1]) == (6, 6):
+        MASK.setdefault('40', []).append([6, 6, _d[2]])
+        break
+
 if MASK:
     data['mask'] = MASK
     print('=== 底图烤入的战利品格已遮挡 %s' % {k: len(v) for k, v in MASK.items()})
