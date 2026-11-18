@@ -604,6 +604,8 @@ def main():
 
     print('\n=== 10F 决战 ===')
     if not run_segs(w, 10, F['10b'], '10F决战'): return 1
+    w.do_cut10()   # ★10F 围杀过场（BOSS 退位 + 8 只骷髅围上来）
+    if not run_segs(w, 10, F['10b2'], '10F围杀突围'): return 1
     if not stair(w, 6, 11, '10F(6,11)->11F（BOSS 死后上行梯）'): return 1
 
     print('\n★★ 第一区完成，进 11F:', st(w.hero))

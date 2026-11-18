@@ -555,6 +555,7 @@ class World:
     event41_stage: int = 0            # ✅ 41F 暗墙事件阶段：0=未触发, 1=(2,2)杀+(10,2)撞墙刷怪, 2=事件完成(降臨の翼生成)
     pending_items: Dict = None        # ✅ 事件写在怪物脚下的道具：怪物被击杀后露出（10F 水晶/蓝药/黄钥）
     story26: bool = False             # ✅ 26F(6,7) 假公主剧情已触发 → 24F 竖井已挖开（一次性）
+    cut10_done: bool = False          # 10F(6,5) 围杀过场已触发
     story24_end: bool = False         # ✅ 24F(6,0) ending() 已执行 → 已传送到 50F(6,7)、24F 已还原
     seal49: bool = False              # ✅ 49F 十字封印成立（四正方向警卫全灭）→ obj57 改写 800/500/100
     zeno49_dead: bool = False         # ✅ 49F(6,3) ゼノ已击败 → 战后演出已摆出道具
@@ -570,7 +571,7 @@ class World:
     def new(cls, event_mode='on_entry', hero=None, trap_mode='apply'):
         w = cls(hero=hero or Hero.initial(), cells=base_cells(), over={}, ter_over={}, cleared=set(),
                 applied_events=set(), event_mode=event_mode, trap_mode=trap_mode, caveats=set(),
-                bought=set(), boss10=False, boss20=False, octo15=False, event41_stage=0, pending_items={})
+                bought=set(), boss10=False, boss20=False, octo15=False, event41_stage=0, pending_items={}, cut10_done=False)
         w.apply_floor_events(w.hero.f)
         return w
 
@@ -1190,6 +1191,39 @@ class World:
             return ['避开3F中央(反事实)']
         return log
 
+    # -- 10F 围杀过场 ------------------------------------------------------
+    def do_cut10(self):
+        """MTower.java@3604 触发 / @3350-3602 演出：BOSS 连退两格到 (6,1)，
+        内圈 6C+2B 依次围到 (6,5) 四周八格，(6,3)(6,7)(4,4)(8,4) 变落穴。
+        位移序列照抄 Java 的 42 次 moveChara(x,y,dir)，dir: 1=右 2=左 3=下 4=上。
+        ⚠️ 用户确认 Java 与 PC98 同图：(5,6)(7,6) 在本图被读成墙，触发时一并按地板打通。"""
+        MOV = [(6, 3, 4), (6, 2, 4),
+               (2, 4, 1), (3, 4, 1), (4, 4, 1), (5, 4, 3), (5, 5, 3), (5, 6, 1),
+               (10, 4, 2), (9, 4, 2), (8, 4, 2), (7, 4, 2),
+               (3, 3, 3), (3, 4, 1), (4, 4, 1), (5, 4, 3), (5, 5, 3),
+               (9, 3, 3), (9, 4, 2), (8, 4, 2), (7, 4, 3), (7, 5, 3),
+               (2, 3, 3), (2, 4, 1), (3, 4, 1), (4, 4, 1), (5, 4, 3),
+               (10, 3, 3), (10, 4, 2), (9, 4, 2), (8, 4, 2), (7, 4, 3),
+               (1, 3, 3), (1, 4, 1), (2, 4, 1), (3, 4, 1), (4, 4, 1),
+               (11, 3, 3), (11, 4, 2), (10, 4, 2), (9, 4, 2), (8, 4, 2)]
+        D = {1: (1, 0), 2: (-1, 0), 3: (0, 1), 4: (0, -1)}
+        moved = 0
+        for (x, y, d) in MOV:
+            o = self.at(10, x, y)
+            if not o:
+                continue
+            dx, dy = D[d]
+            self.set_at(10, x, y, 0)
+            self.set_at(10, x + dx, y + dy, o)
+            moved += 1
+        for (x, y) in ((6, 3), (6, 7), (4, 4), (8, 4)):
+            self.set_at(10, x, y, 20)
+        self.ter_over[(10, 5, 6)] = 1
+        self.ter_over[(10, 7, 6)] = 1
+        self.cut10_done = True
+        return ['剧情：スケルトンＡ 退到 (6,1)，%d 只骷髅依次围上来（(5,4)~(7,6) 八格），'
+                '(6,3)(6,7)(4,4)(8,4) 塌成落穴' % moved]
+
     def _reveal_pending(self, f, x, y, log):
         """事件写在怪物脚下的道具：击杀后露出并立即取得（对应原版 itemFlag 拾取演出）。"""
         o = self.pending_items.pop((f, x, y), None)
@@ -1534,7 +1568,7 @@ class World:
                  (2, 3, 13), (10, 3, 14))                     # 同左：赤晶 / 蓝晶
         for fx, fy, fo in under:
             # ⚠️ 若该格怪已在 BOSS 前被杀，pending 永远不会兑现 → 直接铺出（同 20F 修正）
-            if (10, fx, fy) in self.cleared:
+            if (10, fx, fy) in self.cleared or not self.at(10, fx, fy) or TYPE.get(oatr(self.at(10, fx, fy), 3)) != 'MONSTER':
                 self.set_at(10, fx, fy, fo)
                 self.cleared.discard((10, fx, fy))
             else:
