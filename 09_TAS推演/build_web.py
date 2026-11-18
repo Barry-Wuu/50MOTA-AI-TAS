@@ -1264,7 +1264,12 @@ function showNpcTip(el){
     const d = NPC_DLG[key];
     if(!d) return;
     // 只显示本层台词（data-floor 提供时）；无 data-floor 则回退全部
-    const ls = (floor!=null) ? d.lines.filter(function(l){ return l.f===floor; }) : d.lines;
+    let ls = (floor!=null) ? d.lines.filter(function(l){ return l.f===floor; }) : d.lines;
+    // 2026-11-18：本层无台词时回退到该角色全部台词。
+    //   假魔王/魔王 Zeno（obj57）台词按 magic_tower1_texts.md 归在 3/40/50F，
+    //   但 49F 假魔王（击败给屠龙匕）那步 data-floor=49 → 过滤后 0 条 → tooltip 不显示。
+    //   49F 假魔王与 50F 真魔王是同一角色，跨层回退可正确显示其台词。
+    if(!ls.length && floor!=null) ls = d.lines;
     if(!ls.length) return;
     // 具名角色显示「日文 ⇒ 中文」；老人/商人等无日文异名的角色只显示中文名
     const head = (d.jp && d.jp !== d.zh) ? (esc(d.jp)+' ⇒ '+esc(d.zh)) : esc(d.zh);
