@@ -816,6 +816,35 @@ class World:
             log.append('29F(6,3) 暗道打通，现黄钥匙 obj1')
         return log
 
+    def face_talk(self, tx, ty):
+        """✅ 2026-11-19（用户：别踏进 NPC 格再退出来）：面朝 MESSAGE NPC 交谈，人不进格
+        （原著 directCheck 阻挡式）。效果与 move 落在 MESSAGE 分支一致（+3%/金币/道具/纯台词）。
+        零位移，单独录一步。"""
+        h = self.hero
+        f, x, y = h.f, h.x, h.y
+        if abs(tx - x) + abs(ty - y) != 1:
+            return ['blocked:必须站在 NPC 邻格面朝它（当前(%d,%d)→(%d,%d)）' % (x, y, tx, ty)]
+        o = self.at(f, tx, ty)
+        t = TYPE.get(oatr(o, 3)) if o else None
+        if t != 'MESSAGE':
+            return ['blocked:(%d,%d) 非可交谈 NPC' % (tx, ty)]
+        if (f, tx, ty) in self.cleared:
+            return ['blocked:已交谈']
+        kind, val = MSG_EFFECT.get(o, ('none', None))
+        log = []
+        if kind == 'pct3':
+            b_a, b_d = h.atk, h.dfn
+            h.atk, h.dfn = int(h.atk * 1.03) or 1, int(h.dfn * 1.03) or 1
+            log.append(f'NPC obj{o} 交谈后消失：攻{b_a}→{h.atk} 防{b_d}→{h.dfn}（+3%，取整）')
+        elif kind == 'gold':
+            h.gold += val; log.append(f'NPC obj{o} 交谈后消失：+{val} GOLD')
+        elif kind == 'item':
+            h.items.add(val); log.append(f'NPC obj{o} 交谈后消失：获得 obj{val}')
+        else:
+            log.append(f'NPC obj{o} 交谈后消失')
+        self.cleared.add((f, tx, ty))
+        return log
+
     def move(self, dx, dy):
         h = self.hero
         # ✅ 2026-11-14 保真度修正：原版每次输入只走 **一格**。

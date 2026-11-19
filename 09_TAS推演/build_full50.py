@@ -167,6 +167,17 @@ def face_dig_rec(self, tx, ty):
     return lg
 M.World.face_dig = face_dig_rec
 
+# ✅ 2026-11-19（用户：别踏进 NPC 格再退）：face_talk 同 face_altar/face_dig，零位移触发，补录原地步。
+_otalk = M.World.face_talk
+def face_talk_rec(self, tx, ty):
+    lg = _otalk(self, tx, ty)
+    txt = ';'.join(lg or [])
+    if txt and ('blocked' in txt or '不足' in txt or '错误' in txt or '必须' in txt):
+        return lg
+    record(self, None, lg)
+    return lg
+M.World.face_talk = face_talk_rec
+
 # ✅ 2026-11-15：道具使用也单独录一步。此前 use_super_pick()/use_bomb() 等直接调用、
 #   不产生 step，导致 37F「超级镐破整层 45 格真墙」这个关键动作被记到下一个移动步头上
 #   （日志里完全没有"使用超级镐"），前端也看不到它引发的整层地形变化。
