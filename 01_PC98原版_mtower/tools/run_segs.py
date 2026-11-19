@@ -214,23 +214,18 @@ def goto(w, tx, ty, label=''):
         seq.append(cur)
         cur = prev[cur]
     seq.reverse()
-    # ✅ 2026-11-19（用户清单 16 处贴梯冗余）：目标格是「楼梯邻格的纯空地」
-    #   且沿途已先经过同一楼梯的另一个邻格时，在那里提前停——紧跟的 stair()
-    #   会就地踩梯，省去绕到对侧再折返的 2 步。
-    tgt_stairs = [(sx, sy) for (sx, sy) in _stair_cells(w, h.f)
-                  if abs(tx - sx) + abs(ty - sy) == 1]
-    if len(tgt_stairs) == 1 and not w.at(h.f, tx, ty) \
-            and not M.obj_raw(h.f, tx, ty) and (tx, ty) not in M.DARKWALL_CELLS \
-            and (h.f, tx, ty) not in M.DIG_WALLS:
-        sx, sy = tgt_stairs[0]
-        # 起点已贴同一梯 → 整个 goto 都是绕行，直接停（紧跟的 stair 就地踩）
-        if abs(start[0] - sx) + abs(start[1] - sy) == 1:
-            seq = []
-        else:
-            for k, c in enumerate(seq):
-                if abs(c[0] - sx) + abs(c[1] - sy) == 1 and c != (tx, ty):
-                    seq = seq[:k + 1]
+    # ✅ 2026-11-19：goto 目标是「回梯旁」类纯空地时，沿途若先经过贴梯格就停在那里
+    #   （紧跟的 fly/stair 只需贴梯），省走到梯另一侧邻格的 2 步。
+    if not w.at(h.f, tx, ty) and not M.obj_raw(h.f, tx, ty):
+        stairs = [c for c in M.STAIRS.get(h.f, (None, None)) if c]
+        for k, c in enumerate(seq):
+            if c == (tx, ty):
+                break
+            if any(abs(c[0] - sx) + abs(c[1] - sy) == 1 for (sx, sy) in stairs):
+                if w.at(h.f, c[0], c[1]) or M.obj_raw(h.f, c[0], c[1]):
                     break
+                seq = seq[:k + 1]
+                break
     for (nx, ny) in seq:
         dx, dy = nx - w.hero.x, ny - w.hero.y
         f0 = w.hero.f
@@ -273,20 +268,10 @@ def stair(w, sx, sy, label=''):
         print('  !! 楼梯 %dF(%d,%d) 无可达入口' % (h.f, sx, sy))
         return False
     ax, ay = best[1], best[2]
-    if 'DBGSTAIR' in __import__('os').environ:
-        print('  [DBG] %dF stair(%d,%d) hero(%d,%d) cands=%s best=(%d,%d) d=%s'
-              % (h.f, sx, sy, h.x, h.y,
-                 [(_p, _dist_to(w, _p[0], _p[1])) for _p in cands], ax, ay, best[0]))
     if not goto(w, ax, ay):
         print('  !! 楼梯 %dF(%d,%d) 无可达入口' % (h.f, sx, sy))
         return False
-    if 'DBGSTAIR' in __import__('os').environ:
-        print('  [DBG2] after goto: hero(%d,%d) target(%d,%d) step=(%d,%d)'
-              % (w.hero.x, w.hero.y, ax, ay, sx - w.hero.x, sy - w.hero.y))
     ok, lg = _step(w, (sx - w.hero.x, sy - w.hero.y))
-    if 'DBGSTAIR' in __import__('os').environ:
-        print('  [DBG3] after step: hero(%d,%d) f%d ok=%s lg=%s'
-              % (w.hero.x, w.hero.y, w.hero.f, ok, lg))
     if not ok:
         print('  !! 上楼梯失败: %s' % lg)
         return False

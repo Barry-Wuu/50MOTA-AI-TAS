@@ -173,12 +173,21 @@ def goto(w, tx, ty, label=''):
 
 def stair(w, sx, sy, label=''):
     h = w.hero
+    # ✅ 2026-11-19（用户清单16处贴梯冗余，坐标对齐）：
+    #   原按固定顺序 (下,上,右,左) 取第一个可站邻格 → 总是走到梯下方 (sx,sy+1)，
+    #   即使英雄已站在梯另一侧邻格（如 (5,1) 贴梯 (6,1)），仍绕 2 步到 (6,2) 再踩。
+    #   改为按 Dijkstra 距离取最近邻格（与 run_segs.py 的 stair 口径一致），
+    #   英雄已贴梯时 distance=0 → 原地踩，省去绕行 2 步。
+    cands = []
     for d in ((0, 1), (0, -1), (1, 0), (-1, 0)):
         ax, ay = sx + d[0], sy + d[1]
         if not (1 <= ax <= 11 and 1 <= ay <= 11):
             continue
         if not _cost(w, h.f, ax, ay)[0]:
             continue
+        cands.append((ax, ay))
+    cands.sort(key=lambda p: _dist_to(w, p[0], p[1]) if _dist_to(w, p[0], p[1]) is not None else 1e9)
+    for (ax, ay) in cands:
         if not goto(w, ax, ay):
             continue
         ok, lg = _step(w, (sx - w.hero.x, sy - w.hero.y))
@@ -566,7 +575,7 @@ def main():
         (3, 1,  ''),
         (4, 1,  ''),
         (5, 1,  ''),
-        (5, 2,  ''),
+        # ✅ 2026-11-19：删多余段末点(5,2)——(5,1)已贴梯(6,1)，stair 就地踩省2步
     ], 'V6 取15F蓝钥'): return 1
     if not stair(w, 6, 1, 'V6 15F->16F（提前取剑）'): return 1
     # 16F 穿行：蓝门(6,4) → 绕兽人武士(6,6) 走 x7 列 → 黄门(6,8) → 上行梯(6,11)
@@ -622,8 +631,7 @@ def main():
         (3, 11, ''),
         (4, 11, ''),
         (5, 11, ''),
-        (5, 10, ''),
-        (6, 10, '回底廊邻下行梯'),
+        # ✅ 2026-11-19：删(5,10)(6,10)两步绕行——(5,11)已贴梯(6,11)，紧跟 fly(12) 只需贴梯
     ], 'V6 取剑'): return 1
     if h.atk < 50:
         print('  !! V6 提前取剑未生效（ATK=%d，应为 50）' % h.atk); return 1
@@ -945,8 +953,6 @@ def main():
         (3, 1, ''),
         (4, 1, ''),
         (5, 1, ''),
-        (5, 2, ''),
-        (6, 2, ''),
     ], 'V14'): return 1
     # (6,2) 邻上行梯(6,1)，飞 11F（FLY_LAND[11]=(6,10)）
     if not fly(w, 11, 'V14 15F→11F（飞行之珠）'): return 1
@@ -1203,8 +1209,6 @@ def main():
         (9, 11, ''),
         (8, 11, ''),
         (7, 11, ''),
-        (7, 10, ''),
-        (6, 10, ''),
     ], 'V19'): return 1
     # 中间偏左：上級僧侶 → ゾンビ → 黄门 → ゾンビナイト → 上行梯
     if not run(w, [
@@ -1495,7 +1499,8 @@ def main():
     _lg = w.move(1, 0)            # 朝 (11,11) 商店触发购物，英雄仍停 (10,11)
     if not _lg or not any('购物 obj159' in s for s in _lg):
         print('  !! V25 15F 购物失败:', _lg); return 1
-    if not goto(w, 6, 10, 'V25 15F 回楼梯旁(6,10)'): return 1
+    # ✅ 2026-11-19：购物后就近贴梯——走到(7,11)即贴梯(6,11)，与原(6,10)同为梯邻格，省2步
+    if not goto(w, 7, 11, 'V25 15F 回楼梯旁(7,11)'): return 1
     if not run_segs.fly(w, 20, 'V25 15F->20F'): return 1
 
     print()
@@ -1911,8 +1916,6 @@ def main():
         (6, 8, ''),
         (6, 9, ''),
         (6, 10, ''),
-        (7, 10, ''),
-        (7, 11, ''),                 # 上梯(6,11)旁
     ], 'V31'): return 1
 
     print()
