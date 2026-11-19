@@ -85,7 +85,11 @@ def record(w, d, lg):
         if over_prev.get(k) != v and k not in w.cleared:
             if v:
                 dyn[str(k[0])].append([k[1], k[2], idx, int(v) if isinstance(v, int) else str(v)])
-            elif over_prev.get(k):
+            elif over_prev.get(k) or M.obj_raw(k[0], k[1], k[2]):
+                # ✅ 2026-11-19：静态格（cells 里的怪/物件）被 set_at(...,0) 抹掉时，
+                #   over_prev 里没有它的旧值（静态物件不在 over 里），旧条件会漏发 T0
+                #   → 前端仍按 objs 把那只怪画在原地。40F 剧本「怪走到 (6,6) 后原格腾空」
+                #   正是这种情形，故补 obj_raw 判据。
                 dyn[str(k[0])].append([k[1], k[2], idx, 'T0'])
     for k, v in w.ter_over.items():
         if ter_prev.get(k) != v:
@@ -106,8 +110,16 @@ _om = M.World.move
 def move_rec(self, dx, dy):
     lg = _om(self, dx, dy)
     record(self, (dx, dy), lg)
+    # ✅ 2026-11-19：40F 踩 (6,7) 触发围杀剧本时，引擎只登记 pending，
+    #   这里在「到达步」之后逐波补记 13 个零位移步（每步一只怪走过来出手），
+    #   这样掉血分散在各自那一步、前端能逐步看到怪消失。
+    if getattr(self, 'cut40_pending', False):
+        self.cut40_pending = False
+        for _wlg in self.iter_cut40():
+            record(self, None, _wlg)
     return lg
 M.World.move = move_rec
+M.DEFER_CUT_STEPS = True
 
 _of = M.World.fly
 def fly_rec(self, tf):
