@@ -118,6 +118,9 @@ for _jp, _names in ROUTE_NAMES.items():
         NPC_DLG.setdefault(_n, _rec)
 # 商人 / 老人：遍历实体 NPC，按楼层聚合中文台词
 _merch = {}; _old = {}
+_MERCH_CELL = {}   # (floor,x,y) -> 该格商人台词；每个商人单独一句，避免同层多商人共享台词
+def _cell_key(f, x, y):
+    return '商人@%d-%d-%d' % (f, x, y)
 try:
     for _r in csv.DictReader(io.open(ENT_PATH, encoding='utf-8-sig')):
         if not _is_npc_entity(_r):
@@ -130,6 +133,10 @@ try:
         except Exception:
             continue
         try:
+            _x = int(_r['x']); _y = int(_r['y'])
+        except Exception:
+            continue
+        try:
             _obj = int(_r['obj']) if _r.get('obj') else -1
         except Exception:
             _obj = -1
@@ -139,10 +146,23 @@ try:
         _nj = _r.get('name_jp') or ''
         _is_m = (_OBJ_GRP.get(_obj) == MCH_GRP) or any(k in _nj for k in _MERCHANT_KW)
         (_merch if _is_m else _old).setdefault(_fi, []).append(_zh)
+        if _is_m:
+            _MERCH_CELL[(_fi, _x, _y)] = _zh
 except Exception:
     pass
+# 12F(11,1) 右上角 obj17 无限卖黄钥匙商店（1000G/把，撞暗墙后出现）：
+# 实体表只在 catalog 行登记 obj17（模板），12F 无逐层实体行 → 上面循环漏掉。
+if _OBJ_ZH.get(17):
+    _MERCH_CELL[(12, 11, 1)] = _OBJ_ZH[17]
+    if _OBJ_ZH[17] not in _merch.get(12, []):
+        _merch.setdefault(12, []).append(_OBJ_ZH[17])
 NPC_DLG['商人'] = {'jp': '商人', 'zh': '商人',
                   'lines': [{'f': f, 'zh': z} for f in sorted(_merch) for z in _merch[f]]}
+# 每个商人格一个独立 key（jp/zh 都叫「商人」，悬停只显示该格那一句）：
+# 12F 左上角 obj156=800G 红钥匙、右上角 obj17=1000G 无限黄钥匙——各弹各的。
+for (_cf, _cx, _cy), _czh in _MERCH_CELL.items():
+    NPC_DLG[_cell_key(_cf, _cx, _cy)] = {'jp': '商人', 'zh': '商人',
+                                         'lines': [{'f': _cf, 'zh': _czh}]}
 NPC_DLG['老人'] = {'jp': '老人', 'zh': '老人',
                   'lines': [{'f': f, 'zh': z} for f in sorted(_old) for z in _old[f]]}
 NPC_DLG_JSON = json.dumps(NPC_DLG, ensure_ascii=False)
@@ -213,10 +233,14 @@ try:
             _role = _mm.group(1).strip()          # 盗賊 / 勇者（具名实体）
         else:
             _is_m = (_OBJ_GRP.get(_obj) == MCH_GRP) or any(k in _nj for k in _MERCHANT_KW)
-            _role = '商人' if _is_m else '老人'
+            # 商人用按格独立 key（同层多商人各弹各的台词）；老人仍用通用「老人」
+            _role = _cell_key(_fi, _x, _y) if _is_m else '老人'
         _MARK_CELLS.setdefault((_fi, _x, _y), set()).add(_role)
 except Exception:
     pass
+# 12F(11,1) 右上角 obj17 无限卖黄钥匙商人：实体表只 catalog 行有它（撞暗墙后出现），
+# 12F 无逐层行 → 上面循环漏挂标记，右上角商人悬停无 tooltip。补挂其独立 key。
+_MARK_CELLS.setdefault((12, 11, 1), set()).add(_cell_key(12, 11, 1))
 NPC_MARKS = {}
 for (_f, _x, _y), _set in _MARK_CELLS.items():
     NPC_MARKS.setdefault(_f, []).append({'x': _x, 'y': _y, 'n': sorted(_set)})
