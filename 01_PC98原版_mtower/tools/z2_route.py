@@ -4510,12 +4510,13 @@ def main():
                     continue
                 if not goto(w, x, y, 'V83 %dF 零损清怪 obj%d(%d,%d)' % (fl, o, x, y)):
                     print('  .. V83 %dF obj%d(%d,%d) 跳过（不可达/被堵）' % (fl, o, x, y))
-            # 清扫后必须回到楼梯旁（FLY_LAND 落点）才能再飞；同样无钥绕门
-            lx, ly = M.FLY_LAND[fl]
-            if (h.x, h.y) != (lx, ly):
-                if not goto(w, lx, ly, 'V83 %dF 回珠飞落点(%d,%d)' % (fl, lx, ly)):
-                    print('  !! V83 %dF 回落点失败（无钥），巡回中止' % fl)
-                    return False
+            # ✅ 2026-11-19（用户）：清扫完就近贴梯起飞，不再一律走回 FLY_LAND。
+            #   FLY_LAND 只是「飞进来的落点」，它挨着的那座楼梯未必最近 ——
+            #   15F 清完在 (3,10)，走回 (6,10) 要 11 步，走到 (5,1)（贴 (6,1) 上梯）只要 10 步；
+            #   19F/14F 同理（分别走回 (1,2)/(10,11) 都是绕远）。改取最近的梯邻格。
+            if not goto_stair_adj(w, 'V83 %dF 就近贴梯' % fl):
+                print('  !! V83 %dF 贴梯失败（无钥），巡回中止' % fl)
+                return False
             return True
         finally:
             h.keys['y'], h.keys['b'], h.keys['r'] = real_keys
@@ -4532,6 +4533,9 @@ def main():
     #   （10F 及以下），合计省 544 步、买镐前仍余 269G。
     _SWEEP_FLOORS = [18, 12, 15, 19, 14, 20, 17,
                      33, 34, 36, 38, 40]
+    # ✅ 2026-11-19（用户）：某层的进入点改由邻层楼梯中转时记在这里 ——
+    #   {目标层: 中转层}；中转后踩 (6,11) 下楼即到目标层的 WARP 落点。
+    _SWEEP_RELAY = {14: 15}
     for _fl in _SWEEP_FLOORS:
         # ✅ 2026-11-15：该层已无 0 战损目标 → 不飞这一趟。
         #   原先是无条件飞过去、落点站一步再飞去下一层（每层白 1 步，
@@ -4545,17 +4549,32 @@ def main():
         _rk = (_h.keys['y'], _h.keys['b'], _h.keys['r'])
         _h.keys['y'] = _h.keys['b'] = _h.keys['r'] = 0
         try:
-            _lx, _ly = M.FLY_LAND[_fl]
+            if _fl in _SWEEP_RELAY:
+                # WARP 值是 (目标层, x, y)，这里只要落点坐标
+                _lx, _ly = M.WARP[(_SWEEP_RELAY[_fl], 6, 11)][1:]
+            else:
+                _lx, _ly = M.FLY_LAND[_fl]
             _ds = _bfs_dist(w, _fl, _lx, _ly)
         finally:
             _h.keys['y'], _h.keys['b'], _h.keys['r'] = _rk
         if not any(_ds.get((x, y), 1e9) < 1e9 for (x, y, _o) in _tg):
             print('  .. V83 %dF 目标全不可达（无钥绕门），跳过不飞' % _fl)
             continue
-        # 珠飞要求站楼梯旁；FLY_LAND 落点即上行梯旁踏出格 → 落地后可直接再飞
-        if not fly(w, _fl, 'V83 珠飞→%dF' % _fl):
-            print('  !! V83 珠飞 %dF 失败，跳过该层' % _fl)
-            continue
+        # ✅ 2026-11-19（用户指定「#5055 飞 15F 走下楼并 ^^ 接 #5063」）：
+        #   19F→14F 不再直飞 14F(10,11)（离作业面 (6,8) 还有 7 步），
+        #   改「珠飞 15F(6,10) → 踩 15F(6,11) 下落 → 14F(6,10)」，落地就贴着 x6 竖道，
+        #   上两步即 (6,8)。_SWEEP_RELAY 记「去该层改由哪层中转」。
+        if _fl in _SWEEP_RELAY:
+            if not fly(w, _SWEEP_RELAY[_fl], 'V83 珠飞→%dF（中转）' % _SWEEP_RELAY[_fl]):
+                print('  !! V83 珠飞 %dF 失败，跳过该层' % _SWEEP_RELAY[_fl])
+                continue
+            if not stair(w, 6, 11, 'V83 %dF 下楼→%dF' % (_SWEEP_RELAY[_fl], _fl)):
+                continue
+        else:
+            # 珠飞要求站楼梯旁；FLY_LAND 落点即上行梯旁踏出格 → 落地后可直接再飞
+            if not fly(w, _fl, 'V83 珠飞→%dF' % _fl):
+                print('  !! V83 珠飞 %dF 失败，跳过该层' % _fl)
+                continue
         if not _zero_sweep(w, _fl):
             break
         print('  %-26s %s' % ('V83 %dF 清完' % _fl, st(h)))
