@@ -286,13 +286,38 @@ def fly(w, target_f, label=''):
     return True
 
 
+def goto_stair_adj(w, label=''):
+    """走到**最近**的楼梯邻格（飞行之珠/升降须站梯旁）。
+    ✅ 2026-11-19（用户：不接受剪枝器兜底）：FLY_LAND 只是「飞进来的落点」，不是最近的梯旁；
+       4F 收尾在 (1,10)（已贴 (1,11) 梯）却走回 (11,10) 再飞，白跑 12 步。改为就近贴梯。"""
+    h = w.hero
+    cands = []
+    for (sx, sy) in _stair_cells(w, h.f):
+        for dx, dy in ((0, 1), (0, -1), (1, 0), (-1, 0)):
+            ax, ay = sx + dx, sy + dy
+            if not (1 <= ax <= 11 and 1 <= ay <= 11):
+                continue
+            if not _cost(w, h.f, ax, ay)[0]:
+                continue
+            cands.append((ax, ay))
+    best = None
+    for (ax, ay) in cands:
+        d = _dist_to(w, ax, ay)
+        if d is None:
+            continue
+        if best is None or d < best[0]:
+            best = (d, ax, ay)
+    if best is None:
+        print('  !! %dF 无站得住的梯邻格' % h.f)
+        return False
+    return goto(w, best[1], best[2], label or ('%dF 就近贴梯' % h.f))
+
+
 def fly_to(w, target_f, label=''):
-    """走到当前层上行梯旁（FLY_LAND[h.f] 邻接本层上行梯），再用飞行之珠传送到 target_f。
+    """走到最近的梯邻格，再用飞行之珠传送到 target_f。
     ✅ 2026-11-14：orb 前移后（Toy 1100 起持有），用本函数把空爬楼换成 1 次传送。
     前提：本层上行梯旁格可达（FLY_LAND[h.f] 是上行踏出格，必邻接上行梯）。"""
-    h = w.hero
-    lx, ly = M.FLY_LAND.get(h.f)
-    if not goto(w, lx, ly, '%dF 走至上行梯旁' % h.f):
+    if not goto_stair_adj(w, '%dF 就近贴梯' % w.hero.f):
         return False
     return fly(w, target_f, label)
 
