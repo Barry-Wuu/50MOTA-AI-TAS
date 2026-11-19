@@ -28,9 +28,9 @@ def run(cmd, tag):
         raise SystemExit('%s 失败 rc=%s' % (tag, r.returncode))
 
 # 0) 自动剪除空闲闭环（必须在 build_web 之前，否则步数回涨）
-run(['_prune_loops.py', DATA_F], 'prune 空闲闭环')
-# 0b) 剪除「贴梯后多走空步才 fly/stair」的冗余（带 cons/dyn 引用保护）
-run(['_prune_stair_tail.py', DATA_F], 'prune 贴梯尾部冗余')
+# ✅ 2026-11-19（用户决定）：停用剪枝器，展开结果直接当成品。
+#   原 _prune_loops / _prune_stair_tail 会隐藏删除 108 步（4 个往返闭环 68 + 19 处踩梯空走 40），
+#   属于「源里有、成品没有」的裁剪，已按用户要求去掉。
 
 # 1) build_web.py 拆分模式
 run(['build_web.py', DATA_F, 'x.html', '50', TMP], 'build_web 拆分')
