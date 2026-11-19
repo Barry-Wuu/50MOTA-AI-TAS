@@ -822,18 +822,37 @@ function dmgInfo(m, heroA, heroD, items, oid){
   const h = 120 - 120*t;
   return {txt:String(loss), color:'hsl('+h+',92%,56%)', cant:false, loss:loss};
 }
+/* ✅ 2026-11-19（用户：8 只怪在 #1635 就该显示，伤害角标要跟着怪走、打完消失）：
+   旧 renderDmg 直接把 floors[f].objs（静态底图上的怪）按原地坐标画角标 ——
+   10F 围杀把 6C+2B 挪到 (6,5) 四周后，角标仍钉在 (1,3)(2,3)… 这些原格，且打死后也不消失。
+   这里按「静态 objs 打底 → 依事件顺序叠 dyn（物件落位 / 清空）→ 扣掉已消耗格」求出该步
+   每个格子上真正的物件，角标再跟着这个结果画。 */
+function curObjs(f){
+  const fl = FL[f] || {};
+  const cur = {}, objs = fl.objs || {};
+  for(const k in objs) cur[k] = objs[k];
+  ((D.dyn||{})[String(f)] || []).forEach(function(d){
+    if(d[2] > sel) return;
+    const k = d[0]+','+d[1], v = d[3];
+    if(v === 'T0'){ delete cur[k]; return; }                 // 格子被清空（怪走开/被杀/道具拿走）
+    if(v === 'STAIR') return;                                 // 楼梯：不动物件
+    if(typeof v === 'string' && v.charAt(0) === 'T') return;   // 地形 T0/T1/T2/T3：不动物件
+    cur[k] = [v, null, 'm'];                                  // 有物件落到该格（怪或道具）
+  });
+  const cons = (D.cons||{})[String(f)] || [];
+  cons.forEach(function(c){ if(c[2] <= sel) delete cur[c[0]+','+c[1]]; });
+  return cur;
+}
 function renderDmg(f, heroA, heroD, items){
   const ITEMS_NOW = items || [];
   const fl = FL[f];
   if(!fl){ dmgLayer.innerHTML=''; return; }
-  const cons = CONS[String(f)] || [];
-  const done = {};
-  cons.forEach(function(c){ if(c[2]<=sel) done[c[0]+','+c[1]]=1; });
-  const objs = fl.objs || {}, MS = D.monstats || {};
+  const objs = curObjs(f), MS = D.monstats || {};
   let h='';
   for(const k in objs){
+    if(f===40 && k==='6,6') continue;                 // 40F 围杀中转格：不挂角标（用户口径）
     const v = objs[k], oid = String(v[0]);
-    if(v[2]!=='m' || done[k]) continue;               // 只画未打的怪
+    if(v[2]!=='m') continue;                          // 只画怪
     const ms = MS[oid];
     if(!ms) continue;
     const xy = k.split(',');
