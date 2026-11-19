@@ -860,7 +860,7 @@ class World:
                     log.append('★41F 撞塌暗墙(10,2) → 魔術師Ａ埋伏出现!')
                     return log                         # 不移动（怪挡路）
                 self.cleared.add((f, nx, ny)); log.append('撞塌暗墙 obj89'); o = 0; ty = '空'
-                if (f, nx, ny) in ((19, 6, 3), (19, 6, 4)):   # 📝 19F 十字暗墙：撞开获得十字架 obj103
+                if (f, nx, ny) == (19, 6, 3):            # 📝 19F 十字架在 (6,3) 暗墙后：撞开 (6,3) 才得 obj103（(6,4) 仅撞开通道）
                     h.items.add(103); log.append('获得十字架 obj103（对吸血鬼等伤害翻倍）')
             elif o == 79:                                # ✅ 熔岩：**不可通行**（不是掉血地砖）
                 # 📝 依据：MTower.java @785 `directCheck` —— obj79 的 c3=0/c4=0 → 判 bl=false，
