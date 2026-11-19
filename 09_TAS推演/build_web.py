@@ -1371,7 +1371,8 @@ function showNpcTip(el){
     // 具名角色显示「日文 ⇒ 中文」；老人/商人等无日文异名的角色只显示中文名
     const head = (d.jp && d.jp !== d.zh) ? (esc(d.jp)+' ⇒ '+esc(d.zh)) : esc(d.zh);
     html += '<div class="npch">'+head+'</div>';
-    ls.forEach(function(l){ html += '<div class="npcl">'+esc(l.zh)+'</div>'; });
+    // 去掉每句台词首尾的「」号（数据源 magic_tower1_texts.md 带引号包裹，tooltip 里不需要）
+    ls.forEach(function(l){ html += '<div class="npcl">'+esc(String(l.zh==null?'':l.zh).replace(/^[「]+|[」]+$/g,''))+'</div>'; });
   });
   if(!html){ npctip.style.display='none'; return; }
   npctip.innerHTML = html;
