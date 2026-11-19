@@ -795,6 +795,27 @@ class World:
         lbl = {'hp': '生命', 'atk': '攻击', 'dfn': '防御'}.get(pol, pol)
         return ['商店花费%d金币 → %s+%d' % (c, lbl, gain)]
 
+    def face_dig(self, tx, ty):
+        """✅ 2026-11-19（用户：#2731 朝右撞盗贼对话）：面朝盗贼格交谈、凿开暗道，人不进格
+        （原著 MTower.java directCheck 阻挡式：NPC 挡路，撞上去对话）。零位移，单独录一步。"""
+        h = self.hero
+        f, x, y = h.f, h.x, h.y
+        if abs(tx - x) + abs(ty - y) != 1:
+            return ['blocked:必须站在盗贼邻格面朝它（当前(%d,%d)→(%d,%d)）' % (x, y, tx, ty)]
+        if (f, tx, ty) not in DIG_TRIG:
+            return ['blocked:(%d,%d) 非凿墙触发格' % (tx, ty)]
+        tg = DIG_TRIG[(f, tx, ty)]
+        already = (tg in self.ter_over) if f == 29 else ((f, tx, ty) in self.cleared)
+        if already:
+            return ['blocked:已凿开']
+        self.cleared.add((f, tx, ty))
+        log = ['盗賊「…大ダコの抜け穴がようやく…」→ 凿开暗道 %s' % (tg,)]
+        if f == 29:
+            self.ter_over[DIG29_WALL] = 1
+            self.over[DIG29_WALL] = 1
+            log.append('29F(6,3) 暗道打通，现黄钥匙 obj1')
+        return log
+
     def move(self, dx, dy):
         h = self.hero
         # ✅ 2026-11-14 保真度修正：原版每次输入只走 **一格**。
@@ -1069,6 +1090,10 @@ class World:
                     self.cleared.add((f, nx, ny))
                     log.append(f'落穴 obj20 @ {f}F({nx},{ny}) 守卫已清 → 消失')
                 o = 0   # 其余 type0=NORMAL 地板装饰可踩
+        # ✅ 2026-11-19（用户：#2731 朝右撞盗贼对话）：原著 directCheck 阻挡式——
+        #   29F(7,2) 盗贼 obj88 未凿时不可踩入，面朝它调 face_dig() 交谈凿暗道、人不进格。
+        if (f, nx, ny) == (29, 7, 2) and DIG29_WALL not in self.ter_over:
+            return ['blocked:29F 盗贼挡路（Java directCheck 面朝触发，face_dig）']
         # 落格
         h.x, h.y = nx, ny
         # ✅ 穿行魔法伤害：每步入新格判定（夹击半血 / 魔術師邻接-200/-100，圣盾免）
