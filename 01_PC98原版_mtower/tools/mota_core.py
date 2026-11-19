@@ -868,8 +868,15 @@ class World:
                 #    （41F 中央十字 (5,6)(7,6) 被 V71 撞过后 V93 复现 blocked:墙）。
                 if (f, nx, ny) not in self.cleared:
                     log.append('撞塌暗墙(14,1,3) → 露出红钥匙')
-            elif DIG_WALLS.get((f, nx, ny)) not in self.cleared:
-                return ['blocked:墙']               # 未触发=普通墙；触发后直接放行（log 由落格时带出）
+            elif (f, nx, ny) in DIG_WALLS:
+                if DIG_WALLS[(f, nx, ny)] not in self.cleared:
+                    return ['blocked:墙']           # 未触发=普通墙
+                # ✅ 2026-11-19（用户 #3370）：盗贼已凿开的暗道格，英雄走过这一步即覆盖为地面
+                #   （置 ter_over=1 → MA[1][3]=0 地板 → record 发 T0），与后续 obj89 撞塌暗墙
+                #   「走过变地面」口径一致。29F 走 face_dig 单独置，这里覆盖 15F/35F 的 DIG 墙。
+                self.ter_over[(f, nx, ny)] = 1
+            else:
+                return ['blocked:墙']
         o = self.at(f, nx, ny)
         if o in ALTAR_SIDE:
             # ✅ 祭坛左右两格 obj21/obj23 属于祭坛本体，不可踩入
