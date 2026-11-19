@@ -78,6 +78,18 @@ def record(w, d, lg):
             if not any(d[2] == idx and d[3] == 'T0' for d in dyn[str(cf)] if d[0] == cx and d[1] == cy):
                 dyn[str(cf)].append([cx, cy, idx, 'T0'])
     cleared_prev = set(w.cleared)
+    for k, v in w.ter_over.items():
+        if ter_prev.get(k) != v:
+            # ⚠️ ter_over 存的是 **MA 索引**，不是地形类别：ter_over=1 → MA[1][3]=0 → 地板；
+            #   ter_over=3 → MA[3][3]=1 → 暗墙；ter_over=31（24F 复原）→ MA[31][3]=1 → 墙。
+            #   旧代码直接 'T%d' % v 把索引当地形类别发出，导致 37F 整层凿开的墙（v=1）
+            #   被前端标成「T1=墙」，画出来仍是墙 ← 用户 2026-11-15 指出的 bug。
+            #   现在统一发出地形类别 0/1/2，仅保留 v==3 的「暗墙」特例（前端有独立紫色标签）。
+            tc = M.MA[v][3] if 0 <= v < len(M.MA) else 1
+            code = 3 if v == 3 else tc
+            dyn[str(k[0])].append([k[1], k[2], idx, 'T%d' % code])
+    # ✅ 2026-11-19：地形事件先发、物件事件后发 —— 同一步里「格子从墙变地板 + 站上去一只怪」
+    #   （10F 围杀 (5,6)(7,6)）必须让物件排在后面，前端按「该格最后一条事件」判定才不会把怪压掉。
     for k, v in w.over.items():
         # ✅ 2026-11-16：原条件里的 `and v` 把 over=0（格子被清成地面）整类事件丢掉了，
         #   导致 10F BOSS 后 (4,4)(8,4)(6,7) 三个落穴被拆掉，前端却仍画成落穴（用户指出地面渲染错误）。
@@ -91,16 +103,6 @@ def record(w, d, lg):
                 #   → 前端仍按 objs 把那只怪画在原地。40F 剧本「怪走到 (6,6) 后原格腾空」
                 #   正是这种情形，故补 obj_raw 判据。
                 dyn[str(k[0])].append([k[1], k[2], idx, 'T0'])
-    for k, v in w.ter_over.items():
-        if ter_prev.get(k) != v:
-            # ⚠️ ter_over 存的是 **MA 索引**，不是地形类别：ter_over=1 → MA[1][3]=0 → 地板；
-            #   ter_over=3 → MA[3][3]=1 → 暗墙；ter_over=31（24F 复原）→ MA[31][3]=1 → 墙。
-            #   旧代码直接 'T%d' % v 把索引当地形类别发出，导致 37F 整层凿开的墙（v=1）
-            #   被前端标成「T1=墙」，画出来仍是墙 ← 用户 2026-11-15 指出的 bug。
-            #   现在统一发出地形类别 0/1/2，仅保留 v==3 的「暗墙」特例（前端有独立紫色标签）。
-            tc = M.MA[v][3] if 0 <= v < len(M.MA) else 1
-            code = 3 if v == 3 else tc
-            dyn[str(k[0])].append([k[1], k[2], idx, 'T%d' % code])
     over_prev = dict(w.over)
     ter_prev = dict(w.ter_over)
     prev = a

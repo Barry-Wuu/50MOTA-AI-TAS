@@ -1200,6 +1200,12 @@ class World:
             return self.do_trap3F(log)
         # 剧本收尾后的通路：盗贼挖开的 2F(2,7) 由 ter_over 生效，这里只把「四角撤走」标清楚
         
+        # ✅ 2026-11-19：10F 踩 (6,5) 触发围杀过场（BOSS 退 (6,1) + 8 只骷髅围上来）。
+        #   必须在这里触发而不是等 run_segs 事后调用：事后调用时「到达 (6,5)」那一步已经录完，
+        #   8 只怪会被记到下一步，前端要再走一步才看得见（用户指出 #1724 少显示 4 只怪）。
+        if h.f == 10 and (nx, ny) == (6, 5) and not self.cut10_done:
+            h.x, h.y = nx, ny
+            return self.do_cut10()
         # ✅ 2026-11-18：40F 踩 (6,7) 触发 66/126 围杀剧本（金騎士 这才登场）
         if h.f == 40 and (nx, ny) == (6, 7) and not self.cut40_done:
             h.x, h.y = nx, ny

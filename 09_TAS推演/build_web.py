@@ -915,11 +915,13 @@ function renderMap(){
   // ✅ 2026-11-16：同一格可能有先后多条 dyn（如 10F (4,4)：步1478 出现落穴 obj20 →
   //   步1791 被 BOSS 战后拆除变地面 T0）。旧逻辑只看「该条自身是否为 T0」，
   //   于是 obj20 那条仍然挂标记，画面在 BOSS 后仍显示落穴 ← 用户指出的地面渲染错误。
-  //   现预扫一遍：凡该格已有 ≤sel 的 T0，则跳过它的物件标记。
-  const dynCleared = {};   // key -> 已被清成地面
+  // ✅ 2026-11-19：同一格、同一步里也可能既有地形 T0 又有物件（10F 围杀把 (5,6)(7,6)
+  //   从墙改成地板的同时把骷髅放上去）。旧的「该格只要出现过 T0 就压掉物件」会把这两只
+  //   永久藏掉（用户指出 #1724 应有 8 只怪、实际只有 4 只）。改为按事件顺序取最后一条。
+  const dynLast = {};      // key -> 该格截至 sel 的最后一条事件值
   dynArr.forEach(function(d){
     if(d[2] > sel) return;
-    if(d[3] === 'T0') dynCleared[d[0]+','+d[1]] = 1;
+    dynLast[d[0]+','+d[1]] = d[3];
   });
   const dynSeen = {};
   let dynH = '';
@@ -928,7 +930,7 @@ function renderMap(){
     if(d[3] === 'T0') return;                   // 变地面：已由 consumeLayer 贴地板贴图，不再挂标记
     const key = d[0]+','+d[1];
     const v = d[3];
-    if(dynCleared[key]) return;                 // 该格后来已被清成地面 → 旧物件标记不再显示
+    if(dynLast[key] !== v) return;              // 该格后续已被清成地面/换成别的物件 → 这条不显示
     // 物件已被拾取/击杀/交谈（该格已还原成地面）→ 不再显示；地形变化 T* 保留
     if(typeof v !== 'string' && consumed[key]) return;
     const stat = (fl.objs||{})[key];
