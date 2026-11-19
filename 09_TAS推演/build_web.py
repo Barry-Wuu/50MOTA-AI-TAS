@@ -896,6 +896,12 @@ function renderMap(){
   // 截至当前步已消耗的格（如盗贼交谈后消失、镐拾取后消失）→ 该格起按空地处理
   const consumed = {};
   cons.forEach(function(c){ if(c[2] <= sel) consumed[c[0]+','+c[1]]=1; });
+  // ✅ 2026-11-19：每格的消耗步列表。判断「某 dyn 物件出现后是否又被消耗」时要按步号——
+  //   早于物件出现的旧消耗（如该格原怪物在更早一步被击杀）不应把之后新摆上的战利品也隐藏。
+  //   典型：20F (5,5)(6,5)(7,5) 先杀蝙蝠(cons≈2639) → 吸血鬼死后 2645 又摆 3 把黄钥(obj1)，
+  //   旧 consumed 会把这 3 把钥匙误判成「已消耗」不画（用户指出钥匙没显示）。
+  const consSteps = {};
+  cons.forEach(function(c){ if(c[2] <= sel){ const k=c[0]+','+c[1]; (consSteps[k]=consSteps[k]||[]).push(c[2]); } });
   // ✅ 2026-11-15：值到 "T0"（地形变地面）的格也**直接贴本层地板贴图**，不再只挂紫框标记。
   //   37F 超级镐破整层真墙 / 24F 秘道 / 29F 暗道 / 41F 揭示格都走这条路：
   //   原图里那格是墙的像素，不覆盖就会一直显示成墙 ← 用户指出的 bug。
@@ -951,7 +957,8 @@ function renderMap(){
     const v = d[3];
     if(dynLast[key] !== v) return;              // 该格后续已被清成地面/换成别的物件 → 这条不显示
     // 物件已被拾取/击杀/交谈（该格已还原成地面）→ 不再显示；地形变化 T* 保留
-    if(typeof v !== 'string' && consumed[key]) return;
+    // ✅ 2026-11-19：只有当「消耗步 ≥ 本物件出现步」才算被消耗（早于本物件出现的旧消耗不隐藏它）
+    if(typeof v !== 'string'){ const cs=consSteps[key]; if(cs && cs.some(function(t){ return t >= d[2]; })) return; }
     const stat = (fl.objs||{})[key];
     if(typeof v !== 'string' && stat && String(stat[0]) === String(v)) return;  // 与静态一致，无变化
     let lab, cls='dynmk';
