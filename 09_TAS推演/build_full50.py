@@ -244,6 +244,11 @@ for _f, _arr in M.FLOOR_WRITES.items():
             continue
         if M.TYPE.get(M.oatr(_o, 3)) != 'MONSTER':
             continue
+        if _f == 40 and (_x, _y) == (6, 6):
+            # ✅ 2026-11-19（用户：40F(6,6) 不用单独显示伤害）：
+            #   该格是 66/126 围杀剧本的中转格 —— 13 只怪依次走到这里被逐只击破，
+            #   玩家并不上门打这一格，挂「剩余伤害」角标会误导（还会随步数变来变去）。
+            continue
         _key = '%d,%d' % (_x, _y)
         if _key in floors[_k]['objs']:
             continue                                  # 静态已有，不覆盖
