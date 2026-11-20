@@ -756,14 +756,25 @@ class World:
             log.append('★魔導師夹击 → HP减半（现 %d）' % h.hp)
             if h.hp <= 0:
                 return ['被魔導師夹击夹死（HP≤0）']
-        # 2) 魔術師邻接固定伤害
-        for c in (L, R, U, D):
+        # 2) 魔術師邻接固定伤害 + obj99 后退（原著 MTower.java ichicheck2@852-901）
+        #    魔術師Ａ(99) 邻接 mazyutushi 后，若身后格 mapObject==0 && map==地板，
+        #    则 moveChara 把巫师往后挪一格（远离英雄）；魔術師Ｂ(100) 只扣血不退。
+        for dx, dy, c in ((-1, 0, L), (1, 0, R), (0, -1, U), (0, 1, D)):
             dmg = MAGIC_ADJ_DMG.get(c)
-            if dmg:
-                h.hp -= dmg
-                log.append('★魔術師邻接 → -%d（现 %d）' % (dmg, h.hp))
-                if h.hp <= 0:
-                    return ['被魔術師魔法打死（HP≤0）']
+            if not dmg:
+                continue
+            h.hp -= dmg
+            log.append('★魔術師邻接 → -%d（现 %d）' % (dmg, h.hp))
+            if h.hp <= 0:
+                return ['被魔術師魔法打死（HP≤0）']
+            if c == 99:                                  # 魔術師Ａ：身后空地板 → 后退一格
+                mx, my = x + dx, y + dy                 # 巫师原格
+                bx, by = x + 2 * dx, y + 2 * dy         # 身后格
+                if self.at(f, bx, by) == 0 and self.terrain_at(f, bx, by) == 0:
+                    self.cleared.add((f, mx, my))       # 原格清空
+                    self.cleared.discard((f, bx, by))   # 身后格可能曾在 cleared 中
+                    self.set_at(f, bx, by, 99)          # 巫师落到身后格
+                    log.append('★魔術師Ａ后退 (%d,%d)→(%d,%d)' % (mx, my, bx, by))
         return None
 
     # -- 动作：朝 (dx,dy) 走一步 -------------------------------------------

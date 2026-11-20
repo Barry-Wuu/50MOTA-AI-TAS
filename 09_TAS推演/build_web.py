@@ -516,6 +516,7 @@ td.ev .tag.b{background:#3a2020;color:#ffb0b0}
 td.note{color:var(--gold);font-size:11px;max-width:200px;overflow:hidden;text-overflow:ellipsis}
 td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
 .dpos{color:var(--green)} .dneg{color:var(--red)} .d0{color:#55617a}
+.dpos,.dneg{font-size:15px;margin-left:1.5ch;font-variant-numeric:tabular-nums}
 
 /* ---------- 右侧 ---------- */
 .rightcol .card{padding:0}
@@ -534,6 +535,7 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
 .logline{font-size:11.5px;color:var(--dim);word-break:break-all}
 .posline{font-size:12px;color:var(--dim)}
 .posline b{color:var(--txt)}
+.posline .floorname{color:var(--txt)}
 .statgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
 .sbox{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:7px 9px}
 .sbox i{display:block;font-style:normal;color:var(--dim);font-size:10.5px;letter-spacing:.5px}
@@ -690,10 +692,6 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
     <div class="card">
       <div class="cardhead"><h2>楼层信息</h2><span class="sp"></span><span class="sub">当前层与图例</span></div>
       <div class="floorbody">
-        <div>
-          <div class="floorname" id="floorname">1F</div>
-          <div class="posline" id="posline"></div>
-        </div>
         <div class="stats" id="floostats"></div>
         <div class="legend" id="legend"></div>
       </div>
@@ -726,7 +724,7 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
         </div>
         <div id="mapside">
           <div class="card statecard">
-            <div class="cardhead"><h2>本步状态（引擎实算）</h2><span class="sp"></span><span class="sub" id="stateSub"></span></div>
+            <div class="cardhead"><h2>本步状态</h2><span class="sp"></span><span class="sub" id="stateSub"></span></div>
             <div class="statebody" id="stateBody"></div>
           </div>
         </div>
@@ -911,7 +909,7 @@ function renderDmg(f, heroA, heroD, items){
   dmgLayer.innerHTML = h;
 }
 function dspan(v){
-  if(!v) return '<span class="d0">0</span>';
+  if(!v) return '';
   return '<span class="'+(v>0?'dpos':'dneg')+'">'+(v>0?'+':'')+v+'</span>';
 }
 function deltaText(s){
@@ -1064,15 +1062,7 @@ function renderMap(){
   // 剩余怪物伤害（当前层，按本步攻防算）
   renderDmg(f, cur.a, cur.df, cur.it);
 
-  // 地图侧栏
-  document.getElementById('floorname').innerHTML = f+'F <span>第 '+cur.i+' 步的实际位置</span>';
-  let pos='';
-  if(cur.p && (cur.p[0]!==cur.f || cur.p[1]!==cur.x || cur.p[2]!==cur.y)){
-    pos='路线标注 '+cur.f+'F('+cur.x+','+cur.y+') → 引擎落点 <b>'+cur.p[0]+'F('+cur.p[1]+','+cur.p[2]+')</b>';
-  }else{
-    pos='坐标 <b>'+cur.f+'F('+cur.x+','+cur.y+')</b>　方向 '+(cur.d||'·');
-  }
-  document.getElementById('posline').innerHTML = pos;
+  // 地图侧栏（楼层数已移入本步状态位置行开头；楼层信息卡不再显示 floorname/posline）
 
   const st=fl;
   const entry = st.entry ? ('HP '+st.entry.hp+' / A '+st.entry.atk+' / D '+st.entry.dfn) : '—';
@@ -1101,7 +1091,7 @@ function renderState(){
        '</div>';
   h += '<div class="evline">'+fmtEv(ev, s.f)+'</div>';
   const p=posOf(s);
-  h += '<div class="posline">位置：<b>'+s.f+'F('+s.x+','+s.y+')</b>　方向 <b>'+(s.d||'·')+'</b>'+
+  h += '<div class="posline"><span class="floorname">'+s.f+'F</span>　位置：<b>'+s.f+'F('+s.x+','+s.y+')</b>　方向 <b>'+(s.d||'·')+'</b>'+
        ((p[0]!==s.f||p[1]!==s.x||p[2]!==s.y) ? '　<span style="color:var(--gold)">引擎落点 '+p[0]+'F('+p[1]+','+p[2]+')</span>' : '')+
        '</div>';
   // ⚠️ 变量名别叫 src：Toy 的预检脚本用 `src\s*=\s*['"]...` 正则找本地资源引用，
@@ -1114,15 +1104,15 @@ function renderState(){
   }
   if(srcline) h += '<div class="logline">'+esc(srcline)+'</div>';
   h += '<div class="statgrid">'+
-       '<div class="sbox"><i>HP 生命</i><span class="val">'+s.hp+'</span><span class="dl">'+dspan(s.dh)+'</span><div class="from">'+b.hp+' → '+s.hp+'</div></div>'+
-       '<div class="sbox"><i>ATK 攻击</i><span class="val">'+s.a+'</span><span class="dl">'+dspan(s.da)+'</span><div class="from">'+b.a+' → '+s.a+'</div></div>'+
-       '<div class="sbox"><i>DEF 防御</i><span class="val">'+s.df+'</span><span class="dl">'+dspan(s.dd)+'</span><div class="from">'+b.df+' → '+s.df+'</div></div>'+
-       '<div class="sbox"><i>GOLD 金币</i><span class="val">'+s.g+'</span><span class="dl">'+dspan(s.dg)+'</span><div class="from">'+b.g+' → '+s.g+'</div></div>'+
+       '<div class="sbox"><i>HP 生命</i><span class="val">'+s.hp+'</span>'+dspan(s.dh)+'</div>'+
+       '<div class="sbox"><i>ATK 攻击</i><span class="val">'+s.a+'</span>'+dspan(s.da)+'</div>'+
+       '<div class="sbox"><i>DEF 防御</i><span class="val">'+s.df+'</span>'+dspan(s.dd)+'</div>'+
+       '<div class="sbox"><i>GOLD 金币</i><span class="val">'+s.g+'</span>'+dspan(s.dg)+'</div>'+
        '</div>';
   h += '<div class="keyrow">'+
-       '<div class="kk"><i>黄钥匙</i><b>'+s.ky+'</b><div class="from">'+b.ky+' → '+s.ky+'</div></div>'+
-       '<div class="kk"><i>蓝钥匙</i><b>'+s.kb+'</b><div class="from">'+b.kb+' → '+s.kb+'</div></div>'+
-       '<div class="kk"><i>红钥匙</i><b>'+s.kr+'</b><div class="from">'+b.kr+' → '+s.kr+'</div></div>'+
+       '<div class="kk"><i>黄钥匙</i><b>'+s.ky+'</b>'+dspan(s.ky-b.ky)+'</div>'+
+       '<div class="kk"><i>蓝钥匙</i><b>'+s.kb+'</b>'+dspan(s.kb-b.kb)+'</div>'+
+       '<div class="kk"><i>红钥匙</i><b>'+s.kr+'</b>'+dspan(s.kr-b.kr)+'</div>'+
        '</div>';
   // 已获得道具：每道具一个图标，拿到才显示、用完即隐。
   // obj106 中心飞行器：显示剩余次数 s.cw 个（刚吃 3 个，用一次减一，减到 0 消失）。
@@ -1139,7 +1129,7 @@ function renderState(){
     h += '<div class="warnbox"><b>⚠ 坐标/落点差异</b><br>'+s.mm.map(esc).join('<br>')+'</div>';
   }
   if(s.st==='ok' && !(s.mm&&s.mm.length)){
-    h += '<div class="okbox">✓ 本步状态由 mota_core 实算，与路线无冲突</div>';
+    h += '<div class="okbox">🤖 本页面状态由 WorkBuddy 实时核算</div>';
   }
   document.getElementById('stateBody').innerHTML = h;
   document.getElementById('stateSub').textContent = '第'+s.i+'/'+TOTAL+'步';
