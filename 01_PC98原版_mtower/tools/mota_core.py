@@ -1070,6 +1070,17 @@ class World:
                     log.append(f'开{ {"y":"黄","b":"蓝","r":"红"}[col] }门 obj{o}'); return log
             elif o in KEY_OF:
                 h.keys[KEY_OF[o]] += 1; self.cleared.add((f, nx, ny)); log.append(f'拾 {oname(o)[:10]}'); o = 0
+            elif o == 161:
+                # ✅ 2026-11-20：28F 收购商 obj161 卖钥匙（Java @4066-4082 yesnoNumber==7 实证）：
+                #    黄钥匙>0 → 卖 1 把 +100G（objectAttribute[161][13]），商人不清零可无限卖；
+                #    黄钥匙=0 → 弹提示不交易。英雄不移动（对话确认后仍在原格）。
+                if h.keys['y'] > 0:
+                    h.keys['y'] -= 1
+                    h.gold += oatr(161, 13)
+                    log.append('卖黄钥 obj%d +%d金' % (161, oatr(161, 13)))
+                else:
+                    log.append('无黄钥匙，商人 obj161 不收购')
+                return log                       # 英雄不移动
             elif ty in ('STATUS', 'ITEM'):
                 self.pick(o, log); self.cleared.add((f, nx, ny)); o = 0
             elif o in DECOR_PASS:

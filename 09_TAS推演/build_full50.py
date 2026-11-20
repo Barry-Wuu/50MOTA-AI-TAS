@@ -25,8 +25,17 @@ last_dir = ['↑']
 
 
 def snap(h, w=None):
+    # ✅ 2026-11-20：V83 清扫期间 z2_route 临时清零钥匙做「无钥绕门」寻路，
+    #   录制步数时若看到 sweep_real_keys 掩码，则显示真实钥匙——
+    #   否则前端会看到钥匙在清扫段「凭空消失又回来」（用户：#4410 黄钥匙不翼而飞）。
+    _mask = getattr(w, 'sweep_real_keys', None) if w is not None else None
+    if _mask is not None:
+        _ky, _kb, _kr = _mask
+        _ky += h.keys.get('y', 0); _kb += h.keys.get('b', 0); _kr += h.keys.get('r', 0)
+    else:
+        _ky = h.keys.get('y', 0); _kb = h.keys.get('b', 0); _kr = h.keys.get('r', 0)
     return dict(hp=h.hp, atk=h.atk, dfn=h.dfn, gold=h.gold,
-                ky=h.keys.get('y', 0), kb=h.keys.get('b', 0), kr=h.keys.get('r', 0),
+                ky=_ky, kb=_kb, kr=_kr,
                 items=sorted(h.items),
                 cw=(w.center_warp_charges if w is not None else 0))
 
