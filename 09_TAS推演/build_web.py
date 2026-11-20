@@ -471,7 +471,7 @@ main{flex:1;min-height:0;display:grid;grid-template-columns:404px minmax(0,1fr);
 .floorname span{font-size:12px;color:var(--dim);font-weight:400;margin-left:6px}
 .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
 .stat{background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:6px 8px}
-.stat i{display:block;font-style:normal;color:var(--dim);font-size:11px}
+.stat i{display:inline;font-style:normal;color:var(--dim);font-size:11px;margin-right:5px}
 .stat b{font-size:14px;color:var(--txt)}
 .legend{display:flex;flex-wrap:wrap;gap:6px 10px;font-size:11px;color:var(--dim)}
 .legend span{display:flex;align-items:center;gap:4px}
@@ -696,19 +696,18 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
         </div>
         <div class="stats" id="floostats"></div>
         <div class="legend" id="legend"></div>
-        <label class="toggle"><input type="checkbox" id="consToggle"> 给已消耗格描边（默认已还原成地面）</label>
       </div>
+    </div>
+
+    <div class="card">
+      <div class="cardhead"><h2>楼层导航</h2><span class="sp"></span><span class="sub">点击跳到该层第一步</span></div>
+      <div class="floorchips" id="floorchips"></div>
     </div>
 
     <div class="card">
       <div class="cardhead"><h2>校验结论 / 问题清单</h2><span class="sp"></span><span class="sub" id="issueSub"></span></div>
       <div class="verify" id="verifyBox"></div>
       <div id="issueList"></div>
-    </div>
-
-    <div class="card">
-      <div class="cardhead"><h2>楼层导航</h2><span class="sp"></span><span class="sub">点击跳到该层第一步</span></div>
-      <div class="floorchips" id="floorchips"></div>
     </div>
   </aside>
 
@@ -1082,9 +1081,7 @@ function renderMap(){
     '<div class="stat"><i>本层步数</i><b>'+st.steps+'</b></div>'+
     '<div class="stat"><i>战损</i><b>'+st.loss+'</b></div>'+
     '<div class="stat"><i>击杀</i><b>'+st.kills+'</b></div>'+
-    '<div class="stat"><i>最大已访问楼层</i><b>'+MAXF[sel]+'</b></div>'+
-    '<div class="stat"><i>首次进入</i><b style="font-size:11px;font-weight:400">'+entry+'</b></div>'+
-    '<div class="stat"><i>最后离开</i><b style="font-size:11px;font-weight:400">'+exit+'</b></div>';
+    '<div class="stat"><i>最大已访问楼层</i><b>'+MAXF[sel]+'</b></div>';
 }
 
 /* ---------------- 状态面板 ---------------- */
@@ -1346,9 +1343,6 @@ stepno.addEventListener('keydown', function(e){ if(e.key==='Enter') document.get
 document.getElementById('keyonly').addEventListener('change', function(e){
   keyOnly=e.target.checked; buildTable(ST[sel].f); highlightRow();
 });
-document.getElementById('consToggle').addEventListener('change', function(e){
-  showCons=e.target.checked; consumeLayer.classList.toggle('hint', showCons);
-});
 document.addEventListener('keydown', function(e){
   if(e.target.tagName==='INPUT' && e.target.type!=='range') return;
   if(e.key==='ArrowRight'){ e.preventDefault(); stopPlay(); select(sel+1); }
@@ -1360,12 +1354,7 @@ document.addEventListener('keydown', function(e){
 });
 
 /* ---------------- 图例 ---------------- */
-document.getElementById('legend').innerHTML =
-  '<span><i class="dot" style="background:#4cc9f0"></i>本层已走路径</span>'+
-  '<span><i class="dot" style="background:#ff9f43;border-color:#ff9f43"></i>补丁格</span>'+
-  '<span><i class="dot" style="background:#3ecf8e"></i>已消耗→地面</span>'+
-  '<span><i class="dot" style="background:#3ecf8e"></i>剩余怪伤害：0=绿 · 越大越红</span>'+
-  '<span>底图 = 原版贴图</span>';
+document.getElementById('legend').innerHTML = '';
 
 /* ---------------- 对话悬浮面板 ---------------- */
 const npctip = document.getElementById('npctip');
