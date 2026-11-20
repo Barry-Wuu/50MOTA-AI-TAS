@@ -119,8 +119,11 @@ for _jp, _names in ROUTE_NAMES.items():
 # 商人 / 老人：遍历实体 NPC，按楼层聚合中文台词
 _merch = {}; _old = {}
 _MERCH_CELL = {}   # (floor,x,y) -> 该格商人台词；每个商人单独一句，避免同层多商人共享台词
+_OLD_CELL = {}     # (floor,x,y) -> 该格老人台词；每个老人单独一句，避免同层多老人串台（16F 左下 obj43 / 右下 obj154）
 def _cell_key(f, x, y):
     return '商人@%d-%d-%d' % (f, x, y)
+def _old_key(f, x, y):
+    return '老人@%d-%d-%d' % (f, x, y)
 try:
     for _r in csv.DictReader(io.open(ENT_PATH, encoding='utf-8-sig')):
         if not _is_npc_entity(_r):
@@ -148,6 +151,8 @@ try:
         (_merch if _is_m else _old).setdefault(_fi, []).append(_zh)
         if _is_m:
             _MERCH_CELL[(_fi, _x, _y)] = _zh
+        else:
+            _OLD_CELL[(_fi, _x, _y)] = _zh
 except Exception:
     pass
 # 12F(11,1) 右上角 obj17 无限卖黄钥匙商店（1000G/把，撞暗墙后出现）：
@@ -156,6 +161,13 @@ if _OBJ_ZH.get(17):
     _MERCH_CELL[(12, 11, 1)] = _OBJ_ZH[17]
     if _OBJ_ZH[17] not in _merch.get(12, []):
         _merch.setdefault(12, []).append(_OBJ_ZH[17])
+# ✅ 2026-11-20（用户：补 16F 右下角老登 tooltip）：obj154 给圣水老人（16F(11,11) 撞 obj89 暗墙后出现）
+#   只在 texts.csv [82] 有台词，entities.csv 无 16F 逐层格点行 → 上面循环漏挂标记 + 漏收台词。
+#   补：台词进 _old[16]，格点 (16,11,11) 挂「老人」，使悬停显示圣水对白。
+if _OBJ_ZH.get(154):
+    if _OBJ_ZH[154] not in _old.get(16, []):
+        _old.setdefault(16, []).append(_OBJ_ZH[154])
+    _OLD_CELL[(16, 11, 11)] = _OBJ_ZH[154]
 NPC_DLG['商人'] = {'jp': '商人', 'zh': '商人',
                   'lines': [{'f': f, 'zh': z} for f in sorted(_merch) for z in _merch[f]]}
 # 每个商人格一个独立 key（jp/zh 都叫「商人」，悬停只显示该格那一句）：
@@ -165,6 +177,11 @@ for (_cf, _cx, _cy), _czh in _MERCH_CELL.items():
                                          'lines': [{'f': _cf, 'zh': _czh}]}
 NPC_DLG['老人'] = {'jp': '老人', 'zh': '老人',
                   'lines': [{'f': f, 'zh': z} for f in sorted(_old) for z in _old[f]]}
+# 每个老人格一个独立 key（jp/zh 都叫「老人」，悬停只显示该格那一句）：
+# 16F 左下 obj43「红钥匙2处」与右下 obj154「圣水」各弹各的，不再串台。
+for (_cf, _cx, _cy), _czh in _OLD_CELL.items():
+    NPC_DLG[_old_key(_cf, _cx, _cy)] = {'jp': '老人', 'zh': '老人',
+                                        'lines': [{'f': _cf, 'zh': _czh}]}
 NPC_DLG_JSON = json.dumps(NPC_DLG, ensure_ascii=False)
 # 名称按长度降序，避免短名被长名前缀误匹配（如 假魔王 早于 魔王）
 NPC_NAMES = sorted(NPC_DLG.keys(), key=len, reverse=True)
@@ -233,14 +250,16 @@ try:
             _role = _mm.group(1).strip()          # 盗賊 / 勇者（具名实体）
         else:
             _is_m = (_OBJ_GRP.get(_obj) == MCH_GRP) or any(k in _nj for k in _MERCHANT_KW)
-            # 商人用按格独立 key（同层多商人各弹各的台词）；老人仍用通用「老人」
-            _role = _cell_key(_fi, _x, _y) if _is_m else '老人'
+            # 商人/老人都用按格独立 key（同层多角色各弹各的台词，避免串台）
+            _role = _cell_key(_fi, _x, _y) if _is_m else _old_key(_fi, _x, _y)
         _MARK_CELLS.setdefault((_fi, _x, _y), set()).add(_role)
 except Exception:
     pass
 # 12F(11,1) 右上角 obj17 无限卖黄钥匙商人：实体表只 catalog 行有它（撞暗墙后出现），
 # 12F 无逐层行 → 上面循环漏挂标记，右上角商人悬停无 tooltip。补挂其独立 key。
 _MARK_CELLS.setdefault((12, 11, 1), set()).add(_cell_key(12, 11, 1))
+# 16F(11,11) 右下角老登 obj154（撞 obj89 暗墙后出现，给圣水）：entities.csv 无逐层行 → 补挂按格独立标记。
+_MARK_CELLS.setdefault((16, 11, 11), set()).add(_old_key(16, 11, 11))
 NPC_MARKS = {}
 for (_f, _x, _y), _set in _MARK_CELLS.items():
     NPC_MARKS.setdefault(_f, []).append({'x': _x, 'y': _y, 'n': sorted(_set)})
