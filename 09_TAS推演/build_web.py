@@ -431,6 +431,9 @@ main{flex:1;min-height:0;display:grid;grid-template-columns:404px minmax(0,1fr);
 /* ---------- 地图（原著贴图） ---------- */
 .mapcard{padding:10px 12px 12px}
 .maprow{display:flex;gap:16px;align-items:flex-start}
+/* 地图左侧纵向楼层拖动条：底=0F，顶=50F；作用同上下键 */
+.floorslider{flex:0 0 auto;width:22px;height:var(--mapsize);margin:0;
+  writing-mode:vertical-lr;direction:rtl;accent-color:var(--gold);cursor:ns-resize}
 #mapbox{position:relative;flex:0 0 auto;width:var(--mapsize);aspect-ratio:1/1;
   border:2px solid #3a3f52;border-radius:6px;background:#000 center/100% 100% no-repeat;
   image-rendering:pixelated;box-shadow:0 4px 18px rgba(0,0,0,.5)}
@@ -495,7 +498,7 @@ main{flex:1;min-height:0;display:grid;grid-template-columns:404px minmax(0,1fr);
 .stepcard .cardhead{padding:7px 12px}
 .tablewrap{flex:1;overflow:auto}
 table{border-collapse:collapse;width:100%;font-size:12px}
-thead th{position:sticky;top:0;background:#141926;z-index:2;text-align:left;font-weight:600;
+thead th{position:sticky;top:0;background:#141926;z-index:2;text-align:left;font-weight:700;
   color:var(--dim);padding:5px 7px;border-bottom:1px solid var(--line);white-space:nowrap;font-size:11.5px}
 tbody td{padding:3px 7px;border-bottom:1px solid #1e2431;white-space:nowrap;vertical-align:middle}
 tbody tr{cursor:pointer}
@@ -517,6 +520,11 @@ td.note{color:var(--gold);font-size:11px;max-width:200px;overflow:hidden;text-ov
 td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
 .dpos{color:var(--green)} .dneg{color:var(--red)} .d0{color:#55617a}
 .dpos,.dneg{font-size:15px;margin-left:1.5ch;font-variant-numeric:tabular-nums}
+/* 步骤表内并入数值后的变动值：全角空格分隔、继承字号、正绿负红 */
+.tdpos,.tdneg{font-variant-numeric:tabular-nums}
+.tdpos{color:var(--green)} .tdneg{color:var(--red)}
+/* 钥匙列：三钥匙数值 + 变动处钥匙汉字，与本步状态三色钥匙同色 */
+td.keys .ky{color:var(--gold)} td.keys .kb{color:var(--accent)} td.keys .kr{color:var(--red)}
 
 /* ---------- 右侧 ---------- */
 .rightcol .card{padding:0}
@@ -534,18 +542,19 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
 .evline{font-size:13px;color:var(--txt);word-break:break-all}
 .logline{font-size:11.5px;color:var(--dim);word-break:break-all}
 .posline{font-size:12px;color:var(--dim)}
-.posline b{color:var(--txt)}
+.posline b{color:var(--txt);font-size:14px}
 .posline .floorname{color:var(--txt)}
 .statgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
 .sbox{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:7px 9px}
-.sbox i{display:block;font-style:normal;color:var(--dim);font-size:10.5px;letter-spacing:.5px}
-.sbox .val{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+.sbox i{display:inline;font-style:normal;color:var(--dim);font-size:10.5px;letter-spacing:.5px}
+.sbox .val{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
 .sbox .from{font-size:11px;color:#6d7891}
 .sbox .dl{font-size:11.5px;margin-left:4px}
 .keyrow{display:flex;gap:8px}
 .keyrow .kk{flex:1;text-align:center;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:5px}
-.keyrow .kk i{font-style:normal;font-size:10.5px;color:var(--dim);display:block}
-.keyrow .kk b{font-size:15px}
+.keyrow .kk i{font-style:normal;font-size:10.5px;color:var(--dim);display:inline}
+.keyrow .kk b{font-size:15px;font-weight:700}
+.keyrow .kk b.ky{color:var(--gold)} .keyrow .kk b.kb{color:var(--accent)} .keyrow .kk b.kr{color:var(--red)}
 .itemrow{display:flex;flex-wrap:wrap;gap:5px;align-items:center;
   background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 8px}
 .itemrow .ihead{font-size:10.5px;color:var(--dim);margin-right:2px}
@@ -643,7 +652,7 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
   :root{--mapsize:min(520px, 92vw)}
   /* 地图与其右侧卡片在窄屏改为上下堆叠，避免侧栏被压成 0 宽 */
   .maprow{flex-wrap:wrap;gap:12px}
-  #mapbox{width:100%;max-width:var(--mapsize);margin:0 auto}
+  #mapbox{width:calc(100% - 34px);max-width:var(--mapsize);margin:0}
   #mapside{flex:1 1 100%;min-width:0;width:100%}
   #mapside .statebody{overflow:visible}
 }
@@ -683,27 +692,19 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
 </head>
 <body>
 <header>
-  <h1>魔塔1 <em>1F→50F</em> 全塔通关逐格校验</h1>
+  <h1>50层魔塔通关攻略</h1>
   <div class="chips" id="chips"></div>
 </header>
 
 <main>
   <aside class="rightcol">
     <div class="card">
-      <div class="cardhead"><h2>楼层信息</h2><span class="sp"></span><span class="sub">当前层与图例</span></div>
-      <div class="floorbody">
-        <div class="stats" id="floostats"></div>
-        <div class="legend" id="legend"></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="cardhead"><h2>楼层导航</h2><span class="sp"></span><span class="sub">点击跳到该层第一步</span></div>
+      <div class="cardhead"><h2>楼层导航</h2><span class="sp"></span><span class="sub">点击跳转到该层第一步</span></div>
       <div class="floorchips" id="floorchips"></div>
     </div>
 
     <div class="card">
-      <div class="cardhead"><h2>校验结论 / 问题清单</h2><span class="sp"></span><span class="sub" id="issueSub"></span></div>
+      <div class="cardhead"><h2>校验结论</h2><span class="sp"></span><span class="sub" id="issueSub"></span></div>
       <div class="verify" id="verifyBox"></div>
       <div id="issueList"></div>
     </div>
@@ -712,6 +713,7 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
   <section class="leftcol">
     <div class="card mapcard">
       <div class="maprow">
+        <input id="floorSlider" class="floorslider" type="range" min="0" max="50" value="1" orient="vertical" title="拖动查看楼层（0F~50F）">
         <div id="mapbox">
           <svg id="psvg" viewBox="0 0 520 520" preserveAspectRatio="none"></svg>
           <div id="consumeLayer"></div>
@@ -724,21 +726,19 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
         </div>
         <div id="mapside">
           <div class="card statecard">
-            <div class="cardhead"><h2>本步状态</h2><span class="sp"></span><span class="sub" id="stateSub"></span></div>
+            <div class="cardhead"><h2>本步状态</h2><span class="sp"></span></div>
             <div class="statebody" id="stateBody"></div>
           </div>
         </div>
       </div>
       <div class="controls">
-        <button class="btn" id="btnFirst" title="首步">⏮</button>
-        <button class="btn" id="btnPrev" title="上一步">◀</button>
+        <button class="btn primary" id="btnPrev" title="上一步">◀ 上一步</button>
         <button class="btn primary" id="btnNext" title="下一步">下一步 ▶</button>
-        <button class="btn" id="btnLast" title="末步">⏭</button>
-        <button class="btn" id="btnPrevEv" title="上一个事件">↑ 上一事件</button>
-        <button class="btn" id="btnNextEv" title="下一个事件">↓ 下一事件</button>
+        <button class="btn" id="btnNextEv" title="下一层">↓ 下一层</button>
+        <button class="btn" id="btnPrevEv" title="上一层">↑ 上一层</button>
         <button class="btn" id="btnPlay" title="自动播放">▶ 播放</button>
         <input id="slider" type="range" min="1" max="__TOTAL__" value="1">
-        <span class="ctrllabel" id="stepLabel">1 / __TOTAL__</span>
+        <span class="ctrllabel" id="stepLabel">第1/__TOTAL__步</span>
         <input id="stepno" type="number" min="1" max="__TOTAL__" value="1">
         <button class="btn" id="btnGo">跳转</button>
       </div>
@@ -748,6 +748,8 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
       <div class="cardhead">
         <h2 id="tblTitle">本层步骤</h2>
         <span class="sub" id="tblSub"></span>
+        <button class="btn" id="btnPrevEv2" title="上一个事件">↑ 上一事件</button>
+        <button class="btn" id="btnNextEv2" title="下一个事件">↓ 下一事件</button>
         <span class="sp"></span>
         <label class="ctrllabel"><input type="checkbox" id="keyonly"> 只看关键步（事件 / 战斗 / 开门 / 拾取 / 异常）</label>
       </div>
@@ -755,8 +757,8 @@ td.keys{font-variant-numeric:tabular-nums;color:#c9d2e2}
         <table>
           <thead>
             <tr>
-              <th>步</th><th>楼层 (x,y)</th><th>方向</th><th>事件 / 日志</th>
-              <th>HP</th><th>ATK</th><th>DEF</th><th>G</th><th>钥匙</th><th>Δ</th>
+              <th>步</th><th>坐标</th><th>方向</th><th>事件 / 日志</th>
+              <th>HP</th><th>ATK</th><th>DEF</th><th>G</th><th>钥匙</th>
             </tr>
           </thead>
           <tbody id="tbody"></tbody>
@@ -781,11 +783,30 @@ const ST = D.steps, FL = D.floors, ISSUES = D.issues || [];
 const TOTAL = ST.length;
 // 到每一步为止已访问的最大楼层（MAXF[i] = max(ST[0..i].f)）
 const MAXF = (function(){var a=new Array(ST.length);var m=0;for(var i=0;i<ST.length;i++){var v=ST[i].f||1;if(v>m)m=v;a[i]=m;}return a;})();
-const byFloor = {}, firstOf = {};
+const byFloor = {}, firstOf = {}, lastOf = {};
 ST.forEach(function(s,i){
   (byFloor[s.f] = byFloor[s.f] || []).push(i);
   if(firstOf[s.f] === undefined) firstOf[s.f] = i;
+  lastOf[s.f] = i;
 });
+// 切层查看时的「有效步」：
+//   · 该层在当前步之前走过 → 截至当前步的该层最后一步（地图=当时离开前的样子，不画勇者）
+//     ⚠️ 不能用该层「全程最后一步」：多访层（如 34F 首访 2908 / 二访 3793）二访在未来，
+//        取全程末步会显示成未来的清场态（用户指出 #3270 看 34F 时楼里啥都没有）。
+//   · 该层还没到过（含 0F 等特殊层）→ 该层首步（地图=首访时的样子，不画勇者）
+//   · 该层恰好是当前步所在层 → 当前步（画勇者）
+//   · FL 里有但全程无步骤的层 → null（地图只能画初始态）
+//   ⚠️ 判据用首步序号而非楼层数值：0F 数值最小但到访最晚（#4275），按数值判断会误判成"已走过"。
+function viewStepOf(f){
+  if(f === ST[sel].f) return sel;
+  if(byFloor[f]){
+    // 取「当前步之前」该层的最后一步（多访层只算到 sel 为止，不落到未来的二访）
+    const arr = byFloor[f];
+    for(let k=arr.length-1; k>=0; k--){ if(arr[k] <= sel) return arr[k]; }
+    return arr[0];   // 整层都在未来 → 首步
+  }
+  return null;
+}
 
 const CELL=40, N=13, MAPW=CELL*N;
 const PATCHES = [{f:29,x:6,y:3,label:'暗道补丁'},{f:30,x:6,y:1,label:'清场生成梯'}];
@@ -807,6 +828,9 @@ const slider = document.getElementById('slider');
 const stepno = document.getElementById('stepno');
 
 let sel = 0, tableFloor = -1, keyOnly = false, lastKeyOnly = false, playTimer = null, showCons = false;
+// ✅ 2026-11-21（用户）：上/下键 = 切层查看模式。null = 跟随勇者所在层；
+//   数字 = 锁定查看的楼层（步骤不变，只换地图）。0↔50 首尾相接。
+let viewFloor = null;
 
 const DIRV = {'↑':[0,-1],'↓':[0,1],'←':[-1,0],'→':[1,0],'·':[0,0],'':[0,0]};
 const STLABEL = {ok:'正常',note:'标注行',blocked:'无法执行',skip:'未执行',
@@ -839,7 +863,8 @@ function fmtEv(t, floor){
   return s;
 }
 function posOf(s){ return s.p ? s.p : [s.f,s.x,s.y]; }
-function actualFloor(){ return posOf(ST[sel])[0]; }
+// 切层查看模式：优先用 viewFloor；正常模式跟随勇者
+function actualFloor(){ return viewFloor!=null ? viewFloor : posOf(ST[sel])[0]; }
 function pct(v){ return ((v*CELL+CELL/2)/MAPW*100).toFixed(4)+'%'; }
 function cx(x){ return x*CELL+CELL/2; }
 function cy(y){ return y*CELL+CELL/2; }
@@ -867,12 +892,13 @@ function dmgInfo(m, heroA, heroD, items, oid){
    10F 围杀把 6C+2B 挪到 (6,5) 四周后，角标仍钉在 (1,3)(2,3)… 这些原格，且打死后也不消失。
    这里按「静态 objs 打底 → 依事件顺序叠 dyn（物件落位 / 清空）→ 扣掉已消耗格」求出该步
    每个格子上真正的物件，角标再跟着这个结果画。 */
-function curObjs(f){
+function curObjs(f, upto){
+  if(upto==null) upto = sel;
   const fl = FL[f] || {};
   const cur = {}, objs = fl.objs || {};
   for(const k in objs) cur[k] = objs[k];
   ((D.dyn||{})[String(f)] || []).forEach(function(d){
-    if(d[2] > sel) return;
+    if(d[2] > upto) return;
     const k = d[0]+','+d[1], v = d[3];
     if(v === 'T0'){ delete cur[k]; return; }                 // 格子被清空（怪走开/被杀/道具拿走）
     if(v === 'STAIR') return;                                 // 楼梯：不动物件
@@ -880,14 +906,14 @@ function curObjs(f){
     cur[k] = [v, null, 'm'];                                  // 有物件落到该格（怪或道具）
   });
   const cons = (D.cons||{})[String(f)] || [];
-  cons.forEach(function(c){ if(c[2] <= sel) delete cur[c[0]+','+c[1]]; });
+  cons.forEach(function(c){ if(c[2] <= upto) delete cur[c[0]+','+c[1]]; });
   return cur;
 }
-function renderDmg(f, heroA, heroD, items){
+function renderDmg(f, heroA, heroD, items, upto){
   const ITEMS_NOW = items || [];
   const fl = FL[f];
   if(!fl){ dmgLayer.innerHTML=''; return; }
-  const objs = curObjs(f), MS = D.monstats || {};
+  const objs = curObjs(f, upto), MS = D.monstats || {};
   let h='';
   for(const k in objs){
     if(f===40 && k==='6,6') continue;                 // 40F 围杀中转格：不挂角标（用户口径）
@@ -912,13 +938,16 @@ function dspan(v){
   if(!v) return '';
   return '<span class="'+(v>0?'dpos':'dneg')+'">'+(v>0?'+':'')+v+'</span>';
 }
-function deltaText(s){
-  const a=[];
-  if(s.dh) a.push('HP'+(s.dh>0?'+':'')+s.dh);
-  if(s.da) a.push('A'+(s.da>0?'+':'')+s.da);
-  if(s.dd) a.push('D'+(s.dd>0?'+':'')+s.dd);
-  if(s.dg) a.push('G'+(s.dg>0?'+':'')+s.dg);
-  return a.length?a.join(' '):'—';
+// 步骤表并入数值后的变动：全角空格分隔；正绿负红；0 不显示。
+function tdDelta(v){
+  if(!v) return '';
+  return '　<span class="'+(v>0?'tdpos':'tdneg')+'">'+(v>0?'+':'')+v+'</span>';
+}
+// 钥匙变动：带颜色标签，如「+1黄」；黄/蓝/红汉字取本步状态三色钥匙同色
+function tdKeyDelta(v, tag){
+  if(!v) return '';
+  const kc = tag==='黄'?'ky':(tag==='蓝'?'kb':'kr');
+  return '　<span class="'+(v>0?'tdpos':'tdneg')+'">'+(v>0?'+':'')+v+'<span class="'+kc+'">'+tag+'</span></span>';
 }
 function isKeyStep(s){
   return !!(s.l) || !!(s.mm) || s.st!=='ok' || s.st==='note';
@@ -929,30 +958,35 @@ function renderMap(){
   const f = actualFloor();
   const fl = FL[f];
   if(!fl) return;
+  // ✅ 2026-11-21（用户）：切层查看模式——地图用「该层最后一步/首步」的快照渲染，但不画勇者。
+  //   正常模式（viewFloor=null）行为不变（当前步 + 画勇者）。
+  const vMode = (viewFloor!=null && viewFloor!==ST[sel].f);
+  const vStep = vMode ? viewStepOf(f) : sel;
+  const snap = (vStep!=null && vMode) ? vStep : sel;   // 渲染快照步号（cons/dyn/mask 都以它为准）
   mapbox.style.backgroundImage = 'url("'+(IMG[String(f)]||'')+'")';
 
   // 已消耗格（击杀/拾取/开门/撞暗墙/交谈NPC…）→ 还原成地面；楼梯格上的人走了则还原成楼梯
   const cons = CONS[String(f)] || [];
   // 截至当前步已消耗的格（如盗贼交谈后消失、镐拾取后消失）→ 该格起按空地处理
   const consumed = {};
-  cons.forEach(function(c){ if(c[2] <= sel) consumed[c[0]+','+c[1]]=1; });
+  cons.forEach(function(c){ if(c[2] <= snap) consumed[c[0]+','+c[1]]=1; });
   // ✅ 2026-11-19：每格的消耗步列表。判断「某 dyn 物件出现后是否又被消耗」时要按步号——
   //   早于物件出现的旧消耗（如该格原怪物在更早一步被击杀）不应把之后新摆上的战利品也隐藏。
   //   典型：20F (5,5)(6,5)(7,5) 先杀蝙蝠(cons≈2639) → 吸血鬼死后 2645 又摆 3 把黄钥(obj1)，
   //   旧 consumed 会把这 3 把钥匙误判成「已消耗」不画（用户指出钥匙没显示）。
   const consSteps = {};
-  cons.forEach(function(c){ if(c[2] <= sel){ const k=c[0]+','+c[1]; (consSteps[k]=consSteps[k]||[]).push(c[2]); } });
+  cons.forEach(function(c){ if(c[2] <= snap){ const k=c[0]+','+c[1]; (consSteps[k]=consSteps[k]||[]).push(c[2]); } });
   // ✅ 2026-11-15：值到 "T0"（地形变地面）的格也**直接贴本层地板贴图**，不再只挂紫框标记。
   //   37F 超级镐破整层真墙 / 24F 秘道 / 29F 暗道 / 41F 揭示格都走这条路：
   //   原图里那格是墙的像素，不覆盖就会一直显示成墙 ← 用户指出的 bug。
   const tfloor = [];
   ((D.dyn||{})[String(f)] || []).forEach(function(d){
-    if(d[2] <= sel && d[3] === 'T0') tfloor.push([d[0], d[1]]);
+    if(d[2] <= snap && d[3] === 'T0') tfloor.push([d[0], d[1]]);
   });
   consumeLayer.style.setProperty('--tile', 'url("' + (TILE[String(f)] || '') + '")');
   consumeLayer.style.setProperty('--up', 'url("' + (STAIR.u || '') + '")');
   consumeLayer.style.setProperty('--down', 'url("' + (STAIR.d || '') + '")');
-  consumeLayer.innerHTML = cons.filter(function(c){ return c[2] <= sel; }).map(function(c){
+  consumeLayer.innerHTML = cons.filter(function(c){ return c[2] <= snap; }).map(function(c){
     // ⚠️ 2026-11-15 修 bug：_tile() 返回 'ku'/'kd'/'f'，旧代码一律拼成 'k'+值 →
     //   class 变成 "cons kku"，而 CSS 只有 `.cons.ku` / `.cons.kd`，永远匹配不上，
     //   于是**所有楼梯格都被当普通地板画**（32F(11,1) 上行梯不显示就是这么来的）。
@@ -963,7 +997,7 @@ function renderMap(){
   }).join('') + ((D.mask||{})[String(f)] || []).filter(function(m){
     // ✅ 2026-11-18：底图把「BOSS 死后才出现的战利品/评分 NPC」也画进去了（10F/40F 等）。
     //   这些格在其出现步之前用本层地板贴图盖住，避免一进层就"爆战利品"。
-    return m[2] > sel;
+    return m[2] > snap;
   }).map(function(m){
     return '<div class="cons" style="left:'+pct(m[0])+';top:'+pct(m[1])+'"></div>';
   }).join('');
@@ -985,13 +1019,13 @@ function renderMap(){
   //   永久藏掉（用户指出 #1724 应有 8 只怪、实际只有 4 只）。改为按事件顺序取最后一条。
   const dynLast = {};      // key -> 该格截至 sel 的最后一条事件值
   dynArr.forEach(function(d){
-    if(d[2] > sel) return;
+    if(d[2] > snap) return;
     dynLast[d[0]+','+d[1]] = d[3];
   });
   const dynSeen = {};
   let dynH = '';
   dynArr.forEach(function(d){
-    if(d[2] > sel) return;                      // 尚未出现
+    if(d[2] > snap) return;                      // 尚未出现
     if(d[3] === 'T0') return;                   // 变地面：已由 consumeLayer 贴地板贴图，不再挂标记
     const key = d[0]+','+d[1];
     const v = d[3];
@@ -1029,7 +1063,7 @@ function renderMap(){
   // 路径
   const full = (fl.path||[]);
   const vis=[];
-  for(let i=0;i<=sel;i++){
+  for(let i=0;i<=snap;i++){
     const s=ST[i], p=posOf(s);
     if(p[0]!==f || !EXEC[s.st]) continue;
     const pt=[p[1],p[2]];
@@ -1053,25 +1087,20 @@ function renderMap(){
   // 只画已走过的青色路线（去掉"待经路线"黑虚线 full）
   svgEl.innerHTML = poly(vis,'vis');
 
-  // 勇者
-  const cur=ST[sel], p=posOf(cur);
-  markerEl.style.left = pct(p[1]);
-  markerEl.style.top  = pct(p[2]);
-  document.getElementById('heroImg').src = HERO[cur.d] || HERO['↓'];
+  // 勇者：切层查看模式（不在勇者层）不画勇者，其余照常
+  if(vMode){
+    markerEl.style.display = 'none';
+  }else{
+    markerEl.style.display = '';
+    const cur=ST[sel], p=posOf(cur);
+    markerEl.style.left = pct(p[1]);
+    markerEl.style.top  = pct(p[2]);
+    document.getElementById('heroImg').src = HERO[cur.d] || HERO['↓'];
+  }
 
-  // 剩余怪物伤害（当前层，按本步攻防算）
-  renderDmg(f, cur.a, cur.df, cur.it);
-
-  // 地图侧栏（楼层数已移入本步状态位置行开头；楼层信息卡不再显示 floorname/posline）
-
-  const st=fl;
-  const entry = st.entry ? ('HP '+st.entry.hp+' / A '+st.entry.atk+' / D '+st.entry.dfn) : '—';
-  const exit  = st.exit  ? ('HP '+st.exit.hp +' / A '+st.exit.atk +' / D '+st.exit.dfn) : '—';
-  document.getElementById('floostats').innerHTML =
-    '<div class="stat"><i>本层步数</i><b>'+st.steps+'</b></div>'+
-    '<div class="stat"><i>战损</i><b>'+st.loss+'</b></div>'+
-    '<div class="stat"><i>击杀</i><b>'+st.kills+'</b></div>'+
-    '<div class="stat"><i>最大已访问楼层</i><b>'+MAXF[sel]+'</b></div>';
+  // 剩余怪物伤害：切层查看时按快照步的怪物/攻防/道具算，与此前最后一步渲染完全一致。
+  const cd = ST[snap];
+  renderDmg(f, cd.a, cd.df, cd.it, snap);
 }
 
 /* ---------------- 状态面板 ---------------- */
@@ -1091,28 +1120,27 @@ function renderState(){
        '</div>';
   h += '<div class="evline">'+fmtEv(ev, s.f)+'</div>';
   const p=posOf(s);
-  h += '<div class="posline"><span class="floorname">'+s.f+'F</span>　位置：<b>'+s.f+'F('+s.x+','+s.y+')</b>　方向 <b>'+(s.d||'·')+'</b>'+
+  const DEMOJI = {'←':'⬅️','→':'➡️','↑':'⬆️','↓':'⬇️'};
+  // ✅ 2026-11-21（用户）：上/下键切层查看时，本步状态的「楼层数」同步显示所看楼层（黄字标注），
+  //   位置/方向及其余状态数值保持本步不变。
+  const vF = actualFloor();
+  const vTag = (vF!==s.f) ? '　<span style="color:var(--gold)">查看 '+vF+'F</span>' : '';
+  h += '<div class="posline"><span class="floorname">'+(vF!==s.f ? vF : s.f)+'F</span>'+vTag+'　位置 <b>('+s.x+','+s.y+')</b>　方向 <b>'+(DEMOJI[s.d]||s.d||'·')+'</b>　最大已访问楼层 <b>'+MAXF[sel]+'F</b>'+
        ((p[0]!==s.f||p[1]!==s.x||p[2]!==s.y) ? '　<span style="color:var(--gold)">引擎落点 '+p[0]+'F('+p[1]+','+p[2]+')</span>' : '')+
        '</div>';
-  // ⚠️ 变量名别叫 src：Toy 的预检脚本用 `src\s*=\s*['"]...` 正则找本地资源引用，
-  //    会把这个 JS 字符串当成 href 而误报 "referenced local resource not found"。
-  let srcline='';
-  if(s.rs){
-    srcline = '来源：录制路线 CSV 第 '+s.rs+' 行 · 逐行重放与录制状态一致';
-  }else{
-    srcline = '来源：segs_route.py 人工翻译 · mota_core 逐格实算';
-  }
-  if(srcline) h += '<div class="logline">'+esc(srcline)+'</div>';
+  // ✅ 2026-11-21（用户）：保持原本七个格子（4 属性 statgrid + 3 钥匙 keyrow），
+  //   每格内部「名字 + 全角空格 + 数值」放在同一行（i 不换行）。
+  //   黄钥匙=gold、蓝钥匙=accent、红钥匙=red（同本步状态三色钥匙）。
   h += '<div class="statgrid">'+
-       '<div class="sbox"><i>HP 生命</i><span class="val">'+s.hp+'</span>'+dspan(s.dh)+'</div>'+
-       '<div class="sbox"><i>ATK 攻击</i><span class="val">'+s.a+'</span>'+dspan(s.da)+'</div>'+
-       '<div class="sbox"><i>DEF 防御</i><span class="val">'+s.df+'</span>'+dspan(s.dd)+'</div>'+
-       '<div class="sbox"><i>GOLD 金币</i><span class="val">'+s.g+'</span>'+dspan(s.dg)+'</div>'+
+       '<div class="sbox"><i>HP 生命</i>　<span class="val">'+s.hp+'</span>'+dspan(s.dh)+'</div>'+
+       '<div class="sbox"><i>ATK 攻击</i>　<span class="val">'+s.a+'</span>'+dspan(s.da)+'</div>'+
+       '<div class="sbox"><i>DEF 防御</i>　<span class="val">'+s.df+'</span>'+dspan(s.dd)+'</div>'+
+       '<div class="sbox"><i>GOLD 金币</i>　<span class="val">'+s.g+'</span>'+dspan(s.dg)+'</div>'+
        '</div>';
   h += '<div class="keyrow">'+
-       '<div class="kk"><i>黄钥匙</i><b>'+s.ky+'</b>'+dspan(s.ky-b.ky)+'</div>'+
-       '<div class="kk"><i>蓝钥匙</i><b>'+s.kb+'</b>'+dspan(s.kb-b.kb)+'</div>'+
-       '<div class="kk"><i>红钥匙</i><b>'+s.kr+'</b>'+dspan(s.kr-b.kr)+'</div>'+
+       '<div class="kk"><i>黄钥匙</i>　<b class="ky">'+s.ky+'</b>'+dspan(s.ky-b.ky)+'</div>'+
+       '<div class="kk"><i>蓝钥匙</i>　<b class="kb">'+s.kb+'</b>'+dspan(s.kb-b.kb)+'</div>'+
+       '<div class="kk"><i>红钥匙</i>　<b class="kr">'+s.kr+'</b>'+dspan(s.kr-b.kr)+'</div>'+
        '</div>';
   // 已获得道具：每道具一个图标，拿到才显示、用完即隐。
   // obj106 中心飞行器：显示剩余次数 s.cw 个（刚吃 3 个，用一次减一，减到 0 消失）。
@@ -1132,7 +1160,6 @@ function renderState(){
     h += '<div class="okbox">🤖 本页面状态由 WorkBuddy 实时核算</div>';
   }
   document.getElementById('stateBody').innerHTML = h;
-  document.getElementById('stateSub').textContent = '第'+s.i+'/'+TOTAL+'步';
 }
 
 /* ---------------- 步骤表 ---------------- */
@@ -1141,6 +1168,7 @@ function buildTable(f){
   let h='';
   for(const i of list){
     const s=ST[i];
+    const pk = i>0 ? ST[i-1] : null;   // 钥匙变动基准：全局前一步
     let cls='';
     if(s.mm && s.mm.length) cls+=' mmrow';
     if(s.st==='blocked') cls+=' blk';
@@ -1165,22 +1193,33 @@ function buildTable(f){
       : '';
     h += '<tr class="'+cls.trim()+'" data-i="'+i+'">'+
          '<td class="num">'+s.i+'</td>'+
-         '<td>'+s.f+'F ('+s.x+','+s.y+')</td>'+
+         '<td><b>'+s.f+'F</b> ('+s.x+','+s.y+')</td>'+
          '<td class="dir">'+(s.d||'·')+'</td>'+
          '<td class="ev" title="'+esc(evText)+'">'+tag+fmtEv(evText, s.f)+'</td>'+
-         '<td>'+s.hp+'</td><td>'+s.a+'</td><td>'+s.df+'</td><td>'+s.g+'</td>'+
-         '<td class="keys">'+s.ky+'/'+s.kb+'/'+s.kr+'</td>'+
-         '<td>'+deltaText(s)+'</td>'+
+         '<td>'+s.hp+tdDelta(s.dh)+'</td><td>'+s.a+tdDelta(s.da)+'</td><td>'+s.df+tdDelta(s.dd)+'</td><td>'+s.g+tdDelta(s.dg)+'</td>'+
+         '<td class="keys"><span class="ky">'+s.ky+'</span>/<span class="kb">'+s.kb+'</span>/<span class="kr">'+s.kr+'</span>'+
+           tdKeyDelta(pk?s.ky-pk.ky:0,'黄')+tdKeyDelta(pk?s.kb-pk.kb:0,'蓝')+tdKeyDelta(pk?s.kr-pk.kr:0,'红')+'</td>'+
          '</tr>';
   }
   tbody.innerHTML=h;
   tableFloor=f; lastKeyOnly=keyOnly;
-  document.getElementById('tblTitle').textContent = f+'F 步骤明细';
+  document.getElementById('tblTitle').textContent = '步骤明细';
   document.getElementById('tblSub').textContent = list.length+' / '+(byFloor[f]||[]).length+' 行';
+}
+function updateTblSub(){
+  // 第一个数 = 当前步在本层表格里的行号（随 sel 变化），第二个数 = 本层总步数。
+  let row = tbody.querySelector('tr[data-i="'+sel+'"]');
+  let cur = row ? Array.prototype.indexOf.call(tbody.rows, row)+1 : 0;
+  if(!row){ // keyOnly：当前步不在精简表里 → 取不超过 sel 的最后一行
+    const rows = tbody.rows;
+    for(let k=rows.length-1;k>=0;k--){ if(+rows[k].dataset.i<=sel){ cur=k+1; break; } }
+  }
+  document.getElementById('tblSub').textContent = cur+' / '+(byFloor[tableFloor]||[]).length+' 行';
 }
 
 function highlightRow(){
   tbody.querySelectorAll('tr.sel').forEach(function(el){el.classList.remove('sel');});
+  updateTblSub();
   const row = tbody.querySelector('tr[data-i="'+sel+'"]');
   if(row){
     row.classList.add('sel');
@@ -1201,10 +1240,8 @@ function renderFloors(){
     const st=FL[f];
     if(!st) continue;
     const warn = ISSUES.some(function(it){return it.floor===f;});
-    h += '<div class="fchip'+(warn?' warnf':'')+'" data-f="'+f+'" title="'+esc(
-        f+'F  步'+st.steps+'  战损'+st.loss+'  击杀'+st.kills+'  开门'+st.doors+'  拾取'+st.pickups+
-        '  最低HP'+(st.minhp==null?'-':st.minhp))+'">'+
-      '<b>'+f+'F</b><i>'+st.steps+'步 · 损'+st.loss+'</i></div>';
+    h += '<div class="fchip'+(warn?' warnf':'')+'" data-f="'+f+'">'+
+      '<b>'+f+'F</b><i>'+st.steps+'步 · 伤'+st.loss+'</i></div>';
   }
   const box=document.getElementById('floorchips');
   box.innerHTML=h;
@@ -1213,10 +1250,12 @@ function renderFloors(){
   });
 }
 function updateFloorActive(){
-  const f=ST[sel].f;
+  const f=actualFloor();
   document.querySelectorAll('.fchip').forEach(function(el){
     el.classList.toggle('active', +el.dataset.f===f);
   });
+  // 纵向楼层拖动条跟随当前查看层（换步=勇者层；切层=所看层）
+  document.getElementById('floorSlider').value = f;
 }
 
 /* ---------------- 问题清单 ---------------- */
@@ -1232,7 +1271,7 @@ function renderIssues(){
   });
   flags.sort(function(a,b){return a.line-b.line;});
   const box=document.getElementById('issueList');
-  if(!flags.length){ box.innerHTML='<div class="verify">无异常</div>'; }
+  if(!flags.length){ box.innerHTML=''; }
   else{
     box.innerHTML = flags.map(function(it){
       return '<div class="issueitem" data-line="'+it.line+'">'+
@@ -1248,7 +1287,7 @@ function renderIssues(){
       });
     });
   }
-  document.getElementById('issueSub').textContent = flags.length+' 个标记点';
+  document.getElementById('issueSub').textContent = flags.length ? flags.length+' 个标记点' : '';
 }
 
 /* ---------------- 顶部摘要 ---------------- */
@@ -1276,7 +1315,6 @@ function renderHeader(){
   document.getElementById('verifyBox').innerHTML =
     '<div><b>路线 = z2_route.py 程序化推演（1F→50F 全塔通关），mota_core 逐格实算</b>：共 <b>'+t.steps+'</b> 步，终点 50F(6,5) HP<b>'+f.hp+'</b> A<b>'+f.atk+'</b> D<b>'+f.dfn+'</b> G<b>'+f.gold+'</b> 钥 '+f.ky+'/'+f.kb+'/'+f.kr+'（真魔王已击破）。</div>'+
     '<div>关键节点：V94 大法师(A423/D402, 战损6162) → V95 26F假公主(4红门) → V96 24F竖井 ending → V97 真魔王(封印后800/500/100, 战损196)。</div>'+
-    '<div style="color:#ffd98a">⚠ 变动格：<b style="color:#8fe3ff">蓝框</b>=该步起新出现的物件（10F 战利品/落穴/盗贼、41F 魔術師Ａ+降臨翼…）；<b style="color:#d7b0ff">紫框</b>=地形变化为墙/暗墙（41F 三个暗墙、24F 竖井复原）。<b>地形变地面</b>的格（37F 超级镐破整层墙、29/30F 暗道、24F 竖井）直接贴地板贴图，不再挂框。</div>'+
     '<div>剩余怪伤害 = 当前步攻防下与该怪战斗的总 HP 损失；0=绿色，越高越偏红，打不动（攻≤防）显示红色 ???。数字标在怪物格左下角。</div>';
 }
 
@@ -1284,6 +1322,8 @@ function renderHeader(){
 function select(i){
   i = Math.max(0, Math.min(TOTAL-1, i));
   sel = i;
+  // ✅ 左右键（及一切换步操作）跳回勇者所在层（用户：按左右键时地图改变步骤且跳回勇者所在层）
+  if(viewFloor!=null && viewFloor!==ST[sel].f){ viewFloor=null; }
   const f = ST[sel].f;
   if(f!==tableFloor || keyOnly!==lastKeyOnly) buildTable(f);
   renderState();
@@ -1291,7 +1331,7 @@ function select(i){
   updateFloorActive();
   slider.value = sel+1;
   stepno.value = ST[sel].i;
-  document.getElementById('stepLabel').textContent = ST[sel].i+' / '+TOTAL;
+  document.getElementById('stepLabel').textContent = '第'+ST[sel].i+'/'+TOTAL+'步';
   highlightRow();
 }
 function nextEvent(dir){
@@ -1317,12 +1357,14 @@ function togglePlay(){
   }, 320);
 }
 
-document.getElementById('btnFirst').onclick=function(){ select(0); stopPlay(); };
 document.getElementById('btnPrev').onclick=function(){ select(sel-1); stopPlay(); };
 document.getElementById('btnNext').onclick=function(){ select(sel+1); stopPlay(); };
-document.getElementById('btnLast').onclick=function(){ select(TOTAL-1); stopPlay(); };
-document.getElementById('btnPrevEv').onclick=function(){ nextEvent(-1); stopPlay(); };
-document.getElementById('btnNextEv').onclick=function(){ nextEvent(1); stopPlay(); };
+// controls 区：上一层/下一层按钮 = 上下键切层
+document.getElementById('btnPrevEv').onclick=function(){ stopPlay(); shiftFloor(+1); };
+document.getElementById('btnNextEv').onclick=function(){ stopPlay(); shiftFloor(-1); };
+// 步骤明细标题栏：上一事件/下一事件按钮 = 跳事件
+document.getElementById('btnPrevEv2').onclick=function(){ nextEvent(-1); stopPlay(); };
+document.getElementById('btnNextEv2').onclick=function(){ nextEvent(1); stopPlay(); };
 document.getElementById('btnPlay').onclick=togglePlay;
 slider.addEventListener('input', function(){ stopPlay(); select(+slider.value-1); });
 document.getElementById('btnGo').onclick=function(){
@@ -1333,18 +1375,39 @@ stepno.addEventListener('keydown', function(e){ if(e.key==='Enter') document.get
 document.getElementById('keyonly').addEventListener('change', function(e){
   keyOnly=e.target.checked; buildTable(ST[sel].f); highlightRow();
 });
+// ✅ 2026-11-21（用户）：切层查看（上/下键、左侧楼层拖动条共用）。
+//   步骤不变，只改地图显示层与本步状态楼层数；0F ↔ 50F 首尾相接。
+function setViewFloor(f){
+  viewFloor = (f === ST[sel].f) ? null : f;   // 落到勇者层 → 恢复正常模式
+  renderState();
+  renderMap();
+  updateFloorActive();
+}
+function shiftFloor(dir){
+  const FLOORS = [];
+  for(let k=0;k<=50;k++){ if(FL[k]) FLOORS.push(k); }
+  if(!FLOORS.length) return;
+  let idx = FLOORS.indexOf(actualFloor());
+  if(idx<0) idx = 0;
+  idx = (idx + dir + FLOORS.length) % FLOORS.length;   // 首尾相接
+  setViewFloor(FLOORS[idx]);
+}
+// 左侧纵向拖动条：0F 在下、50F 在上，拖动 = 切层查看（同上下键）
+document.getElementById('floorSlider').addEventListener('input', function(e){
+  stopPlay();
+  setViewFloor(+e.target.value);
+});
 document.addEventListener('keydown', function(e){
   if(e.target.tagName==='INPUT' && e.target.type!=='range') return;
   if(e.key==='ArrowRight'){ e.preventDefault(); stopPlay(); select(sel+1); }
   else if(e.key==='ArrowLeft'){ e.preventDefault(); stopPlay(); select(sel-1); }
+  else if(e.key==='ArrowUp'){ e.preventDefault(); stopPlay(); shiftFloor(+1); }
+  else if(e.key==='ArrowDown'){ e.preventDefault(); stopPlay(); shiftFloor(-1); }
   else if(e.key==='PageDown'){ e.preventDefault(); stopPlay(); select(sel+20); }
   else if(e.key==='PageUp'){ e.preventDefault(); stopPlay(); select(sel-20); }
   else if(e.key==='Home'){ e.preventDefault(); stopPlay(); select(0); }
   else if(e.key==='End'){ e.preventDefault(); stopPlay(); select(TOTAL-1); }
 });
-
-/* ---------------- 图例 ---------------- */
-document.getElementById('legend').innerHTML = '';
 
 /* ---------------- 对话悬浮面板 ---------------- */
 const npctip = document.getElementById('npctip');
