@@ -1,0 +1,11 @@
+[12:17:08] 后台部署任务启动，等待 10 分钟…
+[12:27:08] 第 1 次状态检查: published
+[12:27:08] 执行 toy update …
+[12:27:12] update rc=0
+[12:27:12] 已生成预览链接，尚未提交审核：
+]8;;https://www.bilibili.com/toy/preview/author_JjJOaYi4/index.html\[34;4m打开 Toy 预览[0m]8;;\
+https://www.bilibili.com/toy/preview/author_JjJOaYi4/index.html
+
+已通过 --yes 确认，继续提交审核。
+更新成功。id=54630033656832 status=auditing
+[12:27:12] 后台部署任务结束

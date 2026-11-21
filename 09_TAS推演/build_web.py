@@ -492,6 +492,7 @@ main{flex:1;min-height:0;display:grid;grid-template-columns:404px minmax(0,1fr);
 #stepno{width:64px;background:#0f131c;border:1px solid var(--line);color:var(--txt);border-radius:6px;
   padding:4px 6px;font-size:12px;text-align:center}
 .ctrllabel{font-size:11.5px;color:var(--dim);white-space:nowrap}
+#stepLabel{color:#fff}
 
 /* ---------- 步骤表 ---------- */
 .stepcard{flex:1;min-height:150px;display:flex;flex-direction:column;overflow:hidden}
@@ -741,7 +742,7 @@ td.keys .ky{color:var(--gold)} td.keys .kb{color:var(--accent)} td.keys .kr{colo
         <button class="btn" id="btnPrevEv" title="上一层">↑ 上一层</button>
         <button class="btn" id="btnPlay" title="自动播放">▶ 播放</button>
         <input id="slider" type="range" min="1" max="__TOTAL__" value="1">
-        <span class="ctrllabel" id="stepLabel">第1/__TOTAL__步</span>
+        <span class="ctrllabel" id="stepLabel">1/__TOTAL__步</span>
         <input id="stepno" type="number" min="1" max="__TOTAL__" value="1">
         <button class="btn" id="btnGo">跳转</button>
       </div>
@@ -1333,7 +1334,7 @@ function select(i){
   updateFloorActive();
   slider.value = sel+1;
   stepno.value = ST[sel].i;
-  document.getElementById('stepLabel').textContent = '第'+ST[sel].i+'/'+TOTAL+'步';
+  document.getElementById('stepLabel').textContent = ST[sel].i+'/'+TOTAL+'步';
   highlightRow();
 }
 function nextEvent(dir){
