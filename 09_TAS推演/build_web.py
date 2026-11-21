@@ -511,7 +511,9 @@ tbody tr.invrow{box-shadow:inset 3px 0 0 var(--orange);background:#241a0e}
 tbody tr.deadrow{box-shadow:inset 3px 0 0 var(--red);background:#2a1212}
 tbody tr.unrow td{color:#5f6b80;opacity:.72}
 tbody tr.noterow td{color:var(--dim)}
+thead th.num,td.num{width:1%;white-space:nowrap}
 td.num{color:var(--dim);text-align:right;font-variant-numeric:tabular-nums}
+thead th.num{text-align:right}
 td.dir{text-align:center;color:var(--accent);font-weight:700}
 td.ev{max-width:340px;white-space:normal;word-break:break-all}
 td.ev .tag{display:inline-block;font-size:10px;padding:0 4px;border-radius:3px;margin-right:4px;background:#233047;color:#9db4d8}
@@ -757,7 +759,7 @@ td.keys .ky{color:var(--gold)} td.keys .kb{color:var(--accent)} td.keys .kr{colo
         <table>
           <thead>
             <tr>
-              <th>步</th><th>坐标</th><th>方向</th><th>事件 / 日志</th>
+              <th class="num">步骤</th><th>坐标</th><th>方向</th><th>事件 / 日志</th>
               <th>HP</th><th>ATK</th><th>DEF</th><th>G</th><th>钥匙</th>
             </tr>
           </thead>
