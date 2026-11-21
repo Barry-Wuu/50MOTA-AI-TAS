@@ -1299,8 +1299,7 @@ function renderHeader(){
   let nExec=0, nInv=0, nUn=0;
   ST.forEach(function(s){ if(s.st==='ok'||s.st==='dead') nExec++; else if(s.st==='invalid') nInv++; else nUn++; });
   const chips=[
-    '<span class="chip">总步数 <b>'+t.steps+'</b></span>',
-    '<span class="chip ok">引擎实际执行 <b>'+nExec+'</b> 步</span>',
+    '<span class="chip ok">总步数 <b>'+nExec+'</b> 步</span>',
     '<span class="chip">累计战损 <b>'+t.loss+'</b> · 击杀 <b>'+t.kills+'</b> · 开门 <b>'+t.doors+'</b> · 拾取 <b>'+t.pickups+'</b></span>',
     (dd? '<span class="chip" style="border-color:#7a2020;color:#ffb0b0">暴毙点 <b>'+dd.floor+'F('+dd.x+','+dd.y+')</b> HP'+dd.hp+' / 需'+dd.need+'</span>' : ''),
     '<span class="chip hl" id="minhpChip">最低 HP <b>'+m[0]+'</b> @ '+m[1]+'F('+m[2]+','+m[3]+')</span>',
