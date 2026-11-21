@@ -480,10 +480,19 @@ def main():
     if not stair(w, 1, 1, '2F(1,1)->1F'): return 1
     if not run_segs(w, 1, S['1b'], '1F回'): return 1
     if not run_segs(w, 1, S['1c'], '1F拿orb'): return 1
-    if not fly_to(w, 4, '飞行 1F→4F（接旧700）'): return 1
+    # ✅ 2026-11-22（用户：#827 飞5F下楼，直上接 #843）
+    #   原 fly 4F 落 (11,10) 走 y7 走廊 15 步到左区；现改 fly 5F，FLY_LAND[5]=(2,11)
+    #   正好贴 5F 下梯(1,11)，原地 stair 下到 4F(1,10)，再走 x1 竖列上来接开黄门(2,4)，
+    #   跳过原 4c 前两路点 (3,6)(3,5) 纯过路。省 7 步，击杀/门/拾取与终态均不变。
+    if not fly_to(w, 5, '飞行 1F→5F（下楼接4F左区）'): return 1
+    if not stair(w, 1, 11, '5F(1,11)->4F(1,10)'): return 1
 
     print('\n- 4F 段3（回）')
-    if not run_segs(w, 4, S['4c'], '4F回'): return 1
+    _4c = S['4c']
+    if not run_segs(w, 4, [
+        (1, 9, 'x1 竖列'), (1, 8, ''), (1, 7, ''), (1, 6, ''), (1, 5, ''),
+        (2, 5, _4c[2][1]),
+    ] + _4c[3:], '4F回'): return 1
     # ✅ 2026-11-21（用户：orb 已提前到手，绕圈里的纯过路爬楼改 fly 跳层）
     #   上行 4F→5F→6F→7F→8F：5F/6F/7F 均无事件纯过路，直接 4F fly→8F（落点 (1,2) 接 8b）。
     if not fly_to(w, 8, '飞行 4F→8F（省5F/6F/7F纯过路爬楼）'): return 1
