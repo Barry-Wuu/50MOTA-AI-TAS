@@ -512,6 +512,7 @@ tbody tr.deadrow{box-shadow:inset 3px 0 0 var(--red);background:#2a1212}
 tbody tr.unrow td{color:#5f6b80;opacity:.72}
 tbody tr.noterow td{color:var(--dim)}
 thead th.num,td.num{width:1%;white-space:nowrap}
+thead th.tight,tbody td.tight{width:1%;white-space:nowrap}
 td.num{color:var(--dim);text-align:right;font-variant-numeric:tabular-nums}
 thead th.num{text-align:right}
 td.dir{text-align:center;color:var(--accent);font-weight:700}
@@ -759,8 +760,8 @@ td.keys .ky{color:var(--gold)} td.keys .kb{color:var(--accent)} td.keys .kr{colo
         <table>
           <thead>
             <tr>
-              <th class="num">步骤</th><th>坐标</th><th>方向</th><th>事件 / 日志</th>
-              <th>HP</th><th>ATK</th><th>DEF</th><th>G</th><th>钥匙</th>
+              <th class="num">步骤</th><th>坐标</th><th class="tight">方向</th><th>事件 / 日志</th>
+              <th class="tight">HP</th><th class="tight">ATK</th><th class="tight">DEF</th><th class="tight">G</th><th class="tight">钥匙</th>
             </tr>
           </thead>
           <tbody id="tbody"></tbody>
@@ -1196,10 +1197,10 @@ function buildTable(f){
     h += '<tr class="'+cls.trim()+'" data-i="'+i+'">'+
          '<td class="num">'+s.i+'</td>'+
          '<td><b>'+s.f+'F</b> ('+s.x+','+s.y+')</td>'+
-         '<td class="dir">'+(s.d||'·')+'</td>'+
+         '<td class="dir tight">'+(s.d||'·')+'</td>'+
          '<td class="ev" title="'+esc(evText)+'">'+tag+fmtEv(evText, s.f)+'</td>'+
-         '<td>'+s.hp+tdDelta(s.dh)+'</td><td>'+s.a+tdDelta(s.da)+'</td><td>'+s.df+tdDelta(s.dd)+'</td><td>'+s.g+tdDelta(s.dg)+'</td>'+
-         '<td class="keys"><span class="ky">'+s.ky+'</span>/<span class="kb">'+s.kb+'</span>/<span class="kr">'+s.kr+'</span>'+
+         '<td class="tight">'+s.hp+tdDelta(s.dh)+'</td><td class="tight">'+s.a+tdDelta(s.da)+'</td><td class="tight">'+s.df+tdDelta(s.dd)+'</td><td class="tight">'+s.g+tdDelta(s.dg)+'</td>'+
+         '<td class="keys tight"><span class="ky">'+s.ky+'</span>/<span class="kb">'+s.kb+'</span>/<span class="kr">'+s.kr+'</span>'+
            tdKeyDelta(pk?s.ky-pk.ky:0,'黄')+tdKeyDelta(pk?s.kb-pk.kb:0,'蓝')+tdKeyDelta(pk?s.kr-pk.kr:0,'红')+'</td>'+
          '</tr>';
   }
