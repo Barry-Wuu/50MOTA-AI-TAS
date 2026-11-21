@@ -1,0 +1,25 @@
+
+=== build_web 拆分 ===
+=== 底图烤入的战利品格已遮挡 {'10': 5, '40': 1}
+wrote D:\B++\WorkBuddy\mota_tas_tmp2\repo\09_TAS推演\_toy_tmp\index.html 91093 bytes
+
+
+=== toy_pack_v10 拆steps/中译 ===
+数据: 精确223+前缀202+obj表821；数据段CJK 7494 字；steps 残留假名 0
+!! 未覆盖 6 条:
+   '楼层传送器'
+   '记事本'
+   '赤い回復薬を手に入れ'
+   '赤のクリスタルを手に'
+   '青い回復薬を手に入れ'
+   '青のクリスタルを手に'
+分块: [('steps1.js', 413), ('steps2.js', 427)]
+输出 D:\B++\WorkBuddy\mota_tas_tmp2\repo\09_TAS推演\_toy_tmp2
+
+
+=== toy_inline_assets 原色内嵌 ===
+内嵌 123 张图（保留原色）→ index.html 70 KB, data.js 1510 KB, style.css 16 KB
+steps 文件: steps1.js, steps2.js
+
+
+✅ Toy 包重建完成 → D:\B++\WorkBuddy\mota_tas_tmp2\repo\09_TAS推演\toy_final

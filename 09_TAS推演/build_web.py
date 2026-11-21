@@ -203,6 +203,12 @@ data = json.load(io.open(DED + DATA_F, encoding='utf-8'))
 # 路线第 1 步时勇者已在 (6,10)，所以该格从第一步起就应还原成地面（步序 -1 = 永远覆盖）。
 data.setdefault('cons', {}).setdefault('1', []).insert(0, [6, 11, -1, 'f'])
 
+# ✅ 2026-11-21（用户）：3F 开场扒装剧本四只 obj58 魔導師 (5,8)(4,9)(6,9)(5,10)
+#   在 step43 踩 (5,9) 触发剧本后 set_at=0 撤走（mota_core.do_trap3F / TRAP_3F.guards），
+#   但底图 floor_03.png 烙死了它们 → 剧情后仍显示。用步序 43 的地面覆盖把它们抹掉。
+for _gx, _gy in ((5, 8), (4, 9), (6, 9), (5, 10)):
+    data.setdefault('cons', {}).setdefault('3', []).append([_gx, _gy, 43, 'f'])
+
 # ---- 地图 NPC 标记：合并「路线 BOSS 标记」与「实体 NPC 标记（权威格点）」
 # 实体 NPC 覆盖 老人/商人/盗賊/勇者 等全部有台词角色（magic_tower1_entities.csv）；
 # 路线 BOSS 标记覆盖 吸血鬼/骑士队长/大法师/魔王 Zeno 等战斗对话 NPC（entities 不含的怪物 BOSS）；
@@ -395,7 +401,7 @@ HTML = r'''<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>魔塔1 · 1F→50F 全塔通关逐格校验（z2_route · 剩余怪伤害）</title>
+<title>50层魔塔战线推演</title>
 <style>
 :root{
   --bg:#0d1017; --panel:#161a24; --panel2:#1c2130; --line:#293040;
@@ -696,7 +702,7 @@ td.keys .ky{color:var(--gold)} td.keys .kb{color:var(--accent)} td.keys .kr{colo
 </head>
 <body>
 <header>
-  <h1>50层魔塔通关攻略</h1>
+  <h1>50层魔塔战线推演</h1>
   <div class="chips" id="chips"></div>
 </header>
 
@@ -1102,9 +1108,12 @@ function renderMap(){
     document.getElementById('heroImg').src = HERO[cur.d] || HERO['↓'];
   }
 
-  // 剩余怪物伤害：切层查看时按快照步的怪物/攻防/道具算，与此前最后一步渲染完全一致。
-  const cd = ST[snap];
-  renderDmg(f, cd.a, cd.df, cd.it, snap);
+  // 剩余怪物伤害：怪物集合 + 攻防 + 道具全部按当前步 sel 算（不分期、不用该层快照属性）。
+  //   ⚠️ 2026-11-21（用户 #654 报 bug）：旧版用 ST[snap] 攻防，1F 首访 #1~#28 是开场神装期
+  //   A100/D100（#43 才扒装成 A10/D10），从 3F 按↓看 1F 时角标全算成 0（无伤）。
+  //   统一按当前属性算「以现在的实力打这层剩余怪掉多少血」，各层口径一致。
+  const cd = ST[sel];
+  renderDmg(f, cd.a, cd.df, cd.it, sel);
 }
 
 /* ---------------- 状态面板 ---------------- */
