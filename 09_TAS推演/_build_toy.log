@@ -1,7 +1,7 @@
 
 === build_web 拆分 ===
 === 底图烤入的战利品格已遮挡 {'10': 5, '40': 1}
-wrote D:\B++\WorkBuddy\mota_tas_tmp2\repo\09_TAS推演\_toy_tmp\index.html 91428 bytes
+wrote D:\B++\WorkBuddy\mota_tas_tmp2\repo\09_TAS推演\_toy_tmp\index.html 92263 bytes
 
 
 === toy_pack_v10 拆steps/中译 ===
@@ -13,12 +13,12 @@ wrote D:\B++\WorkBuddy\mota_tas_tmp2\repo\09_TAS推演\_toy_tmp\index.html 91428
    '赤のクリスタルを手に'
    '青い回復薬を手に入れ'
    '青のクリスタルを手に'
-分块: [('steps1.js', 417), ('steps2.js', 398)]
+分块: [('steps1.js', 418), ('steps2.js', 383)]
 输出 D:\B++\WorkBuddy\mota_tas_tmp2\repo\09_TAS推演\_toy_tmp2
 
 
 === toy_inline_assets 原色内嵌 ===
-内嵌 123 张图（保留原色）→ index.html 70 KB, data.js 1509 KB, style.css 16 KB
+内嵌 123 张图（保留原色）→ index.html 71 KB, data.js 1508 KB, style.css 16 KB
 steps 文件: steps1.js, steps2.js
 
 
