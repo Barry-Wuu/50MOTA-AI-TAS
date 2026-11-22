@@ -511,6 +511,9 @@ thead th{position:sticky;top:0;background:#141926;z-index:2;text-align:left;font
 tbody td{padding:3px 7px;border-bottom:1px solid #1e2431;white-space:nowrap;vertical-align:middle}
 tbody tr{cursor:pointer}
 tbody tr:hover{background:#1a2030}
+/* 同层相邻步骤步号不连续(中间去了别的层) → 该行上方分隔线变亮金色 */
+tbody tr.gap td{border-top:2px solid var(--gold);background:#241f12}
+tbody tr.gap td.num{color:var(--gold);font-weight:700}
 tbody tr.sel{background:#12303f;box-shadow:inset 3px 0 0 var(--accent)}
 tbody tr.mmrow{box-shadow:inset 3px 0 0 var(--gold)}
 tbody tr.mmrow.sel{box-shadow:inset 3px 0 0 var(--gold),inset 0 0 0 1px #1d6d8f}
@@ -1178,12 +1181,27 @@ function renderState(){
 
 /* ---------------- 步骤表 ---------------- */
 function buildTable(f){
-  const list = (byFloor[f]||[]).filter(function(i){ return !keyOnly || isKeyStep(ST[i]); });
+  const all = byFloor[f]||[];
+  const list = all.filter(function(i){ return !keyOnly || isKeyStep(ST[i]); });
+  // 同层相邻步骤步号不连续(中间去了别的层) → 记录断层后那一步的全局索引
+  const gapSet = new Set();
+  for(let k=1;k<all.length;k++){
+    if(ST[all[k]].i - ST[all[k-1]].i > 1) gapSet.add(all[k]);
+  }
   let h='';
+  let prevShown=-1;
   for(const i of list){
     const s=ST[i];
+    // 上一条显示行与本行之间若跨越断层 → 本行上方分隔线变亮
+    let gapBefore=false;
+    if(prevShown>=0){
+      const p=all.indexOf(prevShown);
+      for(let k=p+1;k<all.length && all[k]<=i;k++){ if(gapSet.has(all[k])){ gapBefore=true; break; } }
+    }
+    prevShown=i;
     const pk = i>0 ? ST[i-1] : null;   // 钥匙变动基准：全局前一步
     let cls='';
+    if(gapBefore) cls+=' gap';
     if(s.mm && s.mm.length) cls+=' mmrow';
     if(s.st==='blocked') cls+=' blk';
     if(s.st==='invalid') cls+=' invrow';
