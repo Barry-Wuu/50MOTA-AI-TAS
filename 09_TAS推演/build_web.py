@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-"""把 merged_route.json + 原著贴图渲染成一个自包含的交互式网页。
+"""把 merged_route.json + 原著贴图渲染成中文交互网页（拆分模式，供中文构建链用）。
 - 楼层底图：01_PC98原版_mtower/floors/floor_XX.png（原版美术，无损 WebP 内嵌）
 - 勇者标记：mota_art/MTower.gif 顶行勇者帧（col3,row0）
-输出：1F到31F_推演全过程.html
+- ⚠️ 单文件直出模式已禁用（未经中译会产出日语网页）；中文页走 build_toy.py 构建链：
+    build_toy.py → build_web.py(拆分) → toy_pack_v10.py(中译) → toy_inline_assets.py
 """
 import io, os, sys, json, base64, csv, re
 from PIL import Image
@@ -1511,9 +1512,12 @@ if SPLIT_DIR:
     dscript = '<script src="./data.js"></script>'
     out = os.path.join(SPLIT_DIR, 'index.html')
 else:
-    bind = (js, img_js, tile_js, stair_js, hero_js, item_js)
-    dscript = ''
-    out = DED + OUT_HTML
+    # ✅ 2026-11-22（用户：为防止再部署出日语网页）——单文件直出模式已禁用。
+    #   该模式把未中译的 D 直接内嵌进 HTML，步骤日志/道具名全是日语原文（假名 1 万+），
+    #   之前的线上日语页就是这么来的。中文页面必须走中文构建链：
+    #     build_toy.py → build_web.py 拆分模式 → toy_pack_v10.py 中译 → toy_inline_assets.py
+    #   需要重建页面请用：python build_toy.py merged_route_full.json
+    raise SystemExit('单文件直出模式已禁用（会产出日语网页）；请改用拆分模式或 build_toy.py 中文构建链。')
 
 html = (HTML.replace('__DATASCRIPT__', dscript)
             .replace('__DATA__', bind[0])
