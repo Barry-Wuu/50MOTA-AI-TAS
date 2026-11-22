@@ -40,8 +40,25 @@ while i<limit and i<len(s):
         pf=s[i-1]['f']  # 起飞层
         delta=f-pf
         if delta==0:
-            # 同层瞬移（昇華の翼式）：JSON 是坐标跳跃，Java 需另法；先保留单键占位
-            emit(DMAP.get(d,'u'),f,px,py,'同层瞬移(待处理)')
+            # 同层瞬移 s[1616]: 16F(6,10)下梯旁 → 16F(6,2)上梯旁。
+            # Java 飞行珠无法"停在本层"，但利用楼梯落点可等价实现，零战损（FlyExp2 铁证实测）：
+            #   16F(6,10) --e--开栏 dir=1(下梯crop42通17F)
+            #   e → 17F(6,10)  item=3
+            #   e → 17F(6,10)  item=0 (17F无上行梯,自动退出选层)
+            #   e → 16F(6,10)  item=3 (重开,方向翻转为向下)
+            #   e → 15F(6,2)   item=3 (下降; 16F上梯crop41落15F(6,2))
+            #   q → 15F(6,2)   item=0 (退出选层)
+            #   u → 16F(6,2)   item=0 (走15F上梯crop40→16F落(6,2)=目标)
+            # CSV 目标严格按每键执行后的实测落点填写, 供引擎逐步校验。
+            bx,by=s[i-1]['x'],s[i-1]['y']         # 起点 (6,10)
+            tx,ty=px,py                            # 终点 (6,2)
+            emit('e',pf,bx,by,'开道具栏')
+            emit('e',pf+1,bx,by,'飞上%dF'%(pf+1))
+            emit('e',pf+1,bx,by,'自动退出选层')
+            emit('e',pf,bx,by,'重开翻转方向向下')
+            emit('e',pf-1,tx,ty,'下降到%dF落(%d,%d)'%(pf-1,tx,ty))
+            emit('q',pf-1,tx,ty,'退出选层')
+            emit('u',f,tx,ty,'走上梯回%dF落目标(%d,%d)'%(f,tx,ty))
             i+=1; continue
         # 逐层递推落点：第k次Enter后到 pf+k 层，落点 FLY_LAND[pf+k]
         n=abs(delta)
