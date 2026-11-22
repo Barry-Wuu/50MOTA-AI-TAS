@@ -511,9 +511,9 @@ thead th{position:sticky;top:0;background:#141926;z-index:2;text-align:left;font
 tbody td{padding:3px 7px;border-bottom:1px solid #1e2431;white-space:nowrap;vertical-align:middle}
 tbody tr{cursor:pointer}
 tbody tr:hover{background:#1a2030}
-/* 同层相邻步骤步号不连续(中间去了别的层) → 该行上方分隔线变亮金色 */
-tbody tr.gap td{border-top:2px solid var(--gold);background:#241f12}
-tbody tr.gap td.num{color:var(--gold);font-weight:700}
+/* 同层相邻步骤步号不连续(中间去了别的层) → 该行上方分隔线改纯白，宽度与底色不变 */
+tbody tr:has(+ tr.gap) td{border-bottom-color:#fff}
+tbody tr.gap td{border-top:1px solid #fff}
 tbody tr.sel{background:#12303f;box-shadow:inset 3px 0 0 var(--accent)}
 tbody tr.mmrow{box-shadow:inset 3px 0 0 var(--gold)}
 tbody tr.mmrow.sel{box-shadow:inset 3px 0 0 var(--gold),inset 0 0 0 1px #1d6d8f}

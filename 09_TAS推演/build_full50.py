@@ -54,13 +54,21 @@ def _tile(f, x, y):
     return 'ku' if (x, y) == (s[0] if len(s) > 0 else None) else 'f'
 
 
-def record(w, d, lg):
+def record(w, d, lg, face=None):
     global prev, cleared_prev, over_prev, ter_prev
     h = w.hero
     a = snap(h, w)
     idx = len(steps) + 1
     log = ' ｜ '.join(x for x in (lg or []) if x)
-    if d is None:                       # 非移动步：沿用上一个朝向
+    if face is not None:
+        # ✅ 2026-11-22（用户：「买完东西脸不朝向祭坛」）：面朝目标格的原地步，
+        #   朝向必须由「英雄格 → 目标格」推导（如 32F 人站 (10,11) 面朝祭坛 (10,10) = ↑），
+        #   不能沿用上一步移动方向（否则从左走来就一直朝 →）。face_* 三类原地步都传此参。
+        fx, fy = face
+        _d = DIRV.get((fx - h.x, fy - h.y)) or last_dir[0]
+        if _d != '·':
+            last_dir[0] = _d
+    elif d is None:                     # 非移动步：沿用上一个朝向
         _d = last_dir[0]
     else:
         _dv = DIRV.get(tuple(d))
@@ -161,7 +169,7 @@ def face_altar_rec(self, ax, ay):
     txt = ';'.join(lg or [])
     if txt and ('不足' in txt or '错误' in txt or '必须' in txt):
         return lg                     # 失败不记步（与 use_* 口径一致）
-    record(self, None, lg)
+    record(self, None, lg, face=(ax, ay))   # ✅ 面朝祭坛格（用户：买完东西要朝向祭坛）
     return lg
 M.World.face_altar = face_altar_rec
 
@@ -172,7 +180,7 @@ def face_dig_rec(self, tx, ty):
     txt = ';'.join(lg or [])
     if txt and ('blocked' in txt or '不足' in txt or '错误' in txt or '必须' in txt):
         return lg                     # 失败不记步
-    record(self, None, lg)
+    record(self, None, lg, face=(tx, ty))   # ✅ 面朝凿墙/盗贼目标格
     return lg
 M.World.face_dig = face_dig_rec
 
@@ -183,7 +191,7 @@ def face_talk_rec(self, tx, ty):
     txt = ';'.join(lg or [])
     if txt and ('blocked' in txt or '不足' in txt or '错误' in txt or '必须' in txt):
         return lg
-    record(self, None, lg)
+    record(self, None, lg, face=(tx, ty))   # ✅ 面朝交谈 NPC 目标格
     return lg
 M.World.face_talk = face_talk_rec
 
