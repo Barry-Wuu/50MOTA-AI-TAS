@@ -542,6 +542,7 @@ class World:
     ter_over: Dict = None        # 稀疏地形覆盖：(f,x,y)->新地形id（剧本造/拆墙）
     cleared: Set = None
     applied_events: Set = None
+    visited_floors: Set = None       # ★已到访楼层集合（fly 目标层合法性判定用；含 0F/44F 等非连续层）
     trap_done: bool = False
     flag3F: int = 0
     event_mode: str = 'on_entry'
@@ -578,11 +579,16 @@ class World:
         w = cls(hero=hero or Hero.initial(), cells=base_cells(), over={}, ter_over={}, cleared=set(),
                 applied_events=set(), event_mode=event_mode, trap_mode=trap_mode, caveats=set(),
                 bought=set(), boss10=False, boss20=False, octo15=False, event41_stage=0, pending_items={}, cut10_done=False, cut40_done=False)
+        w.visited_floors = {w.hero.f}    # ★起点层（通常 1F）计入已到访
         w.apply_floor_events(w.hero.f)
         return w
 
     # -- 事件写入 ----------------------------------------------------------
     def apply_floor_events(self, f):
+        # ★记录已到访楼层（不受 event_mode 限制，所有改层入口都会调本函数）：fly 合法性判定用
+        if self.visited_floors is None:
+            self.visited_floors = set()
+        self.visited_floors.add(f)
         if self.event_mode != 'on_entry' or f in self.applied_events:
             return
         self.applied_events.add(f)
@@ -662,6 +668,11 @@ class World:
             return ['飞行之珠：尚未持有 obj26，无法传送']
         if target_f not in FLY_LAND:
             return ['飞行之珠：目标层 %d 不可达' % target_f]
+        # ★2026-11-22 修：飞行之珠只能飞「已到访楼层」（原实现漏校验，导致飞未到访层违规）。
+        #   用显式 visited_floors 集合而非「最高楼层 / 连续区间」——0F(降臨の翼)、44F(幻の階/昇華の翼)
+        #   等非连续层均已到访，必须能通过 fly 返回。起点层由 new() 计入，其余由 apply_floor_events 记录。
+        if getattr(self, 'visited_floors', None) is not None and target_f not in self.visited_floors:
+            return ['飞行之珠：目标层 %d 尚未到访（已到访 %s）' % (target_f, sorted(self.visited_floors))]
         s = STAIRS.get(h.f)
         cells = [c for c in (s if s else (None, None)) if c]
         adj = any(abs(sx - h.x) + abs(sy - h.y) == 1 for (sx, sy) in cells)
