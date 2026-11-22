@@ -40,6 +40,13 @@ public class Headless8 {
   static Event EV;
   static Graphics DUMMY;
 
+  // 游戏内 4 个 AWT 对话框（ZAboutMT/ZOkCanDialog/ZscoreMTDialog/ZLabelDialog）。
+  // score2<=9 时的结算流程会 d4.setVisible(true) 弹模态框要求输入名字，
+  // headless 下无人点 OK -> Dialog.show() 卡在 WaitDispatchSupport.enter（CPU 0% 死锁）。
+  // 处理：设非模态 + 每帧自动关闭（等价于玩家点 OK/关闭），只动 UI 显示，不改任何游戏逻辑状态。
+  static java.awt.Dialog[] DIALOGS = new java.awt.Dialog[0];
+  static int dialogCloseCount = 0;
+
   // ---------- AppletStub：零 X 依赖（图像返回 BufferedImage，声音返回哑巴 clip） ----------
   static class HeadlessStub implements AppletStub, AppletContext {
     public boolean isActive() { return true; }
@@ -113,6 +120,39 @@ public class Headless8 {
         for (int i = 0; i < Math.min(6, st.length); i++) log("      at " + st[i]);
       }
     }
+    closeDialogs();   // 模拟玩家关闭结算/排行榜对话框，防 headless 模态死锁
+  }
+
+  /** 收集游戏内所有 AWT Dialog 并设为非模态，消除 show() 的 EDT 死锁 */
+  static void initDialogs() {
+    java.util.List<java.awt.Dialog> ds = new java.util.ArrayList<>();
+    for (Field x : app.getClass().getDeclaredFields()) {
+      if (java.awt.Dialog.class.isAssignableFrom(x.getType())) {
+        try {
+          x.setAccessible(true);
+          java.awt.Dialog d = (java.awt.Dialog) x.get(app);
+          if (d != null) {
+            d.setModal(false);              // 关键：非模态 setVisible(true) 立即返回，不等 EDT
+            ds.add(d);
+          }
+        } catch (Throwable t) { log("  [dialog init] " + x.getName() + ": " + t); }
+      }
+    }
+    DIALOGS = ds.toArray(new java.awt.Dialog[0]);
+    log("[headless] 对话框非模态化 " + DIALOGS.length + " 个");
+  }
+
+  /** 每帧把弹出的对话框关掉（等价于玩家输入名字后点 OK / 关闭排行榜） */
+  static void closeDialogs() {
+    for (java.awt.Dialog d : DIALOGS) {
+      try {
+        if (d.isShowing()) {
+          d.setVisible(false);
+          dialogCloseCount++;
+          if (dialogCloseCount <= 20) log("    [dialog] 自动关闭对话框 #" + dialogCloseCount);
+        }
+      } catch (Throwable t) {}
+    }
   }
 
   /** 同步推进到状态稳定（连续 STABLE 帧签名不变） */
@@ -159,8 +199,10 @@ public class Headless8 {
       case 'd': case 'D': case '2': return 50;   // 下
       case 'l': case 'L': case '4': return 52;   // 左
       case 'r': case 'R': case '6': return 54;   // 右
+      case 'e': case 'E': return 10;             // Enter（脚本里显式写的确认键）
+      case 'q': case 'Q': return 27;             // ESC
     }
-    return 13;                                    // Enter
+    return 13;
   }
 
   static boolean DBG = System.getenv("H8_DEBUG") != null;
@@ -278,6 +320,7 @@ public class Headless8 {
     initFlags();
     initBuffers();
     initAudio();
+    initDialogs();
     log("[headless] init 完成，贴图 imgCrop[100]=" + (f("imgCrop") != null && Array.get(f("imgCrop").get(app), 100) != null ? "就绪" : "缺失(不影响逻辑)"));
 
     // 过开场：按 Enter 直到 HP>0 且回到 1F(6,11)
@@ -358,7 +401,7 @@ public class Headless8 {
         log(sb.toString());
       }
     }
-    log("[headless] tick 成功 " + tickOk + " 异常 " + tickErr);
+    log("[headless] tick 成功 " + tickOk + " 异常 " + tickErr + " 对话框自动关闭 " + dialogCloseCount + " 次");
     LOG.close(); System.exit(0);
   }
 }
